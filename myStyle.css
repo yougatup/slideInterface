@@ -1,0 +1,36 @@
+body {
+padding: 0px;
+margin: 0px;
+overflow: hidden;
+}
+
+#leftPlane  {
+height: 100%;
+width: 49.5%;
+float: left;
+border: 1px solid black;
+overflow-y: scroll;
+}
+
+#slidePlane {
+height: 100%;
+width: 49.5%;
+float: left;
+border: 1px solid black;
+}
+
+#slideIframe {
+height: 100%;
+width: 100%;
+}
+
+.punch-filmstrip-thumbnail{
+    background-color: yellow;
+    border: 3px solid black;
+}
+
+
+#documentText {
+    white-space:pre-wrap;
+    font-size: 18px;
+}
