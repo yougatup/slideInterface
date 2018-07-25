@@ -14,7 +14,6 @@
     <body>
         <div id='wrapper'>
             <div id='leftPlane'>
-
                 <!--Add buttons to initiate auth sequence and sign out-->
                 <button id="authorize-button" style="display: none;">Authorize</button>
                 <button id="signout-button" style="display: none;">Sign Out</button>
@@ -25,12 +24,12 @@
     
                 <button id='insertText'> Insert text </button>
 
-                <div id='slideContents'>
-                </div>
-    
+                <iframe id='pdfjsIframe' src='./generic/web/viewer.html'>
+                </iframe>
             </div>
             <div id='slidePlane'>
-            <iframe id='slideIframe' src='https://docs.google.com/presentation/d/11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4/edit#slide=id.p'/>
+            <iframe id='slideIframe' src='https://docs.google.com/presentation/d/11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4/edit#slide=id.p'>
+            </iframe>
             </div>
         </div>
     </body>

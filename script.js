@@ -1,4 +1,5 @@
 var PRESENTATION_ID = '11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4'
+var documentString;
 
 function issueEvent(object, eventName, data) {
     var myEvent = new CustomEvent(eventName, {detail: data} );
@@ -6,6 +7,56 @@ function issueEvent(object, eventName, data) {
     // window.postMessage(eventName, "*");
 
     object.dispatchEvent(myEvent);
+}
+
+function getKeyword(sentence, callback) {
+    $.ajax({
+			type: 'POST',
+    	    url: 'http://localhost:3000',
+    	    data: sentence,
+    	    success:function(data){
+    	      if(data.indexOf("%%RESULT_RETURN%%") == -1){
+    	          callback("NULL")
+    	      }
+    	      else {
+  			    var myString = data.split("%%RESULT_RETURN%%")[1]
+  			    myString = myString.split("\n")
+
+  			    for(var i=0;i<myString.length;i++) {
+  			    	myString[i] = myString[i].split("\t")
+  			    }
+
+    	        if(callback != null) {
+  		           callback(myString)
+    	        }
+    	      }
+    	    }
+		});
+}
+
+function highlightPhrase(paragraphIndex, phraseStartIndex, count) {
+	$("<span id='highlightPhrase" + paragraphIndex + "_" + phraseStartIndex + "' class='highlightPhrase'></span>").insertBefore("#segment_" + paragraphIndex + "_" + phraseStartIndex)
+
+	for(var i=0;i<count;i++) {
+		$("#segment_" + paragraphIndex + "_" + (phraseStartIndex+i)).appendTo($("#highlightPhrase" + paragraphIndex + "_" + phraseStartIndex));
+		$("#highlightPhrase" + paragraphIndex + "_" + phraseStartIndex).append(" ");
+	}
+}
+
+function highlightParagraph(pIndex) {
+    getKeyword(documentString[pIndex], function(keywords) {
+		if(keywords != 'NULL') {
+       		 for(var i=0;i<keywords.length;i++) {
+       		     var word = keywords[i][0];
+       		     var characterIndex = documentString[pIndex].toLowerCase().indexOf(word);
+	   		 	 var substrIndex = documentString[pIndex].substr(0, (characterIndex+1)).split(' ').length-1
+
+	   		 	 var wordCount = (keywords[i][0].split(' ').length);
+
+	   		 	 highlightPhrase(pIndex, substrIndex, wordCount);
+       		 }
+		}
+    });
 }
 
 function readTextFile(file)
@@ -20,7 +71,31 @@ function readTextFile(file)
             {
                 var allText = rawFile.responseText.replace(/\\r\\n/g, "<br />");
                 
-                $("#leftPlane").append("<pre id='documentText'>" + allText + "</pre>");
+                allText = allText.split("\n");
+                documentString = allText;
+
+                console.log(allText);
+
+                for(var i=0;i<allText.length;i++) {
+                    var segment = allText[i].split(" ");
+                    var myString = "<div id='paragraph" + i + "' class='paragraph'>"
+
+                    for(var j=0;j<segment.length;j++) {
+                        myString += "<span id='segment_" + i + "_" + j + "' class='word'>";
+                        myString += segment[j];
+                        myString += "</span>";
+                        myString += ' ';
+                    }
+
+                    myString += "</div>";
+                    $("#leftPlane").append(myString);
+                }
+
+               //  $("#leftPlane").append("<pre id='documentText'>" + allText + "</pre>");
+
+				for(var i=0;i<allText.length;i++) {
+                	highlightParagraph(i);
+				}
             }
         }
     }
@@ -54,6 +129,7 @@ $(document).ready(function() {
        *  listeners.
        */
       function initClient() {
+          console.log("INIT");
         gapi.client.init({
           apiKey: API_KEY,
           clientId: CLIENT_ID,
@@ -105,10 +181,10 @@ $(document).ready(function() {
        *
        * @param {string} message Text to be placed in pre element.
        */
-      function appendPre(message) {
-        var pre = document.getElementById('content');
+      function appendPre(message) {/*
+        var pre = document.getElementById('slideContents');
         var textContent = document.createTextNode(message + '\n');
-        pre.appendChild(textContent);
+        pre.appendChild(textContent);*/
       }
 
       /**
@@ -166,6 +242,12 @@ $(document).ready(function() {
         createSlide();
         listSlides();
       });
+	
+      $(document).on("addText", function(e) {
+              console.log(e);
+
+              addText(e.detail.objId, e.detail.text);
+      });
 
       $(document).on("getSlideInfo", function() {
         gapi.client.slides.presentations.get({
@@ -218,17 +300,18 @@ $(document).ready(function() {
         });
 
       function addText(objId, myText) {
-        var requests = [{
-          insertText: {
+        var requests = [ 
+        {
+          "deleteText": {
+            objectId: objId,
+          }
+        },
+        {
+          "insertText": {
             objectId: objId,
             text: myText
           }
-        }];
-        
-        // If you wish to populate the slide with elements, add element create requests here,
-        // using the pageId.
-        
-        // Execute the request.
+        } ];
 
         gapi.client.slides.presentations.batchUpdate({
           presentationId: PRESENTATION_ID,
@@ -236,6 +319,24 @@ $(document).ready(function() {
         }).then((createSlideResponse) => {
             console.log("succeed!");
             console.log(createSlideResponse);
+        }).catch(function(error) {
+            console.log('cache!');
+            console.log(error);
+
+            var requests = [ {
+              "insertText": {
+                objectId: objId,
+                text: myText
+              }
+            } ];
+
+            gapi.client.slides.presentations.batchUpdate({
+              presentationId: PRESENTATION_ID,
+              requests: requests
+            }).then((createSlideResponse) => {
+                console.log("succeed!");
+                console.log(createSlideResponse);
+                });
         });
       }
 
@@ -243,6 +344,13 @@ $(document).ready(function() {
               addText("SLIDES_API1293859000_1", "blahblah");
      });
 
-     readTextFile("./document.txt");
+	$(document).on('click', '.highlightPhrase', function() {
+		alert($(this).attr('id'));
+	});
 
+    $(document).on("highlighted", function(details){
+            console.log(details);
+
+            console.log("I got this");
+    });
 });

@@ -34,3 +34,21 @@ width: 100%;
     white-space:pre-wrap;
     font-size: 18px;
 }
+
+.paragraph {
+padding: 3px;
+}
+
+.word {
+}
+
+.highlightPhrase {
+background-color: yellow;
+cursor: pointer;
+}
+
+#pdfjsIframe {
+width: 100%;
+height: 100%;
+}
+
