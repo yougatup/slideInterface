@@ -153,11 +153,11 @@ $(document).ready(function() {
       function updateSigninStatus(isSignedIn) {
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
-          signoutButton.style.display = 'block';
+          // signoutButton.style.display = 'block';
           // listSlides();
         } else {
           authorizeButton.style.display = 'block';
-          signoutButton.style.display = 'none';
+          // signoutButton.style.display = 'none';
         }
       }
 
@@ -244,9 +244,8 @@ $(document).ready(function() {
       });
 	
       $(document).on("addText", function(e) {
-              console.log(e);
-
-              addText(e.detail.objId, e.detail.text);
+          console.log(e);
+          addText(e.detail.objId, e.detail.text, e.detail.pageId);
       });
 
       $(document).on("getSlideInfo", function() {
@@ -299,45 +298,102 @@ $(document).ready(function() {
         });
         });
 
-      function addText(objId, myText) {
-        var requests = [ 
-        {
-          "deleteText": {
-            objectId: objId,
+	  function createObjId() {
+		  var text = "";
+		  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+		  for (var i = 0; i < 20; i++)
+			  text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+		  return text;
+	  }
+
+      function fillText(objId, myText) {
+         var requests = [ 
+             /*
+         {
+           "deleteText": {
+             objectId: objId,
+           }
+         },*/
+         {
+           "insertText": {
+             "objectId": objId,
+             "text": myText + '\n',
+           }
+         } ];
+     
+         gapi.client.slides.presentations.batchUpdate({
+           presentationId: PRESENTATION_ID,
+           requests: requests
+         }).then((createSlideResponse) => {
+             console.log("succeed!");
+             console.log(createSlideResponse);
+         }).catch(function(error) {
+             console.log('cache!');
+             console.log(error);
+     
+             var requests = [ {
+               "insertText": {
+                 objectId: objId,
+                 text: myText
+               }
+             } ];
+     
+             gapi.client.slides.presentations.batchUpdate({
+               presentationId: PRESENTATION_ID,
+               requests: requests
+             }).then((createSlideResponse) => {
+                 console.log("succeed!");
+                 console.log(createSlideResponse);
+                 });
+         });
+      }
+
+      function addText(objId, myText, pageId) {
+          if(objId != null) {
+              fillText(objId, myText);
+           }
+          else{
+             var newObjId = createObjId();
+
+             var requests = [ 
+             {
+               "createShape": {
+                   "objectId": newObjId,
+                   "shapeType": "TEXT_BOX",
+                   "elementProperties": {
+                       "pageObjectId": pageId,
+                       "size": {
+                           "width": {
+                               "magnitude": 350,
+                               "unit": "PT"
+                           },
+                           "height": {
+                               "magnitude": 350,
+                               "unit": "PT"
+                           }
+                       },
+                       "transform": {
+                           "scaleX": 1,
+                           "scaleY": 1,
+                           "translateX": 0,
+                           "translateY": 0,
+                           "unit": "PT"
+                       }
+                   }
+               }
+             }];
+
+             console.log(requests);
+
+             gapi.client.slides.presentations.batchUpdate({
+               presentationId: PRESENTATION_ID,
+               requests: requests
+             }).then((createSlideResponse) => {
+                 fillText(newObjId, myText);
+             });
           }
-        },
-        {
-          "insertText": {
-            objectId: objId,
-            text: myText
-          }
-        } ];
-
-        gapi.client.slides.presentations.batchUpdate({
-          presentationId: PRESENTATION_ID,
-          requests: requests
-        }).then((createSlideResponse) => {
-            console.log("succeed!");
-            console.log(createSlideResponse);
-        }).catch(function(error) {
-            console.log('cache!');
-            console.log(error);
-
-            var requests = [ {
-              "insertText": {
-                objectId: objId,
-                text: myText
-              }
-            } ];
-
-            gapi.client.slides.presentations.batchUpdate({
-              presentationId: PRESENTATION_ID,
-              requests: requests
-            }).then((createSlideResponse) => {
-                console.log("succeed!");
-                console.log(createSlideResponse);
-                });
-        });
       }
 
       $("#insertText").on("click", function() {
