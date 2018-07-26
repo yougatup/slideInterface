@@ -17693,6 +17693,15 @@ exports.NetworkManager = NetworkManager;
 });
 //# sourceMappingURL=pdf.js.map
 
+function getRandomID() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 20; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
 function getSelectionHtml() {
   var html = "";
   if (typeof window.getSelection != "undefined") {
@@ -17707,6 +17716,118 @@ function getSelectionHtml() {
             && range.endOffset === range.startContainer.length) {
           range.selectNode(range.startContainer.parentElement);
         }
+
+        var startNode = $(range.startContainer.parentNode);
+        var endNode = $(range.endContainer.parentNode);
+
+        function getNodeID(node) {
+            if($(node).attr("id") == null) 
+                $(node).attr("id", getRandomID());
+
+            return $(node).attr("id");
+        }
+
+        function highlight(node, start, end) {
+            var contents = $(node).html();
+            var myStart, myEnd;
+
+            if(start == -1) myStart = 0;
+            else myStart = start;
+
+            if(end == -1) myEnd = contents.length;
+            else myEnd = end;
+
+            var flag = 0;
+            var wordCnt = 0;
+            var startIdx = -1, endIdx = -1;
+
+            for(var i=0;i<contents.length;i++) {
+                if(contents[i] == '<') flag = flag + 1;
+                else if(contents[i] == '>') flag = flag - 1;
+                else if(flag == 0) {
+                    if(myStart <= wordCnt && startIdx == -1)
+                        startIdx = i;
+
+                    if(myEnd <= wordCnt+1 && endIdx == -1) 
+                        endIdx = i+1;
+
+                    wordCnt++;
+                }
+            }
+
+            contents = contents.slice(0, startIdx) + "<span class='textHighlight'>" + contents.slice(startIdx, endIdx) + "</span>" + contents.slice(endIdx);
+
+            console.log(contents);
+
+            $(node).html(contents);
+        }
+
+        function getFormerLength(container, node) {
+            var length = 0;
+
+            for(var j=0;j<container[0].childNodes.length;j++) {
+                var children = container[0].childNodes[j];
+
+                if(children.nodeName == '#text') {
+                    if(children.data == node.data) 
+                        break;
+                }
+
+                if(children.nodeName == "SPAN") length += children.innerText.length;
+                else length += children.data.length;
+            }
+
+            console.log(length);
+
+            return length;
+        }
+
+        console.log($(range.startContainer));
+
+        if($(startNode).parent().attr("class") == "textLayer") {
+            var startNodeID = getNodeID(startNode);
+            var endNodeID = getNodeID(endNode);
+
+            var curNode = startNode;
+
+            console.log(range);
+            console.log(curNode);
+            console.log(range.startOffset + " " + range.endOffset);
+
+            if(startNodeID == endNodeID) {
+                if(range.startOffset < range.endOffset) {
+                    var length = getFormerLength(startNode, range.startContainer);
+
+                    console.log(range.startOffset + length);
+
+                    highlight(curNode, range.startOffset+length, range.endOffset+length);
+                }
+            }
+            else {
+                for(var k=0;;k++) {
+                    var nodeID = getNodeID(curNode);
+
+                    if(nodeID == startNodeID) {
+                        var length = getFormerLength(startNode, range.startContainer);
+
+                        highlight(curNode, range.startOffset+length, -1);
+                    }
+                    else if(nodeID == endNodeID) {
+                        var length = getFormerLength(endNode, range.endContainer);
+
+                        highlight(curNode, -1, range.endOffset+length);
+
+                        break;
+                    }
+                    else {
+                        highlight(curNode, -1, -1);
+                    }
+
+                    curNode = $(curNode).next();
+                }
+            }
+        }
+
         container.appendChild(range.cloneContents());
       }
       html = container.innerHTML;
@@ -17737,7 +17858,11 @@ function removeParenthesis(myString) {
 
 $(document).ready( function() {
     $(document).on("mouseup", function() {
-        var highlightedText = removeParenthesis(getSelectionHtml())
+        var contents = getSelectionHtml();
+
+        console.log(contents);
+
+        var highlightedText = removeParenthesis(contents)
 
         if(highlightedText != '')
             issueEvent(document, "highlighted", highlightedText);

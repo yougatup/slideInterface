@@ -2387,3 +2387,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
     display: none;
   }
 }
+
+.textHighlight {
+    background-color: yellow !important;
+}
