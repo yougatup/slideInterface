@@ -17702,6 +17702,49 @@ function getRandomID() {
 
     return text;
 }
+
+var highlightedParts = [];
+var highlightedText = '';
+
+function highlight(node, start, end) {
+    var contents = $(node).html();
+    var myStart, myEnd;
+
+    if(start == -1) myStart = 0;
+    else myStart = start;
+
+    if(end == -1) myEnd = contents.length;
+    else myEnd = end;
+
+    var flag = 0;
+    var wordCnt = 0;
+    var startIdx = -1, endIdx = -1;
+
+    for(var i=0;i<contents.length;i++) {
+        if(contents[i] == '<') flag = flag + 1;
+        else if(contents[i] == '>') flag = flag - 1;
+        else if(flag == 0) {
+            if(myStart <= wordCnt && startIdx == -1)
+                startIdx = i;
+
+            if(myEnd <= wordCnt+1 && endIdx == -1) 
+                endIdx = i+1;
+
+            wordCnt++;
+        }
+    }
+
+    contents = contents.slice(0, startIdx) + "<span class='textHighlight'>" + contents.slice(startIdx, endIdx) + "</span>" + contents.slice(endIdx);
+
+    $(node).html(contents);
+}
+
+function highlightParts() {
+    for(var i=0;i<highlightedParts.length;i++) {
+        highlight(highlightedParts[i][0], highlightedParts[i][1], highlightedParts[i][2]);
+    }
+}
+
 function getSelectionHtml() {
   var html = "";
   if (typeof window.getSelection != "undefined") {
@@ -17727,41 +17770,6 @@ function getSelectionHtml() {
             return $(node).attr("id");
         }
 
-        function highlight(node, start, end) {
-            var contents = $(node).html();
-            var myStart, myEnd;
-
-            if(start == -1) myStart = 0;
-            else myStart = start;
-
-            if(end == -1) myEnd = contents.length;
-            else myEnd = end;
-
-            var flag = 0;
-            var wordCnt = 0;
-            var startIdx = -1, endIdx = -1;
-
-            for(var i=0;i<contents.length;i++) {
-                if(contents[i] == '<') flag = flag + 1;
-                else if(contents[i] == '>') flag = flag - 1;
-                else if(flag == 0) {
-                    if(myStart <= wordCnt && startIdx == -1)
-                        startIdx = i;
-
-                    if(myEnd <= wordCnt+1 && endIdx == -1) 
-                        endIdx = i+1;
-
-                    wordCnt++;
-                }
-            }
-
-            contents = contents.slice(0, startIdx) + "<span class='textHighlight'>" + contents.slice(startIdx, endIdx) + "</span>" + contents.slice(endIdx);
-
-            console.log(contents);
-
-            $(node).html(contents);
-        }
-
         function getFormerLength(container, node) {
             var length = 0;
 
@@ -17777,12 +17785,10 @@ function getSelectionHtml() {
                 else length += children.data.length;
             }
 
-            console.log(length);
-
             return length;
         }
 
-        console.log($(range.startContainer));
+        var firstDiv = null;
 
         if($(startNode).parent().attr("class") == "textLayer") {
             var startNodeID = getNodeID(startNode);
@@ -17790,45 +17796,65 @@ function getSelectionHtml() {
 
             var curNode = startNode;
 
+            container.appendChild(range.cloneContents());
+
+            highlightedParts = []
+
+            console.log(startNodeID + " " + endNodeID);
             console.log(range);
-            console.log(curNode);
-            console.log(range.startOffset + " " + range.endOffset);
-
             if(startNodeID == endNodeID) {
-                if(range.startOffset < range.endOffset) {
-                    var length = getFormerLength(startNode, range.startContainer);
+                var frontLength = getFormerLength(startNode, range.startContainer);
+                var rearLength = getFormerLength(startNode, range.endContainer);
 
-                    console.log(range.startOffset + length);
+                if(range.startOffset+frontLength < range.endOffset+rearLength) {
+                    firstDiv = curNode;
 
-                    highlight(curNode, range.startOffset+length, range.endOffset+length);
+                    highlightedParts.push([curNode, range.startOffset+frontLength, range.endOffset+rearLength]);
                 }
             }
             else {
-                for(var k=0;;k++) {
+                for(var k=0;k<10;k++) {
                     var nodeID = getNodeID(curNode);
 
                     if(nodeID == startNodeID) {
                         var length = getFormerLength(startNode, range.startContainer);
 
-                        highlight(curNode, range.startOffset+length, -1);
+                        firstDiv = curNode;
+
+                        highlightedParts.push([curNode, range.startOffset+length, -1]);
                     }
                     else if(nodeID == endNodeID) {
                         var length = getFormerLength(endNode, range.endContainer);
 
-                        highlight(curNode, -1, range.endOffset+length);
+                        highlightedParts.push([curNode, -1, range.endOffset+length]);
 
                         break;
                     }
                     else {
-                        highlight(curNode, -1, -1);
+                        highlightedParts.push([curNode, -1, -1]);
                     }
 
                     curNode = $(curNode).next();
                 }
             }
-        }
 
-        container.appendChild(range.cloneContents());
+            removePopovers();
+            $('.textHighlight').each(function(index) {
+                    var contents = $(this).html();
+                    $(this).replaceWith(contents);
+            });
+
+            window.getSelection().empty();
+
+            if(firstDiv != null) {
+                highlightParts();
+
+                $(firstDiv).attr("data-toggle", "popover");
+                $(firstDiv).attr("title", "Conversion options");
+                $(firstDiv).attr("data-content", "<button id='textBtn' onclick='sendTextHighlighted()'> TextButton </button>");
+                $(firstDiv).popover({"placement": "top", "html": true}).popover('show');
+            }
+        }
       }
       html = container.innerHTML;
     }
@@ -17838,6 +17864,25 @@ function getSelectionHtml() {
     }
   }
   return html;
+}
+
+function sendTextHighlighted() {
+    console.log(highlightedText);
+
+     if(highlightedText != '')
+          issueEvent(document, "highlighted", highlightedText);
+}
+
+function issueEvent(object, eventName, data) {
+    var myEvent = new CustomEvent(eventName, {detail: data} );
+
+    object.dispatchEvent(myEvent);
+}
+
+function removePopovers() {
+     $('[data-toggle="popover"]').each(function(index) {
+             $(this).popover('dispose');
+     });
 }
 
 function removeParenthesis(myString) {
@@ -17857,20 +17902,20 @@ function removeParenthesis(myString) {
 }
 
 $(document).ready( function() {
-    $(document).on("mouseup", function() {
-        var contents = getSelectionHtml();
+    $(document).on("mouseup", function(e) {
+        var x = e.clientX, y = e.clientY;
+        var elementMouseIsOver = document.elementFromPoint(x, y);
 
-        console.log(contents);
+        if($($(elementMouseIsOver).parent()).attr("class") == "textLayer") {
+            var contents = getSelectionHtml();
 
-        var highlightedText = removeParenthesis(contents)
+            console.log(contents);
 
-        if(highlightedText != '')
-            issueEvent(document, "highlighted", highlightedText);
+            highlightedText = removeParenthesis(contents)
+
+//          if(highlightedText != '')
+//              issueEvent(document, "highlighted", highlightedText);
+        }
     });
 
-    function issueEvent(object, eventName, data) {
-        var myEvent = new CustomEvent(eventName, {detail: data} );
-
-        object.dispatchEvent(myEvent);
-    }
 });
