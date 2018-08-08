@@ -216,6 +216,16 @@ $(document).ready(function() {
         });
       }
 
+      function getPageInfo(presentationId, pageId) {
+        gapi.client.slides.presentations.pages.get({
+          presentationId: presentationId,
+          pageObjectId: pageId
+        }).then(function(response) {
+            console.log(response);
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        });
+      }
 
       function listSlides() {
         gapi.client.slides.presentations.get({
@@ -243,6 +253,12 @@ $(document).ready(function() {
         listSlides();
       });
 	
+      $(document).on("getPageInfo", function(e) {
+          console.log(e);
+          getPageInfo("11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4", "g3e97a32ced_0_0");
+          //addText(e.detail.objId, e.detail.text, e.detail.pageId);
+      });
+
       $(document).on("addText", function(e) {
           console.log(e);
           addText(e.detail.objId, e.detail.text, e.detail.pageId);
@@ -308,6 +324,65 @@ $(document).ready(function() {
 		  return text;
 	  }
 
+      function appendText(objId, myText) {
+         var requests = [ 
+         {
+           "insertText": {
+             "objectId": objId,
+             "text": myText + '\n',
+             "insertionIndex": 987987987
+           }
+         } ];
+     
+         gapi.client.slides.presentations.batchUpdate({
+           presentationId: PRESENTATION_ID,
+           requests: requests
+         }).then((createSlideResponse) => {
+             console.log("strange");
+             console.log(createSlideResponse);
+         }).catch(function(error) {
+             console.log('cache!');
+             console.log(error);
+     
+             if(error.result.error.code == 400) { // get the end index
+
+                 var errorMessage = error.result.error.message;
+
+                 var flag = false;
+                 var result = 0, pow = 1;
+
+                 for(var i=errorMessage.length-1;i>=0;i--) {
+                    if(errorMessage[i] == ')') {
+                       flag = true;
+                    }
+                    else if(errorMessage[i] == '(') break;
+                    else {
+                        if(flag == true) {
+                            result = result + pow * parseInt(errorMessage[i]);
+                            pow *= 10;
+                        }
+                    }
+                 }
+
+                 var requests = [ {
+                   "insertText": {
+                     objectId: objId,
+                     text: (result == 0 ? myText : '\n' + myText),
+                     insertionIndex: result
+                   }
+                 } ];
+    
+                 gapi.client.slides.presentations.batchUpdate({
+                   presentationId: PRESENTATION_ID,
+                   requests: requests
+                 }).then((createSlideResponse) => {
+                     console.log("succeed!");
+                     console.log(createSlideResponse);
+                     });
+                 }
+         });
+      }
+
       function fillText(objId, myText) {
          var requests = [ 
              /*
@@ -336,7 +411,8 @@ $(document).ready(function() {
              var requests = [ {
                "insertText": {
                  objectId: objId,
-                 text: myText
+                 text: myText,
+                 insertionIndex: 180
                }
              } ];
      
@@ -352,7 +428,7 @@ $(document).ready(function() {
 
       function addText(objId, myText, pageId) {
           if(objId != null) {
-              fillText(objId, myText);
+              appendText(objId, myText);
            }
           else{
              var newObjId = createObjId();

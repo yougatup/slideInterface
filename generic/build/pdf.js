@@ -1,3 +1,11 @@
+// ### variables ###
+var startElementInx, endElementInx;
+var highlightedParts = [];
+var highlightedText = '';
+var popupDiv = null;
+var idCnt = 1;
+var mouseDown = 0;
+
 /**
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
@@ -17703,10 +17711,7 @@ function getRandomID() {
     return text;
 }
 
-var highlightedParts = [];
-var highlightedText = '';
-
-function highlight(node, start, end) {
+function highlight(node, start, end, color) {
     var contents = $(node).html();
     var myStart, myEnd;
 
@@ -17734,14 +17739,14 @@ function highlight(node, start, end) {
         }
     }
 
-    contents = contents.slice(0, startIdx) + "<span class='textHighlight'>" + contents.slice(startIdx, endIdx) + "</span>" + contents.slice(endIdx);
+    contents = contents.slice(0, startIdx) + "<span style='background-color:" + color + " !important'>" + contents.slice(startIdx, endIdx) + "</span>" + contents.slice(endIdx);
 
     $(node).html(contents);
 }
 
 function highlightParts() {
     for(var i=0;i<highlightedParts.length;i++) {
-        highlight(highlightedParts[i][0], highlightedParts[i][1], highlightedParts[i][2]);
+        highlight(highlightedParts[i][0], highlightedParts[i][1], highlightedParts[i][2], "red");
     }
 }
 
@@ -17802,6 +17807,7 @@ function getSelectionHtml() {
 
             console.log(startNodeID + " " + endNodeID);
             console.log(range);
+
             if(startNodeID == endNodeID) {
                 var frontLength = getFormerLength(startNode, range.startContainer);
                 var rearLength = getFormerLength(startNode, range.endContainer);
@@ -17846,12 +17852,14 @@ function getSelectionHtml() {
 
             window.getSelection().empty();
 
+            popupDiv = firstDiv;
+
             if(firstDiv != null) {
                 highlightParts();
 
                 $(firstDiv).attr("data-toggle", "popover");
                 $(firstDiv).attr("title", "Conversion options");
-                $(firstDiv).attr("data-content", "<button id='textBtn' onclick='sendTextHighlighted()'> TextButton </button>");
+                $(firstDiv).attr("data-content", "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>");
                 $(firstDiv).popover({"placement": "top", "html": true}).popover('show');
             }
         }
@@ -17866,11 +17874,57 @@ function getSelectionHtml() {
   return html;
 }
 
+function prevPopover() {
+     $(popupDiv).popover('dispose');
+
+     $(popupDiv).attr("data-toggle", "popover");
+     $(popupDiv).attr("title", "Conversion options");
+     $(popupDiv).attr("data-content", "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>");
+     $(popupDiv).popover({"placement": "top", "html": true}).popover('show');
+}
+
+function sendTextAsTitle() {
+
+}
+
+function sendTextAsBullets() {
+
+}
+
+function sendTextAsPlane() {
+
+}
+
 function sendTextHighlighted() {
-    console.log(highlightedText);
+     console.log(highlightedText);
+
+     $(popupDiv).popover('dispose');
+/*
+     $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Text conversion options");
+     $(popupDiv).attr("data-content", "<button id='titleBtn' class='btnItem' onclick='sendTextAsTitle()'> Title </button> " + 
+             "<button id='bulletBtn' class='btnItem' onclick='sendTextAsBullets()'> Bullet </button> " + 
+             "<button id='planeBtn' class='btnItem' onclick='sendTextAsPlane()'> Plane </button> "
+             );
+
+     $(popupDiv).popover({"placement": "top", "html": true}).popover('show');
+     */
 
      if(highlightedText != '')
           issueEvent(document, "highlighted", highlightedText);
+
+     // getSlideObjInfo("11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4", "g3e97a32ced_0_0");
+}
+
+function getSlideObjInfo(slideId, slidePageId) {
+    var theUrl = "https://slides.googleapis.com/v1/presentations/" + slideId + "/pages/" + slidePageId;
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+
+    console.log(xmlHttp.responseText);
+
+    return xmlHttp.responseText;
 }
 
 function issueEvent(object, eventName, data) {
@@ -17886,15 +17940,22 @@ function removePopovers() {
 }
 
 function removeParenthesis(myString) {
-    flag = false;
+    var flag = 0;
 
     var retValue = ''
 
     for(var i=0;i<myString.length;i++) {
-        if(myString[i] == '<') flag = true;
-        else if(myString[i] == '>') flag = false;
-        else {
-            if(!flag) retValue = retValue + myString[i];
+        if(myString[i] == '<'){
+            if(myString[i+1] == '/' && myString[i+2] == 'd' && myString[i+3] == 'i' && myString[i+4] == 'v' && myString[i+5] == '>') {
+                if(retValue[retValue.length-1] == '-') retValue = retValue.slice(0, -1);
+                else retValue = retValue + ' ';
+            }
+
+            flag = flag + 1;
+        }
+        else if(myString[i] == '>') flag = flag - 1;
+        else if(flag == 0) {
+            retValue = retValue + myString[i];
         }
     }
 
@@ -17902,7 +17963,45 @@ function removeParenthesis(myString) {
 }
 
 $(document).ready( function() {
+    $(document).on("mousedown", function(e) {
+        mouseDown++;
+
+        var x = e.clientX, y = e.clientY;
+        var elementMouseIsOver = document.elementFromPoint(x, y);
+
+        if($(elementMouseIsOver).hasClass("textElement")) {
+            startElementInx = parseInt($(elementMouseIsOver).attr("id").substr(11));
+            console.log(startElementInx);
+
+            var textHighlightedCnt = $(".textHighlighted").length;
+            var eachCount = 0;
+
+            if(textHighlightedCnt == 0) {
+                $(elementMouseIsOver).addClass("textHighlighted");
+            }
+            else {
+                $(".textHighlighted").each(function() {
+                     $(this).removeClass("textHighlighted");
+
+                     eachCount++;
+
+                     if(eachCount >= textHighlightedCnt) {
+                        $(elementMouseIsOver).addClass("textHighlighted");
+                     }
+                });
+            }
+
+        }
+        else {
+            $(".textHighlighted").each(function() {
+                 $(this).removeClass("textHighlighted");
+            });
+        }
+    });
+
     $(document).on("mouseup", function(e) {
+        mouseDown--;
+
         var x = e.clientX, y = e.clientY;
         var elementMouseIsOver = document.elementFromPoint(x, y);
 
@@ -17913,9 +18012,70 @@ $(document).ready( function() {
 
             highlightedText = removeParenthesis(contents)
 
-//          if(highlightedText != '')
-//              issueEvent(document, "highlighted", highlightedText);
+            console.log(highlightedText);
         }
     });
 
+    $(document).on('mouseenter', '.textElement', function() {
+        if(mouseDown) {
+            var textHighlightedCnt = $(".textHighlighted").length;
+            var endElement = this;
+            var eachCount = 0;
+
+            $(".textHighlighted").each(function() {
+                 $(this).removeClass("textHighlighted");
+
+                 eachCount++;
+
+                 if(eachCount >= textHighlightedCnt) {
+                    endElementInx = parseInt($(endElement).attr("id").substr(11));
+
+                    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+                       $("#textSegment" + i).addClass("textHighlighted");
+                    }
+                 }
+            });
+
+        }
+     });
+
+    $(document).on('mouseleave', '.textElement', function() {
+          // do something
+     });
+ 
+    observer = new MutationObserver(printMessage);
+
+    mutationConfig = { attributes: false, childList: true, subtree: true };
+    observer.observe(document, mutationConfig);
+
 });
+
+function printMessage(mutationList) {
+    console.log("yay");
+    console.log(mutationList);
+
+    for(var i=0;i<mutationList.length;i++) {
+        if($(mutationList[i].target).hasClass("textLayer")) {
+            console.log("found!");
+            console.log(mutationList[i]);
+
+            for(var j=0;j<mutationList[i].addedNodes.length;j++) {
+                var elem = mutationList[i].addedNodes[j];
+
+                if($(elem).hasClass("endOfContent")) continue;
+
+                var contents = $(elem).html();
+                var splitted = contents.split(" ");
+                var result = '';
+
+                for(var k=0;k<splitted.length;k++) {
+                    result = result + "<span id=textSegment" + idCnt + " class='textElement'>" + splitted[k] + '</span> ';
+                    idCnt++;
+                }
+
+                $(elem).html(result);
+            }
+        } 
+    }
+}
+
