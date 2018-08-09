@@ -17962,6 +17962,31 @@ function removeParenthesis(myString) {
     return retValue;
 }
 
+function getSelectedString() {
+    var result = '';
+
+    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+        result = result + $('#textSegment' + i).html() + ' ';
+    }
+
+    return result;
+}
+
+function isInThePopover(elem) {
+    cur = $(elem);
+
+    while($(cur).length != 0) {
+        console.log(cur);
+
+        if($(cur).hasClass("popover"))
+            return true;
+
+        cur = $(cur).parent();
+    }
+
+    return false;
+}
+
 $(document).ready( function() {
     $(document).on("mousedown", function(e) {
         mouseDown++;
@@ -17969,7 +17994,11 @@ $(document).ready( function() {
         var x = e.clientX, y = e.clientY;
         var elementMouseIsOver = document.elementFromPoint(x, y);
 
+        console.log($(elementMouseIsOver));
+
         if($(elementMouseIsOver).hasClass("textElement")) {
+            removePopovers();
+
             startElementInx = parseInt($(elementMouseIsOver).attr("id").substr(11));
             console.log(startElementInx);
 
@@ -17990,12 +18019,16 @@ $(document).ready( function() {
                      }
                 });
             }
-
         }
-        else {
+        else if(!isInThePopover(elementMouseIsOver)) {
+            removePopovers();
+
             $(".textHighlighted").each(function() {
                  $(this).removeClass("textHighlighted");
             });
+        }
+        else {
+
         }
     });
 
@@ -18005,14 +18038,51 @@ $(document).ready( function() {
         var x = e.clientX, y = e.clientY;
         var elementMouseIsOver = document.elementFromPoint(x, y);
 
-        if($($(elementMouseIsOver).parent()).attr("class") == "textLayer") {
-            var contents = getSelectionHtml();
+        console.log(elementMouseIsOver);
 
-            console.log(contents);
+        if($(elementMouseIsOver).hasClass("textElement")) {
+            var textHighlightedCnt = $(".textHighlighted").length;
+            var endElement = elementMouseIsOver;
+            var eachCount = 0;
 
-            highlightedText = removeParenthesis(contents)
+            $(".textHighlighted").each(function() {
+                 $(this).removeClass("textHighlighted");
 
-            console.log(highlightedText);
+                 eachCount++;
+
+                 if(eachCount >= textHighlightedCnt) {
+                    endElementInx = parseInt($(endElement).attr("id").substr(11));
+
+                    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+                       $("#textSegment" + i).addClass("textHighlighted");
+                    }
+
+                    var contents = getSelectedString();
+
+                    console.log(contents);
+
+                    // highlightedText = removeParenthesis(contents)
+                    highlightedText = contents;
+
+                    console.log(highlightedText);
+
+                    removePopovers();
+
+                    var firstDiv = $("#textSegment" + startElementInx);
+
+                    popupDiv = firstDiv;
+
+                    if(firstDiv != null) {
+                        highlightParts();
+
+                        $(firstDiv).attr("data-toggle", "popover");
+                        $(firstDiv).attr("title", "Conversion options");
+                        $(firstDiv).attr("data-content", "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>");
+                        $(firstDiv).popover({"placement": "top", "html": true}).popover('show');
+                    }
+                 }
+            });
+
         }
     });
 
@@ -18037,10 +18107,6 @@ $(document).ready( function() {
             });
 
         }
-     });
-
-    $(document).on('mouseleave', '.textElement', function() {
-          // do something
      });
  
     observer = new MutationObserver(printMessage);
