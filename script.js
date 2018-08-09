@@ -261,7 +261,7 @@ $(document).ready(function() {
 
       $(document).on("addText", function(e) {
           console.log(e);
-          addText(e.detail.objId, e.detail.text, e.detail.pageId);
+          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.startIndex, e.detail.endIndex);
       });
 
       $(document).on("getSlideInfo", function() {
@@ -379,6 +379,7 @@ $(document).ready(function() {
                      console.log("succeed!");
                      console.log(createSlideResponse);
                      });
+
                  }
          });
       }
@@ -426,7 +427,7 @@ $(document).ready(function() {
          });
       }
 
-      function addText(objId, myText, pageId) {
+      function addText(objId, pageId, myText, startIndex, endIndex) {
           if(objId != null) {
               appendText(objId, myText);
            }

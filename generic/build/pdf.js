@@ -17746,7 +17746,7 @@ function highlight(node, start, end, color) {
 
 function highlightParts() {
     for(var i=0;i<highlightedParts.length;i++) {
-        highlight(highlightedParts[i][0], highlightedParts[i][1], highlightedParts[i][2], "red");
+        highlight(highlightedParts[i][0], highlightedParts[i][1], highlightedParts[i][2], "yellow");
     }
 }
 
@@ -17909,8 +17909,14 @@ function sendTextHighlighted() {
      $(popupDiv).popover({"placement": "top", "html": true}).popover('show');
      */
 
-     if(highlightedText != '')
-          issueEvent(document, "highlighted", highlightedText);
+     if(highlightedText != '') {
+          issueEvent(document, "highlighted", 
+              {
+                "text": highlightedText,
+                "startIndex": startElementInx,
+                "endIndex": endElementInx
+              });
+     }
 
      // getSlideObjInfo("11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4", "g3e97a32ced_0_0");
 }
@@ -17966,7 +17972,15 @@ function getSelectedString() {
     var result = '';
 
     for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-        result = result + $('#textSegment' + i).html() + ' ';
+        var elem = $('#textSegment' + i);
+
+        if($(elem).hasClass("textSegmentLineBreak")) {
+            if(result.slice(-1) == '-') result = result.slice(0, -1);
+            else result = result + ' ';
+        }
+        else {
+            result = result + $('#textSegment' + i).html();
+        }
     }
 
     return result;
@@ -18135,8 +18149,14 @@ function printMessage(mutationList) {
                 var result = '';
 
                 for(var k=0;k<splitted.length;k++) {
-                    result = result + "<span id=textSegment" + idCnt + " class='textElement'>" + splitted[k] + '</span> ';
-                    idCnt++;
+                    if(k < splitted.length-1) {
+                        result = result + "<span id=textSegment" + idCnt + " class='textElement'>" + splitted[k] + '</span>' + '<span id=textSegment' + (idCnt+1) + "> </span>";
+                        idCnt = idCnt + 2;
+                    }
+                    else {
+                        result = result + "<span id=textSegment" + idCnt + " class='textElement'>" + splitted[k] + '</span>' + '<span id=textSegment' + (idCnt+1) + " class='textSegmentLineBreak'></span>";
+                        idCnt = idCnt + 2;
+                    }
                 }
 
                 $(elem).html(result);
