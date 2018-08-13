@@ -642,3 +642,5 @@ $(document).ready(function() {
         curClickedElements = p.clickedElements
     });
 });
+
+
