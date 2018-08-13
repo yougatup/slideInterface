@@ -1,8 +1,9 @@
 var PRESENTATION_ID = '11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4'
 var documentString;
 var highlightDictionary = {};
-var curPageId;
+var curPageId = null;
 var curClickedElements = [];
+var myDB;
 
 function issueEvent(object, eventName, data) {
     var myEvent = new CustomEvent(eventName, {detail: data} );
@@ -105,7 +106,7 @@ function readTextFile(file)
     rawFile.send(null);
 }
 
-$(document).ready(function() {
+function initializeGAPI() {
       // Client ID and API key from the Developer Console
       var CLIENT_ID = '1080216621788-nsdlr416il84hr9t6nkrb9fv3b663tgk.apps.googleusercontent.com';
       var API_KEY = 'AIzaSyDtDPjTzXFIxzaYwz-qyaHAty-16vCNOJo';
@@ -291,20 +292,134 @@ $(document).ready(function() {
         });
       }*/
 
-
       handleClientLoad();
+}
+
+function storeData(pageId, objIdList, startIdx, endIdx) {
+    for(var i=0;i<objIdList.length;i++) {
+        myDB.put({
+          "_id": createObjId(),
+          "pageId": pageId,
+          "objId": objIdList[i],
+          "startIdx": startIdx,
+          "endIdx": endIdx
+        }).then(function (response) {
+          // handle response
+            console.log("SUCCEED STORE DATA");
+
+            loadData();
+
+        }).catch(function (err) {
+          console.log(err);
+        });
+    }
+}
+
+function loadData() {
+	myDB.allDocs({
+	  include_docs: true,
+	  attachments: true
+	}).then(function (result) {
+	  console.log(result);
+
+      for(var i=0;i<result.rows.length;i++) {
+         var elem = result.rows[i].doc;
+
+         addHighlight(elem.pageId, [elem.objId], elem.startIdx, elem.endIdx, false);
+      }
+
+      updateHighlight(curPageId, null);
+	}).catch(function (err) {
+	  console.log(err);
+	});
+}
+
+function createObjId() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 20; i++)
+  	  text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function addHighlight(pageId, objIdList, startIdx, endIdx, flag) {
+    if(!(pageId in highlightDictionary)) {
+        highlightDictionary[pageId] = {};
+    }
+
+    for(var i=0;i<objIdList.length;i++) {
+        objId = objIdList[i];
+
+        if(!(objId in highlightDictionary[pageId])) {
+            highlightDictionary[pageId][objId] = [];
+        }
+
+        highlightDictionary[pageId][objId].push([startIdx, endIdx]);
+    }
+
+    console.log(highlightDictionary);
+    
+    if(flag)
+        storeData(pageId, objIdList, startIdx, endIdx);
+}
+
+function updateHighlight(pageId, objIdList) {
+    console.log("UPDATE_HIGHLIGHT");
+    console.log(pageId);
+    console.log(objIdList);
+
+    console.log(highlightDictionary);
+
+    issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
+
+    if(!(pageId in highlightDictionary)) return;
+
+    var keys = Object.keys(highlightDictionary[pageId]);
+
+    for(var i=0;i<keys.length;i++) {
+      var thisKey = keys[i];
+
+      for(var j=0;j<highlightDictionary[pageId][thisKey].length;j++) {
+          var startIdx = highlightDictionary[pageId][thisKey][j][0];
+          var endIdx = highlightDictionary[pageId][thisKey][j][1];
+
+          issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
+                  {
+                     "startIndex": startIdx,
+                     "endIndex": endIdx,
+                     "color": (objIdList.includes(thisKey) ? 'blue' : 'yellow'),
+          });
+      }
+    }
+}
+
+function clearDatabase() {
+	myDB.allDocs({
+	  include_docs: true,
+	  attachments: true
+	}).then(function (result) {
+	  console.log(result);
+
+      for(var i=0;i<result.rows.length;i++) {
+         var elem = result.rows[i].doc;
+
+         myDB.remove(elem);
+      }
+	}).catch(function (err) {
+	  console.log(err);
+	});
+}
+
+$(document).ready(function() {
+       initializeGAPI();
 
       $("#createSlideButton").on("click", function() {
         createSlide();
         listSlides();
       });
 	
-      $(document).on("getPageInfo", function(e) {
-          console.log(e);
-          getPageInfo("11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4", "g3e97a32ced_0_0");
-          //addText(e.detail.objId, e.detail.text, e.detail.pageId);
-      });
-
       $(document).on("addText", function(e) {
           console.log(e);
 
@@ -360,16 +475,6 @@ $(document).ready(function() {
           appendPre('Error: ' + response.result.error.message);
         });
         });
-
-	  function createObjId() {
-		  var text = "";
-		  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-		  for (var i = 0; i < 20; i++)
-			  text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-		  return text;
-	  }
 
       function appendText(objId, myText, startIndex, endIndex) {
          console.log("yay");
@@ -447,7 +552,8 @@ $(document).ready(function() {
                      console.log("succeed!");
                      console.log(createSlideResponse);
 
-                     addHighlight(curPageId, curClickedElements, startIndex, endIndex);
+                     addHighlight(curPageId, curClickedElements, startIndex, endIndex, true);
+
                      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                              {
                                 "startIndex": startIndex,
@@ -459,56 +565,8 @@ $(document).ready(function() {
          });
       }
 
-      function addHighlight(pageId, objIdList, startIdx, endIdx) {
-          if(!(pageId in highlightDictionary)) {
-              highlightDictionary[pageId] = {};
-          }
-
-          for(var i=0;i<objIdList.length;i++) {
-              objId = objIdList[i];
-
-              if(!(objId in highlightDictionary[pageId])) {
-                  highlightDictionary[pageId][objId] = [];
-              }
-
-              highlightDictionary[pageId][objId].push([startIdx, endIdx]);
-          }
-
-          console.log(highlightDictionary);
-      }
-
       function removeHighlight(pageId, objId, startIdx, endIdx) {
           // to be filled
-      }
-
-      function updateHighlight(pageId, objIdList) {
-          console.log("UPDATE_HIGHLIGHT");
-          console.log(pageId);
-          console.log(objIdList);
-
-          console.log(highlightDictionary);
-
-          issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
-
-          if(!(pageId in highlightDictionary)) return;
-
-          var keys = Object.keys(highlightDictionary[pageId]);
-
-          for(var i=0;i<keys.length;i++) {
-            var thisKey = keys[i];
-
-            for(var j=0;j<highlightDictionary[pageId][thisKey].length;j++) {
-                var startIdx = highlightDictionary[pageId][thisKey][j][0];
-                var endIdx = highlightDictionary[pageId][thisKey][j][1];
-
-                issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
-                        {
-                           "startIndex": startIdx,
-                           "endIndex": endIdx,
-                           "color": (objIdList.includes(thisKey) ? 'blue' : 'yellow'),
-                });
-            }
-          }
       }
 
       function fillText(objId, myText, startIndex, endIndex) {
@@ -533,7 +591,7 @@ $(document).ready(function() {
              console.log("succeed!");
              console.log(createSlideResponse);
 
-             addHighlight(curPageId, ["editor-" + objId], startIndex, endIndex);
+             addHighlight(curPageId, ["editor-" + objId], startIndex, endIndex, true);
 
              issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                      {
@@ -641,6 +699,10 @@ $(document).ready(function() {
         curPageId = p.pageId;
         curClickedElements = p.clickedElements
     });
-});
 
+    myDB = new PouchDB('doc2slide_db')
+
+//    clearDatabase();
+    loadData();
+});
 
