@@ -17899,6 +17899,7 @@ function sendTextHighlighted() {
      console.log(highlightedText);
 
      $(popupDiv).popover('dispose');
+
 /*
      $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Text conversion options");
      $(popupDiv).attr("data-content", "<button id='titleBtn' class='btnItem' onclick='sendTextAsTitle()'> Title </button> " + 
@@ -17968,6 +17969,15 @@ function removeParenthesis(myString) {
     return retValue;
 }
 
+function highlightString(start, end, color) {
+    console.log(start + " " + end + " " + color);
+
+    for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
+        var elem = $('#textSegment' + i);
+
+        $(elem).addClass("textSelected textSelected"+color);
+    }
+}
 function getSelectedString() {
     var result = '';
 
@@ -17999,6 +18009,12 @@ function isInThePopover(elem) {
     }
 
     return false;
+}
+
+function removeHighlight() {
+   $(".textHighlighted").each(function() {
+        $(this).removeClass("textHighlighted");
+   });
 }
 
 $(document).ready( function() {
@@ -18100,6 +18116,28 @@ $(document).ready( function() {
         }
     });
 
+    $(document).on("PDFJS_HIGHLIGHT_TEXT", function(e) {
+        var p = e.detail;
+
+        console.log(p);
+
+        $(".textHighlighted").each(function() {
+             $(this).removeClass("textHighlighted");
+        });
+
+        highlightString(p.data.startIndex, p.data.endIndex, p.data.color);
+    });
+
+    $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
+        console.log("PDFJS_REMOVE_HIGHLIGHT_CALLED");
+
+        $(".textSelected").each(function() {
+             $(this).removeClass("textSelected");
+             $(this).removeClass("textSelectedyellow");
+             $(this).removeClass("textSelectedblue");
+        });
+    });
+
     $(document).on('mouseenter', '.textElement', function() {
         if(mouseDown) {
             var textHighlightedCnt = $(".textHighlighted").length;
@@ -18131,9 +18169,6 @@ $(document).ready( function() {
 });
 
 function printMessage(mutationList) {
-    console.log("yay");
-    console.log(mutationList);
-
     for(var i=0;i<mutationList.length;i++) {
         if($(mutationList[i].target).hasClass("textLayer")) {
             console.log("found!");

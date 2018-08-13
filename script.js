@@ -1,5 +1,8 @@
 var PRESENTATION_ID = '11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4'
 var documentString;
+var highlightDictionary = {};
+var curPageId;
+var curClickedElements = [];
 
 function issueEvent(object, eventName, data) {
     var myEvent = new CustomEvent(eventName, {detail: data} );
@@ -112,7 +115,7 @@ $(document).ready(function() {
 
       // Authorization scopes required by the API; multiple scopes can be
       // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/presentations";
+      var SCOPES = "https://www.googleapis.com/auth/presentations https://www.googleapis.com/auth/script.scriptapp https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/script.external_request";
 
       var authorizeButton = document.getElementById('authorize-button');
       var signoutButton = document.getElementById('signout-button');
@@ -155,6 +158,8 @@ $(document).ready(function() {
           authorizeButton.style.display = 'none';
           // signoutButton.style.display = 'block';
           // listSlides();
+
+          // callAppsScript(gapi.auth2.getAuthInstance());
         } else {
           authorizeButton.style.display = 'block';
           // signoutButton.style.display = 'none';
@@ -246,6 +251,47 @@ $(document).ready(function() {
         });
       }
 
+      /**
+       * Shows basic usage of the Apps Script API.
+       *
+       * Call the Apps Script API to create a new script project, upload files
+       * to the project, and log the script's URL to the user.
+       *
+       * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
+       */
+/*
+      function callAppsScript(auth) {
+        gapi.client.script.projects.create({
+          resource: {
+            title: 'My Script'
+          }
+        }).then((resp) => {
+          return gapi.client.script.projects.updateContent({
+            scriptId: resp.result.scriptId,
+            resource: {
+              files: [{
+                name: 'hello',
+                type: 'SERVER_JS',
+                source: 'function helloWorld() {\n  console.log("Hello, world!");\n}'
+              }, {
+                name: 'appsscript',
+                type: 'JSON',
+                source: "{\"timeZone\":\"America/New_York\",\"" +
+                   "exceptionLogging\":\"CLOUD\"}"
+              }]
+            }
+          });
+        }).then((resp) => {
+          let result = resp.result;
+          if (result.error) throw result.error;
+          console.log(`https://script.google.com/d/${result.scriptId}/edit`);
+        }).catch((error) => {
+          // The API encountered a problem.
+          return console.log(`The API returned an error: ${error}`);
+        });
+      }*/
+
+
       handleClientLoad();
 
       $("#createSlideButton").on("click", function() {
@@ -261,6 +307,7 @@ $(document).ready(function() {
 
       $(document).on("addText", function(e) {
           console.log(e);
+
           addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.startIndex, e.detail.endIndex);
       });
 
@@ -324,7 +371,26 @@ $(document).ready(function() {
 		  return text;
 	  }
 
-      function appendText(objId, myText) {
+      function appendText(objId, myText, startIndex, endIndex) {
+         console.log("yay");
+
+         gapi.client.request({
+            'root': 'https://script.googleapis.com',
+            'path': 'v1/scripts/16qbV0EOaVfKQhEw7d3Ug9Wc87ShtQ5PuJoYB0GQumeh9s08TYQHTTUah:run',
+            'method': 'POST',
+            'body': {
+                'function': 'myFunction',
+                'parameters': null,
+                'devMode': false 
+            }
+         }).then((response) => {
+             console.log("cool!");
+             console.log(response);
+         }).catch(function(error) {
+             console.log('cache!');
+             console.log(error);
+         });
+
          var requests = [ 
          {
            "insertText": {
@@ -376,15 +442,76 @@ $(document).ready(function() {
                    presentationId: PRESENTATION_ID,
                    requests: requests
                  }).then((createSlideResponse) => {
+                     // successfully pasted the text
+
                      console.log("succeed!");
                      console.log(createSlideResponse);
-                     });
 
+                     addHighlight(curPageId, curClickedElements, startIndex, endIndex);
+                     issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
+                             {
+                                "startIndex": startIndex,
+                                "endIndex": endIndex,
+                                "color": 'yellow',
+                             });
+                     });
                  }
          });
       }
 
-      function fillText(objId, myText) {
+      function addHighlight(pageId, objIdList, startIdx, endIdx) {
+          if(!(pageId in highlightDictionary)) {
+              highlightDictionary[pageId] = {};
+          }
+
+          for(var i=0;i<objIdList.length;i++) {
+              objId = objIdList[i];
+
+              if(!(objId in highlightDictionary[pageId])) {
+                  highlightDictionary[pageId][objId] = [];
+              }
+
+              highlightDictionary[pageId][objId].push([startIdx, endIdx]);
+          }
+
+          console.log(highlightDictionary);
+      }
+
+      function removeHighlight(pageId, objId, startIdx, endIdx) {
+          // to be filled
+      }
+
+      function updateHighlight(pageId, objIdList) {
+          console.log("UPDATE_HIGHLIGHT");
+          console.log(pageId);
+          console.log(objIdList);
+
+          console.log(highlightDictionary);
+
+          issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
+
+          if(!(pageId in highlightDictionary)) return;
+
+          var keys = Object.keys(highlightDictionary[pageId]);
+
+          for(var i=0;i<keys.length;i++) {
+            var thisKey = keys[i];
+
+            for(var j=0;j<highlightDictionary[pageId][thisKey].length;j++) {
+                var startIdx = highlightDictionary[pageId][thisKey][j][0];
+                var endIdx = highlightDictionary[pageId][thisKey][j][1];
+
+                issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
+                        {
+                           "startIndex": startIdx,
+                           "endIndex": endIdx,
+                           "color": (objIdList.includes(thisKey) ? 'blue' : 'yellow'),
+                });
+            }
+          }
+      }
+
+      function fillText(objId, myText, startIndex, endIndex) {
          var requests = [ 
              /*
          {
@@ -405,31 +532,24 @@ $(document).ready(function() {
          }).then((createSlideResponse) => {
              console.log("succeed!");
              console.log(createSlideResponse);
+
+             addHighlight(curPageId, ["editor-" + objId], startIndex, endIndex);
+
+             issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
+                     {
+                        "startIndex": startIndex,
+                        "endIndex": endIndex,
+                        "color": 'yellow',
+             });
          }).catch(function(error) {
              console.log('cache!');
              console.log(error);
-     
-             var requests = [ {
-               "insertText": {
-                 objectId: objId,
-                 text: myText,
-                 insertionIndex: 180
-               }
-             } ];
-     
-             gapi.client.slides.presentations.batchUpdate({
-               presentationId: PRESENTATION_ID,
-               requests: requests
-             }).then((createSlideResponse) => {
-                 console.log("succeed!");
-                 console.log(createSlideResponse);
-                 });
          });
       }
 
       function addText(objId, pageId, myText, startIndex, endIndex) {
           if(objId != null) {
-              appendText(objId, myText);
+              appendText(objId, myText, startIndex, endIndex);
            }
           else{
              var newObjId = createObjId();
@@ -468,7 +588,7 @@ $(document).ready(function() {
                presentationId: PRESENTATION_ID,
                requests: requests
              }).then((createSlideResponse) => {
-                 fillText(newObjId, myText);
+                 fillText(newObjId, myText, startIndex, endIndex);
              });
           }
       }
@@ -485,5 +605,40 @@ $(document).ready(function() {
             console.log(details);
 
             console.log("I got this");
+    });
+
+    $(document).on("ADDTEXT_COMPLETED", function(e) {
+            console.log(e.details);
+    });
+
+    $(document).on("removeAllHighlight", function(e) {
+            $("#slidePlaneCanvas").html('');
+    });
+
+    $(document).on("highlightSlideObject", function(e) {
+            $("#slidePlaneCanvas").append(
+                    '<div style="' + 
+                    'position: absolute; ' + 
+                    'width: ' + e.detail.width + '; ' + 
+                    'height: ' + e.detail.height + '; ' + 
+                    'left: ' + e.detail.left+ '; ' + 
+                    'top: ' + e.detail.top + '; ' +
+                    'background-color: yellow;' + 
+                    'opacity: 0.2">' + 
+                    '</div>'
+                    );
+    });
+
+    $(document).on("ROOT_UPDATE_HIGHLIGHT_REQUEST", function(e) {
+        var p = e.detail;
+
+        updateHighlight(p.pageId, p.objIdList);
+    });
+
+    $(document).on("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS", function(e) {
+        var p = e.detail;
+
+        curPageId = p.pageId;
+        curClickedElements = p.clickedElements
     });
 });
