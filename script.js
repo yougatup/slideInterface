@@ -328,7 +328,7 @@ function loadData() {
          addHighlight(elem.pageId, [elem.objId], elem.startIdx, elem.endIdx, false);
       }
 
-      updateHighlight(curPageId, null);
+      updateHighlight(curPageId, []);
 	}).catch(function (err) {
 	  console.log(err);
 	});
@@ -359,18 +359,15 @@ function addHighlight(pageId, objIdList, startIdx, endIdx, flag) {
         highlightDictionary[pageId][objId].push([startIdx, endIdx]);
     }
 
-    console.log(highlightDictionary);
-    
     if(flag)
         storeData(pageId, objIdList, startIdx, endIdx);
 }
 
 function updateHighlight(pageId, objIdList) {
     console.log("UPDATE_HIGHLIGHT");
+    /*
     console.log(pageId);
-    console.log(objIdList);
-
-    console.log(highlightDictionary);
+    console.log(objIdList);*/
 
     issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
 
@@ -696,8 +693,14 @@ $(document).ready(function() {
     $(document).on("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS", function(e) {
         var p = e.detail;
 
+        console.log("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS");
+
         curPageId = p.pageId;
         curClickedElements = p.clickedElements
+/*
+        console.log(curPageId);
+        console.log(curClickedElements);
+        */
     });
 
     myDB = new PouchDB('doc2slide_db')

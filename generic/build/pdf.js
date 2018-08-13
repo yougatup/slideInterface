@@ -17970,8 +17970,6 @@ function removeParenthesis(myString) {
 }
 
 function highlightString(start, end, color) {
-    console.log(start + " " + end + " " + color);
-
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
         var elem = $('#textSegment' + i);
 
@@ -18119,8 +18117,6 @@ $(document).ready( function() {
     $(document).on("PDFJS_HIGHLIGHT_TEXT", function(e) {
         var p = e.detail;
 
-        console.log(p);
-
         $(".textHighlighted").each(function() {
              $(this).removeClass("textHighlighted");
         });
@@ -18129,8 +18125,6 @@ $(document).ready( function() {
     });
 
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
-        console.log("PDFJS_REMOVE_HIGHLIGHT_CALLED");
-
         $(".textSelected").each(function() {
              $(this).removeClass("textSelected");
              $(this).removeClass("textSelectedyellow");
@@ -18171,9 +18165,6 @@ $(document).ready( function() {
 function printMessage(mutationList) {
     for(var i=0;i<mutationList.length;i++) {
         if($(mutationList[i].target).hasClass("textLayer")) {
-            console.log("found!");
-            console.log(mutationList[i]);
-
             for(var j=0;j<mutationList[i].addedNodes.length;j++) {
                 var elem = mutationList[i].addedNodes[j];
 
