@@ -364,7 +364,6 @@ function addHighlight(pageId, objIdList, startIdx, endIdx, flag) {
 }
 
 function updateHighlight(pageId, objIdList) {
-    console.log("UPDATE_HIGHLIGHT");
     /*
     console.log(pageId);
     console.log(objIdList);*/
@@ -386,6 +385,7 @@ function updateHighlight(pageId, objIdList) {
                   {
                      "startIndex": startIdx,
                      "endIndex": endIdx,
+                     "slideObjId": thisKey,
                      "color": (objIdList.includes(thisKey) ? 'blue' : 'yellow'),
           });
       }
@@ -666,7 +666,7 @@ $(document).ready(function() {
             console.log(e.details);
     });
 
-    $(document).on("removeAllHighlight", function(e) {
+    $(document).on("clearPlaneCanvas", function(e) {
             $("#slidePlaneCanvas").html('');
     });
 
@@ -692,8 +692,6 @@ $(document).ready(function() {
 
     $(document).on("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS", function(e) {
         var p = e.detail;
-
-        console.log("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS");
 
         curPageId = p.pageId;
         curClickedElements = p.clickedElements

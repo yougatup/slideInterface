@@ -17969,11 +17969,12 @@ function removeParenthesis(myString) {
     return retValue;
 }
 
-function highlightString(start, end, color) {
+function highlightString(start, end, color, slideObjId) {
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
         var elem = $('#textSegment' + i);
 
         $(elem).addClass("textSelected textSelected"+color);
+        $(elem).attr("slideObjId", slideObjId);
     }
 }
 function getSelectedString() {
@@ -18121,7 +18122,7 @@ $(document).ready( function() {
              $(this).removeClass("textHighlighted");
         });
 
-        highlightString(p.data.startIndex, p.data.endIndex, p.data.color);
+        highlightString(p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
     });
 
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
@@ -18129,6 +18130,7 @@ $(document).ready( function() {
              $(this).removeClass("textSelected");
              $(this).removeClass("textSelectedyellow");
              $(this).removeClass("textSelectedblue");
+             $(this).removeAttr("slideObjId");
         });
     });
 
@@ -18151,15 +18153,26 @@ $(document).ready( function() {
                     }
                  }
             });
+        }
+        else if($(this).hasClass("textSelected")) {
+            var objId = $(this).attr("slideObjId");
 
+            // highlightSlideObject(objId);
+
+            issueEvent(document, "getSlideObjectForHighlight", {
+                    "slideObjId": objId
+            });
         }
      });
+
+    $(document).on('mouseleave', '.textElement', function() {
+        issueEvent(document, "clearPlaneCanvas", null);
+    });
  
     observer = new MutationObserver(printMessage);
 
     mutationConfig = { attributes: false, childList: true, subtree: true };
     observer.observe(document, mutationConfig);
-
 });
 
 function printMessage(mutationList) {
