@@ -6,6 +6,7 @@ var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
 var jsonMetaData, xmlMetaData;
+var parsedReferences = [];
 
 /**
  * @licstart The following is the entire license notice for the
@@ -17984,7 +17985,8 @@ function getSelectedString() {
     for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
         var elem = $('#textSegment' + i);
 
-        if($(elem).hasClass("textSegmentLineBreak")) {
+        if($(elem).hasClass("referred")) ;
+        else if($(elem).hasClass("textSegmentLineBreak")) {
             if(result.slice(-1) == '-') result = result.slice(0, -1);
             else result = result + ' ';
         }
@@ -18000,8 +18002,6 @@ function isInThePopover(elem) {
     cur = $(elem);
 
     while($(cur).length != 0) {
-        console.log(cur);
-
         if($(cur).hasClass("popover"))
             return true;
 
@@ -18015,6 +18015,15 @@ function removeHighlight() {
    $(".textHighlighted").each(function() {
         $(this).removeClass("textHighlighted");
    });
+}
+
+function getRefInfo(id) {
+    for(var i=0;i<parsedReferences.length;i++) {
+        if(parsedReferences[i].id == id)
+            return parsedReferences[i];
+    }
+
+    return null;
 }
 
 $(document).ready( function() {
@@ -18062,6 +18071,18 @@ $(document).ready( function() {
         }
     });
 
+    function getReferredList(classes) {
+        var retValue = [];
+
+        for(var i=0;i<classes.length;i++) {
+            if(classes[i].match("^referred") && classes[i] != "referred") {
+                retValue.push(classes[i].substr(8));
+            }
+        }
+
+        return retValue;
+    }
+
     $(document).on("mouseup", function(e) {
         mouseDown = 0;
 
@@ -18083,7 +18104,6 @@ $(document).ready( function() {
 		};
 
         console.log($(elementMouseIsOver));
-        console.log(cumulativeOffset(elementMouseIsOver));
 
         if($(elementMouseIsOver).hasClass("textElement")) {
             var textHighlightedCnt = $(".textHighlighted").length;
@@ -18091,6 +18111,9 @@ $(document).ready( function() {
             var eachCount = 0;
 
             $(".textHighlighted").each(function() {
+                 var classes = $(this).attr('class').split(/\s+/);
+                 var referredList = getReferredList(classes);
+
                  $(this).removeClass("textHighlighted");
 
                  eachCount++;
@@ -18114,16 +18137,33 @@ $(document).ready( function() {
                     removePopovers();
 
                     var firstDiv = $("#textSegment" + startElementInx);
+                    var content = '';
 
                     popupDiv = firstDiv;
 
                     if(firstDiv != null) {
                         highlightParts();
 
+                        if(startElementInx >= endElementInx) {
+                            $("#textSegment" + startElementInx).hasClass("referred")
+                            var classes = $("#textSegment" + startElementInx).attr('class').split(/\s+/);
+                            var referredList = getReferredList(classes);
+
+                            for(var i=0;i<referredList.length;i++) {
+                                refInfo = getRefInfo(referredList[i]);
+
+                                content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
+                            }
+                        }
+
+                        if(content == '') content = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>";
+                        else content = content + "<br><hr />" + "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>";
+
                         $(firstDiv).attr("data-toggle", "popover");
                         $(firstDiv).attr("title", "Conversion options");
-                        $(firstDiv).attr("data-content", "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>");
-                        $(firstDiv).popover({"placement": "top", "html": true}).popover('show');
+                        $(firstDiv).attr("data-content", content);
+
+                        $(firstDiv).popover({"placement": "top", "html": true, "max-width": "400px"}).popover('show');
                     }
                  }
             });
@@ -18206,6 +18246,46 @@ $(document).ready( function() {
     observer.observe(document, mutationConfig);
 });
 
+function parseBib(bib) {
+    var id = null;
+    var paperTitle = null;
+    var authors = [];
+    var venue = null;
+    var date = null;
+
+    id = $(bib).attr("xml:id");
+    paperTitle = $(bib).find("analytic").find("title").html();
+
+    var authorElems = $(bib).find("author");
+
+    for(var i=0;i<authorElems.length;i++) {
+        var author = $(authorElems)[i];
+
+        var name = $(author).find("persName");
+        var nameString = '';
+
+        if($(name).length > 0) {
+            for(var j=0;j<$(name)[0].childNodes.length;j++) {
+                var nameCharacter = $($(name)[0].childNodes[j]).html();
+                nameString = (j == 0 ? nameCharacter : nameString + ' ' + nameCharacter);
+            }
+        }
+
+        authors.push(nameString);
+    }
+
+    venue = $(bib).find("monogr").find("title").html();
+    date = $(bib).find("imprint").find("date").attr("when");
+
+    return {
+        "id": id,
+        "paperTitle": paperTitle,
+        "authors": authors,
+        "venue": venue,
+        "date": date
+    };
+}
+
 function readTextFile(file, filetype)
 {
     var rawFile = new XMLHttpRequest();
@@ -18228,6 +18308,22 @@ function readTextFile(file, filetype)
                     tei = $.parseXML(allText.join([separator = '']))
                     xmlMetaData = $.parseXML(allText.join([separator = '']));
                     console.log(xmlMetaData);
+
+                    var listBibl = $(xmlMetaData).find('listBibl');
+
+                    console.log($(listBibl));
+
+                    for(var i=0;i<$(listBibl)[0].childNodes.length;i++) {
+                        var bib = $(listBibl)[0].childNodes[i];
+
+                        if($(bib).is("biblstruct")) {
+                            var result = parseBib(bib);
+
+                            parsedReferences.push(result);
+                        }
+                    }
+
+                    console.log(parsedReferences);
                 }
                 else if(filetype == 'json'){
                     json = $.parseJSON(allText.join([separator = '']))
@@ -18342,6 +18438,7 @@ function printMessage(mutationList) {
                        textLeft <= refMidX && refMidX <= textLeft + textWidth) {
                         console.log($("#textSegment" + j));
 
+                        $("#textSegment" + j).addClass("referred" + ref.id);
                         $("#textSegment" + j).addClass("referred");
                     }
                 }

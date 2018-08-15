@@ -2400,8 +2400,9 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
 }
 
 .btnItem {
-width: 30px;
-height: 30px;
+width: 80px;
+height: 50px;
+        font-size: 25px;
 }
 
 .smallBtnItem{
@@ -2464,3 +2465,16 @@ height: 15px;
 .referred:hover {
     background-color: yellow;
 }
+
+.popover {
+    max-width: 500px !important;
+}
+
+.popover-body {
+    font-size: 18px;
+}
+
+.popover-header {
+    font-size: 25px !important;
+}
+
