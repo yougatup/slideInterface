@@ -5,6 +5,7 @@ var highlightedText = '';
 var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
+var jsonMetaData, xmlMetaData;
 
 /**
  * @licstart The following is the entire license notice for the
@@ -18062,12 +18063,27 @@ $(document).ready( function() {
     });
 
     $(document).on("mouseup", function(e) {
-        mouseDown--;
+        mouseDown = 0;
 
         var x = e.clientX, y = e.clientY;
         var elementMouseIsOver = document.elementFromPoint(x, y);
 
-        console.log(elementMouseIsOver);
+		var cumulativeOffset = function(element) {
+		    var top = 0, left = 0;
+		    do {
+		        top += element.offsetTop  || 0;
+		        left += element.offsetLeft || 0;
+		        element = element.offsetParent;
+		    } while(element);
+		
+		    return {
+		        top: top,
+		        left: left
+		    };
+		};
+
+        console.log($(elementMouseIsOver));
+        console.log(cumulativeOffset(elementMouseIsOver));
 
         if($(elementMouseIsOver).hasClass("textElement")) {
             var textHighlightedCnt = $(".textHighlighted").length;
@@ -18168,16 +18184,117 @@ $(document).ready( function() {
     $(document).on('mouseleave', '.textElement', function() {
         issueEvent(document, "clearPlaneCanvas", null);
     });
+
+    $(document).on('click', function(e){
+        var x = event.clientX;     // Get the horizontal coordinate
+        var y = event.clientY;     // Get the vertical coordinate
+        var coor = "X coords: " + x + ", Y coords: " + y;
+
+        console.log(coor);
+    });
  
+    $(document).on("mouseenter", ".pageCanvasReferenceWithID", function(){
+            console.log("hovered!" + this);
+            });
+
+    readTextFile("../web/paperData/paper/metadata.tei", 'xml');
+    readTextFile("../web/paperData/paper/metadata.json", 'json');
+
     observer = new MutationObserver(printMessage);
 
     mutationConfig = { attributes: false, childList: true, subtree: true };
     observer.observe(document, mutationConfig);
 });
 
+function readTextFile(file, filetype)
+{
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText.replace(/\\r\\n/g, "<br />");
+
+                allText = allText.split("\n");
+                documentString = allText;
+
+                console.log(allText);
+                console.log(allText.join([separator = '']));
+
+                if(filetype == 'xml') {
+                    tei = $.parseXML(allText.join([separator = '']))
+                    xmlMetaData = $.parseXML(allText.join([separator = '']));
+                    console.log(xmlMetaData);
+                }
+                else if(filetype == 'json'){
+                    json = $.parseJSON(allText.join([separator = '']))
+                    jsonMetaData = $.parseJSON(allText.join([separator = '']))
+                    console.log(jsonMetaData);
+                }
+
+/*
+                for(var i=0;i<allText.length;i++) {
+                    var segment = allText[i].split(" ");
+                    var myString = "<div id='paragraph" + i + "' class='paragraph'>"
+
+                    for(var j=0;j<segment.length;j++) {
+                        myString += "<span id='segment_" + i + "_" + j + "' class='word'>";
+                        myString += segment[j];
+                        myString += "</span>";
+                        myString += ' ';
+                    }
+
+                    myString += "</div>";
+                    $("#leftPlane").append(myString);
+                }
+
+               //  $("#leftPlane").append("<pre id='documentText'>" + allText + "</pre>");
+
+                for(var i=0;i<allText.length;i++) {
+                    highlightParagraph(i);
+                }
+*/
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+
 function printMessage(mutationList) {
+    // console.log(mutationList);
+
     for(var i=0;i<mutationList.length;i++) {
         if($(mutationList[i].target).hasClass("textLayer")) {
+            var pageNumber = parseInt($($(mutationList[i].target).parent()).attr("data-page-number"));
+            var pageSize = jsonMetaData.pages[pageNumber-1];
+            var refs = [];
+
+            console.log($("#pageCanvas" + pageNumber).length);
+
+            if($("#pageCanvas" + pageNumber).length == 0) {
+                var pageDiv = $(mutationList[i].target).parent();
+                $($(mutationList[i].target).parent()).append("<div id=pageCanvas" + pageNumber + " class=pageCanvas></div>");
+
+                $("#pageCanvas" + pageNumber).height($(pageDiv).height());
+                $("#pageCanvas" + pageNumber).width($(pageDiv).width());
+            }
+
+            for(var j=0;j<jsonMetaData.refMarkers.length;j++) {
+                if(jsonMetaData.refMarkers[j].p == pageNumber)
+                    refs.push(jsonMetaData.refMarkers[j]);
+            }
+
+            console.log(refs);
+
+            var pageRect = $(mutationList[i].target)[0].getBoundingClientRect();
+
+            var startCnt = idCnt;
+            var endCnt = -1;
+
             for(var j=0;j<mutationList[i].addedNodes.length;j++) {
                 var elem = mutationList[i].addedNodes[j];
 
@@ -18199,6 +18316,69 @@ function printMessage(mutationList) {
                 }
 
                 $(elem).html(result);
+            }
+
+            endCnt = idCnt;
+
+            for(var j=startCnt;j<endCnt;j++) {
+                for(var k=0;k<refs.length;k++) {
+                    var ref = refs[k];
+
+                    var refY = ((refs[k].y) / pageSize.page_height) * pageRect.height;
+                    var refX = ((refs[k].x) / pageSize.page_width) * pageRect.width;
+                    var refHeight = ((refs[k].h) / pageSize.page_height) * pageRect.height;
+                    var refWidth = ((refs[k].w) / pageSize.page_width) * pageRect.width;
+
+                    var refMidY = refY + (refHeight / 2);
+                    var refMidX = refX + (refWidth / 2);
+
+                    var textLeft = $("#textSegment" + j).offset().left - $("#pageCanvas" + pageNumber).offset().left;
+                    var textTop = $("#textSegment" + j).offset().top- $("#pageCanvas" + pageNumber).offset().top;
+
+                    var textWidth = $("#textSegment" + j).width();
+                    var textHeight = $("#textSegment" + j).height();
+
+                    if(textTop <= refMidY && refMidY <= textTop + textHeight && 
+                       textLeft <= refMidX && refMidX <= textLeft + textWidth) {
+                        console.log($("#textSegment" + j));
+
+                        $("#textSegment" + j).addClass("referred");
+                    }
+                }
+            }
+
+            for(var j=0;j<refs.length;j++) {
+                var ref = refs[j];
+
+                var refY = ((refs[j].y) / pageSize.page_height) * pageRect.height;
+                var refX = ((refs[j].x) / pageSize.page_width) * pageRect.width;
+                var refHeight = ((refs[j].h) / pageSize.page_height) * pageRect.height;
+                var refWidth = ((refs[j].w) / pageSize.page_width) * pageRect.width;
+
+                var pageCanvasReferenceElementID = "pageCanvasReference_" + pageNumber + "_" + j;
+
+                if($("#" + pageCanvasReferenceElementID).length == 0) {
+                    $("#pageCanvas" + pageNumber).append(
+                            "<div id=" + pageCanvasReferenceElementID + "></div>"
+                            );
+
+                    if(ref.id != null) 
+                        $("#" + pageCanvasReferenceElementID).addClass("pageCanvasReferenceWithID")
+                    else 
+                        $("#" + pageCanvasReferenceElementID).addClass("pageCanvasReferenceWithoutID")
+
+                    $("#" + pageCanvasReferenceElementID).css({
+                            "left": refX,
+                            "top": refY
+                    });
+
+                    $("#" + pageCanvasReferenceElementID).width(refWidth);
+                    $("#" + pageCanvasReferenceElementID).height(refHeight);
+
+                    console.log(pageCanvasReferenceElementID);
+                    console.log("X : " + refX + ", Y : " + refY);
+                    console.log("width : " + refWidth + ", height : " + refHeight);
+                }
             }
         } 
     }

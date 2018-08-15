@@ -4,6 +4,8 @@ var highlightDictionary = {};
 var curPageId = null;
 var curClickedElements = [];
 var myDB;
+var jsonMetaData, xmlMetaData;
+var tei, json;
 
 function issueEvent(object, eventName, data) {
     var myEvent = new CustomEvent(eventName, {detail: data} );
@@ -63,7 +65,7 @@ function highlightParagraph(pIndex) {
     });
 }
 
-function readTextFile(file)
+function readTextFile(file, filetype)
 {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
@@ -79,7 +81,20 @@ function readTextFile(file)
                 documentString = allText;
 
                 console.log(allText);
+                console.log(allText.join([separator = '']));
 
+				if(filetype == 'xml') {
+					tei = $.parseXML(allText.join([separator = '']))
+					xmlMetaData = $.parseXML(allText.join([separator = '']));
+					console.log(xmlMetaData);
+				}
+				else if(filetype == 'json'){
+					json = $.parseJSON(allText.join([separator = '']))
+					jsonMetaData = $.parseJSON(allText.join([separator = '']))
+					console.log(jsonMetaData);
+				}
+
+/*
                 for(var i=0;i<allText.length;i++) {
                     var segment = allText[i].split(" ");
                     var myString = "<div id='paragraph" + i + "' class='paragraph'>"
@@ -100,6 +115,7 @@ function readTextFile(file)
 				for(var i=0;i<allText.length;i++) {
                 	highlightParagraph(i);
 				}
+*/
             }
         }
     }
@@ -652,7 +668,7 @@ $(document).ready(function() {
               addText("SLIDES_API1293859000_1", "blahblah");
      });
 
-	$(document).on('click', '.highlightPhrase', function() {
+	$(document).on('click', function() {
 		alert($(this).attr('id'));
 	});
 
@@ -700,6 +716,20 @@ $(document).ready(function() {
         console.log(curClickedElements);
         */
     });
+/*
+	readTextFile("./generic/web/metadata.tei", 'xml');
+	readTextFile("./generic/web/metadata.json", 'json');
+*/
+	
+    function refSuccess(e) {
+        console.log(e);
+    }
+
+    $.ajax({
+url: "https://api.crossref.org/works?rows=5&query.title=Trace-based+Just-in-Time+Type+Specialization+for+Dynamic+Languages",
+success: refSuccess,
+dataType: "json"
+            });
 
     myDB = new PouchDB('doc2slide_db')
 

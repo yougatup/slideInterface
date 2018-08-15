@@ -2426,3 +2426,41 @@ height: 15px;
 .textSelectedblue {
     background-color: blue;
 }
+
+.pageCanvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.pageCanvasReferenceWithID {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 5px solid red;
+}
+
+.pageCanvasReferenceWithID:hover {
+    background-color: yellow;
+}
+
+.pageCanvasReferenceWithoutID {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border-bottom: 5px solid blue;
+}
+
+.pageCanvasReferenceWithoutID:hover {
+    border-bottom: 5px solid yellow;
+}
+
+.referred:hover {
+    background-color: yellow;
+}
