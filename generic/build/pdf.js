@@ -6,7 +6,9 @@ var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
 var jsonMetaData, xmlMetaData;
+var parsedListofReferences = [];
 var parsedReferences = [];
+var parsedFigures = [];
 
 /**
  * @licstart The following is the entire license notice for the
@@ -18286,6 +18288,60 @@ function parseBib(bib) {
     };
 }
 
+function parseListOfReferences(bib) {
+    var retValue = [];
+
+    var id = $(bib).attr("xml:id");
+    var pageID;
+
+    var coors = $(bib).attr("coords").split(';');
+
+    for(var i=0;i<coors.length;i++) {
+        var coor = coors[i].split(',');
+
+        var pageID = coor[0];
+        var x = coor[1];
+        var y = coor[2];
+        var w = coor[3];
+        var h = coor[4];
+
+        retValue.push({
+            'p': pageID,
+            'x': x,
+            'y': y,
+            'w': w,
+            'h': h
+        });
+    }
+
+    return retValue;
+}
+
+function parseFigure(fig) {
+    var retValue = [];
+    var coors = $(fig).attr("coords").split(';');
+
+    for(var i=0;i<coors.length;i++) {
+        var coor = coors[i].split(',');
+
+        var p = coor[0];
+        var x = coor[1];
+        var y = coor[2];
+        var w = coor[3];
+        var h = coor[4];
+
+        retValue.push({
+                'p': p,
+                'x': x,
+                'y': y,
+                'h': h,
+                'w': w
+        });
+    }
+
+    return retValue;
+}
+
 function readTextFile(file, filetype)
 {
     var rawFile = new XMLHttpRequest();
@@ -18324,6 +18380,33 @@ function readTextFile(file, filetype)
                     }
 
                     console.log(parsedReferences);
+
+                    var figures = $(xmlMetaData).find('figure');
+
+                    for(var i=0;i<$(figures).length;i++) {
+                        var figure = $(figures)[i];
+
+                        console.log($(figure));
+
+                        var result = parseFigure(figure);
+
+                        console.log(result);
+                        parsedFigures.push(result)
+                    }
+
+                    console.log(parsedFigures);
+
+                    var listOfReferences = $(xmlMetaData).find('back').find('biblStruct');
+
+                    for(var i=0;i<$(listOfReferences).length;i++) {
+                        var ref = $(listOfReferences)[i];
+
+                        var result = parseListOfReferences(ref);
+
+                        parsedListofReferences.push(result);
+                    }
+
+                    console.log(parsedListofReferences);
                 }
                 else if(filetype == 'json'){
                     json = $.parseJSON(allText.join([separator = '']))
@@ -18368,6 +18451,8 @@ function printMessage(mutationList) {
             var pageNumber = parseInt($($(mutationList[i].target).parent()).attr("data-page-number"));
             var pageSize = jsonMetaData.pages[pageNumber-1];
             var refs = [];
+            var figs = [];
+            var ListofRefs = [];
 
             console.log($("#pageCanvas" + pageNumber).length);
 
@@ -18384,7 +18469,21 @@ function printMessage(mutationList) {
                     refs.push(jsonMetaData.refMarkers[j]);
             }
 
-            console.log(refs);
+            for(var j=0;j<parsedFigures.length;j++) {
+                for(var k=0;k<parsedFigures[j].length;k++) {
+                    if(parsedFigures[j][k].p == pageNumber) {
+                        figs.push(parsedFigures[j][k]);
+                    }
+                }
+            }
+
+            for(var j=0;j<parsedListofReferences.length;j++) {
+                for(var k=0;k<parsedListofReferences[j].length;k++) {
+                    if(parsedListofReferences[j][k].p == pageNumber) {
+                        ListofRefs.push(parsedListofReferences[j][k]);
+                    }
+                }
+            }
 
             var pageRect = $(mutationList[i].target)[0].getBoundingClientRect();
 
@@ -18443,7 +18542,7 @@ function printMessage(mutationList) {
                     }
                 }
             }
-
+            /* REFERENCES ANNOTATING */
             for(var j=0;j<refs.length;j++) {
                 var ref = refs[j];
 
@@ -18476,6 +18575,60 @@ function printMessage(mutationList) {
                     console.log("X : " + refX + ", Y : " + refY);
                     console.log("width : " + refWidth + ", height : " + refHeight);
                 }
+            }
+
+            /* FIGURE SCRIPT ANNOTATION*/ 
+
+            for(var j=0;j<figs.length;j++) {
+                var pageCanvasFigureID = "pageCanvasFigure_" + pageNumber + "_" + j;
+
+                var figY = ((figs[j].y) / pageSize.page_height) * pageRect.height;
+                var figX = ((figs[j].x) / pageSize.page_width) * pageRect.width;
+                var figHeight = ((figs[j].h) / pageSize.page_height) * pageRect.height;
+                var figWidth  = ((figs[j].w) / pageSize.page_width) * pageRect.width;
+
+                $("#pageCanvas" + pageNumber).append(
+                        "<div id=" + pageCanvasFigureID + "></div>"
+                );
+
+                $("#" + pageCanvasFigureID).addClass("pageCanvasFigure");
+
+                $("#" + pageCanvasFigureID).css({
+                        "left": figX,
+                        "top": figY
+                        });
+
+                $("#" + pageCanvasFigureID).width(figWidth);
+                $("#" + pageCanvasFigureID).height(figHeight);
+
+                console.log(figX + " " + figY + " " + figWidth + " " + figHeight);
+            }
+            
+            console.log(ListofRefs);
+
+            /* LIST OF REFERENCES ANNOTATING */ 
+
+            for(var j=0;j<ListofRefs.length;j++) {
+                var pageCanvasListofRefsID = "pageCanvasListofRefs" + pageNumber + "_" + j;
+
+                var lirefY = ((ListofRefs[j].y) / pageSize.page_height) * pageRect.height;
+                var lirefX = ((ListofRefs[j].x) / pageSize.page_width) * pageRect.width;
+                var lirefHeight = ((ListofRefs[j].h) / pageSize.page_height) * pageRect.height;
+                var lirefWidth  = ((ListofRefs[j].w) / pageSize.page_width) * pageRect.width;
+
+                $("#pageCanvas" + pageNumber).append(
+                        "<div id=" + pageCanvasListofRefsID + "></div>"
+                );
+
+                $("#" + pageCanvasListofRefsID ).addClass("pageCanvasListofRefs");
+
+                $("#" + pageCanvasListofRefsID ).css({
+                        "left": lirefX,
+                        "top": lirefY
+                        });
+
+                $("#" + pageCanvasListofRefsID ).width(lirefWidth);
+                $("#" + pageCanvasListofRefsID ).height(lirefHeight);
             }
         } 
     }

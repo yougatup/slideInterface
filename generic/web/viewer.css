@@ -2478,3 +2478,21 @@ height: 15px;
     font-size: 25px !important;
 }
 
+
+.pageCanvasFigure {
+    background-color: green;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+.pageCanvasListofRefs {
+    background-color: gray;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0.5;
+}
