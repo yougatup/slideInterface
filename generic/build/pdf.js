@@ -5,7 +5,7 @@ var highlightedText = '';
 var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
-var jsonMetaData, xmlMetaData;
+var jsonMetaData, xmlMetaData, pdffigureMetaData;
 var parsedListofReferences = [];
 var parsedReferences = [];
 var parsedFigures = [];
@@ -18239,8 +18239,9 @@ $(document).ready( function() {
             console.log("hovered!" + this);
             });
 
-    readTextFile("../web/paperData/paper/metadata.tei", 'xml');
-    readTextFile("../web/paperData/paper/metadata.json", 'json');
+    readTextFile("../web/paperData/paper/metadata.tei", 'xml', "TEI");
+    readTextFile("../web/paperData/paper/metadata.json", 'json', "REFERENCE_META");
+    readTextFile("../web/paperData/paper/dataOutputpaper.json", 'json', "PDF_FIGURE");
 
     observer = new MutationObserver(printMessage);
 
@@ -18342,7 +18343,7 @@ function parseFigure(fig) {
     return retValue;
 }
 
-function readTextFile(file, filetype)
+function readTextFile(file, filetype, type)
 {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
@@ -18360,7 +18361,7 @@ function readTextFile(file, filetype)
                 console.log(allText);
                 console.log(allText.join([separator = '']));
 
-                if(filetype == 'xml') {
+                if(type == "TEI") {
                     tei = $.parseXML(allText.join([separator = '']))
                     xmlMetaData = $.parseXML(allText.join([separator = '']));
                     console.log(xmlMetaData);
@@ -18408,10 +18409,14 @@ function readTextFile(file, filetype)
 
                     console.log(parsedListofReferences);
                 }
-                else if(filetype == 'json'){
+                else if(type == 'REFERENCE_META'){
                     json = $.parseJSON(allText.join([separator = '']))
                     jsonMetaData = $.parseJSON(allText.join([separator = '']))
                     console.log(jsonMetaData);
+                }
+                else if(type == "PDF_FIGURE"){
+                    pdffigureMetaData = $.parseJSON(allText.join([separator = '']));
+                    console.log(pdffigureMetaData);
                 }
 
 /*
@@ -18451,7 +18456,7 @@ function printMessage(mutationList) {
             var pageNumber = parseInt($($(mutationList[i].target).parent()).attr("data-page-number"));
             var pageSize = jsonMetaData.pages[pageNumber-1];
             var refs = [];
-            var figs = [];
+            var figCaptions = [], figs = [];
             var ListofRefs = [];
 
             console.log($("#pageCanvas" + pageNumber).length);
@@ -18472,7 +18477,7 @@ function printMessage(mutationList) {
             for(var j=0;j<parsedFigures.length;j++) {
                 for(var k=0;k<parsedFigures[j].length;k++) {
                     if(parsedFigures[j][k].p == pageNumber) {
-                        figs.push(parsedFigures[j][k]);
+                        figCaptions.push(parsedFigures[j][k]);
                     }
                 }
             }
@@ -18482,6 +18487,14 @@ function printMessage(mutationList) {
                     if(parsedListofReferences[j][k].p == pageNumber) {
                         ListofRefs.push(parsedListofReferences[j][k]);
                     }
+                }
+            }
+
+            for(var j=0;j<pdffigureMetaData.length;j++) {
+                var data = pdffigureMetaData[j];
+
+                if((data.page + 1) == pageNumber) {
+                    figs.push(pdffigureMetaData[j]);
                 }
             }
 
@@ -18578,33 +18591,34 @@ function printMessage(mutationList) {
             }
 
             /* FIGURE SCRIPT ANNOTATION*/ 
+            /*
+            for(var j=0;j<figCaptions.length;j++) {
+                var pageCanvasFigureCaptionID = "pageCanvasFigureCaption_" + pageNumber + "_" + j;
 
-            for(var j=0;j<figs.length;j++) {
-                var pageCanvasFigureID = "pageCanvasFigure_" + pageNumber + "_" + j;
-
-                var figY = ((figs[j].y) / pageSize.page_height) * pageRect.height;
-                var figX = ((figs[j].x) / pageSize.page_width) * pageRect.width;
-                var figHeight = ((figs[j].h) / pageSize.page_height) * pageRect.height;
-                var figWidth  = ((figs[j].w) / pageSize.page_width) * pageRect.width;
+                var figY = ((figCaptions[j].y) / pageSize.page_height) * pageRect.height;
+                var figX = ((figCaptions[j].x) / pageSize.page_width) * pageRect.width;
+                var figHeight = ((figCaptions[j].h) / pageSize.page_height) * pageRect.height;
+                var figWidth  = ((figCaptions[j].w) / pageSize.page_width) * pageRect.width;
 
                 $("#pageCanvas" + pageNumber).append(
-                        "<div id=" + pageCanvasFigureID + "></div>"
+                        "<div id=" + pageCanvasFigureCaptionID + "></div>"
                 );
 
-                $("#" + pageCanvasFigureID).addClass("pageCanvasFigure");
+                $("#" + pageCanvasFigureCaptionID).addClass("pageCanvasFigureCaption");
 
-                $("#" + pageCanvasFigureID).css({
+                $("#" + pageCanvasFigureCaptionID).css({
                         "left": figX,
                         "top": figY
                         });
 
-                $("#" + pageCanvasFigureID).width(figWidth);
-                $("#" + pageCanvasFigureID).height(figHeight);
+                $("#" + pageCanvasFigureCaptionID).width(figWidth);
+                $("#" + pageCanvasFigureCaptionID).height(figHeight);
 
                 console.log(figX + " " + figY + " " + figWidth + " " + figHeight);
             }
             
             console.log(ListofRefs);
+            */
 
             /* LIST OF REFERENCES ANNOTATING */ 
 
@@ -18629,6 +18643,38 @@ function printMessage(mutationList) {
 
                 $("#" + pageCanvasListofRefsID ).width(lirefWidth);
                 $("#" + pageCanvasListofRefsID ).height(lirefHeight);
+            }
+
+            /* FIGURE ANNOTATION */
+
+            console.log(figs);
+
+            for(var j=0;j<figs.length;j++) {
+                var pageCanvasFigsID = "pageCanvasFigs" + pageNumber + "_" + j;
+
+                var figY = ((figs[j].regionBoundary.y1) / pageSize.page_height) * pageRect.height;
+                var figX  = ((figs[j].regionBoundary.x1) / pageSize.page_width) * pageRect.width;
+                var figHeight = ((figs[j].regionBoundary.y2 - figs[j].regionBoundary.y1) / pageSize.page_height) * pageRect.height;
+                var figWidth = ((figs[j].regionBoundary.x2 - figs[j].regionBoundary.x1) / pageSize.page_width) * pageRect.width;
+
+                figX -= 5;
+                figY -= 5;
+                figHeight += 10;
+                figWidth += 10;
+
+                $("#pageCanvas" + pageNumber).append(
+                        "<div id=" + pageCanvasFigsID + "></div>"
+                );
+
+                $("#" + pageCanvasFigsID).addClass("pageCanvasFigures");
+
+                $("#" + pageCanvasFigsID).css({
+                        "left": figX,
+                        "top": figY 
+                        });
+
+                $("#" + pageCanvasFigsID).width(figWidth);
+                $("#" + pageCanvasFigsID).height(figHeight);
             }
         } 
     }

@@ -2479,7 +2479,7 @@ height: 15px;
 }
 
 
-.pageCanvasFigure {
+.pageCanvasFigureCaption {
     background-color: green;
     position: absolute;
     margin: 0;
@@ -2490,6 +2490,15 @@ height: 15px;
 
 .pageCanvasListofRefs {
     background-color: gray;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+.pageCanvasFigures {
+    background-color: orange;
     position: absolute;
     margin: 0;
     padding: 0;
