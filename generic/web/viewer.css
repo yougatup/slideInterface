@@ -2406,8 +2406,9 @@ height: 50px;
 }
 
 .smallBtnItem{
-width: 15px;
-height: 15px;
+width: 25px;
+height: 25px;
+font-size: 15px;
 }
 
 .textElement:hover {
@@ -2498,10 +2499,53 @@ height: 15px;
 }
 
 .pageCanvasFigures {
-    background-color: orange;
+    border: 2px solid red;
     position: absolute;
     margin: 0;
     padding: 0;
     overflow: hidden;
     opacity: 0.5;
+    pointer-events: all;
 }
+
+.pageCanvasFigures:hover {
+    background-color: orange;
+    border: 2px solid red;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0.5;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+#imageQueryBox {
+width: 420px;
+}
+
+#imageSearchBtn {
+width: 50px;
+}
+
+#popOverFigureContents {
+height: 100%;
+width: 100%;
+}
+
+.imageQueryResultItem {
+    max-width: 400px;
+    margin: 10px;
+}
+
+.imageQueryResultItem:hover {
+    background-color: orange;
+    border: 2px solid red;
+    cursor: pointer;
+}
+
+#imageQueryResult {
+    height: 600px;
+    overflow: scroll;
+}
+

@@ -11,8 +11,11 @@ cd pdffigures2
 
 sbt "run-main org.allenai.pdffigures2.FigureExtractorBatchCli ../paperData/$1/paper.pdf -s stat_file.json -m imageOutput -d dataOutput"
 
-mv imageOutput* ../paperData/$1/
-mv dataOutput* ../paperData/$1/
+cp imageOutput* ../paperData/$1/
+cp dataOutput* ../paperData/$1/
+
+
+scp -rp ../paperData/$1 ubuntu@hyungyu.com:/var/www/html/doc2slide/metaData/
 
 cd ..
 

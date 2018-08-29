@@ -128,11 +128,11 @@ function initializeGAPI() {
       var API_KEY = 'AIzaSyDtDPjTzXFIxzaYwz-qyaHAty-16vCNOJo';
 
       // Array of API discovery doc URLs for APIs used by the quickstart
-      var DISCOVERY_DOCS = ["https://slides.googleapis.com/$discovery/rest?version=v1"];
+      var DISCOVERY_DOCS = ["https://slides.googleapis.com/$discovery/rest?version=v1", "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
 
       // Authorization scopes required by the API; multiple scopes can be
       // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/presentations https://www.googleapis.com/auth/script.scriptapp https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/script.external_request";
+      var SCOPES = "https://www.googleapis.com/auth/presentations https://www.googleapis.com/auth/script.scriptapp https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/script.external_request https://www.googleapis.com/auth/drive.metadata.readonly";
 
       var authorizeButton = document.getElementById('authorize-button');
       var signoutButton = document.getElementById('signout-button');
@@ -177,6 +177,7 @@ function initializeGAPI() {
           // listSlides();
 
           // callAppsScript(gapi.auth2.getAuthInstance());
+			listFiles();
         } else {
           authorizeButton.style.display = 'block';
           // signoutButton.style.display = 'none';
@@ -213,6 +214,35 @@ function initializeGAPI() {
        * Prints the number of slides and elements in a sample presentation:
        * https://docs.google.com/presentation/d/1EAYk18WDjIG-zp_0vLm3CsfQh_i8eXc67Jo2O9C6Vuc/edit
        */
+
+    /**
+       * Print files.
+       */
+      function listFiles() {
+			console.log(" *** I am in the listfiles *** ");
+        gapi.client.drive.files.list({
+          'pageSize': 10,
+          'fields': "nextPageToken, files(id, name)"
+        }).then(function(response) {
+			console.log(response);
+/*
+          appendPre('Files:');
+          var files = response.result.files;
+          if (files && files.length > 0) {
+            for (var i = 0; i < files.length; i++) {
+              var file = files[i];
+              appendPre(file.name + ' (' + file.id + ')');
+            }
+          } else {
+            appendPre('No files found.');
+          }*/
+        }).catch((error) => {
+          // The API encountered a problem.
+			console.log(error);
+          return console.log(`The API returned an error: ${error}`);
+        });
+      }
+
 
       function createSlide() {
         var requests = [{
@@ -311,12 +341,13 @@ function initializeGAPI() {
       handleClientLoad();
 }
 
-function storeData(pageId, objIdList, startIdx, endIdx) {
+function storeData(pageId, objIdList, pageNumber, startIdx, endIdx) {
     for(var i=0;i<objIdList.length;i++) {
         myDB.put({
           "_id": createObjId(),
           "pageId": pageId,
           "objId": objIdList[i],
+		  "pageNumber": pageNumber,
           "startIdx": startIdx,
           "endIdx": endIdx
         }).then(function (response) {
@@ -341,7 +372,7 @@ function loadData() {
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
 
-         addHighlight(elem.pageId, [elem.objId], elem.startIdx, elem.endIdx, false);
+         addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.startIdx, elem.endIdx, false);
       }
 
       updateHighlight(curPageId, []);
@@ -360,7 +391,7 @@ function createObjId() {
     return text;
 }
 
-function addHighlight(pageId, objIdList, startIdx, endIdx, flag) {
+function addHighlight(pageId, objIdList, pageNumber, startIdx, endIdx, flag) {
     if(!(pageId in highlightDictionary)) {
         highlightDictionary[pageId] = {};
     }
@@ -372,11 +403,11 @@ function addHighlight(pageId, objIdList, startIdx, endIdx, flag) {
             highlightDictionary[pageId][objId] = [];
         }
 
-        highlightDictionary[pageId][objId].push([startIdx, endIdx]);
+        highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx]);
     }
 
     if(flag)
-        storeData(pageId, objIdList, startIdx, endIdx);
+        storeData(pageId, objIdList, pageNumber, startIdx, endIdx);
 }
 
 function updateHighlight(pageId, objIdList) {
@@ -394,11 +425,13 @@ function updateHighlight(pageId, objIdList) {
       var thisKey = keys[i];
 
       for(var j=0;j<highlightDictionary[pageId][thisKey].length;j++) {
-          var startIdx = highlightDictionary[pageId][thisKey][j][0];
-          var endIdx = highlightDictionary[pageId][thisKey][j][1];
+          var pageNumber = highlightDictionary[pageId][thisKey][j][0];
+          var startIdx = highlightDictionary[pageId][thisKey][j][1];
+          var endIdx = highlightDictionary[pageId][thisKey][j][2];
 
           issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                   {
+					"pageNumber": pageNumber,
                      "startIndex": startIdx,
                      "endIndex": endIdx,
                      "slideObjId": thisKey,
@@ -436,7 +469,7 @@ $(document).ready(function() {
       $(document).on("addText", function(e) {
           console.log(e);
 
-          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.startIndex, e.detail.endIndex);
+          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.pageNumber, e.detail.startIndex, e.detail.endIndex);
       });
 
       $(document).on("getSlideInfo", function() {
@@ -487,9 +520,9 @@ $(document).ready(function() {
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
         });
-        });
+      });
 
-      function appendText(objId, myText, startIndex, endIndex) {
+      function appendText(objId, myText, pageNumber, startIndex, endIndex) {
          console.log("yay");
 
          gapi.client.request({
@@ -553,7 +586,7 @@ $(document).ready(function() {
                      objectId: objId,
                      text: (result == 0 ? myText : '\n' + myText),
                      insertionIndex: result
-                   }
+                   },
                  } ];
     
                  gapi.client.slides.presentations.batchUpdate({
@@ -565,10 +598,11 @@ $(document).ready(function() {
                      console.log("succeed!");
                      console.log(createSlideResponse);
 
-                     addHighlight(curPageId, curClickedElements, startIndex, endIndex, true);
+                     addHighlight(curPageId, curClickedElements, pageNumber, startIndex, endIndex, true);
 
                      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                              {
+								"pageNumber": pageNumber,
                                 "startIndex": startIndex,
                                 "endIndex": endIndex,
                                 "color": 'yellow',
@@ -582,7 +616,7 @@ $(document).ready(function() {
           // to be filled
       }
 
-      function fillText(objId, myText, startIndex, endIndex) {
+      function fillText(objId, myText, pageNumber, startIndex, endIndex) {
          var requests = [ 
              /*
          {
@@ -604,10 +638,11 @@ $(document).ready(function() {
              console.log("succeed!");
              console.log(createSlideResponse);
 
-             addHighlight(curPageId, ["editor-" + objId], startIndex, endIndex, true);
+             addHighlight(curPageId, ["editor-" + objId], pageNumber, startIndex, endIndex, true);
 
              issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                      {
+						"pageNumber": pageNumber,
                         "startIndex": startIndex,
                         "endIndex": endIndex,
                         "color": 'yellow',
@@ -618,9 +653,9 @@ $(document).ready(function() {
          });
       }
 
-      function addText(objId, pageId, myText, startIndex, endIndex) {
+      function addText(objId, pageId, myText, pageNumber, startIndex, endIndex) {
           if(objId != null) {
-              appendText(objId, myText, startIndex, endIndex);
+              appendText(objId, myText, pageNumber, startIndex, endIndex);
            }
           else{
              var newObjId = createObjId();
@@ -659,7 +694,7 @@ $(document).ready(function() {
                presentationId: PRESENTATION_ID,
                requests: requests
              }).then((createSlideResponse) => {
-                 fillText(newObjId, myText, startIndex, endIndex);
+                 fillText(newObjId, myText, pageNumber, startIndex, endIndex);
              });
           }
       }
@@ -705,6 +740,29 @@ $(document).ready(function() {
 
         updateHighlight(p.pageId, p.objIdList);
     });
+
+	$(document).on("SEND_IMAGE", function(e) {
+		p = e.detail;
+
+	    var requests = [ {
+		   "createImage": {
+		     "url": p.imageURL,
+		     "elementProperties": {
+		   	  "pageObjectId": curPageId,
+		     }
+		   },
+	    } ];
+	    
+	    gapi.client.slides.presentations.batchUpdate({
+	      presentationId: PRESENTATION_ID,
+	      requests: requests
+	    }).then((createSlideResponse) => {
+	        // successfully pasted the text
+	
+	        console.log("succeed!");
+	        console.log(createSlideResponse);
+	    });
+	});
 
     $(document).on("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS", function(e) {
         var p = e.detail;

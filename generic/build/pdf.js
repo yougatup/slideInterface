@@ -1,5 +1,5 @@
 // ### variables ###
-var startElementInx, endElementInx;
+var startElementInx, endElementInx, curPageNumber;
 var highlightedParts = [];
 var highlightedText = '';
 var popupDiv = null;
@@ -17918,12 +17918,53 @@ function sendTextHighlighted() {
           issueEvent(document, "highlighted", 
               {
                 "text": highlightedText,
+                "pageNumber": curPageNumber,
                 "startIndex": startElementInx,
                 "endIndex": endElementInx
               });
      }
 
      // getSlideObjInfo("11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4", "g3e97a32ced_0_0");
+}
+
+function appendImageQueryResult(response) {
+    for(var i=0;i<response.items.length;i++) {
+        var item = response.items[i];
+
+        $("#imageQueryResult").append("<img id='imageQueryResultItem" + i + "' class='imageQueryResultItem' src='" + item.link + "' />");
+    }
+}
+function getImageQueryResult(queryString) {
+    queryString = queryString.replace(' ', '+');
+
+    $.get({
+            url:"https://www.googleapis.com/customsearch/v1?key=AIzaSyA160fCjV5GS8HhQtYj2R29huH9lnXURKw&cx=000180283903413636684:oxqpr8tki8w&q="+queryString+"&searchType=image",
+            success: appendImageQueryResult 
+            });
+}
+
+function figureItemClicked() {
+    $(popupDiv).popover('dispose');
+
+    $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Figure search");
+    $(popupDiv).attr("data-content", "<div id='popOverFigureContents'></div>");
+
+    $(popupDiv).popover({"placement": "top", "html": true}).popover('show');
+    $(".popover").css("width", "800px");
+    $(".popover").css("height", "800px");
+
+    $("#popOverFigureContents").append("<input type='text' id='imageQueryBox' /> <button id='imageSearchBtn' onclick='searchImage()'> Go </button> <br> <hr /> <div id='imageQueryResult'> </div>");
+
+    $("#imageQueryBox").val(highlightedText);
+    getImageQueryResult(highlightedText);
+}
+
+function searchImage() {
+    var searchQuery = $("#imageQueryBox").val();
+
+    $("#imageQueryResult").html('');
+
+    var imageQueryResult = getImageQueryResult(searchQuery);
 }
 
 function getSlideObjInfo(slideId, slidePageId) {
@@ -17973,29 +18014,58 @@ function removeParenthesis(myString) {
     return retValue;
 }
 
-function highlightString(start, end, color, slideObjId) {
+function highlightString(pageNumber, start, end, color, slideObjId) {
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
-        var elem = $('#textSegment' + i);
+        var elem = $('#textSegment_' + pageNumber + '_' + i);
 
         $(elem).addClass("textSelected textSelected"+color);
         $(elem).attr("slideObjId", slideObjId);
     }
 }
+
 function getSelectedString() {
     var result = '';
+    var referenceStringList = [];
 
     for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-        var elem = $('#textSegment' + i);
+        var elem = $('#textSegment_' + curPageNumber + "_" + i);
 
-        if($(elem).hasClass("referred")) ;
+        if($(elem).hasClass("referred")) {
+            var referredList = getReferredList($(elem).attr('class').split(/\s+/));
+            console.log(referredList);
+
+            for(var j=0;j<referredList.length;j++) {
+                 console.log(referredList[j]);
+                 var refInfo = getRefInfo(referredList[j]);
+
+                 if(refInfo != null) {
+                    if(refInfo.authors != null) 
+                       referenceStringList.push(refInfo.authors[0] + " et al., " + refInfo.date);
+                 }
+            }
+        }
         else if($(elem).hasClass("textSegmentLineBreak")) {
             if(result.slice(-1) == '-') result = result.slice(0, -1);
             else result = result + ' ';
         }
         else {
-            result = result + $('#textSegment' + i).html();
+            result = result + $('#textSegment_' + curPageNumber + "_" + i).html();
         }
     }
+
+    console.log(referenceStringList);
+
+    if(referenceStringList.length != 0) {
+        result = result + ' (';
+
+        for(var i=0;i<referenceStringList.length;i++) {
+            result = (i == 0 ? result + referenceStringList[i] : result + '; ' + referenceStringList[i]);
+        }
+
+        result = result + ')';
+    }
+
+    result = result.replace(/  +/g, ' ');
 
     return result;
 }
@@ -18028,6 +18098,17 @@ function getRefInfo(id) {
     return null;
 }
 
+function getReferredList(classes) {
+    var retValue = [];
+
+    for(var i=0;i<classes.length;i++) {
+        if(classes[i].match("^referred") && classes[i] != "referred") {
+            retValue.push(classes[i].substr(8));
+        }
+    }
+
+    return retValue;
+}
 $(document).ready( function() {
     $(document).on("mousedown", function(e) {
         mouseDown++;
@@ -18040,8 +18121,8 @@ $(document).ready( function() {
         if($(elementMouseIsOver).hasClass("textElement")) {
             removePopovers();
 
-            startElementInx = parseInt($(elementMouseIsOver).attr("id").substr(11));
-            console.log(startElementInx);
+            curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
+            startElementInx = parseInt($(elementMouseIsOver).attr("id").split("_")[2]);
 
             var textHighlightedCnt = $(".textHighlighted").length;
             var eachCount = 0;
@@ -18072,18 +18153,6 @@ $(document).ready( function() {
 
         }
     });
-
-    function getReferredList(classes) {
-        var retValue = [];
-
-        for(var i=0;i<classes.length;i++) {
-            if(classes[i].match("^referred") && classes[i] != "referred") {
-                retValue.push(classes[i].substr(8));
-            }
-        }
-
-        return retValue;
-    }
 
     $(document).on("mouseup", function(e) {
         mouseDown = 0;
@@ -18121,10 +18190,10 @@ $(document).ready( function() {
                  eachCount++;
 
                  if(eachCount >= textHighlightedCnt) {
-                    endElementInx = parseInt($(endElement).attr("id").substr(11));
+                    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
 
                     for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-                       $("#textSegment" + i).addClass("textHighlighted");
+                       $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted");
                     }
 
                     var contents = getSelectedString();
@@ -18138,7 +18207,7 @@ $(document).ready( function() {
 
                     removePopovers();
 
-                    var firstDiv = $("#textSegment" + startElementInx);
+                    var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
                     var content = '';
 
                     popupDiv = firstDiv;
@@ -18147,19 +18216,22 @@ $(document).ready( function() {
                         highlightParts();
 
                         if(startElementInx >= endElementInx) {
-                            $("#textSegment" + startElementInx).hasClass("referred")
-                            var classes = $("#textSegment" + startElementInx).attr('class').split(/\s+/);
+                            $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
+                            var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
                             var referredList = getReferredList(classes);
 
                             for(var i=0;i<referredList.length;i++) {
                                 refInfo = getRefInfo(referredList[i]);
 
-                                content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
+                                if(refInfo != null && refInfo.authors != null) 
+                                    content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
                             }
                         }
 
-                        if(content == '') content = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>";
-                        else content = content + "<br><hr />" + "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>";
+                        var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button> <button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
+
+                        if(content == '') content = btnList;
+                        else content = content + "<br><hr />" + btnList;
 
                         $(firstDiv).attr("data-toggle", "popover");
                         $(firstDiv).attr("title", "Conversion options");
@@ -18180,7 +18252,7 @@ $(document).ready( function() {
              $(this).removeClass("textHighlighted");
         });
 
-        highlightString(p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
+        highlightString(p.data.pageNumber, p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
     });
 
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
@@ -18194,9 +18266,12 @@ $(document).ready( function() {
 
     $(document).on('mouseenter', '.textElement', function() {
         if(mouseDown) {
+            console.log("mouseenter and down");
             var textHighlightedCnt = $(".textHighlighted").length;
             var endElement = this;
             var eachCount = 0;
+
+            console.log(curPageNumber);
 
             $(".textHighlighted").each(function() {
                  $(this).removeClass("textHighlighted");
@@ -18204,10 +18279,10 @@ $(document).ready( function() {
                  eachCount++;
 
                  if(eachCount >= textHighlightedCnt) {
-                    endElementInx = parseInt($(endElement).attr("id").substr(11));
+                    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
 
                     for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-                       $("#textSegment" + i).addClass("textHighlighted");
+                       $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted");
                     }
                  }
             });
@@ -18224,6 +18299,7 @@ $(document).ready( function() {
      });
 
     $(document).on('mouseleave', '.textElement', function() {
+        console.log("mouseleave");
         issueEvent(document, "clearPlaneCanvas", null);
     });
 
@@ -18238,6 +18314,30 @@ $(document).ready( function() {
     $(document).on("mouseenter", ".pageCanvasReferenceWithID", function(){
             console.log("hovered!" + this);
             });
+
+    $(document).on("click", ".pageCanvasFigures", function(){
+            console.log('image clicked!');
+            console.log($(this));
+            console.log("URL: " + $(this).attr("imageURL"));
+
+          issueEvent(document, "sendImage", 
+              {
+                "imageURL": "https://hyungyu.com/doc2slide/metaData/paper/" + ($(this).attr("imageURL")),
+              });
+
+            });
+
+    $(document).on("click", ".imageQueryResultItem", function(){
+            console.log("send query result item");
+            console.log($(this));
+            console.log($(this).attr("src"));
+
+            issueEvent(document, "sendImage", 
+              {
+                 "imageURL": $(this).attr("src"),
+              });
+
+           });
 
     readTextFile("../web/paperData/paper/metadata.tei", 'xml', "TEI");
     readTextFile("../web/paperData/paper/metadata.json", 'json', "REFERENCE_META");
@@ -18270,6 +18370,9 @@ function parseBib(bib) {
         if($(name).length > 0) {
             for(var j=0;j<$(name)[0].childNodes.length;j++) {
                 var nameCharacter = $($(name)[0].childNodes[j]).html();
+
+                if(nameCharacter.length == 1) nameCharacter = nameCharacter + '.';
+
                 nameString = (j == 0 ? nameCharacter : nameString + ' ' + nameCharacter);
             }
         }
@@ -18278,7 +18381,9 @@ function parseBib(bib) {
     }
 
     venue = $(bib).find("monogr").find("title").html();
-    date = $(bib).find("imprint").find("date").attr("when");
+    
+    if($(bib).find("imprint").find("date").attr("when") != null) 
+        date = $(bib).find("imprint").find("date").attr("when").substr(0, 4);
 
     return {
         "id": id,
@@ -18500,7 +18605,9 @@ function printMessage(mutationList) {
 
             var pageRect = $(mutationList[i].target)[0].getBoundingClientRect();
 
-            var startCnt = idCnt;
+            idCnt = 1;
+
+            var startCnt = 1;
             var endCnt = -1;
 
             for(var j=0;j<mutationList[i].addedNodes.length;j++) {
@@ -18514,11 +18621,11 @@ function printMessage(mutationList) {
 
                 for(var k=0;k<splitted.length;k++) {
                     if(k < splitted.length-1) {
-                        result = result + "<span id=textSegment" + idCnt + " class='textElement'>" + splitted[k] + '</span>' + '<span id=textSegment' + (idCnt+1) + "> </span>";
+                        result = result + "<span id=textSegment_" + pageNumber + "_" + idCnt + " class='textElement'>" + splitted[k] + '</span>' + '<span id=textSegment_' + pageNumber + "_" + (idCnt+1) + "> </span>";
                         idCnt = idCnt + 2;
                     }
                     else {
-                        result = result + "<span id=textSegment" + idCnt + " class='textElement'>" + splitted[k] + '</span>' + '<span id=textSegment' + (idCnt+1) + " class='textSegmentLineBreak'></span>";
+                        result = result + "<span id=textSegment_" + pageNumber + "_" + idCnt + " class='textElement'>" + splitted[k] + '</span>' + '<span id=textSegment_' + pageNumber + "_" + (idCnt+1) + " class='textSegmentLineBreak'></span>";
                         idCnt = idCnt + 2;
                     }
                 }
@@ -18540,18 +18647,18 @@ function printMessage(mutationList) {
                     var refMidY = refY + (refHeight / 2);
                     var refMidX = refX + (refWidth / 2);
 
-                    var textLeft = $("#textSegment" + j).offset().left - $("#pageCanvas" + pageNumber).offset().left;
-                    var textTop = $("#textSegment" + j).offset().top- $("#pageCanvas" + pageNumber).offset().top;
+                    var textLeft = $("#textSegment_" + pageNumber + "_" + j).offset().left - $("#pageCanvas" + pageNumber).offset().left;
+                    var textTop = $("#textSegment_" + pageNumber + "_" + j).offset().top- $("#pageCanvas" + pageNumber).offset().top;
 
-                    var textWidth = $("#textSegment" + j).width();
-                    var textHeight = $("#textSegment" + j).height();
+                    var textWidth = $("#textSegment_" + pageNumber + "_" + j).width();
+                    var textHeight = $("#textSegment_" + pageNumber + "_" + j).height();
 
                     if(textTop <= refMidY && refMidY <= textTop + textHeight && 
                        textLeft <= refMidX && refMidX <= textLeft + textWidth) {
-                        console.log($("#textSegment" + j));
+                        console.log($("#textSegment_" + pageNumber + "_" + j));
 
-                        $("#textSegment" + j).addClass("referred" + ref.id);
-                        $("#textSegment" + j).addClass("referred");
+                        $("#textSegment_" + pageNumber + "_" + j).addClass("referred" + ref.id);
+                        $("#textSegment_" + pageNumber + "_" + j).addClass("referred");
                     }
                 }
             }
@@ -18622,6 +18729,9 @@ function printMessage(mutationList) {
 
             /* LIST OF REFERENCES ANNOTATING */ 
 
+            console.log(" *** List of references *** ");
+            console.log(ListofRefs);
+
             for(var j=0;j<ListofRefs.length;j++) {
                 var pageCanvasListofRefsID = "pageCanvasListofRefs" + pageNumber + "_" + j;
 
@@ -18667,7 +18777,7 @@ function printMessage(mutationList) {
                 );
 
                 $("#" + pageCanvasFigsID).addClass("pageCanvasFigures");
-
+                $("#" + pageCanvasFigsID).attr("imageURL", figs[j].renderURL);
                 $("#" + pageCanvasFigsID).css({
                         "left": figX,
                         "top": figY 
@@ -18675,6 +18785,7 @@ function printMessage(mutationList) {
 
                 $("#" + pageCanvasFigsID).width(figWidth);
                 $("#" + pageCanvasFigsID).height(figHeight);
+
             }
         } 
     }
