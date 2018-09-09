@@ -5,16 +5,14 @@ overflow: hidden;
 }
 
 #leftPlane  {
-height: 100%;
-width: 49.5%;
 float: left;
+height: 100%;
 border: 1px solid black;
 }
 
 #slidePlane {
-height: 100%;
-width: 49.5%;
 float: left;
+height: 100%;
 border: 1px solid black;
 }
 
@@ -58,4 +56,22 @@ position: absolute;
 top: 0px;
 left: 50%;
 pointer-events: none;
+}
+
+#outlinePlane {
+float: left;
+border: 1px solid black;
+height: 100%;
+}
+
+.splitBar {
+position: absolute;
+width: 10px;
+height: 100%;
+background-color: red;
+}
+
+#wrapper {
+width: 2000px;
+height: 800px;
 }

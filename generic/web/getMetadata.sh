@@ -9,11 +9,10 @@ curl -v --form input=@./$1.pdf --form teiCoordinates=persName --form teiCoordina
  
 cd pdffigures2
 
-sbt "run-main org.allenai.pdffigures2.FigureExtractorBatchCli ../paperData/$1/paper.pdf -s stat_file.json -m imageOutput -d dataOutput"
+sbt "run-main org.allenai.pdffigures2.FigureExtractorBatchCli ../paperData/$1/paper.pdf -s stat_file.json -m imageOutput -d dataOutput -g structure"
 
 cp imageOutput* ../paperData/$1/
 cp dataOutput* ../paperData/$1/
-
 
 scp -rp ../paperData/$1 ubuntu@hyungyu.com:/var/www/html/doc2slide/metaData/
 

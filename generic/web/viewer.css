@@ -2549,3 +2549,76 @@ width: 100%;
     overflow: scroll;
 }
 
+
+#textShorteningBox {
+width: 100%;
+float: left;
+
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+
+#textShorteningWrapper {
+display: block;
+overflow: hidden;
+width: 450px;
+}
+
+.shorteningBoxSpan {
+padding: 2px;
+cursor: pointer;
+}
+
+.imageSearchBox {
+height: 15px;
+width: 15px;
+margin: 3px;
+}
+
+.topBarIcons {
+    margin-top: 8px;
+}
+
+.topBarCheckbox {
+height: 17px;
+width: 17px;
+       margin-right: 2px;
+}
+
+.topBarText {
+color: white;
+}
+
+#topBarCursorIcon {
+    background-color: white;
+}
+
+#topBarYellowIcon {
+    background-color: yellow;
+}
+
+#topBarRedIcon{
+    background-color: red;
+}
+
+#topBarBlueIcon{
+    background-color: blue;
+}
+
+#topBarGreenIcon{
+    background-color: green;
+}
+
+.topBarButton {
+    width: 17px;
+    height: 17px;
+}
+
+.topBarHighlightButtons {
+        margin-left: 5px;
+        margin-right 5px;
+}

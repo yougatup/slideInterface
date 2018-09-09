@@ -6,6 +6,8 @@ var curClickedElements = [];
 var myDB;
 var jsonMetaData, xmlMetaData;
 var tei, json;
+var userID, documentID;
+var windowsHeight, windowsWidth;
 
 function issueEvent(object, eventName, data) {
     var myEvent = new CustomEvent(eventName, {detail: data} );
@@ -345,6 +347,8 @@ function storeData(pageId, objIdList, pageNumber, startIdx, endIdx) {
     for(var i=0;i<objIdList.length;i++) {
         myDB.put({
           "_id": createObjId(),
+          "userId": userID,
+          "documentId": documentID,
           "pageId": pageId,
           "objId": objIdList[i],
 		  "pageNumber": pageNumber,
@@ -367,15 +371,24 @@ function loadData() {
 	  include_docs: true,
 	  attachments: true
 	}).then(function (result) {
+      var flag = false;
 	  console.log(result);
 
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
 
-         addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.startIdx, elem.endIdx, false);
+         if(elem.userId == userID && elem.documentId == documentID) {
+             addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.startIdx, elem.endIdx, false);
+             flag = true;
+         }
       }
 
-      updateHighlight(curPageId, []);
+      if(flag) {
+        updateHighlight(curPageId, []);
+      }
+      else {
+        
+      }
 	}).catch(function (err) {
 	  console.log(err);
 	});
@@ -703,10 +716,6 @@ $(document).ready(function() {
               addText("SLIDES_API1293859000_1", "blahblah");
      });
 
-	$(document).on('click', function() {
-		alert($(this).attr('id'));
-	});
-
     $(document).on("highlighted", function(details){
             console.log(details);
 
@@ -779,6 +788,34 @@ $(document).ready(function() {
 	readTextFile("./generic/web/metadata.json", 'json');
 */
 	
+    windowsHeight = $(window).height();
+    windowsWidth = $(window).width();
+
+    console.log(windowsHeight);
+    console.log(windowsWidth);
+
+    $("#leftPlane").height(windowsHeight-1);
+    $("#outlinePlane").height(windowsHeight-1);
+    $("#slidePlane").height(windowsHeight-1);
+
+    $("#wrapper").width(windowsWidth-2);
+
+    Split(['#leftPlane', '#outlinePlane', '#slidePlane'], {
+        sizes: [33, 33, 34],
+        minSize: 200
+    });
+
+    $(window).resize(function() {
+        windowsHeight = $(window).height();
+        windowsWidth = $(window).width();
+
+        $("#leftPlane").height(windowsHeight-1);
+        $("#outlinePlane").height(windowsHeight-1);
+        $("#slidePlane").height(windowsHeight-1);
+
+        $("#wrapper").width(windowsWidth-2);
+    });
+
     function refSuccess(e) {
         console.log(e);
     }
@@ -791,7 +828,7 @@ dataType: "json"
 
     myDB = new PouchDB('doc2slide_db')
 
-//    clearDatabase();
+    clearDatabase();
     loadData();
 });
 

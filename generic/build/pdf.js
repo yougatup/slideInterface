@@ -9,6 +9,8 @@ var jsonMetaData, xmlMetaData, pdffigureMetaData;
 var parsedListofReferences = [];
 var parsedReferences = [];
 var parsedFigures = [];
+var shorteningBoxSpanStartInx, shorteningBoxSpanEndInx, shorteningBoxSpanCnt;
+var myDB;
 
 /**
  * @licstart The following is the entire license notice for the
@@ -17953,7 +17955,9 @@ function figureItemClicked() {
     $(".popover").css("width", "800px");
     $(".popover").css("height", "800px");
 
-    $("#popOverFigureContents").append("<input type='text' id='imageQueryBox' /> <button id='imageSearchBtn' onclick='searchImage()'> Go </button> <br> <hr /> <div id='imageQueryResult'> </div>");
+    $("#popOverFigureContents").append("<input type='text' id='imageQueryBox' /> <button id='imageSearchBtn' onclick='searchImage()'> Go </button> <br>" + 
+            "<input type='checkbox' class='imageSearchBox' name='icons' value='icons' onchange='searchImage()'> Icons </input>" + 
+            "<hr /> <div id='imageQueryResult'> </div>");
 
     $("#imageQueryBox").val(highlightedText);
     getImageQueryResult(highlightedText);
@@ -17961,10 +17965,18 @@ function figureItemClicked() {
 
 function searchImage() {
     var searchQuery = $("#imageQueryBox").val();
+    var queryAttr = '';
 
     $("#imageQueryResult").html('');
 
-    var imageQueryResult = getImageQueryResult(searchQuery);
+
+    $(".imageSearchBox").each(function(index) {
+        if(this.checked == true) {
+            queryAttr = queryAttr + ' ' + $(this).attr("value");
+        }
+    });
+
+    var imageQueryResult = getImageQueryResult(searchQuery + queryAttr);
 }
 
 function getSlideObjInfo(slideId, slidePageId) {
@@ -18109,7 +18121,19 @@ function getReferredList(classes) {
 
     return retValue;
 }
-$(document).ready( function() {
+
+function prepareUI() {
+    $("#toolbarViewerRight").prepend(
+            "<button id='topBarCursorIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
+            "<button id='topBarYellowIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
+            "<button id='topBarRedIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
+            "<button id='topBarBlueIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
+            "<button id='topBarGreenIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>" 
+            );
+}
+
+
+function enableDoc2Slide() {
     $(document).on("mousedown", function(e) {
         mouseDown++;
 
@@ -18141,6 +18165,15 @@ $(document).ready( function() {
                      }
                 });
             }
+        }
+        else if($(elementMouseIsOver).hasClass("shorteningBoxSpan")) {
+            shorteningBoxSpanStartInx = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
+            clearShorteningBoxSpanBackground();
+            selectShorteningBoxSpan(shorteningBoxSpanStartInx, shorteningBoxSpanStartInx);
+        }
+        else if($(elementMouseIsOver).attr("id") == "textShorteningBox") {
+            console.log("here!");
+            clearShorteningBoxSpanBackground();
         }
         else if(!isInThePopover(elementMouseIsOver)) {
             removePopovers();
@@ -18223,25 +18256,64 @@ $(document).ready( function() {
                             for(var i=0;i<referredList.length;i++) {
                                 refInfo = getRefInfo(referredList[i]);
 
-                                if(refInfo != null && refInfo.authors != null) 
+                                if(refInfo != null && refInfo.authors != null) {
                                     content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
+                                    console.log(refInfo);
+                                }
                             }
                         }
 
-                        var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button> <button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
+                        var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
 
-                        if(content == '') content = btnList;
-                        else content = content + "<br><hr />" + btnList;
+                        if(content == ''){
+                            content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
+                            content = content + "<hr />"
+                            content = content + btnList;
+                        }
+                        else {
+                            content = content + "<br><hr />" + btnList;
+                        }
 
                         $(firstDiv).attr("data-toggle", "popover");
                         $(firstDiv).attr("title", "Conversion options");
                         $(firstDiv).attr("data-content", content);
 
-                        $(firstDiv).popover({"placement": "top", "html": true, "max-width": "400px"}).popover('show');
+                        $(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
+
+                        var tempHighlightedText = highlightedText + ' ';
+                        var temp = '';
+
+                        shorteningBoxSpanCnt = 0;
+
+                        for(var i=0;i<tempHighlightedText.length;i++) {
+                            if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
+                                if(temp != ''){
+                                    $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
+                                    shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+                                }
+
+                                if(i < tempHighlightedText.length-1)  {
+                                    $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
+
+                                    shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+                                }
+                                
+                                    temp = '';
+                            }
+                            else {
+                                temp = temp + tempHighlightedText[i];
+                            }
+                        }
+/*
+                        for(var i=0;i<textArray.length;i++) {
+                            $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
+                            if(i < textArray.length - 1)
+                                $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
+                        }
+                        */
                     }
                  }
             });
-
         }
     });
 
@@ -18339,6 +18411,19 @@ $(document).ready( function() {
 
            });
 
+    $(document).on("mouseenter", ".shorteningBoxSpan", function(){
+        if(mouseDown != 0) {
+            shorteningBoxSpanEndInx = parseInt($(this).attr("id").split("_")[1]);
+
+            clearShorteningBoxSpanBackground();
+            console.log("cleared!");
+
+            selectShorteningBoxSpan(shorteningBoxSpanStartInx, shorteningBoxSpanEndInx);
+            console.log("colored!");
+        }
+    });
+
+
     readTextFile("../web/paperData/paper/metadata.tei", 'xml', "TEI");
     readTextFile("../web/paperData/paper/metadata.json", 'json', "REFERENCE_META");
     readTextFile("../web/paperData/paper/dataOutputpaper.json", 'json', "PDF_FIGURE");
@@ -18347,7 +18432,26 @@ $(document).ready( function() {
 
     mutationConfig = { attributes: false, childList: true, subtree: true };
     observer.observe(document, mutationConfig);
+
+    myDB = new PouchDB('referenceLocation_DB')
+}
+
+$(document).ready( function() {
+    prepareUI();
+    enableDoc2Slide();
 });
+
+function clearShorteningBoxSpanBackground() {
+    for(var i=0;i<shorteningBoxSpanCnt;i++) {
+        $("#shorteningBoxSpan_" + i).css("background-color", "white");
+    }
+}
+
+function selectShorteningBoxSpan(start, end) {
+    for(var j=start;j<=end;j++) {
+        $("#shorteningBoxSpan_" + j).css("background-color", "gray");
+    }
+}
 
 function parseBib(bib) {
     var id = null;
@@ -18635,6 +18739,8 @@ function printMessage(mutationList) {
 
             endCnt = idCnt;
 
+            /* HIGHLIGHT TEXT */
+ 
             for(var j=startCnt;j<endCnt;j++) {
                 for(var k=0;k<refs.length;k++) {
                     var ref = refs[k];
@@ -18662,6 +18768,7 @@ function printMessage(mutationList) {
                     }
                 }
             }
+
             /* REFERENCES ANNOTATING */
             for(var j=0;j<refs.length;j++) {
                 var ref = refs[j];

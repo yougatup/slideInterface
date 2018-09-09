@@ -3,9 +3,14 @@
         <meta charset="utf-8">
         <meta name="google-signin-client_id" content="1080216621788-nsdlr416il84hr9t6nkrb9fv3b663tgk.apps.googleusercontent.com">
         <link rel="stylesheet" type="text/css" href="myStyle.css">
+        <link rel="stylesheet" href="./splitjs/split.css">
 
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="./splitjs/split.js"></script>
+
+        <script src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
         <script src="https://apis.google.com/js/api.js"></script>
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script src="scripts/pouchdb-7.0.0.min.js"></script>
@@ -16,28 +21,38 @@
 
     <body>
         <div id='wrapper'>
-            <div id='leftPlane'>
-                <!--Add buttons to initiate auth sequence and sign out-->
-                <button id="authorize-button" style="display: none;">Authorize</button>
-                <button id="signout-button" style="display: none;">Sign Out</button>
+            <div id='leftPlane' class='mainPlane split split-horizontal'>
+                <div id='leftPlanecontent' class='content'>
+                    <!--Add buttons to initiate auth sequence and sign out-->
+                    <button id="authorize-button" style="display: none;">Authorize</button>
+                    <button id="signout-button" style="display: none;">Sign Out</button>
 
-                <!--
-                <button id='createSlideButton'> Add a slide </button>
-                <button id='slideInfoButton'> Get slide info </button>
-                <button id='fireEventButton'> Fire Event </button>
+                    <!--
+                    <button id='createSlideButton'> Add a slide </button>
+                    <button id='slideInfoButton'> Get slide info </button>
+                    <button id='fireEventButton'> Fire Event </button>
     
-                <button id='insertText'> Insert text </button> -->
+                    <button id='insertText'> Insert text </button> -->
 
-                <iframe id='pdfjsIframe' src='./generic/web/viewer.html'>
-                </iframe>
-            </div>
-            <div id='slidePlane'>
-                <div id='slidePlaneCanvas'> 
+                    <iframe id='pdfjsIframe' src='./generic/web/viewer.html'>
+                    </iframe>
                 </div>
-
-                <iframe id='slideIframe' src='https://docs.google.com/presentation/d/11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4/edit#slide=id.p'>
-                </iframe>
             </div>
+            <div id='outlinePlane' class='mainPlane split split-horizontal'>
+                <div id='outlinePlaneContent' class='content'>
+                    aa
+                </div>
+            </div>
+            <div id='slidePlane' class='mainPlane split split-horizontal'>
+                <div id='slidePlaneContent' class='content'>
+                    <div id='slidePlaneCanvas'> 
+                    </div>
+
+                    <iframe id='slideIframe' src='https://docs.google.com/presentation/d/11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4/edit#slide=id.p'>
+                    </iframe>
+                </div>
+            </div>
+
         </div>
     </body>
 </html>
