@@ -18423,12 +18423,12 @@ function enableDoc2Slide() {
         }
     });
 
-
     readTextFile("../web/paperData/paper/metadata.tei", 'xml', "TEI");
     readTextFile("../web/paperData/paper/metadata.json", 'json', "REFERENCE_META");
     readTextFile("../web/paperData/paper/dataOutputpaper.json", 'json', "PDF_FIGURE");
-
+/*
     observer = new MutationObserver(printMessage);
+    */
 
     mutationConfig = { attributes: false, childList: true, subtree: true };
     observer.observe(document, mutationConfig);

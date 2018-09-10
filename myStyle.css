@@ -75,3 +75,27 @@ background-color: red;
 width: 2000px;
 height: 800px;
 }
+
+#outlinePlaneContent {
+padding: 10px;
+box-sizing: border-box;
+}
+
+.outlineLineEditor {
+    height: 40px;
+    font-size: 30px;
+    border: 1px solid black;
+}
+
+.outlineBullet {
+    font-size: 30px;
+    height: 40px;
+    width: 40px;
+    text-align: right;
+    float: left;
+    margin-right: 5px;
+}
+
+.outlineLineEditor:focus {
+   outline-width: 0;
+}

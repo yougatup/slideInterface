@@ -8,6 +8,15 @@ var jsonMetaData, xmlMetaData;
 var tei, json;
 var userID, documentID;
 var windowsHeight, windowsWidth;
+var outlineInfo = [];
+
+Array.prototype.insert = function ( index, item ) {
+        this.splice( index, 0, item );
+};
+
+Array.prototype.remove= function ( index ) {
+        this.splice( index, 1 );
+};
 
 function issueEvent(object, eventName, data) {
     var myEvent = new CustomEvent(eventName, {detail: data} );
@@ -471,6 +480,87 @@ function clearDatabase() {
 	});
 }
 
+function generateObjId() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 10; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
+function getTextInEditor(index) {
+    return $("#outlineLineEditor_" + index).text();
+}
+
+function increaseLevel(index) {
+    setLevel(index, outlineInfo[index].level+1);
+}
+
+function decreaseLevel(index) {
+    setLevel(index, outlineInfo[index].level-1);
+}
+
+function setLevel(index, level) {
+    $("#outlineLineBullet_" + index).css("width", 30 * (level+1));
+    $("#outlineLineEditor_" + index).css("margin-left", $("#outlineLineBullet_" + index).width()+3);
+
+    outlineInfo[index].level = level;
+}
+
+function putNewOutlineLine(index, level, text) {
+    var objId = generateObjId();
+
+    if(outlineInfo.length == 0) {
+        $("#outlinePlaneContent").append(
+            "<div id='outlineLine_" + index + "' class='outlineLineWrapper' objId=" + objId + ">" + 
+                "<div id='outlineLineBullet_" + index + "' class='outlineBullet'> * </div>" + 
+                "<div id='outlineLineEditor_" + index + "' class='outlineLineEditor' contenteditable='true'></div>" + 
+            "</div>"
+            );
+    }
+    else {
+        console.log("hmm?");
+
+        for(var i=outlineInfo.length-1;i>=index;i--) {
+            $("#outlineLine_" + i).attr("id", "outlineLine_" + (i+1));
+            $("#outlineLineBullet_" + i).attr("id", "outlineLineBullet_" + (i+1));
+            $("#outlineLineEditor_" + i).attr("id", "outlineLineEditor_" + (i+1));
+        }
+
+        console.log("#outlineLine_" + (index-1));
+
+        $("#outlineLine_" + (index-1)).after(
+            "<div id='outlineLine_" + index + "' class='outlineLineWrapper' objId=" + objId + ">" + 
+                "<div id='outlineLineBullet_" + index + "' class='outlineBullet'> * </div>" + 
+                "<div id='outlineLineEditor_" + index + "' class='outlineLineEditor' contenteditable='true'></div>" + 
+            "</div>"
+            );
+    }
+
+    outlineInfo.insert(index, {
+            "id": objId,
+            "level": level,
+            });
+
+    setLevel(index, level);
+
+    console.log(outlineInfo);
+}
+
+function removeOutlineLine(index) {
+    $("#outlineLine_" + index).remove();
+
+    for(var i=index+1;i<outlineInfo.length;i++) {
+        $("#outlineLine_" + i).attr("id", "outlineLine_" + (i-1));
+        $("#outlineLineBullet_" + i).attr("id", "outlineLineBullet_" + (i-1));
+        $("#outlineLineEditor_" + i).attr("id", "outlineLineEditor_" + (i-1));
+    }
+
+    outlineInfo.remove(index);
+}
+
 $(document).ready(function() {
        initializeGAPI();
 
@@ -788,6 +878,8 @@ $(document).ready(function() {
 	readTextFile("./generic/web/metadata.json", 'json');
 */
 	
+    putNewOutlineLine(0, 0, "blah");
+
     windowsHeight = $(window).height();
     windowsWidth = $(window).width();
 
@@ -799,6 +891,52 @@ $(document).ready(function() {
     $("#slidePlane").height(windowsHeight-1);
 
     $("#wrapper").width(windowsWidth-2);
+
+    $(document).on('keydown', '.outlineLineEditor', function(e) {
+            console.log(e);
+
+            var curIndex = parseInt($(this).attr("id").split("_")[1]);
+            var curLevel = outlineInfo[curIndex].level;
+
+            if(e.keyCode == 13) { // Enter
+                var newIndex = curIndex + 1
+                console.log("i'm here");
+
+                putNewOutlineLine(newIndex, curLevel, '1');
+
+                $("#outlineLineEditor_" + newIndex).focus();
+
+                return false;
+            }
+            else if(e.keyCode == 9) { // Tab
+                if(e.shiftKey && outlineInfo[curIndex].level > 0) decreaseLevel(curIndex);
+                else if(!e.shiftKey && curIndex > 0 && outlineInfo[curIndex-1].level >= outlineInfo[curIndex].level) increaseLevel(curIndex);
+
+                return false;
+            }
+            else if(e.keyCode == 8 && getTextInEditor(curIndex) == '') { // Back space
+                if(curIndex == outlineInfo.length-1) {
+                    removeOutlineLine(curIndex);
+                    $("#outlineLineEditor_" + (curIndex-1)).focus();
+                }
+                else {
+                    removeOutlineLine(curIndex);
+                    $("#outlineLineEditor_" + (curIndex)).focus();
+                }
+            }
+            else if(e.keyCode == 38) { // Upper arrow
+                var prevIndex = curIndex-1;
+
+                if(prevIndex >= 0) $("#outlineLineEditor_" + prevIndex).focus();
+            }
+            else if(e.keyCode == 40) { // Lower arrow
+                var nextIndex = curIndex+1;
+
+                if(nextIndex < outlineInfo.length) $("#outlineLineEditor_" + nextIndex).focus();
+            }
+
+            else return true;
+            });
 
     Split(['#leftPlane', '#outlinePlane', '#slidePlane'], {
         sizes: [33, 33, 34],
@@ -812,8 +950,9 @@ $(document).ready(function() {
         $("#leftPlane").height(windowsHeight-1);
         $("#outlinePlane").height(windowsHeight-1);
         $("#slidePlane").height(windowsHeight-1);
-
         $("#wrapper").width(windowsWidth-2);
+
+        $("#outlineLineEditor1").css("padding-left", $("#outlineLineBullet1").width);
     });
 
     function refSuccess(e) {
