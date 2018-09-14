@@ -1,16 +1,23 @@
 // ### variables ###
+var userID, documentID;
 var startElementInx, endElementInx, curPageNumber;
 var highlightedParts = [];
 var highlightedText = '';
 var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
-var jsonMetaData, xmlMetaData, pdffigureMetaData;
+var jsonMetaData, xmlMetaData, pdffigureMetaData, jsonPdfStructure;
 var parsedListofReferences = [];
 var parsedReferences = [];
 var parsedFigures = [];
 var shorteningBoxSpanStartInx, shorteningBoxSpanEndInx, shorteningBoxSpanCnt;
 var myDB;
+var highlightColors = ['whitesmoke', 'yellow', 'red', 'blue', 'green'];
+var currentHighlightColor = 0;
+var segmentDatabase = {};
+var sectionDictionary = {};
+var sectionTextSegment = {};
+var sectionTextSegmentProcessed = {};
 
 /**
  * @licstart The following is the entire license notice for the
@@ -17917,12 +17924,16 @@ function sendTextHighlighted() {
      */
 
      if(highlightedText != '') {
+         console.log("hmm?");
+         console.log(highlightColors[currentHighlightColor]);
+
           issueEvent(document, "highlighted", 
               {
                 "text": highlightedText,
                 "pageNumber": curPageNumber,
                 "startIndex": startElementInx,
-                "endIndex": endElementInx
+                "endIndex": endElementInx,
+                "color": highlightColors[currentHighlightColor]
               });
      }
 
@@ -18027,6 +18038,8 @@ function removeParenthesis(myString) {
 }
 
 function highlightString(pageNumber, start, end, color, slideObjId) {
+    console.log(color);
+
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
         var elem = $('#textSegment_' + pageNumber + '_' + i);
 
@@ -18097,7 +18110,7 @@ function isInThePopover(elem) {
 
 function removeHighlight() {
    $(".textHighlighted").each(function() {
-        $(this).removeClass("textHighlighted");
+        $(this).removeClass("textHighlighted " + getAllHighlightColors());
    });
 }
 
@@ -18122,16 +18135,95 @@ function getReferredList(classes) {
     return retValue;
 }
 
-function prepareUI() {
-    $("#toolbarViewerRight").prepend(
-            "<button id='topBarCursorIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
-            "<button id='topBarYellowIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
-            "<button id='topBarRedIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
-            "<button id='topBarBlueIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>"  +
-            "<button id='topBarGreenIcon' class='topBarIcons topBarButton topBarHighlightButtons'> &nbsp; </button>" 
-            );
+function selectHighlightColor(color) {
+    currentHighlightColor = color;
+
+    $(".topBarHighlightButtons").each(function(index) {
+        $(this).removeClass("topBarHighlightButtonSelected");
+    });
+
+    switch(color) {
+        case 0:
+            $("#topBarCursorIcon").addClass("topBarHighlightButtonSelected");
+            break;
+        case 1:
+            $("#topBarYellowIcon").addClass("topBarHighlightButtonSelected");
+            break;
+        case 2: 
+            $("#topBarRedIcon").addClass("topBarHighlightButtonSelected");
+            break;
+        case 3:
+            $("#topBarBlueIcon").addClass("topBarHighlightButtonSelected");
+            break;
+        case 4:
+            $("#topBarGreenIcon").addClass("topBarHighlightButtonSelected");
+            break;
+    }
+
+    if(color == 0) enableTextLayerSelection();
+    else disableTextLayerSelection();
+
 }
 
+function prepareUI() {
+    $("#toolbarViewerRight").prepend(
+            "<button id='topBarCursorIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(0)> &nbsp; </button>"  +
+            "<button id='topBarYellowIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(1)> &nbsp; </button>"  +
+            "<button id='topBarRedIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(2)> &nbsp; </button>"  +
+            "<button id='topBarBlueIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(3)> &nbsp; </button>"  +
+            "<button id='topBarGreenIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(4)> &nbsp; </button>" 
+            );
+
+    selectHighlightColor(0);
+
+}
+
+function disableTextLayerSelection() {
+    $(".textLayer").css("-webkit-touch-callout", 'none'); 
+    $(".textLayer").css("-webkit-user-select", 'none'); 
+    $(".textLayer").css("-khtml-user-select", 'none');
+    $(".textLayer").css("-moz-user-select", 'none'); 
+    $(".textLayer").css("-ms-user-select", 'none'); 
+    $(".textLayer").css("user-select", 'none'); 
+
+    $(".textElement").css("cursor", 'pointer');
+}
+
+function enableTextLayerSelection() {
+    $(".textLayer").css("-webkit-touch-callout", ''); 
+    $(".textLayer").css("-webkit-user-select", ''); 
+    $(".textLayer").css("-khtml-user-select", '');
+    $(".textLayer").css("-moz-user-select", ''); 
+    $(".textLayer").css("-ms-user-select", ''); 
+    $(".textLayer").css("user-select", ''); 
+
+    $(".textElement").css("cursor", 'auto');
+}
+
+function getHighlightColorClass(color) {
+    switch(color) {
+        case 0:
+            return "";
+        case 1:
+            return "textHighlightedYellow";
+        case 2:
+            return "textHighlightedRed";
+        case 3:
+            return "textHighlightedBlue";
+        case 4:
+            return "textHighlightedGreen";
+    }
+}
+
+function getAllHighlightColors() {
+    var retValue = '';
+
+    for(var i=0;i<highlightColors.length;i++) {
+        retValue = retValue + ' ' + getHighlightColorClass(i);
+    }
+
+    return retValue;
+}
 
 function enableDoc2Slide() {
     $(document).on("mousedown", function(e) {
@@ -18152,16 +18244,18 @@ function enableDoc2Slide() {
             var eachCount = 0;
 
             if(textHighlightedCnt == 0) {
-                $(elementMouseIsOver).addClass("textHighlighted");
+                if(currentHighlightColor != 0)
+                    $(elementMouseIsOver).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
             }
             else {
                 $(".textHighlighted").each(function() {
-                     $(this).removeClass("textHighlighted");
+                     $(this).removeClass("textHighlighted " + getAllHighlightColors());
 
                      eachCount++;
 
                      if(eachCount >= textHighlightedCnt) {
-                        $(elementMouseIsOver).addClass("textHighlighted");
+                        if(currentHighlightColor != 0)
+                            $(elementMouseIsOver).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
                      }
                 });
             }
@@ -18179,7 +18273,7 @@ function enableDoc2Slide() {
             removePopovers();
 
             $(".textHighlighted").each(function() {
-                 $(this).removeClass("textHighlighted");
+                 $(this).removeClass("textHighlighted " + getAllHighlightColors());
             });
         }
         else {
@@ -18214,106 +18308,108 @@ function enableDoc2Slide() {
             var endElement = elementMouseIsOver;
             var eachCount = 0;
 
-            $(".textHighlighted").each(function() {
-                 var classes = $(this).attr('class').split(/\s+/);
-                 var referredList = getReferredList(classes);
+            if(currentHighlightColor != 0) {
+                $(".textHighlighted").each(function() {
+                        var classes = $(this).attr('class').split(/\s+/);
+                        var referredList = getReferredList(classes);
 
-                 $(this).removeClass("textHighlighted");
+                        $(this).removeClass("textHighlighted " + getAllHighlightColors());
 
-                 eachCount++;
+                        eachCount++;
 
-                 if(eachCount >= textHighlightedCnt) {
-                    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+                        if(eachCount >= textHighlightedCnt) {
+                        endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
 
-                    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-                       $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted");
-                    }
+                        for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+                        $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+                        }
 
-                    var contents = getSelectedString();
+                        var contents = getSelectedString();
 
-                    console.log(contents);
+                        console.log(contents);
 
-                    // highlightedText = removeParenthesis(contents)
-                    highlightedText = contents;
+                        // highlightedText = removeParenthesis(contents)
+                        highlightedText = contents;
 
-                    console.log(highlightedText);
+                        console.log(highlightedText);
 
-                    removePopovers();
+                        removePopovers();
 
-                    var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
-                    var content = '';
+                        var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
+                        var content = '';
 
-                    popupDiv = firstDiv;
+                        popupDiv = firstDiv;
 
-                    if(firstDiv != null) {
-                        highlightParts();
+                        if(firstDiv != null) {
+                            highlightParts();
 
-                        if(startElementInx >= endElementInx) {
-                            $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
-                            var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
-                            var referredList = getReferredList(classes);
+                            if(startElementInx >= endElementInx) {
+                                $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
+                                    var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
+                                var referredList = getReferredList(classes);
 
-                            for(var i=0;i<referredList.length;i++) {
-                                refInfo = getRefInfo(referredList[i]);
+                                for(var i=0;i<referredList.length;i++) {
+                                    refInfo = getRefInfo(referredList[i]);
 
-                                if(refInfo != null && refInfo.authors != null) {
-                                    content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
-                                    console.log(refInfo);
+                                    if(refInfo != null && refInfo.authors != null) {
+                                        content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
+                                        console.log(refInfo);
+                                    }
                                 }
                             }
-                        }
 
-                        var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
+                            var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
 
-                        if(content == ''){
-                            content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
-                            content = content + "<hr />"
-                            content = content + btnList;
-                        }
-                        else {
-                            content = content + "<br><hr />" + btnList;
-                        }
-
-                        $(firstDiv).attr("data-toggle", "popover");
-                        $(firstDiv).attr("title", "Conversion options");
-                        $(firstDiv).attr("data-content", content);
-
-                        $(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
-
-                        var tempHighlightedText = highlightedText + ' ';
-                        var temp = '';
-
-                        shorteningBoxSpanCnt = 0;
-
-                        for(var i=0;i<tempHighlightedText.length;i++) {
-                            if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
-                                if(temp != ''){
-                                    $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
-                                    shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
-                                }
-
-                                if(i < tempHighlightedText.length-1)  {
-                                    $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
-
-                                    shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
-                                }
-                                
-                                    temp = '';
+                            if(content == ''){
+                                content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
+                                    content = content + "<hr />"
+                                    content = content + btnList;
                             }
                             else {
-                                temp = temp + tempHighlightedText[i];
+                                content = content + "<br><hr />" + btnList;
                             }
+
+                            $(firstDiv).attr("data-toggle", "popover");
+                            $(firstDiv).attr("title", "Conversion options");
+                            $(firstDiv).attr("data-content", content);
+
+                            $(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
+
+                            var tempHighlightedText = highlightedText + ' ';
+                            var temp = '';
+
+                            shorteningBoxSpanCnt = 0;
+
+                            for(var i=0;i<tempHighlightedText.length;i++) {
+                                if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
+                                    if(temp != ''){
+                                        $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
+                                        shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+                                    }
+
+                                    if(i < tempHighlightedText.length-1)  {
+                                        $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
+
+                                        shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+                                    }
+
+                                    temp = '';
+                                }
+                                else {
+                                    temp = temp + tempHighlightedText[i];
+                                }
+                            }
+                            /*
+                               for(var i=0;i<textArray.length;i++) {
+                               $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
+                               if(i < textArray.length - 1)
+                               $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
+                               }
+                             */
                         }
-/*
-                        for(var i=0;i<textArray.length;i++) {
-                            $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
-                            if(i < textArray.length - 1)
-                                $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
                         }
-                        */
-                    }
-                 }
-            });
+                });
+            }
         }
     });
 
@@ -18321,7 +18417,7 @@ function enableDoc2Slide() {
         var p = e.detail;
 
         $(".textHighlighted").each(function() {
-             $(this).removeClass("textHighlighted");
+             $(this).removeClass("textHighlighted " + getAllHighlightColors());
         });
 
         highlightString(p.data.pageNumber, p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
@@ -18330,34 +18426,37 @@ function enableDoc2Slide() {
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
         $(".textSelected").each(function() {
              $(this).removeClass("textSelected");
+
              $(this).removeClass("textSelectedyellow");
              $(this).removeClass("textSelectedblue");
+             $(this).removeClass("textSelectedred");
+             $(this).removeClass("textSelectedgreen");
+
              $(this).removeAttr("slideObjId");
         });
     });
 
     $(document).on('mouseenter', '.textElement', function() {
         if(mouseDown) {
-            console.log("mouseenter and down");
-            var textHighlightedCnt = $(".textHighlighted").length;
-            var endElement = this;
-            var eachCount = 0;
+            if(currentHighlightColor != 0) {
+                var textHighlightedCnt = $(".textHighlighted").length;
+                var endElement = this;
+                var eachCount = 0;
 
-            console.log(curPageNumber);
+                $(".textHighlighted").each(function() {
+                     $(this).removeClass("textHighlighted " + getAllHighlightColors());
 
-            $(".textHighlighted").each(function() {
-                 $(this).removeClass("textHighlighted");
+                     eachCount++;
 
-                 eachCount++;
+                     if(eachCount >= textHighlightedCnt) {
+                        endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
 
-                 if(eachCount >= textHighlightedCnt) {
-                    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
-
-                    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-                       $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted");
-                    }
-                 }
-            });
+                        for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+                           $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+                        }
+                     }
+                });
+            }
         }
         else if($(this).hasClass("textSelected")) {
             var objId = $(this).attr("slideObjId");
@@ -18426,13 +18525,85 @@ function enableDoc2Slide() {
     readTextFile("../web/paperData/paper/metadata.tei", 'xml', "TEI");
     readTextFile("../web/paperData/paper/metadata.json", 'json', "REFERENCE_META");
     readTextFile("../web/paperData/paper/dataOutputpaper.json", 'json', "PDF_FIGURE");
+    readTextFile("../web/paperData/paper/structurepaper.json", 'json', "PDF_STRUCTURE");
 
     observer = new MutationObserver(printMessage);
 
     mutationConfig = { attributes: false, childList: true, subtree: true };
     observer.observe(document, mutationConfig);
 
-    myDB = new PouchDB('referenceLocation_DB')
+    myDB = new PouchDB('referenceLocation_DB');
+
+    // clearDatabase();
+    // loadData();
+}
+
+function clearDatabase() {
+	myDB.allDocs({
+	  include_docs: true,
+	  attachments: true
+	}).then(function (result) {
+	  console.log(result);
+
+      for(var i=0;i<result.rows.length;i++) {
+         var elem = result.rows[i].doc;
+
+         myDB.remove(elem);
+      }
+	}).catch(function (err) {
+	  console.log(err);
+	});
+}
+
+function createObjId() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 20; i++)
+  	  text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function storeData(textSegmentId, referred, section) {/*
+        myDB.put({
+          "_id": createObjId(),
+          "userId": userID,
+          "documentId": documentID,
+          "textSegmentId": textSegmentId,
+          "referred": referred,
+          "section": section
+        }).then(function (response) {
+          // handle response
+        }).catch(function (err) {
+          console.log(err);
+        });*/
+}
+
+function loadData() {
+	myDB.allDocs({
+	  include_docs: true,
+	  attachments: true
+	}).then(function (result) {
+      var flag = false;
+	  console.log(result);
+
+      for(var i=0;i<result.rows.length;i++) {
+         var elem = result.rows[i].doc;
+
+         if(elem.userId == userID && elem.documentId == documentID) {
+            segmentDatabase[elem.textSegmentId] = [elem.referred, elem.section];
+         }
+      }
+
+      console.log(segmentDatabase);
+
+      $("#pdfjsIframe").show();
+
+
+	}).catch(function (err) {
+	  console.log(err);
+	});
 }
 
 $(document).ready( function() {
@@ -18566,17 +18737,17 @@ function readTextFile(file, filetype, type)
                 allText = allText.split("\n");
                 documentString = allText;
 
-                console.log(allText);
-                console.log(allText.join([separator = '']));
+                // console.log(allText);
+                // console.log(allText.join([separator = '']));
 
                 if(type == "TEI") {
                     tei = $.parseXML(allText.join([separator = '']))
                     xmlMetaData = $.parseXML(allText.join([separator = '']));
-                    console.log(xmlMetaData);
+                    // console.log(xmlMetaData);
 
                     var listBibl = $(xmlMetaData).find('listBibl');
 
-                    console.log($(listBibl));
+                    // console.log($(listBibl));
 
                     for(var i=0;i<$(listBibl)[0].childNodes.length;i++) {
                         var bib = $(listBibl)[0].childNodes[i];
@@ -18595,15 +18766,15 @@ function readTextFile(file, filetype, type)
                     for(var i=0;i<$(figures).length;i++) {
                         var figure = $(figures)[i];
 
-                        console.log($(figure));
+//                         console.log($(figure));
 
                         var result = parseFigure(figure);
 
-                        console.log(result);
+                        // console.log(result);
                         parsedFigures.push(result)
                     }
 
-                    console.log(parsedFigures);
+                    // console.log(parsedFigures);
 
                     var listOfReferences = $(xmlMetaData).find('back').find('biblStruct');
 
@@ -18615,16 +18786,21 @@ function readTextFile(file, filetype, type)
                         parsedListofReferences.push(result);
                     }
 
-                    console.log(parsedListofReferences);
+                    // console.log(parsedListofReferences);
                 }
                 else if(type == 'REFERENCE_META'){
                     json = $.parseJSON(allText.join([separator = '']))
                     jsonMetaData = $.parseJSON(allText.join([separator = '']))
-                    console.log(jsonMetaData);
+                    // console.log(jsonMetaData);
                 }
                 else if(type == "PDF_FIGURE"){
                     pdffigureMetaData = $.parseJSON(allText.join([separator = '']));
-                    console.log(pdffigureMetaData);
+                    // console.log(pdffigureMetaData);
+                }
+                else if(type == "PDF_STRUCTURE") {
+                    json = $.parseJSON(allText.join([separator = '']))
+                    jsonPdfStructure = $.parseJSON(allText.join([separator = '']))
+                    console.log(jsonPdfStructure);
                 }
 
 /*
@@ -18659,15 +18835,20 @@ function readTextFile(file, filetype, type)
 function printMessage(mutationList) {
     // console.log(mutationList);
 
+    if(currentHighlightColor == 0)
+        enableTextLayerSelection();
+    else
+        disableTextLayerSelection();
+
     for(var i=0;i<mutationList.length;i++) {
         if($(mutationList[i].target).hasClass("textLayer")) {
             var pageNumber = parseInt($($(mutationList[i].target).parent()).attr("data-page-number"));
             var pageSize = jsonMetaData.pages[pageNumber-1];
             var refs = [];
-            var figCaptions = [], figs = [];
+            var figCaptions = [], figs = [], sections = [];
             var ListofRefs = [];
 
-            console.log($("#pageCanvas" + pageNumber).length);
+            // console.log($("#pageCanvas" + pageNumber).length);
 
             if($("#pageCanvas" + pageNumber).length == 0) {
                 var pageDiv = $(mutationList[i].target).parent();
@@ -18706,6 +18887,33 @@ function printMessage(mutationList) {
                 }
             }
 
+            // console.log(jsonPdfStructure);
+            for(var j=0;j<jsonPdfStructure.sections.length;j++) {
+                var data = jsonPdfStructure.sections[j];
+
+                for(var k=0;k<data.paragraphs.length;k++) {
+                    var paragraph = data.paragraphs[k];
+
+                    if((paragraph.page + 1) == pageNumber) {
+                        sections.push(paragraph);
+                    }
+                }
+
+                if(data.title != null) {
+                    if((data.title.page + 1) == pageNumber) {
+                        sections.push(data.title);
+                    }
+                }
+            }
+
+            if(jsonPdfStructure.abstractText != null && (jsonPdfStructure.abstractText.page+1) == pageNumber) {
+                sections.push(jsonPdfStructure.abstractText);
+            }
+
+            for(var j=0;j<sections.length;j++) {
+                sectionDictionary["section_" + pageNumber + "_" + j] = sections[j].sentences;
+            }
+
             var pageRect = $(mutationList[i].target)[0].getBoundingClientRect();
 
             idCnt = 1;
@@ -18740,32 +18948,107 @@ function printMessage(mutationList) {
 
             /* HIGHLIGHT TEXT */
  
+            var keyList = Object.keys( segmentDatabase );
+            // console.log(keyList);
+
+            // console.log(sections);
+
             for(var j=startCnt;j<endCnt;j++) {
-                for(var k=0;k<refs.length;k++) {
-                    var ref = refs[k];
+                var key = "textSegment_" + pageNumber + "_" + j;
 
-                    var refY = ((refs[k].y) / pageSize.page_height) * pageRect.height;
-                    var refX = ((refs[k].x) / pageSize.page_width) * pageRect.width;
-                    var refHeight = ((refs[k].h) / pageSize.page_height) * pageRect.height;
-                    var refWidth = ((refs[k].w) / pageSize.page_width) * pageRect.width;
-
-                    var refMidY = refY + (refHeight / 2);
-                    var refMidX = refX + (refWidth / 2);
-
-                    var textLeft = $("#textSegment_" + pageNumber + "_" + j).offset().left - $("#pageCanvas" + pageNumber).offset().left;
-                    var textTop = $("#textSegment_" + pageNumber + "_" + j).offset().top- $("#pageCanvas" + pageNumber).offset().top;
-
-                    var textWidth = $("#textSegment_" + pageNumber + "_" + j).width();
-                    var textHeight = $("#textSegment_" + pageNumber + "_" + j).height();
-
-                    if(textTop <= refMidY && refMidY <= textTop + textHeight && 
-                       textLeft <= refMidX && refMidX <= textLeft + textWidth) {
-                        console.log($("#textSegment_" + pageNumber + "_" + j));
-
-                        $("#textSegment_" + pageNumber + "_" + j).addClass("referred" + ref.id);
+                if(keyList.includes(key)) {
+                    if(segmentDatabase[key][0] != null){
+                        $("#textSegment_" + pageNumber + "_" + j).addClass("referred" + segmentDatabase[key][0]);
                         $("#textSegment_" + pageNumber + "_" + j).addClass("referred");
                     }
+
+                    if(segmentDatabase[key][1] != null) {
+                        $("#textSegment_" + pageNumber + "_" + j).addClass("section" + segmentDatabase[key][1]);
+                    }
                 }
+                else {
+                    var refID = null, sectionID = null;
+
+                    for(var k=0;k<refs.length;k++) {
+                        var ref = refs[k];
+
+                        var refY = ((refs[k].y) / pageSize.page_height) * pageRect.height;
+                        var refX = ((refs[k].x) / pageSize.page_width) * pageRect.width;
+                        var refHeight = ((refs[k].h) / pageSize.page_height) * pageRect.height;
+                        var refWidth = ((refs[k].w) / pageSize.page_width) * pageRect.width;
+
+                        var refMidY = refY + (refHeight / 2);
+                        var refMidX = refX + (refWidth / 2);
+
+                        var textLeft = $("#textSegment_" + pageNumber + "_" + j).offset().left - $("#pageCanvas" + pageNumber).offset().left;
+                        var textTop = $("#textSegment_" + pageNumber + "_" + j).offset().top- $("#pageCanvas" + pageNumber).offset().top;
+
+                        var textWidth = $("#textSegment_" + pageNumber + "_" + j).width();
+                        var textHeight = $("#textSegment_" + pageNumber + "_" + j).height();
+
+                        var textMidX = textLeft + (textWidth / 2);
+                        var textMidY = textTop + (textTop / 2);
+
+                        if(textTop <= refMidY && refMidY <= textTop + textHeight && 
+                                textLeft <= refMidX && refMidX <= textLeft + textWidth) {
+                            // console.log($("#textSegment_" + pageNumber + "_" + j));
+
+                            $("#textSegment_" + pageNumber + "_" + j).addClass("referred" + ref.id);
+                            $("#textSegment_" + pageNumber + "_" + j).addClass("referred");
+
+                            refID = ref.id;
+
+                            break;
+                        }
+                    }
+
+                    for(var k=0;k<sections.length;k++) {
+                        var pageCanvasSectionID = "pageCanvasSections" + pageNumber + "_" + j;
+
+                        var sectionY = ((sections[k].region.y1) / pageSize.page_height) * pageRect.height;
+                        var sectionX  = ((sections[k].region.x1) / pageSize.page_width) * pageRect.width;
+                        var sectionHeight = ((sections[k].region.y2 - sections[k].region.y1) / pageSize.page_height) * pageRect.height;
+                        var sectionWidth = ((sections[k].region.x2 - sections[k].region.x1) / pageSize.page_width) * pageRect.width;
+
+                        var sectionKey = "section_" + pageNumber + "_" + k;
+                        var textSegmentID = "#textSegment_" + pageNumber + "_" + j;
+
+                        sectionX -= 10;
+                        sectionY -= 10;
+                        sectionHeight += 20;
+                        sectionWidth += 20;
+
+                        var textLeft = $(textSegmentID).offset().left - $("#pageCanvas" + pageNumber).offset().left;
+                        var textTop = $(textSegmentID).offset().top- $("#pageCanvas" + pageNumber).offset().top;
+
+                        var textWidth = $(textSegmentID).width();
+                        var textHeight = $(textSegmentID).height();
+
+                        if(sectionY <= textTop && textTop + textHeight <= sectionY + sectionHeight &&
+                                sectionX <= textLeft && textLeft + textWidth <= sectionX + sectionWidth) {
+                            // console.log($("#textSegment_" + pageNumber + "_" + j));
+
+                            $(textSegmentID).addClass(sectionKey);
+
+                            if(sectionTextSegment[sectionKey] == null) {
+                                sectionTextSegment[sectionKey] = [["textSegment_" + pageNumber + "_" + j, $(textSegmentID).text()]];
+                            }
+                            else {
+                                sectionTextSegment[sectionKey].push(["textSegment_" + pageNumber + "_" + j, $(textSegmentID).text()]);
+                            }
+
+                            sectionID = k;
+
+                            break;
+                        }
+                    }
+
+                    if(sectionID == null) {
+                        $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
+                    }
+                }
+
+                storeData("textSegment_" + pageNumber + "_" + j, refID, sectionID);
             }
 
             /* REFERENCES ANNOTATING */
@@ -18797,9 +19080,11 @@ function printMessage(mutationList) {
                     $("#" + pageCanvasReferenceElementID).width(refWidth);
                     $("#" + pageCanvasReferenceElementID).height(refHeight);
 
+                    /*
                     console.log(pageCanvasReferenceElementID);
                     console.log("X : " + refX + ", Y : " + refY);
                     console.log("width : " + refWidth + ", height : " + refHeight);
+                    */
                 }
             }
 
@@ -18835,8 +19120,8 @@ function printMessage(mutationList) {
 
             /* LIST OF REFERENCES ANNOTATING */ 
 
-            console.log(" *** List of references *** ");
-            console.log(ListofRefs);
+            // console.log(" *** List of references *** ");
+            // console.log(ListofRefs);
 
             for(var j=0;j<ListofRefs.length;j++) {
                 var pageCanvasListofRefsID = "pageCanvasListofRefs" + pageNumber + "_" + j;
@@ -18863,7 +19148,7 @@ function printMessage(mutationList) {
 
             /* FIGURE ANNOTATION */
 
-            console.log(figs);
+            // console.log(figs);
 
             for(var j=0;j<figs.length;j++) {
                 var pageCanvasFigsID = "pageCanvasFigs" + pageNumber + "_" + j;
@@ -18893,7 +19178,112 @@ function printMessage(mutationList) {
                 $("#" + pageCanvasFigsID).height(figHeight);
 
             }
+
+            /* SECTION ANNOTATION */
+
+            for(var j=0;j<sections.length;j++) {
+                var pageCanvasSectionID = "pageCanvasSections" + pageNumber + "_" + j;
+
+                var figY = ((sections[j].region.y1) / pageSize.page_height) * pageRect.height;
+                var figX  = ((sections[j].region.x1) / pageSize.page_width) * pageRect.width;
+                var figHeight = ((sections[j].region.y2 - sections[j].region.y1) / pageSize.page_height) * pageRect.height;
+                var figWidth = ((sections[j].region.x2 - sections[j].region.x1) / pageSize.page_width) * pageRect.width;
+
+                figX -= 5;
+                figY -= 5;
+                figHeight += 10;
+                figWidth += 10;
+
+                $("#pageCanvas" + pageNumber).append(
+                        "<div id=" + pageCanvasSectionID + "></div>"
+                );
+
+                $("#" + pageCanvasSectionID).addClass("borderForDebugging");
+                $("#" + pageCanvasSectionID).attr("imageURL", sections[j].renderURL);
+                $("#" + pageCanvasSectionID).css({
+                        "left": figX,
+                        "top": figY 
+                        });
+
+                $("#" + pageCanvasSectionID).width(figWidth);
+                $("#" + pageCanvasSectionID).height(figHeight);
+
+            }
         } 
+    }
+
+    //console.log(sectionDictionary);
+    //console.log(sectionTextSegment);
+
+    // console.log(sectionTextSegment);
+
+    var keys = Object.keys(sectionDictionary);
+
+    for(var i=0;i<keys.length;i++) {
+        if(sectionTextSegmentProcessed[keys[i]] == null) {
+            console.log(sections);
+            console.log(keys[i]);
+            console.log(sectionDictionary);
+            console.log(sectionDictionary[keys[i]]);
+            console.log("\n");
+
+            var pairs = sectionTextSegment[keys[i]];
+
+            var str1Index = 0;
+            var len = 0;
+
+            var str1 = sectionDictionary[keys[i]][str1Index];
+            var wordCount = 0;
+
+            for(var j=0;j<pairs.length;j++) {
+                if(pairs[j][1] != '' && pairs[j][1] != ' ') {
+                    if(pairs[j][1].slice(-1) == '-') {
+                        pairs[j][1] = pairs[j][1].substr(0, pairs[j][1].length-1);
+                    }
+
+                    var inx = str1.indexOf(pairs[j][1]);
+                    var flag = false;
+
+                    if(inx == -1) {
+                        if(str1Index+1 < sectionDictionary[keys[i]].length) {
+                            if(sectionDictionary[keys[i]][str1Index+1].indexOf(pairs[j][1]) != -1) {
+                                str1 = sectionDictionary[keys[i]][str1Index+1];
+                                str1Index = str1Index + 1;
+
+                                wordCount = 0;
+                            }
+                            else {
+                                console.log("-1!!!!!!!! " + pairs[j][1] + ' ' + j);
+                                flag = true;
+                            }
+                        }
+                        else {
+                            console.log("-1!!!!!!!! " + pairs[j][1] + ' ' + j);
+                            flag = true;
+                        }
+                    }
+
+                    if(!flag) {
+                        var subString = str1.substr(0, inx + pairs[j][1].length);
+                        var numSpace = subString.split(' ').length - 1;
+                        wordCount = wordCount + numSpace;
+
+                        str1 = str1.substr(inx + pairs[j][1].length);
+                        $("#" + pairs[j][0]).attr("sectionSentenceIndex", str1Index);
+                        $("#" + pairs[j][0]).attr("sectionSentenceWordIndex", wordCount);
+
+                        //                console.log(pairs[j][1] + ' ' + (inx + len));
+
+                        len = len + inx + pairs[j][1].length;
+                    }
+                }
+            }
+
+            //        console.log(str1);
+            //        console.log(str2);
+
+            sectionTextSegmentProcessed[keys[i]] = true;
+        }
     }
 }
 

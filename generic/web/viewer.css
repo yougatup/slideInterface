@@ -22,14 +22,6 @@
   overflow: hidden;
   opacity: 0.2;
   line-height: 1.0;
-
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                        supported by Chrome and Opera */
 }
 
 .textLayer > div {
@@ -2417,16 +2409,20 @@ font-size: 15px;
     padding: 0px;
 }
 
-.textHighlighted {
-    background-color: red;
-}
-
 .textSelectedyellow {
     background-color: yellow;
 }
 
 .textSelectedblue {
     background-color: blue;
+}
+
+.textSelectedred {
+    background-color: red;
+}
+
+.textSelectedgreen {
+    background-color: green;
 }
 
 .pageCanvas {
@@ -2593,8 +2589,13 @@ width: 17px;
 color: white;
 }
 
+.topBarHighlightButtonSelected {
+border: 3px solid black;
+}
+
+
 #topBarCursorIcon {
-    background-color: white;
+    background-color: whitesmoke;
 }
 
 #topBarYellowIcon {
@@ -2621,4 +2622,29 @@ color: white;
 .topBarHighlightButtons {
         margin-left: 5px;
         margin-right 5px;
+}
+
+.textHighlightedYellow {
+    background-color: yellow;
+}
+
+.textHighlightedBlue {
+    background-color: blue;
+}
+
+.textHighlightedRed {
+    background-color: red;
+}
+
+.textHighlightedGreen {
+    background-color: green;
+}
+
+.borderForDebugging {
+    border: 2px dotted red;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0.5;
 }

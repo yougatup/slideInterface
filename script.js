@@ -9,6 +9,7 @@ var tei, json;
 var userID, documentID;
 var windowsHeight, windowsWidth;
 var outlineInfo = [];
+var slideInfo = [];
 
 Array.prototype.insert = function ( index, item ) {
         this.splice( index, 0, item );
@@ -185,10 +186,9 @@ function initializeGAPI() {
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           // signoutButton.style.display = 'block';
-          // listSlides();
+          listSlides();
 
           // callAppsScript(gapi.auth2.getAuthInstance());
-			listFiles();
         } else {
           authorizeButton.style.display = 'block';
           // signoutButton.style.display = 'none';
@@ -226,35 +226,6 @@ function initializeGAPI() {
        * https://docs.google.com/presentation/d/1EAYk18WDjIG-zp_0vLm3CsfQh_i8eXc67Jo2O9C6Vuc/edit
        */
 
-    /**
-       * Print files.
-       */
-      function listFiles() {
-			console.log(" *** I am in the listfiles *** ");
-        gapi.client.drive.files.list({
-          'pageSize': 10,
-          'fields': "nextPageToken, files(id, name)"
-        }).then(function(response) {
-			console.log(response);
-/*
-          appendPre('Files:');
-          var files = response.result.files;
-          if (files && files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-              var file = files[i];
-              appendPre(file.name + ' (' + file.id + ')');
-            }
-          } else {
-            appendPre('No files found.');
-          }*/
-        }).catch((error) => {
-          // The API encountered a problem.
-			console.log(error);
-          return console.log(`The API returned an error: ${error}`);
-        });
-      }
-
-
       function createSlide() {
         var requests = [{
           createSlide: {
@@ -279,30 +250,81 @@ function initializeGAPI() {
         });
       }
 
-      function getPageInfo(presentationId, pageId) {
-        gapi.client.slides.presentations.pages.get({
-          presentationId: presentationId,
-          pageObjectId: pageId
-        }).then(function(response) {
-            console.log(response);
-        }, function(response) {
-          appendPre('Error: ' + response.result.error.message);
-        });
-      }
-
       function listSlides() {
         gapi.client.slides.presentations.get({
           presentationId: PRESENTATION_ID
         }).then(function(response) {
+          $("#outlinePlaneContent").text('');
+
           var presentation = response.result;
           var length = presentation.slides.length;
-          appendPre('The presentation contains ' + length + ' slides:');
+
           for (i = 0; i < length; i++) {
             var slide = presentation.slides[i];
-            appendPre('- Slide #' + (i + 1) + ' contains ' +
-                slide.pageElements.length + ' elements.');
-            console.log(slide);
 
+            var slideID = slide.objectId;
+            var slideObjId = [];
+
+            function compare(a, b) {
+                if(a.objectId > b.objectId) return true;
+                else return false;
+            }
+
+            slide.pageElements.sort(compare);
+
+            for(var j=0;j<slide.pageElements.length;j++) {
+                var slideItem = slide.pageElements[j];
+
+                var slideObjParagraphId = [];
+
+                if(slideItem.shape.text != null) {
+                    var nestingLevel = 0;
+                    var isFirstTextRun = true;
+                    var paragraphId = -1;
+
+                    for(var k=0;k<slideItem.shape.text.textElements.length;k++) {
+                        var textElem = slideItem.shape.text.textElements[k];
+
+                        if(textElem.paragraphMarker != null) {
+                            paragraphId = paragraphId + 1;
+                        }
+
+                        var paragraphObjId = "editor-" + slideItem.objectId + "-paragraph-" + paragraphId;
+                        var domId = '';
+
+                        if(textElem.paragraphMarker != null && textElem.paragraphMarker.bullet != null) {
+                            if(textElem.paragraphMarker.bullet.nestingLevel != null) {
+                                nestingLevel = parseInt(textElem.paragraphMarker.bullet.nestingLevel);
+                            }
+                            else nestingLevel = 0;
+                        }
+                        else if(textElem.textRun != null){
+                            var level = (j == 0? nestingLevel : nestingLevel + 1);
+
+                            // domId = appendOutlineLine(level, textElem.textRun.content, paragraphObjId);
+
+                            isFirstTextRun = false;
+
+                            slideObjParagraphId.push({
+                                    slideParagraphObjId: paragraphObjId,
+                                    domId: domId
+                                    });
+                        }
+                    }
+                }
+
+                slideObjId.push({
+                    slideObjId: slideItem.objectId,
+                    slideParagraphs: slideObjParagraphId
+                    });
+            }
+
+            slideInfo.push({
+                slideID: slideID,
+                slideObjs: slideObjId
+            });
+            
+            console.log(slideInfo);
           }
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
@@ -352,7 +374,7 @@ function initializeGAPI() {
       handleClientLoad();
 }
 
-function storeData(pageId, objIdList, pageNumber, startIdx, endIdx) {
+function storeData(pageId, objIdList, pageNumber, startIdx, endIdx, color) {
     for(var i=0;i<objIdList.length;i++) {
         myDB.put({
           "_id": createObjId(),
@@ -362,7 +384,8 @@ function storeData(pageId, objIdList, pageNumber, startIdx, endIdx) {
           "objId": objIdList[i],
 		  "pageNumber": pageNumber,
           "startIdx": startIdx,
-          "endIdx": endIdx
+          "endIdx": endIdx,
+          "color": color
         }).then(function (response) {
           // handle response
             console.log("SUCCEED STORE DATA");
@@ -387,7 +410,7 @@ function loadData() {
          var elem = result.rows[i].doc;
 
          if(elem.userId == userID && elem.documentId == documentID) {
-             addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.startIdx, elem.endIdx, false);
+             addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.startIdx, elem.endIdx, elem.color, false);
              flag = true;
          }
       }
@@ -413,7 +436,7 @@ function createObjId() {
     return text;
 }
 
-function addHighlight(pageId, objIdList, pageNumber, startIdx, endIdx, flag) {
+function addHighlight(pageId, objIdList, pageNumber, startIdx, endIdx, color, flag) {
     if(!(pageId in highlightDictionary)) {
         highlightDictionary[pageId] = {};
     }
@@ -425,11 +448,11 @@ function addHighlight(pageId, objIdList, pageNumber, startIdx, endIdx, flag) {
             highlightDictionary[pageId][objId] = [];
         }
 
-        highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx]);
+        highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx, color]);
     }
 
     if(flag)
-        storeData(pageId, objIdList, pageNumber, startIdx, endIdx);
+        storeData(pageId, objIdList, pageNumber, startIdx, endIdx, color);
 }
 
 function updateHighlight(pageId, objIdList) {
@@ -450,6 +473,9 @@ function updateHighlight(pageId, objIdList) {
           var pageNumber = highlightDictionary[pageId][thisKey][j][0];
           var startIdx = highlightDictionary[pageId][thisKey][j][1];
           var endIdx = highlightDictionary[pageId][thisKey][j][2];
+          var color = highlightDictionary[pageId][thisKey][j][3];
+
+          console.log(color);
 
           issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                   {
@@ -457,7 +483,7 @@ function updateHighlight(pageId, objIdList) {
                      "startIndex": startIdx,
                      "endIndex": endIdx,
                      "slideObjId": thisKey,
-                     "color": (objIdList.includes(thisKey) ? 'blue' : 'yellow'),
+                     "color": color,
           });
       }
     }
@@ -503,38 +529,52 @@ function decreaseLevel(index) {
 }
 
 function setLevel(index, level) {
+    var bulletStyle = '';
+
+    if(level == 0) {
+        bulletStyle = 'T';
+    }
+    else if(level == 1) {
+        bulletStyle = '*';
+    }
+    else if(level == 2) {
+        bulletStyle = '-';
+    }
+
+    $("#outlineLineBullet_" + index).text(bulletStyle);
+
     $("#outlineLineBullet_" + index).css("width", 30 * (level+1));
     $("#outlineLineEditor_" + index).css("margin-left", $("#outlineLineBullet_" + index).width()+3);
 
     outlineInfo[index].level = level;
 }
 
-function putNewOutlineLine(index, level, text) {
+function appendOutlineLine(level, text, paragraphId) {
+    return putNewOutlineLine(outlineInfo.length, level, text, paragraphId);
+}
+
+function putNewOutlineLine(index, level, text, paragraphId) {
     var objId = generateObjId();
 
     if(outlineInfo.length == 0) {
         $("#outlinePlaneContent").append(
-            "<div id='outlineLine_" + index + "' class='outlineLineWrapper' objId=" + objId + ">" + 
+            "<div id='outlineLine_" + index + "' class='outlineLineWrapper' objId=" + objId + " paragraphId=" + paragraphId + ">" + 
                 "<div id='outlineLineBullet_" + index + "' class='outlineBullet'> * </div>" + 
-                "<div id='outlineLineEditor_" + index + "' class='outlineLineEditor' contenteditable='true'></div>" + 
+                "<div id='outlineLineEditor_" + index + "' class='outlineLineEditor' contenteditable='true'>" + text + "</div>" + 
             "</div>"
             );
     }
     else {
-        console.log("hmm?");
-
         for(var i=outlineInfo.length-1;i>=index;i--) {
             $("#outlineLine_" + i).attr("id", "outlineLine_" + (i+1));
             $("#outlineLineBullet_" + i).attr("id", "outlineLineBullet_" + (i+1));
             $("#outlineLineEditor_" + i).attr("id", "outlineLineEditor_" + (i+1));
         }
 
-        console.log("#outlineLine_" + (index-1));
-
         $("#outlineLine_" + (index-1)).after(
-            "<div id='outlineLine_" + index + "' class='outlineLineWrapper' objId=" + objId + ">" + 
+            "<div id='outlineLine_" + index + "' class='outlineLineWrapper' objId=" + objId + " paragraphId=" + paragraphId + ">" + 
                 "<div id='outlineLineBullet_" + index + "' class='outlineBullet'> * </div>" + 
-                "<div id='outlineLineEditor_" + index + "' class='outlineLineEditor' contenteditable='true'></div>" + 
+                "<div id='outlineLineEditor_" + index + "' class='outlineLineEditor' contenteditable='true'>" + text + "</div>" + 
             "</div>"
             );
     }
@@ -546,7 +586,7 @@ function putNewOutlineLine(index, level, text) {
 
     setLevel(index, level);
 
-    console.log(outlineInfo);
+    return objId;
 }
 
 function removeOutlineLine(index) {
@@ -569,10 +609,22 @@ $(document).ready(function() {
         listSlides();
       });
 	
+      function getPageInfo(pageID) {
+        gapi.client.slides.presentations.pages.get({
+          presentationId: PRESENTATION_ID,
+          pageObjectId: pageID
+        }).then(function(response) {
+            console.log(response);
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        });
+      }
+
       $(document).on("addText", function(e) {
           console.log(e);
 
-          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.pageNumber, e.detail.startIndex, e.detail.endIndex);
+          console.log(e.detail.color);
+          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.pageNumber, e.detail.startIndex, e.detail.endIndex, e.detail.color);
       });
 
       $(document).on("getSlideInfo", function() {
@@ -625,7 +677,7 @@ $(document).ready(function() {
         });
       });
 
-      function appendText(objId, myText, pageNumber, startIndex, endIndex) {
+      function appendText(objId, myText, pageNumber, startIndex, endIndex, color) {
          console.log("yay");
 
          gapi.client.request({
@@ -701,14 +753,15 @@ $(document).ready(function() {
                      console.log("succeed!");
                      console.log(createSlideResponse);
 
-                     addHighlight(curPageId, curClickedElements, pageNumber, startIndex, endIndex, true);
+                     console.log(color);
+                     addHighlight(curPageId, curClickedElements, pageNumber, startIndex, endIndex, color, true);
 
                      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                              {
 								"pageNumber": pageNumber,
                                 "startIndex": startIndex,
                                 "endIndex": endIndex,
-                                "color": 'yellow',
+                                "color": color,
                              });
                      });
                  }
@@ -719,7 +772,7 @@ $(document).ready(function() {
           // to be filled
       }
 
-      function fillText(objId, myText, pageNumber, startIndex, endIndex) {
+      function fillText(objId, myText, pageNumber, startIndex, endIndex, color) {
          var requests = [ 
              /*
          {
@@ -741,14 +794,14 @@ $(document).ready(function() {
              console.log("succeed!");
              console.log(createSlideResponse);
 
-             addHighlight(curPageId, ["editor-" + objId], pageNumber, startIndex, endIndex, true);
+             addHighlight(curPageId, ["editor-" + objId], pageNumber, startIndex, endIndex, color, true);
 
              issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                      {
 						"pageNumber": pageNumber,
                         "startIndex": startIndex,
                         "endIndex": endIndex,
-                        "color": 'yellow',
+                        "color": color,
              });
          }).catch(function(error) {
              console.log('cache!');
@@ -756,9 +809,11 @@ $(document).ready(function() {
          });
       }
 
-      function addText(objId, pageId, myText, pageNumber, startIndex, endIndex) {
+      function addText(objId, pageId, myText, pageNumber, startIndex, endIndex, color) {
+          console.log(color);
+
           if(objId != null) {
-              appendText(objId, myText, pageNumber, startIndex, endIndex);
+              appendText(objId, myText, pageNumber, startIndex, endIndex, color);
            }
           else{
              var newObjId = createObjId();
@@ -797,7 +852,7 @@ $(document).ready(function() {
                presentationId: PRESENTATION_ID,
                requests: requests
              }).then((createSlideResponse) => {
-                 fillText(newObjId, myText, pageNumber, startIndex, endIndex);
+                 fillText(newObjId, myText, pageNumber, startIndex, endIndex, color);
              });
           }
       }
@@ -863,6 +918,13 @@ $(document).ready(function() {
 	    });
 	});
 
+    $(document).on("UPDATE_SLIDE_INFO", function(e) {
+        var p = e.detail;
+
+        var slideId = p.pageId;
+        getPageInfo(slideId);
+    });
+
     $(document).on("ROOT_UPDATE_CUR_PAGE_AND_OBJECTS", function(e) {
         var p = e.detail;
 
@@ -878,7 +940,23 @@ $(document).ready(function() {
 	readTextFile("./generic/web/metadata.json", 'json');
 */
 	
-    putNewOutlineLine(0, 0, "blah");
+    $(document).on("click", "#outlinePlaneContent", function(e){
+        var x = e.clientX, y = e.clientY;
+        var elementMouseIsOver = document.elementFromPoint(x, y);
+
+        console.log("clicked!");
+        console.log($(elementMouseIsOver));
+
+        $(".outlineLineEditor").each(function(index) {
+            $(this).css("background-color", "white");
+        });
+
+        if($(elementMouseIsOver).hasClass("outlineLineEditor")) {
+           $(elementMouseIsOver).css("background-color", "yellow");
+        }
+    });
+
+    // putNewOutlineLine(0, 0, "blah");
 
     windowsHeight = $(window).height();
     windowsWidth = $(window).width();
@@ -887,24 +965,26 @@ $(document).ready(function() {
     console.log(windowsWidth);
 
     $("#leftPlane").height(windowsHeight-1);
-    $("#outlinePlane").height(windowsHeight-1);
     $("#slidePlane").height(windowsHeight-1);
 
-    $("#wrapper").width(windowsWidth-2);
+    $("#wrapper").width(windowsWidth-1);
 
+    /*
     $(document).on('keydown', '.outlineLineEditor', function(e) {
-            console.log(e);
-
             var curIndex = parseInt($(this).attr("id").split("_")[1]);
             var curLevel = outlineInfo[curIndex].level;
 
             if(e.keyCode == 13) { // Enter
-                var newIndex = curIndex + 1
-                console.log("i'm here");
+                $(".outlineLineEditor").each(function(index) {
+                    $(this).css("background-color", "white");
+                });
 
-                putNewOutlineLine(newIndex, curLevel, '1');
+                var newIndex = curIndex + 1;
+
+                putNewOutlineLine(newIndex, curLevel, '');
 
                 $("#outlineLineEditor_" + newIndex).focus();
+                $("#outlineLineEditor_" + newIndex).css("background-color", "yellow");
 
                 return false;
             }
@@ -919,28 +999,49 @@ $(document).ready(function() {
                     removeOutlineLine(curIndex);
                     $("#outlineLineEditor_" + (curIndex-1)).focus();
                 }
-                else {
+                else if(outlineInfo.length > 1){
                     removeOutlineLine(curIndex);
                     $("#outlineLineEditor_" + (curIndex)).focus();
                 }
             }
             else if(e.keyCode == 38) { // Upper arrow
+                $(".outlineLineEditor").each(function(index) {
+                    $(this).css("background-color", "white");
+                });
+
                 var prevIndex = curIndex-1;
 
-                if(prevIndex >= 0) $("#outlineLineEditor_" + prevIndex).focus();
+                if(prevIndex >= 0){
+                    $("#outlineLineEditor_" + prevIndex).focus();
+
+                    if($("#outlineLineEditor_" + prevIndex).hasClass("outlineLineEditor")) {
+                       $("#outlineLineEditor_" + prevIndex).css("background-color", "yellow");
+                    }
+                }
             }
             else if(e.keyCode == 40) { // Lower arrow
+                $(".outlineLineEditor").each(function(index) {
+                    $(this).css("background-color", "white");
+                });
+
                 var nextIndex = curIndex+1;
 
-                if(nextIndex < outlineInfo.length) $("#outlineLineEditor_" + nextIndex).focus();
+                if(nextIndex < outlineInfo.length){
+                    $("#outlineLineEditor_" + nextIndex).focus();
+
+                    if($("#outlineLineEditor_" + nextIndex).hasClass("outlineLineEditor")) {
+                       $("#outlineLineEditor_" + nextIndex).css("background-color", "yellow");
+                    }
+                }
             }
 
             else return true;
             });
+            */
 
-    Split(['#leftPlane', '#outlinePlane', '#slidePlane'], {
-        sizes: [33, 33, 34],
-        minSize: 200
+    Split(['#leftPlane', '#slidePlane'], {
+        sizes: [50, 50],
+        minSize: 0
     });
 
     $(window).resize(function() {
@@ -948,9 +1049,8 @@ $(document).ready(function() {
         windowsWidth = $(window).width();
 
         $("#leftPlane").height(windowsHeight-1);
-        $("#outlinePlane").height(windowsHeight-1);
         $("#slidePlane").height(windowsHeight-1);
-        $("#wrapper").width(windowsWidth-2);
+        $("#wrapper").width(windowsWidth-1);
 
         $("#outlineLineEditor1").css("padding-left", $("#outlineLineBullet1").width);
     });

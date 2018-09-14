@@ -11,6 +11,8 @@ border: 1px solid black;
 }
 
 #slidePlane {
+right: 0px;
+top: 0px;
 float: left;
 height: 100%;
 border: 1px solid black;
@@ -50,6 +52,7 @@ height: 100%;
 }
 
 #slidePlaneCanvas {
+right: 0px;
 width: 100%;
 height: 100%;
 position: absolute;
@@ -81,14 +84,17 @@ box-sizing: border-box;
 }
 
 .outlineLineEditor {
-    height: 40px;
+    height: auto;
     font-size: 30px;
     border: 1px solid black;
+    display: block;
+    overflow: auto;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .outlineBullet {
     font-size: 30px;
-    height: 40px;
     width: 40px;
     text-align: right;
     float: left;
@@ -97,4 +103,8 @@ box-sizing: border-box;
 
 .outlineLineEditor:focus {
    outline-width: 0;
+}
+
+.topBarButtonSelected {
+    border: 5px solid black;
 }
