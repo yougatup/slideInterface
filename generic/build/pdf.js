@@ -18038,8 +18038,6 @@ function removeParenthesis(myString) {
 }
 
 function highlightString(pageNumber, start, end, color, slideObjId) {
-    console.log(color);
-
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
         var elem = $('#textSegment_' + pageNumber + '_' + i);
 

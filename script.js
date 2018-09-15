@@ -475,8 +475,6 @@ function updateHighlight(pageId, objIdList) {
           var endIdx = highlightDictionary[pageId][thisKey][j][2];
           var color = highlightDictionary[pageId][thisKey][j][3];
 
-          console.log(color);
-
           issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                   {
 					"pageNumber": pageNumber,
@@ -872,7 +870,7 @@ $(document).ready(function() {
     });
 
     $(document).on("clearPlaneCanvas", function(e) {
-            $("#slidePlaneCanvas").html('');
+            $(".slidePlaneCanvasHighlight").remove();
     });
 
     $(document).on("highlightSlideObject", function(e) {
@@ -884,7 +882,7 @@ $(document).ready(function() {
                     'left: ' + e.detail.left+ '; ' + 
                     'top: ' + e.detail.top + '; ' +
                     'background-color: yellow;' + 
-                    'opacity: 0.2">' + 
+                    'opacity: 0.2" class="slidePlaneCanvasHighlight">' + 
                     '</div>'
                     );
     });
@@ -935,6 +933,13 @@ $(document).ready(function() {
         console.log(curClickedElements);
         */
     });
+
+    $(document).on("showAutoComplete", function(e) {
+        var p = e.detail;
+
+        $("#slidePlaneCanvasPopup").css("left", p.left);
+        $("#slidePlaneCanvasPopup").css("top", p.top);
+    });
 /*
 	readTextFile("./generic/web/metadata.tei", 'xml');
 	readTextFile("./generic/web/metadata.json", 'json');
@@ -955,10 +960,6 @@ $(document).ready(function() {
            $(elementMouseIsOver).css("background-color", "yellow");
         }
     });
-
-    $(document).on("click", "#slidePlaneCanvas", function(e) {
-            console.log("keypressed!");
-            });
 
     // putNewOutlineLine(0, 0, "blah");
 
