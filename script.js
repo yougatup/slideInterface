@@ -940,6 +940,35 @@ $(document).ready(function() {
         $("#slidePlaneCanvasPopup").css("left", p.left);
         $("#slidePlaneCanvasPopup").css("top", p.top);
     });
+
+    $(document).on("clearVisualizeParagraph", function(e) {
+            $(".slideVisualizeParagraph").remove();
+    });
+
+    $(document).on("visualizeParagraph", function(e) {
+        var p = e.detail;
+
+        if($(".slideVisualizeParagraph").length > 0) {
+            console.log("re draw!");
+            $(".slideVisualizeParagraph").css("left", e.detail.left);
+            $(".slideVisualizeParagraph").css("top", e.detail.top);
+            $(".slideVisualizeParagraph").width(e.detail.width);
+            $(".slideVisualizeParagraph").height(e.detail.height);
+        }
+        else {
+            $("#slidePlaneCanvas").append(
+                    '<div style="' + 
+                    'position: absolute; ' + 
+                    'width: ' + e.detail.width + '; ' + 
+                    'height: ' + e.detail.height + '; ' + 
+                    'left: ' + e.detail.left+ '; ' + 
+                    'top: ' + e.detail.top + '; ' +
+                    'border: 2px dotted black' + 
+                    '" class="slideVisualizeParagraph">' + 
+                    '</div>'
+                    );
+        }
+    });
 /*
 	readTextFile("./generic/web/metadata.tei", 'xml');
 	readTextFile("./generic/web/metadata.json", 'json');
