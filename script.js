@@ -956,6 +956,10 @@ $(document).ready(function() {
         }
     });
 
+    $(document).on("click", "#slidePlaneCanvas", function(e) {
+            console.log("keypressed!");
+            });
+
     // putNewOutlineLine(0, 0, "blah");
 
     windowsHeight = $(window).height();

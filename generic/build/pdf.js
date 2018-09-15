@@ -19221,11 +19221,11 @@ function printMessage(mutationList) {
 
     for(var i=0;i<keys.length;i++) {
         if(sectionTextSegmentProcessed[keys[i]] == null) {
-            console.log(sections);
-            console.log(keys[i]);
-            console.log(sectionDictionary);
-            console.log(sectionDictionary[keys[i]]);
-            console.log("\n");
+            // console.log(sections);
+            // console.log(keys[i]);
+            // console.log(sectionDictionary);
+            // console.log(sectionDictionary[keys[i]]);
+            // console.log("\n");
 
             var pairs = sectionTextSegment[keys[i]];
 
