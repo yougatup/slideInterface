@@ -19,6 +19,10 @@ var sectionDictionary = {};
 var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
 
+var prefixTree = {
+"doms":  []
+};
+
 /**
  * @licstart The following is the entire license notice for the
  * Javascript code in this page
@@ -18468,7 +18472,6 @@ function enableDoc2Slide() {
      });
 
     $(document).on('mouseleave', '.textElement', function() {
-        console.log("mouseleave");
         issueEvent(document, "clearPlaneCanvas", null);
     });
 
@@ -18829,6 +18832,39 @@ function readTextFile(file, filetype, type)
     rawFile.send(null);
 }
 
+function feedString(str, doms) {
+    var root = prefixTree;
+
+    for(var i=0;i<str.length;i++) {
+        var a = str[i];
+
+        if(root[a] == null) 
+            root[a] = {
+                'doms': []
+            };
+
+        root = root[a];
+    }
+
+    root["doms"] = root["doms"].concat(doms);
+}
+
+function feedPrefixTree(sectionIndex, strIndex, wordCnt) {
+    // console.log(sectionIndex + ' ' + strIndex + ' ' + wordCnt);
+
+    for(var i=0;i<=wordCnt;i++) {
+        var doms = [];
+        var myStr = '';
+
+        $("[sectionindex="+sectionIndex+"][sectionSentenceIndex="+strIndex+"][sectionSentenceWordIndex="+i+"]").each(function(idx) {
+                doms.push($(this));
+                myStr = myStr + $(this).text();
+                });
+
+        myStr = myStr.toLowerCase();
+        feedString(myStr, doms);
+    }
+}
 
 function printMessage(mutationList) {
     // console.log(mutationList);
@@ -18961,7 +18997,7 @@ function printMessage(mutationList) {
                     }
 
                     if(segmentDatabase[key][1] != null) {
-                        $("#textSegment_" + pageNumber + "_" + j).addClass("section" + segmentDatabase[key][1]);
+                        $("#textSegment_" + pageNumber + "_" + j).attr("sectionIndex", segmentDatabase[key][1]);
                     }
                 }
                 else {
@@ -19026,7 +19062,7 @@ function printMessage(mutationList) {
                                 sectionX <= textLeft && textLeft + textWidth <= sectionX + sectionWidth) {
                             // console.log($("#textSegment_" + pageNumber + "_" + j));
 
-                            $(textSegmentID).addClass(sectionKey);
+                            $(textSegmentID).attr("sectionIndex", sectionKey);
 
                             if(sectionTextSegment[sectionKey] == null) {
                                 sectionTextSegment[sectionKey] = [["textSegment_" + pageNumber + "_" + j, $(textSegmentID).text()]];
@@ -19219,12 +19255,6 @@ function printMessage(mutationList) {
 
     for(var i=0;i<keys.length;i++) {
         if(sectionTextSegmentProcessed[keys[i]] == null) {
-            // console.log(sections);
-            // console.log(keys[i]);
-            // console.log(sectionDictionary);
-            // console.log(sectionDictionary[keys[i]]);
-            // console.log("\n");
-
             var pairs = sectionTextSegment[keys[i]];
 
             var str1Index = 0;
@@ -19245,7 +19275,10 @@ function printMessage(mutationList) {
                     if(inx == -1) {
                         if(str1Index+1 < sectionDictionary[keys[i]].length) {
                             if(sectionDictionary[keys[i]][str1Index+1].indexOf(pairs[j][1]) != -1) {
+                                feedPrefixTree(keys[i], str1Index, wordCount);
+
                                 str1 = sectionDictionary[keys[i]][str1Index+1];
+
                                 str1Index = str1Index + 1;
 
                                 wordCount = 0;
@@ -19267,14 +19300,18 @@ function printMessage(mutationList) {
                         wordCount = wordCount + numSpace;
 
                         str1 = str1.substr(inx + pairs[j][1].length);
+
                         $("#" + pairs[j][0]).attr("sectionSentenceIndex", str1Index);
                         $("#" + pairs[j][0]).attr("sectionSentenceWordIndex", wordCount);
-
                         //                console.log(pairs[j][1] + ' ' + (inx + len));
 
                         len = len + inx + pairs[j][1].length;
                     }
                 }
+            }
+
+            if(wordCount != 0) {
+                 feedPrefixTree(keys[i], str1Index, wordCount);
             }
 
             //        console.log(str1);
@@ -19283,5 +19320,7 @@ function printMessage(mutationList) {
             sectionTextSegmentProcessed[keys[i]] = true;
         }
     }
+
+    console.log(prefixTree);
 }
 
