@@ -18,6 +18,7 @@ var segmentDatabase = {};
 var sectionDictionary = {};
 var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
+var sentenceDatabase = {};
 
 var prefixTree = {
 "doms":  []
@@ -18217,6 +18218,28 @@ function getHighlightColorClass(color) {
     }
 }
 
+function getLeafNode(w) {
+    var root = prefixTree;
+    var retValue = [];
+
+    for(var i=0;i<w.length;i++) {
+        var c = w[i];
+
+        if(root[c] != null) {
+            root = root[c];
+        }
+        else {
+            break;
+        }
+
+        if(i >= (w.length/2-1)) {
+            retValue = retValue.concat(root['doms']);
+        }
+    }
+
+    return retValue;
+}
+
 function getAllHighlightColors() {
     var retValue = '';
 
@@ -18424,6 +18447,148 @@ function enableDoc2Slide() {
 
         highlightString(p.data.pageNumber, p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
     });
+
+    function getUnique(myList) {
+        var retValue = [];
+    
+        for(var i=0;i<myList.length;i++) {
+            if(retValue.indexOf(myList[i]) < 0) {
+                retValue.push(myList[i]);
+            }
+        }
+        // usage example:
+        return retValue;
+    }
+
+    $(document).on("highlightSearchResults", function(e) {
+        var p = e.detail.data;
+        var text = p.words.toLowerCase();
+        var wordSplit = text.split(' ');
+        var calculateCost = {}, calculateCostList = [];
+
+        while(true) {
+            var index = wordSplit.indexOf('');
+
+            if (index > -1) {
+               wordSplit.splice(index, 1);
+            }
+            else break;
+        }
+
+        // console.log(wordSplit);
+
+        $(".searchResultWordCandidate").each(function(index) {
+            $(this).removeClass("searchResultWordCandidate");
+            $(this).removeClass("searchResultWord");
+        });
+
+        $(".searchResultSentence").each(function(index) {
+            $(this).removeClass("searchResultSentence");
+        });
+
+        // console.log("------");
+
+        for(var i=0;i<wordSplit.length;i++) {
+            var word = wordSplit[i];
+            var wordDOMs = getUnique(getLeafNode(word));
+
+            var sentenceKeys = {};
+
+            if(wordDOMs != null) {
+                for(var j=0;j<wordDOMs.length;j++) {
+                    $(wordDOMs[j]).addClass("searchResultWordCandidate");
+
+                    var sectionIndex = $(wordDOMs[j]).attr("sectionindex");
+                    var sectionSentenceIndex = $(wordDOMs[j]).attr("sectionsentenceindex");
+                    var sectionSentenceWordIndex = $(wordDOMs[j]).attr("sectionsentencewordindex");
+
+                    var key = sectionIndex + '-' + sectionSentenceIndex;
+
+                    if(sentenceKeys[key] == null) {
+                        if(calculateCost[key] != null)
+                            calculateCost[key] = calculateCost[key] + 1;
+                        else 
+                            calculateCost[key] = 1;
+
+                        sentenceKeys[key] = true;
+                    }
+                }
+            }
+        }
+
+        var keys = Object.keys(calculateCost);
+ 
+        // console.log(calculateCost);
+        // console.log(wordSplit);
+
+        for(var i=0;i<keys.length;i++) {
+            var sectionIndex = keys[i].split('-')[0];
+            var sectionSentenceIndex = keys[i].split('-')[1];
+
+            if(calculateCost[keys[i]] >= wordSplit.length / 2) {
+                calculateCostList.push([keys[i], calculateCost[keys[i]], 
+//                    $("[sectionindex=" + sectionIndex + "][sectionsentenceindex=" + sectionSentenceIndex + "]")
+                ]);
+            }
+        }
+
+        function compare(a, b) {
+            if(a[1] < b[1]) return true;
+            else return false;
+        }
+
+        calculateCostList.sort(compare);
+
+        for(var i=0;i<calculateCostList.length;i++) {
+            highlightSentenceBasedOnScore(calculateCostList[i][0], calculateCostList[i][1]);
+        }
+
+        // console.log(calculateCost);
+        // console.log(calculateCostList);
+    });
+
+    function highlightSentenceBasedOnScore(key, score) {
+        var sectionIndex = key.split('-')[0];
+        var sectionSentenceIndex = key.split('-')[1];
+
+        var minIndex = 987987987, maxIndex = -1;
+        var pageNumber = -1;
+
+        var objList = sentenceDatabase[key];
+
+        for(var i=objList[1];i<=objList[2];i++) {
+            var obj = $("#textSegment_" + objList[0] + "_" + i);
+
+            if($(obj).hasClass("searchResultWordCandidate")) {
+                $(obj).addClass("searchResultWord");
+            }
+
+            $(obj).addClass("searchResultSentence");
+        }
+
+        
+/*
+        $("[sectionindex=" + sectionIndex + "][sectionsentenceindex=" + sectionSentenceIndex + "]").each(function(index) {
+                pageNumber = $(this).attr("id").split('_')[1];
+
+                var idx = $(this).attr("id").split('_')[2];
+
+                minIndex = Math.min(idx, minIndex);
+                maxIndex = Math.max(idx, maxIndex);
+        });
+
+        for(var i=minIndex;i<=maxIndex;i++) {
+            var segmentId = "textSegment_" + pageNumber + "_" + i;
+            var obj = $("#" + segmentId);
+
+            if($(obj).hasClass("searchResultWordCandidate")) {
+                $(obj).addClass("searchResultWord");
+            }
+
+            $(obj).addClass("searchResultSentence");
+        }*/
+
+    }
 
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
         $(".textSelected").each(function() {
@@ -18834,6 +18999,9 @@ function readTextFile(file, filetype, type)
 
 function feedString(str, doms) {
     var root = prefixTree;
+    var length = str.length;
+
+   // str = str.substring(0, (length/2) + (length%2));
 
     for(var i=0;i<str.length;i++) {
         var a = str[i];
@@ -18842,6 +19010,10 @@ function feedString(str, doms) {
             root[a] = {
                 'doms': []
             };
+
+        if(i >= (length/2) + (length%2)) {
+            root["doms"] = root["doms"].concat(doms);
+        }
 
         root = root[a];
     }
@@ -19303,6 +19475,22 @@ function printMessage(mutationList) {
 
                         $("#" + pairs[j][0]).attr("sectionSentenceIndex", str1Index);
                         $("#" + pairs[j][0]).attr("sectionSentenceWordIndex", wordCount);
+
+                        var myKey = keys[i] + '-' + str1Index;
+
+                        var pageID = $("#" + pairs[j][0]).attr("id").split("_")[1];
+                        var segmentIndex = $("#" + pairs[j][0]).attr("id").split("_")[2];
+
+                        if(sentenceDatabase[myKey] == null) {
+                            sentenceDatabase[myKey] = [pageID, segmentIndex, segmentIndex];
+                        }
+                        else {
+                            var minIndex = sentenceDatabase[myKey][1];
+                            var maxIndex = sentenceDatabase[myKey][2];
+
+                            sentenceDatabase[myKey] = [pageID, Math.min(minIndex, segmentIndex), Math.max(maxIndex, segmentIndex)];
+                        }
+
                         //                console.log(pairs[j][1] + ' ' + (inx + len));
 
                         len = len + inx + pairs[j][1].length;
@@ -19320,7 +19508,5 @@ function printMessage(mutationList) {
             sectionTextSegmentProcessed[keys[i]] = true;
         }
     }
-
-    console.log(prefixTree);
 }
 

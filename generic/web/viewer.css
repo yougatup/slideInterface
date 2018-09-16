@@ -2648,3 +2648,11 @@ border: 3px solid black;
     overflow: hidden;
     opacity: 0.5;
 }
+
+.searchResultSentence {
+    background-color: red;
+}
+
+.searchResultWord {
+    background-color: orange;
+}
