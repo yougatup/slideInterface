@@ -19,6 +19,9 @@ var sectionDictionary = {};
 var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
 var sentenceDatabase = {};
+var ignoreString = [
+    "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours ", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves", "return", "aren't", "can't", "couldn't", "didn't", "doesn't", "don't", "hadn't", "hasn't", "haven't", "hes", "heres", "hows", "im", "isn't", "its", "lets", "mustn't", "shant", "shes", "shouldn't", "thats", "theres", "they'll", "they're", "they've", "wasn't", "were", "weren't", "what's", "whens", "wheres", "whos", "whys", "won't", "wouldn't", "you'd", "you'll", "you're", "you've"
+];
 
 var prefixTree = {
 "doms":  []
@@ -18460,6 +18463,24 @@ function enableDoc2Slide() {
         return retValue;
     }
 
+    $(document).on("removeAutoComplete", function(e) {
+         removeSearchResults();
+    });
+
+    function removeSearchResults() {
+        $(".searchResultWordCandidate").each(function(index) {
+            $(this).removeClass("searchResultWordCandidate");
+            $(this).removeClass("searchResultWord");
+        });
+
+        $(".searchResultSentence").each(function(index) {
+            $(this).removeClass("searchResultSentence");
+        });
+
+        $(".sentenceNumberBox").each(function(index) {
+           $(this).hide();
+        });
+    }
     $(document).on("highlightSearchResults", function(e) {
         var p = e.detail.data;
         var text = p.words.toLowerCase();
@@ -18477,14 +18498,7 @@ function enableDoc2Slide() {
 
         // console.log(wordSplit);
 
-        $(".searchResultWordCandidate").each(function(index) {
-            $(this).removeClass("searchResultWordCandidate");
-            $(this).removeClass("searchResultWord");
-        });
-
-        $(".searchResultSentence").each(function(index) {
-            $(this).removeClass("searchResultSentence");
-        });
+        removeSearchResults();
 
         // console.log("------");
 
@@ -18521,6 +18535,8 @@ function enableDoc2Slide() {
         // console.log(calculateCost);
         // console.log(wordSplit);
 
+        var maxScore = -1;
+
         for(var i=0;i<keys.length;i++) {
             var sectionIndex = keys[i].split('-')[0];
             var sectionSentenceIndex = keys[i].split('-')[1];
@@ -18529,25 +18545,43 @@ function enableDoc2Slide() {
                 calculateCostList.push([keys[i], calculateCost[keys[i]], 
 //                    $("[sectionindex=" + sectionIndex + "][sectionsentenceindex=" + sectionSentenceIndex + "]")
                 ]);
+
+                maxScore = Math.max(maxScore, calculateCost[keys[i]]);
             }
         }
 
         function compare(a, b) {
-            if(a[1] < b[1]) return true;
-            else return false;
+            if(a[1] < b[1]) return 1;
+            else if(a[1] > b[1]) return -1;
+            else return 0;
         }
 
         calculateCostList.sort(compare);
 
+        var sentences = [];
+
         for(var i=0;i<calculateCostList.length;i++) {
-            highlightSentenceBasedOnScore(calculateCostList[i][0], calculateCostList[i][1]);
+            var sentence = highlightSentenceBasedOnScore(calculateCostList[i][0], calculateCostList[i][1], maxScore, i+1);
+
+            sentences.push({
+                text: sentence,
+                objId: calculateCostList[i][0],
+                score: calculateCostList[i][1]
+            });
         }
+
+        // issueEvent(document, "appearAutoComplete", sentences);
+        /*issueEvent(document, "sendAutoCompleteInstance", {
+            text: originalSentence,
+            objId: key,
+            score: score
+        });*/
 
         // console.log(calculateCost);
         // console.log(calculateCostList);
     });
 
-    function highlightSentenceBasedOnScore(key, score) {
+    function highlightSentenceBasedOnScore(key, score, maxScore, num) {
         var sectionIndex = key.split('-')[0];
         var sectionSentenceIndex = key.split('-')[1];
 
@@ -18555,6 +18589,13 @@ function enableDoc2Slide() {
         var pageNumber = -1;
 
         var objList = sentenceDatabase[key];
+
+        var opacity = score / maxScore;
+        // var opacity = Math.pow(2, score / maxScore) - 1;
+
+        var originalSentence = sectionDictionary[sectionIndex][sectionSentenceIndex];
+
+        var pageNumber = objList[0];
 
         for(var i=objList[1];i<=objList[2];i++) {
             var obj = $("#textSegment_" + objList[0] + "_" + i);
@@ -18564,8 +18605,12 @@ function enableDoc2Slide() {
             }
 
             $(obj).addClass("searchResultSentence");
+            $(obj).css("opacity", opacity);
         }
 
+        showNumberingBox(pageNumber, sectionIndex, sectionSentenceIndex, num);
+
+        return originalSentence;
         
 /*
         $("[sectionindex=" + sectionIndex + "][sectionsentenceindex=" + sectionSentenceIndex + "]").each(function(index) {
@@ -18765,7 +18810,6 @@ function loadData() {
       console.log(segmentDatabase);
 
       $("#pdfjsIframe").show();
-
 
 	}).catch(function (err) {
 	  console.log(err);
@@ -19034,8 +19078,54 @@ function feedPrefixTree(sectionIndex, strIndex, wordCnt) {
                 });
 
         myStr = myStr.toLowerCase();
-        feedString(myStr, doms);
+
+        if(ignoreString.indexOf(myStr) <= -1) {
+            feedString(myStr, doms);
+        }
     }
+}
+
+function showNumberingBox(pageId, sectionIndex, sectionSentenceIndex, number) {
+    var sentenceNumberBoxID = "sentenceNumbering-" + sectionIndex + '-' + sectionSentenceIndex;
+
+    $("#" + sentenceNumberBoxID).html(number);
+
+    $("#" + sentenceNumberBoxID).show();
+}
+
+function addNumberingBox(pageId, sectionIndex, sectionSentenceIndex, startIdx, endIdx) {
+    var pageCanvasLeft = $("#pageCanvas" + pageId).offset().left;
+    var pageCanvasTop = $("#pageCanvas" + pageId).offset().top;
+
+    var minX = 987987987, minY = 987987987, maxX = -1, maxY = -1;
+    var numberBoxWidth = 50, numberBoxHeight = 30;
+
+    for(var i=startIdx;i<=endIdx;i++) {
+        var obj = $("#textSegment_" + pageId + "_" + i);
+
+        var leftMargin = $(obj).offset().left - pageCanvasLeft;
+        var topMargin = $(obj).offset().top - pageCanvasTop;
+
+        minX = Math.min(minX, leftMargin);
+        minY = Math.min(minY, topMargin);
+    }
+
+    var sentenceNumberBoxID = "sentenceNumbering-" + sectionIndex + "-" + sectionSentenceIndex;
+
+    $("#pageCanvas" + pageId).append(
+        "<div id=" + sentenceNumberBoxID + " class='sentenceNumberBox'>1</div>"
+    );
+
+    console.log(sentenceNumberBoxID);
+    console.log($("#" + sentenceNumberBoxID));
+
+    $("#" + sentenceNumberBoxID).css({
+            "left": minX - numberBoxWidth - 10,
+            "top": minY
+            });
+
+    $("#" + sentenceNumberBoxID).width(numberBoxWidth);
+    $("#" + sentenceNumberBoxID).height(numberBoxHeight);
 }
 
 function printMessage(mutationList) {
@@ -19447,6 +19537,13 @@ function printMessage(mutationList) {
                     if(inx == -1) {
                         if(str1Index+1 < sectionDictionary[keys[i]].length) {
                             if(sectionDictionary[keys[i]][str1Index+1].indexOf(pairs[j][1]) != -1) {
+                                var myKey = keys[i] + '-' + str1Index;
+                                var db = sentenceDatabase[myKey];
+
+                                console.log(db[0] + ' ' + keys[i] + ' ' + str1Index + ' ' + db[1] + ' ' + db[2]);
+
+                                addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
+
                                 feedPrefixTree(keys[i], str1Index, wordCount);
 
                                 str1 = sectionDictionary[keys[i]][str1Index+1];

@@ -10,6 +10,7 @@ var userID, documentID;
 var windowsHeight, windowsWidth;
 var outlineInfo = [];
 var slideInfo = [];
+var currentAutoCompleteInstances = [];
 
 Array.prototype.insert = function ( index, item ) {
         this.splice( index, 0, item );
@@ -936,12 +937,72 @@ $(document).ready(function() {
         */
     });
 
-    $(document).on("showAutoComplete", function(e) {
+    $(document).on("appearAutoComplete", function(e) {
         var p = e.detail;
+
+        currentAutoCompleteInstances = {};
+
+        for(var i=0;i<p.length;i++) {
+            if(currentAutoCompleteInstances[p[i].objId] == null) {
+                currentAutoCompleteInstances[p[i].objId] = {
+                    text: p[i].text,
+                    score: p[i].score
+                };
+            }
+        }
+
+        // console.log(p);
+
+        for(var i=0;i<p.length;i++) {
+            $("#autoCompleteTable tbody").append(
+                    '<tr>' + 
+                    '<td class="autoCompleteTableFirst">' + p[i].score + '</td>' + 
+                    '<td class="autoCompleteTableSecond">' + p[i].text + '</td>' + 
+                    '</tr>'
+                    );
+        }
+
+        $("#slidePlaneCanvasPopup").show();
+    });
+/*
+    $(document).on("sendAutoCompleteInstance", function(e) {
+        var p = e.detail;
+
+        if(currentAutoCompleteInstances[p.objId] == null) {
+            currentAutoCompleteInstances[p.objId] = {
+                text: p.text,
+                score: p.score
+            };
+        }
+    });*/
+
+    $(document).on("locateAutoComplete", function(e) {
+        var p = e.detail;
+
+        $("#autoCompleteTable").remove();
 
         $("#slidePlaneCanvasPopup").css("left", p.left);
         $("#slidePlaneCanvasPopup").css("top", p.top);
+
+        $("#slidePlaneCanvasPopup").append(
+            "<table id='autoCompleteTable'>" + 
+            "<tbody>" + 
+            "</tbody>" + 
+            "</table>"
+        );
+
+        currentAutoCompleteInstances = {};
+
+        $("#slidePlaneCanvasPopup").css("width", p.width);
+        $("#slidePlaneCanvasPopup").css("height", "200px");
+
+        // $("#slidePlaneCanvasPopup").show();
     });
+
+    $(document).on("removeAutoComplete", function(e) {
+        $("#slidePlaneCanvasPopup").hide();
+    });
+
 
     $(document).on("clearVisualizeParagraph", function(e) {
             $(".slideVisualizeParagraph").remove();

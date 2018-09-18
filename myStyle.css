@@ -62,6 +62,13 @@ pointer-events: none;
 #slidePlaneCanvasPopup {
     position: relative;
     pointer-events: auto;
+    border: 1px solid black;
+    display: none;
+    overflow: auto;
+}
+
+#autoCompleteTable tr td {
+    cursor: pointer;
 }
 
 #outlinePlane {
@@ -112,3 +119,5 @@ box-sizing: border-box;
 .topBarButtonSelected {
     border: 5px solid black;
 }
+
+
