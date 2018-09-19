@@ -18498,13 +18498,13 @@ function enableDoc2Slide() {
     });
 
     $(document).on("showAutoCompleteNumbers", function(e) {
-         console.log("activeAutoCompleteNumbers");
+         // console.log("activeAutoCompleteNumbers");
 
          $(".sentenceNumberBox").addClass("activeAutoCompleteNumbers");
     });
 
     $(document).on("removeAutoComplete", function(e) {
-            console.log("removeAutoComplete pdfjs activated");
+            // console.log("removeAutoComplete pdfjs activated");
             removeSearchResults();
     });
 
@@ -18541,11 +18541,7 @@ function enableDoc2Slide() {
             else break;
         }
 
-        // console.log(wordSplit);
-
         removeSearchResults();
-
-        // console.log("------");
 
         for(var i=0;i<wordSplit.length;i++) {
             var word = wordSplit[i];
