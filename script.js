@@ -12,6 +12,11 @@ var outlineInfo = [];
 var slideInfo = [];
 var currentAutoCompleteInstances = [];
 
+var autoCompleteStatus = false;
+var autoCompleteObjID = null;
+var autoCompleteParagraphNumber = null;
+var autoCompletePageID = null;
+
 Array.prototype.insert = function ( index, item ) {
         this.splice( index, 0, item );
 };
@@ -328,7 +333,8 @@ function initializeGAPI() {
             console.log(slideInfo);
           }
         }, function(response) {
-          appendPre('Error: ' + response.result.error.message);
+            console.log(response);
+          //appendPre('Error: ' + response.result.error.message);
         });
       }
 
@@ -435,6 +441,25 @@ function createObjId() {
   	  text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
+}
+
+function addSentenceHighlight(pageId, objIdList, pageNumber, sectionIndex, sectionSentenceIndex, color, flag) {
+    if(!(pageId in highlightDictionary)) {
+        highlightDictionary[pageId] = {};
+    }
+
+    for(var i=0;i<objIdList.length;i++) {
+        objId = objIdList[i];
+
+        if(!(objId in highlightDictionary[pageId])) {
+            highlightDictionary[pageId][objId] = [];
+        }
+
+        highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx, color]);
+    }
+
+    if(flag)
+        storeData(pageId, objIdList, pageNumber, startIdx, endIdx, color);
 }
 
 function addHighlight(pageId, objIdList, pageNumber, startIdx, endIdx, color, flag) {
@@ -1003,6 +1028,137 @@ $(document).ready(function() {
         $("#slidePlaneCanvasPopup").hide();
     });
 
+    function replaceTextInTheObj(autoCompletePageID, objID, paragraphNumber, originalText, replaceText, pageNumber, segmentStartIndex, segmentEndIndex) {
+        var requests = [{
+          replaceAllText: {
+             "replaceText": replaceText + '\n',
+             "pageObjectIds": [autoCompletePageID],
+             "containsText": {
+                 "text": originalText,
+                 "matchCase": true
+             }
+          }
+        }];
+        
+        // If you wish to populate the slide with elements, add element create requests here,
+        // using the pageId.
+        
+        // Execute the request.
+
+        console.log("start!");
+
+        gapi.client.slides.presentations.batchUpdate({
+          presentationId: PRESENTATION_ID,
+          requests: requests
+        }).then((result) => {
+            addHighlight(autoCompletePageID, [objID], pageNumber, segmentStartIndex, segmentEndIndex, 'yellow', true);
+        });
+      }
+
+    function putTextIntoParagraph(autoCompletePageID, objID, paragraphNumber, pageNumber, segmentStartIndex, segmentEndIndex, text) {
+        console.log(text);
+
+        gapi.client.slides.presentations.pages.get({
+          presentationId: PRESENTATION_ID,
+          pageObjectId: autoCompletePageID 
+        }).then(function(response) {
+            var slideObjs = response.result;
+
+            for(var i=0;i<slideObjs.pageElements.length;i++) {
+                if(slideObjs.pageElements[i].objectId == objID) {
+                    var textElements = slideObjs.pageElements[i].shape.text.textElements;
+                    var paragraphCnt = -1;
+
+                    for(var j=0;j<textElements.length;j++) {
+                        var textElem = textElements[j];
+
+                        if(textElem.paragraphMarker != null) paragraphCnt++;
+                        else {
+                            if(textElem.textRun != null) {
+                                if(paragraphNumber == paragraphCnt) {
+                                    var myStr = textElem.textRun.content;
+
+                                    replaceTextInTheObj(autoCompletePageID, objID, paragraphNumber, myStr, text, pageNumber, segmentStartIndex, segmentEndIndex)
+
+                                    return;
+                                }
+                            }
+                            else {
+                                console.log("################### ERROR ###################");
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        }, function(response) {
+          appendPre('Error: ' + response.result.error.message);
+        });
+    }
+
+    $(document).on("autoCompleteRegister", function(e) {
+        var p = e.detail;
+
+        var text = p.text;
+        var startIndex = p.segmentStartIndex;
+        var endIndex = p.segmentEndIndex;
+        var pageNumber = p.pageNumber;
+
+        putTextIntoParagraph(autoCompletePageID, autoCompleteObjID, autoCompleteParagraphNumber, pageNumber, startIndex, endIndex, text);
+    });
+
+    $(document).on("prepareAutoCompleteNumbers", function(e) {
+        var p = e.detail;
+
+        autoCompleteObjID = p.objID;
+        autoCompleteParagraphNumber = p.paragraph;
+        autoCompletePageID = p.pageID;
+
+        console.log(autoCompleteObjID);
+        console.log(autoCompleteParagraphNumber);
+        console.log(autoCompletePageID);
+
+        $("#slidePlaneCanvasPopup").css("left", p.left);
+        $("#slidePlaneCanvasPopup").css("top", p.top);
+        $("#slidePlaneCanvasPopup").css("width", p.width);
+        $("#slidePlaneCanvasPopup").css("height", "200px");
+
+        $("#autoCompleteNumberInput").val('');
+
+        issueEvent(document, "prepareAutoCompleteNumbersDone", null);
+    });
+
+    $(document).on("showAutoCompleteNumbers", function(e) {
+        autoCompleteStatus = true;
+
+        $("#slidePlaneCanvasPopup").show();
+
+        $("#autoCompleteNumberInput").focus();
+    });
+
+    $("#autoCompleteNumberInput").on("keydown", function(e) {
+       if (e.keyCode === 13) {
+           // Trigger the button element with a click
+           $("#autoCompleteSubmitBtn").click();
+             }
+
+       if (e.keyCode == 27) {
+            $("#autoCompleteCancelBtn").click();
+       }
+       });
+
+    $("#autoCompleteSubmitBtn").on("click", function(e) {
+        $("#slidePlaneCanvasPopup").hide();
+
+        issueEvent(document, "autoCompleteSubmitted", {
+            data: parseInt($("#autoCompleteNumberInput").val())
+        });
+    });
+
+    $("#autoCompleteCancelBtn").on("click", function(e) {
+        issueEvent(document, "autoCompleteCancelled", null);
+    });
 
     $(document).on("clearVisualizeParagraph", function(e) {
             $(".slideVisualizeParagraph").remove();

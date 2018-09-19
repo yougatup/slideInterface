@@ -19,6 +19,7 @@ var sectionDictionary = {};
 var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
 var sentenceDatabase = {};
+var appearedNumberBoxes = {};
 var ignoreString = [
     "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours ", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves", "return", "aren't", "can't", "couldn't", "didn't", "doesn't", "don't", "hadn't", "hasn't", "haven't", "hes", "heres", "hows", "im", "isn't", "its", "lets", "mustn't", "shant", "shes", "shouldn't", "thats", "theres", "they'll", "they're", "they've", "wasn't", "were", "weren't", "what's", "whens", "wheres", "whos", "whys", "won't", "wouldn't", "you'd", "you'll", "you're", "you've"
 ];
@@ -18463,8 +18464,48 @@ function enableDoc2Slide() {
         return retValue;
     }
 
+    $(document).on("autoCompleteSubmitted", function(e) {
+        var p = e.detail;
+        var number = p.data;
+
+        console.log(appearedNumberBoxes[number]);
+        // appearedNumberBoxes[number] = [pageId, sectionIndex, sectionSentenceIndex];
+
+        var pageID = appearedNumberBoxes[number][0];
+        var sectionIndex = appearedNumberBoxes[number][1];
+        var sectionSentenceIndex = appearedNumberBoxes[number][2];
+        var pageNumber = appearedNumberBoxes[number][3];
+        var segmentStartIndex = appearedNumberBoxes[number][4];
+        var segmentEndIndex = appearedNumberBoxes[number][5];
+
+        var originalSentence = sectionDictionary[sectionIndex][sectionSentenceIndex];
+
+        var myKey = sectionIndex + '-' + sectionSentenceIndex;
+        var db = sentenceDatabase[myKey];
+
+        issueEvent(document, "autoCompleteRegister", {
+            text: originalSentence,
+            segmentStartIndex: segmentStartIndex,
+            segmentEndIndex: segmentEndIndex,
+            pageNumber: pageNumber
+        });
+
+        removeSearchResults();
+    }); 
+
+    $(document).on("autoCompleteCancelled", function(e) {
+
+    });
+
+    $(document).on("showAutoCompleteNumbers", function(e) {
+         console.log("activeAutoCompleteNumbers");
+
+         $(".sentenceNumberBox").addClass("activeAutoCompleteNumbers");
+    });
+
     $(document).on("removeAutoComplete", function(e) {
-         removeSearchResults();
+            console.log("removeAutoComplete pdfjs activated");
+            removeSearchResults();
     });
 
     function removeSearchResults() {
@@ -18478,9 +18519,13 @@ function enableDoc2Slide() {
         });
 
         $(".sentenceNumberBox").each(function(index) {
+           $(this).removeClass("activeAutoCompleteNumbers");
            $(this).hide();
         });
+
+        issueEvent(document, "autoCompleteDisappeared", null);
     }
+
     $(document).on("highlightSearchResults", function(e) {
         var p = e.detail.data;
         var text = p.words.toLowerCase();
@@ -18531,9 +18576,6 @@ function enableDoc2Slide() {
         }
 
         var keys = Object.keys(calculateCost);
- 
-        // console.log(calculateCost);
-        // console.log(wordSplit);
 
         var maxScore = -1;
 
@@ -18569,6 +18611,8 @@ function enableDoc2Slide() {
                 score: calculateCostList[i][1]
             });
         }
+
+        issueEvent(document, "autoCompleteAppeared", null);
 
         // issueEvent(document, "appearAutoComplete", sentences);
         /*issueEvent(document, "sendAutoCompleteInstance", {
@@ -18608,7 +18652,7 @@ function enableDoc2Slide() {
             $(obj).css("opacity", opacity);
         }
 
-        showNumberingBox(pageNumber, sectionIndex, sectionSentenceIndex, num);
+        showNumberingBox(pageNumber, sectionIndex, sectionSentenceIndex, pageNumber, objList[1], objList[2], num);
 
         return originalSentence;
         
@@ -19085,11 +19129,12 @@ function feedPrefixTree(sectionIndex, strIndex, wordCnt) {
     }
 }
 
-function showNumberingBox(pageId, sectionIndex, sectionSentenceIndex, number) {
+function showNumberingBox(pageId, sectionIndex, sectionSentenceIndex, pageNumber, segmentStartIndex, segmentEndIndex, number) {
     var sentenceNumberBoxID = "sentenceNumbering-" + sectionIndex + '-' + sectionSentenceIndex;
 
-    $("#" + sentenceNumberBoxID).html(number);
+    appearedNumberBoxes[number] = [pageId, sectionIndex, sectionSentenceIndex, pageNumber, segmentStartIndex, segmentEndIndex];
 
+    $("#" + sentenceNumberBoxID).html(number);
     $("#" + sentenceNumberBoxID).show();
 }
 
@@ -19115,9 +19160,6 @@ function addNumberingBox(pageId, sectionIndex, sectionSentenceIndex, startIdx, e
     $("#pageCanvas" + pageId).append(
         "<div id=" + sentenceNumberBoxID + " class='sentenceNumberBox'>1</div>"
     );
-
-    console.log(sentenceNumberBoxID);
-    console.log($("#" + sentenceNumberBoxID));
 
     $("#" + sentenceNumberBoxID).css({
             "left": minX - numberBoxWidth - 10,
@@ -19540,8 +19582,6 @@ function printMessage(mutationList) {
                                 var myKey = keys[i] + '-' + str1Index;
                                 var db = sentenceDatabase[myKey];
 
-                                console.log(db[0] + ' ' + keys[i] + ' ' + str1Index + ' ' + db[1] + ' ' + db[2]);
-
                                 addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
 
                                 feedPrefixTree(keys[i], str1Index, wordCount);
@@ -19597,6 +19637,10 @@ function printMessage(mutationList) {
 
             if(wordCount != 0) {
                  feedPrefixTree(keys[i], str1Index, wordCount);
+                 var myKey = keys[i] + '-' + str1Index;
+                 var db = sentenceDatabase[myKey];
+
+                 addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
             }
 
             //        console.log(str1);
