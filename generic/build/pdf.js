@@ -11,7 +11,7 @@ var parsedListofReferences = [];
 var parsedReferences = [];
 var parsedFigures = [];
 var shorteningBoxSpanStartInx, shorteningBoxSpanEndInx, shorteningBoxSpanCnt;
-var myDB;
+var myDBDB;
 var highlightColors = ['whitesmoke', 'yellow', 'red', 'blue', 'green'];
 var currentHighlightColor = 0;
 var segmentDatabase = {};
@@ -18483,7 +18483,7 @@ function enableDoc2Slide() {
         var myKey = sectionIndex + '-' + sectionSentenceIndex;
         var db = sentenceDatabase[myKey];
 
-        issueEvent(document, "autoCompleteRegister", {
+        issueEvent(document, "prepareSnapshotForAutoComplete", {
             text: originalSentence,
             segmentStartIndex: segmentStartIndex,
             segmentEndIndex: segmentEndIndex,
@@ -18549,6 +18549,7 @@ function enableDoc2Slide() {
 
             var sentenceKeys = {};
 
+            // console.log(wordDOMs);
             if(wordDOMs != null) {
                 for(var j=0;j<wordDOMs.length;j++) {
                     $(wordDOMs[j]).addClass("searchResultWordCandidate");
@@ -18597,6 +18598,8 @@ function enableDoc2Slide() {
         calculateCostList.sort(compare);
 
         var sentences = [];
+
+        // console.log(calculateCostList);
 
         for(var i=0;i<calculateCostList.length;i++) {
             var sentence = highlightSentenceBasedOnScore(calculateCostList[i][0], calculateCostList[i][1], maxScore, i+1);
@@ -18783,14 +18786,16 @@ function enableDoc2Slide() {
     mutationConfig = { attributes: false, childList: true, subtree: true };
     observer.observe(document, mutationConfig);
 
-    myDB = new PouchDB('referenceLocation_DB');
+    myDBDB = new PouchDB('referenceLocation_DBDB');
 
+    // console.log("hmM?");
     // clearDatabase();
-    // loadData();
+    loadData();
 }
 
 function clearDatabase() {
-	myDB.allDocs({
+    // console.log("??");
+	myDBDB.allDocs({
 	  include_docs: true,
 	  attachments: true
 	}).then(function (result) {
@@ -18799,7 +18804,7 @@ function clearDatabase() {
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
 
-         myDB.remove(elem);
+         myDBDB.remove(elem);
       }
 	}).catch(function (err) {
 	  console.log(err);
@@ -18816,41 +18821,63 @@ function createObjId() {
     return text;
 }
 
-function storeData(textSegmentId, referred, section) {/*
-        myDB.put({
+function storeSectionTextSegment(sectionSegment) {
+        myDBDB.put({
+          "type": "sectionSegment",
           "_id": createObjId(),
-          "userId": userID,
-          "documentId": documentID,
-          "textSegmentId": textSegmentId,
-          "referred": referred,
-          "section": section
+          "sectionSegment": sectionSegment
         }).then(function (response) {
           // handle response
         }).catch(function (err) {
           console.log(err);
-        });*/
+        });
+}
+
+function storeData(textSegmentId, referred, section, pageNumber) {
+        myDBDB.put({
+          "_id": createObjId(),
+          "type": "segment",
+          "userId": userID,
+          "documentId": documentID,
+          "textSegmentId": textSegmentId,
+          "referred": referred,
+          "section": section,
+          "pageNumber": pageNumber
+        }).then(function (response) {
+          // handle response
+        }).catch(function (err) {
+          console.log(err);
+        });
 }
 
 function loadData() {
-	myDB.allDocs({
+    // console.log("doesnt make sense");
+
+	myDBDB.allDocs({
 	  include_docs: true,
 	  attachments: true
 	}).then(function (result) {
       var flag = false;
-	  console.log(result);
+	  // console.log(result);
 
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
 
-         if(elem.userId == userID && elem.documentId == documentID) {
-            segmentDatabase[elem.textSegmentId] = [elem.referred, elem.section];
+         if(elem.type == "segment" && elem.userId == userID && elem.documentId == documentID) {
+            if(segmentDatabase[elem.pageNumber] == null) {
+                segmentDatabase[elem.pageNumber] = {}
+                segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section];
+            }
+            else {
+                segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section];
+            }
          }
       }
 
-      console.log(segmentDatabase);
+      // console.log(segmentDatabase);
 
-      $("#pdfjsIframe").show();
-
+      // $("#pdfjsIframe").show();
+      PDFViewerApplication.open('paperData/paper/paper.pdf');
 	}).catch(function (err) {
 	  console.log(err);
 	});
@@ -19009,7 +19036,7 @@ function readTextFile(file, filetype, type)
                         }
                     }
 
-                    console.log(parsedReferences);
+                    // console.log(parsedReferences);
 
                     var figures = $(xmlMetaData).find('figure');
 
@@ -19050,7 +19077,7 @@ function readTextFile(file, filetype, type)
                 else if(type == "PDF_STRUCTURE") {
                     json = $.parseJSON(allText.join([separator = '']))
                     jsonPdfStructure = $.parseJSON(allText.join([separator = '']))
-                    console.log(jsonPdfStructure);
+                    // console.log(jsonPdfStructure);
                 }
 
 /*
@@ -19112,7 +19139,10 @@ function feedPrefixTree(sectionIndex, strIndex, wordCnt) {
         var doms = [];
         var myStr = '';
 
-        $("[sectionindex="+sectionIndex+"][sectionSentenceIndex="+strIndex+"][sectionSentenceWordIndex="+i+"]").each(function(idx) {
+        // console.log(sectionIndex + ' ' + strIndex + ' ' + i);
+
+        $("[sectionindex="+sectionIndex+"][sectionsentenceindex="+strIndex+"][sectionsentencewordindex="+i+"]").each(function(idx) {
+         //        console.log("hmm?");
                 doms.push($(this));
                 myStr = myStr + $(this).text();
                 });
@@ -19282,25 +19312,43 @@ function printMessage(mutationList) {
 
             /* HIGHLIGHT TEXT */
  
-            var keyList = Object.keys( segmentDatabase );
             // console.log(keyList);
-
             // console.log(sections);
 
-            for(var j=startCnt;j<endCnt;j++) {
-                var key = "textSegment_" + pageNumber + "_" + j;
+            // console.log(segmentDatabase);
 
-                if(keyList.includes(key)) {
-                    if(segmentDatabase[key][0] != null){
-                        $("#textSegment_" + pageNumber + "_" + j).addClass("referred" + segmentDatabase[key][0]);
-                        $("#textSegment_" + pageNumber + "_" + j).addClass("referred");
-                    }
+            if(segmentDatabase[pageNumber] != null) {
+                for(var j=startCnt;j<endCnt;j++) {
+                    var key = "textSegment_" + pageNumber + "_" + j;
 
-                    if(segmentDatabase[key][1] != null) {
-                        $("#textSegment_" + pageNumber + "_" + j).attr("sectionIndex", segmentDatabase[key][1]);
+                    var keyList = Object.keys( segmentDatabase[pageNumber] );
+
+                    if(segmentDatabase[pageNumber][key] != null) {
+                        if(segmentDatabase[pageNumber][key][0] != null){
+                            $("#textSegment_" + pageNumber + "_" + j).addClass("referred" + segmentDatabase[pageNumber][key][0]);
+                            $("#textSegment_" + pageNumber + "_" + j).addClass("referred");
+                        }
+
+                        if(segmentDatabase[pageNumber][key][1] != null) {
+                            var sectionKey = "section_" + pageNumber + "_" + segmentDatabase[pageNumber][key][1];
+                            var textSegmentID = "#textSegment_" + pageNumber + "_" + j;
+                            
+                            $("#textSegment_" + pageNumber + "_" + j).attr("sectionIndex", sectionKey);
+
+                            if(sectionTextSegment[sectionKey] == null) {
+                                sectionTextSegment[sectionKey] = [["textSegment_" + pageNumber + "_" + j, $(textSegmentID).text()]];
+                            }
+                            else {
+                                sectionTextSegment[sectionKey].push(["textSegment_" + pageNumber + "_" + j, $(textSegmentID).text()]);
+                            }
+                        }
                     }
                 }
-                else {
+            }
+            else {
+                for(var j=startCnt;j<endCnt;j++) {
+                    var key = "textSegment_" + pageNumber + "_" + j;
+
                     var refID = null, sectionID = null;
 
                     for(var k=0;k<refs.length;k++) {
@@ -19380,9 +19428,9 @@ function printMessage(mutationList) {
                     if(sectionID == null) {
                         $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
                     }
-                }
 
-                storeData("textSegment_" + pageNumber + "_" + j, refID, sectionID);
+                    storeData("textSegment_" + pageNumber + "_" + j, refID, sectionID, pageNumber);
+                }
             }
 
             /* REFERENCES ANNOTATING */
@@ -19553,8 +19601,12 @@ function printMessage(mutationList) {
 
     var keys = Object.keys(sectionDictionary);
 
+    // console.log(sectionTextSegment);
+    // console.log(sectionDictionary);
+
     for(var i=0;i<keys.length;i++) {
         if(sectionTextSegmentProcessed[keys[i]] == null) {
+            // console.log(keys[i]);
             var pairs = sectionTextSegment[keys[i]];
 
             var str1Index = 0;
@@ -19579,6 +19631,8 @@ function printMessage(mutationList) {
                                 var db = sentenceDatabase[myKey];
 
                                 addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
+
+                                // console.log(keys[i] + ' ' + str1Index + ' ' + wordCount);
 
                                 feedPrefixTree(keys[i], str1Index, wordCount);
 
@@ -19645,5 +19699,7 @@ function printMessage(mutationList) {
             sectionTextSegmentProcessed[keys[i]] = true;
         }
     }
+
+    // console.log(prefixTree);
 }
 

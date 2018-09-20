@@ -3481,7 +3481,7 @@ var defaultOptions = {
     kind: OptionKind.VIEWER
   },
   defaultUrl: {
-    value: 'paperData/paper/paper.pdf',
+    value: '',
     kind: OptionKind.VIEWER
   },
   defaultZoomValue: {

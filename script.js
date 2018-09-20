@@ -11,10 +11,15 @@ var windowsHeight, windowsWidth;
 var outlineInfo = [];
 var slideInfo = [];
 var currentAutoCompleteInstances = [];
+var dataLoaded = false;
+
+var segmentDatabase = {};
+var paragraphTable = {};
 
 var autoCompleteStatus = false;
 var autoCompleteObjID = null;
 var autoCompleteParagraphNumber = null;
+var autoCompleteParagraphIdentifier = null;
 var autoCompletePageID = null;
 
 Array.prototype.insert = function ( index, item ) {
@@ -26,6 +31,7 @@ Array.prototype.remove= function ( index ) {
 };
 
 function issueEvent(object, eventName, data) {
+    // console.log(eventName);
     var myEvent = new CustomEvent(eventName, {detail: data} );
 
     // window.postMessage(eventName, "*");
@@ -330,7 +336,7 @@ function initializeGAPI() {
                 slideObjs: slideObjId
             });
             
-            console.log(slideInfo);
+            // console.log(slideInfo);
           }
         }, function(response) {
             console.log(response);
@@ -381,16 +387,17 @@ function initializeGAPI() {
       handleClientLoad();
 }
 
-function storeData(pageId, objIdList, pageNumber, paragraphNumber, startIdx, endIdx, color) {
+function storeData(pageId, objIdList, pageNumber, paragraphIdentifier, startIdx, endIdx, color) {
     for(var i=0;i<objIdList.length;i++) {
         myDB.put({
           "_id": createObjId(),
+          "type": "highlight",
           "userId": userID,
           "documentId": documentID,
           "pageId": pageId,
           "objId": objIdList[i],
 		  "pageNumber": pageNumber,
-          "paragraphNumber": paragraphNumber,
+          "paragraphIdentifier": paragraphIdentifier,
           "startIdx": startIdx,
           "endIdx": endIdx,
           "color": color
@@ -399,11 +406,26 @@ function storeData(pageId, objIdList, pageNumber, paragraphNumber, startIdx, end
             console.log("SUCCEED STORE DATA");
 
             loadData();
-
         }).catch(function (err) {
           console.log(err);
         });
     }
+}
+
+function registerMapping(objId, paragraphNumber, paragraphId) {
+    if(paragraphTable[objId] == null) {
+        paragraphTable[objId] = [];
+    }
+
+    if(paragraphTable[objId].length <= paragraphNumber) {
+        var curLength = paragraphTable[objId].length;
+
+        for(i=curLength;i<=paragraphNumber;i++) {
+            paragraphTable[objId].push(null);
+        }
+    }
+
+    paragraphTable[objId][paragraphNumber] = paragraphId;
 }
 
 function loadData() {
@@ -417,11 +439,21 @@ function loadData() {
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
 
-         if(elem.userId == userID && elem.documentId == documentID) {
-             addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.paragraphNumber, elem.startIdx, elem.endIdx, elem.color, false);
-             flag = true;
+         if(elem.type == 'highlight') {
+            if(elem.userId == userID && elem.documentId == documentID) {
+                addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.paragraphIdentifier, elem.startIdx, elem.endIdx, elem.color, false);
+            }
+         }
+         else if(elem.type == 'paragraphMapping') {
+              registerMapping(elem.objId, elem.paragraphNumber, elem.paragraphId);
          }
       }
+
+      console.log("data loaded");
+      console.log(highlightDictionary);
+      console.log(paragraphTable);
+
+      dataLoaded = true;
 
       if(flag) {
         updateHighlight(curPageId, [], null);
@@ -444,38 +476,18 @@ function createObjId() {
     return text;
 }
 
-function addSentenceHighlight(pageId, objIdList, pageNumber, sectionIndex, sectionSentenceIndex, color, flag) {
-    if(!(pageId in highlightDictionary)) {
-        highlightDictionary[pageId] = {};
-    }
-
-    for(var i=0;i<objIdList.length;i++) {
-        objId = objIdList[i];
-
-        if(!(objId in highlightDictionary[pageId])) {
-            highlightDictionary[pageId][objId] = [];
-        }
-
-        highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx, color]);
-    }
-
-    if(flag)
-        storeData(pageId, objIdList, pageNumber, paragraphNumber, startIdx, endIdx, color);
-
-}
-
-function addHighlight(pageId, objIdList, pageNumber, paragraphNumber, startIdx, endIdx, color, flag) {
+function addHighlight(pageId, objIdList, pageNumber, paragraphIdentifier, startIdx, endIdx, color, flag) {
     // console.log("add highlight called!");
 
     console.log(objIdList);
-    console.log(paragraphNumber);
+    console.log(paragraphIdentifier);
 
     if(!(pageId in highlightDictionary)) {
         highlightDictionary[pageId] = {};
     }
 
     for(var i=0;i<objIdList.length;i++) {
-        objId = objIdList[i] + '-paragraph-' + paragraphNumber;
+        objId = objIdList[i] + '-paragraph-' + paragraphIdentifier;
 
         console.log(objId);
 
@@ -483,26 +495,26 @@ function addHighlight(pageId, objIdList, pageNumber, paragraphNumber, startIdx, 
             highlightDictionary[pageId][objId] = [];
         }
 
-        console.log(pageNumber);
-        console.log(startIdx);
-        console.log(endIdx);
-        console.log(color);
+        // console.log(pageNumber);
+        // console.log(startIdx);
+        // console.log(endIdx);
+        // console.log(color);
 
         highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx, color]);
     }
 
     if(flag)
-        storeData(pageId, objIdList, pageNumber, paragraphNumber, startIdx, endIdx, color);
+        storeData(pageId, objIdList, pageNumber, paragraphIdentifier, startIdx, endIdx, color);
 }
 
-function updateHighlight(pageId, objIdList, paragraphNumber) {
+function updateHighlight(pageId, objIdList, paragraphIdentifier) {
     /*
     console.log(pageId);
     console.log(objIdList);*/
 
-    console.log(objIdList);
-    console.log(paragraphNumber);
-    console.log(highlightDictionary);
+    // console.log(objIdList);
+    // console.log(paragraphNumber);
+    // console.log(highlightDictionary);
 
     issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
 
@@ -510,13 +522,13 @@ function updateHighlight(pageId, objIdList, paragraphNumber) {
 
     var clickedObjKey = null;
 
-    if(objIdList.length > 0 && paragraphNumber != null) {
+    if(objIdList.length > 0 && paragraphIdentifier != null) {
        var objId = objIdList[0].split('-')[1];
-       var pNumber = paragraphNumber;
+       var pNumber = paragraphIdentifier;
 
        clickedObjKey = objId + '-paragraph-' + pNumber;
-       console.log(clickedObjKey);
-       console.log(highlightDictionary);
+       // console.log(clickedObjKey);
+       // console.log(highlightDictionary);
     }
 
     var keys = Object.keys(highlightDictionary[pageId]);
@@ -673,11 +685,56 @@ $(document).ready(function() {
         });
       }
 
+
+      $(document).on("getParagraphMapping", function(e) {
+              var p = e.detail;
+
+              console.log(p);
+
+              if(dataLoaded == true) {
+                issueEvent(document, "paragraphMappingData", {
+                    paragraphMapping: paragraphTable,
+                });
+              }
+              else {
+                console.log("!!$#@%%#$^%^!%$#%!@%^@%$!@#$");
+              }
+              });
+
+      $(document).on("sendParagraphMappingData", function(e) {
+          var p = e.detail;
+          var id = "paragraph__" + p.objId + '-' + p.paragraphNumber;
+
+          myDB.get(id).then(function(doc){
+                  console.log(doc);
+                  doc.paragraphId = p.paragraphId;
+                  return myDB.put(doc);
+              }).catch(function(err) {
+                  // console.log(err);
+
+                myDB.put({
+                  "_id": id,
+                  "type": "paragraphMapping",
+                  "userId": userID,
+                  "documentId": documentID,
+                  "objId": p.objId,
+                  "paragraphNumber": p.paragraphNumber,
+                  "paragraphId": p.paragraphId,
+                }).then(function (response) {
+                  // handle response
+                    // console.log("SUCCEED STORE MAPPING DATA");
+                }).catch(function (err) {
+                  console.log(err);
+                });
+              });
+
+      });
+
       $(document).on("addText", function(e) {
           console.log(e);
 
           console.log(e.detail.color);
-          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.pageNumber, e.detail.paragraphNumber, e.detail.startIndex, e.detail.endIndex, e.detail.color);
+          addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.pageNumber, e.detail.paragraphIdentifier, e.detail.startIndex, e.detail.endIndex, e.detail.color);
 
           console.log("FIRE!");
       });
@@ -732,7 +789,7 @@ $(document).ready(function() {
         });
       });
 
-      function appendText(objId, myText, pageNumber, paragraphNumber, startIndex, endIndex, color) {
+      function appendText(objId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color) {
          console.log("yay");
 
          gapi.client.request({
@@ -812,7 +869,7 @@ $(document).ready(function() {
                      console.log(paragraphNumber);
 
                      console.log(color);
-                     addHighlight(curPageId, [objId], pageNumber, paragraphNumber, startIndex, endIndex, color, true);
+                     addHighlight(curPageId, [objId], pageNumber, paragraphIdentifier, startIndex, endIndex, color, true);
 
 
                      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
@@ -820,7 +877,7 @@ $(document).ready(function() {
 								"pageNumber": pageNumber,
                                 "startIndex": startIndex,
                                 "endIndex": endIndex,
-                                "slideObjId": curClickedElements[0] + '-paragraph-' + paragraphNumber,
+                                "slideObjId": paragraphIdentifier,
                                 "color": color,
                              });
                      });
@@ -832,7 +889,7 @@ $(document).ready(function() {
           // to be filled
       }
 
-      function fillText(objId, myText, pageNumber, paragraphNumber, startIndex, endIndex, color) {
+      function fillText(objId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color) {
          var requests = [ 
              /*
          {
@@ -855,7 +912,7 @@ $(document).ready(function() {
 
              console.log(paragraphNumber);
 
-             addHighlight(curPageId, [objId], pageNumber, paragraphNumber, startIndex, endIndex, color, true);
+             addHighlight(curPageId, [objId], pageNumber, paragraphIdentifier, startIndex, endIndex, color, true);
 
              issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                      {
@@ -863,7 +920,7 @@ $(document).ready(function() {
                         "startIndex": startIndex,
                         "endIndex": endIndex,
                         "color": color,
-                        "slideObjId": "editor-" + objId + "-paragraph-" + paragraphNumber,
+                        "slideObjId": paragraphIdentifier,
              });
          }).catch(function(error) {
              console.log('cache!');
@@ -871,11 +928,11 @@ $(document).ready(function() {
          });
       }
 
-      function addText(objId, pageId, myText, pageNumber, paragraphNumber, startIndex, endIndex, color) {
+      function addText(objId, pageId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color) {
           console.log(color);
 
           if(objId != null) {
-              appendText(objId, myText, pageNumber, paragraphNumber, startIndex, endIndex, color);
+              appendText(objId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color);
            }
           else{
              var newObjId = createObjId();
@@ -957,7 +1014,7 @@ $(document).ready(function() {
     $(document).on("ROOT_UPDATE_HIGHLIGHT_REQUEST", function(e) {
         var p = e.detail;
 
-        updateHighlight(p.pageId, p.objIdList, p.paragraphNumber);
+        updateHighlight(p.pageId, p.objIdList, p.paragraphIdentifier);
     });
 
 	$(document).on("SEND_IMAGE", function(e) {
@@ -1067,7 +1124,7 @@ $(document).ready(function() {
         $("#slidePlaneCanvasPopup").hide();
     });
 
-    function replaceTextInTheObj(autoCompletePageID, objID, paragraphNumber, originalText, replaceText, pageNumber, segmentStartIndex, segmentEndIndex) {
+    function replaceTextInTheObj(autoCompletePageID, objID, paragraphIdentifier, originalText, replaceText, pageNumber, segmentStartIndex, segmentEndIndex) {
         var requests = [{
           replaceAllText: {
              "replaceText": replaceText + '\n',
@@ -1090,11 +1147,11 @@ $(document).ready(function() {
           presentationId: PRESENTATION_ID,
           requests: requests
         }).then((result) => {
-            addHighlight(autoCompletePageID, [objID], pageNumber, paragraphNumber, segmentStartIndex, segmentEndIndex, 'yellow', true);
+            addHighlight(autoCompletePageID, [objID], pageNumber, paragraphIdentifier, segmentStartIndex, segmentEndIndex, 'yellow', true);
         });
       }
 
-    function putTextIntoParagraph(autoCompletePageID, objID, paragraphNumber, pageNumber, segmentStartIndex, segmentEndIndex, text) {
+    function putTextIntoParagraph(autoCompletePageID, objID, paragraphNumber, paragraphIdentifier, pageNumber, segmentStartIndex, segmentEndIndex, text) {
         console.log(text);
 
         gapi.client.slides.presentations.pages.get({
@@ -1117,7 +1174,7 @@ $(document).ready(function() {
                                 if(paragraphNumber == paragraphCnt) {
                                     var myStr = textElem.textRun.content;
 
-                                    replaceTextInTheObj(autoCompletePageID, objID, paragraphNumber, myStr, text, pageNumber, segmentStartIndex, segmentEndIndex)
+                                    replaceTextInTheObj(autoCompletePageID, objID, paragraphIdentifier, myStr, text, pageNumber, segmentStartIndex, segmentEndIndex)
 
                                     return;
                                 }
@@ -1144,7 +1201,9 @@ $(document).ready(function() {
         var endIndex = p.segmentEndIndex;
         var pageNumber = p.pageNumber;
 
-        putTextIntoParagraph(autoCompletePageID, autoCompleteObjID, autoCompleteParagraphNumber, pageNumber, startIndex, endIndex, text);
+        console.log(autoCompleteParagraphNumber + ' ' + autoCompleteParagraphIdentifier);
+
+        putTextIntoParagraph(autoCompletePageID, autoCompleteObjID, autoCompleteParagraphNumber, autoCompleteParagraphIdentifier, pageNumber, startIndex, endIndex, text);
     });
 
     $(document).on("prepareAutoCompleteNumbers", function(e) {
@@ -1152,10 +1211,12 @@ $(document).ready(function() {
 
         autoCompleteObjID = p.objID;
         autoCompleteParagraphNumber = p.paragraph;
+        autoCompleteParagraphIdentifier = p.paragraphIdentifier;
         autoCompletePageID = p.pageID;
 
         console.log(autoCompleteObjID);
         console.log(autoCompleteParagraphNumber);
+        console.log(autoCompleteParagraphIdentifier);
         console.log(autoCompletePageID);
 
         $("#slidePlaneCanvasPopup").css("left", p.left);
@@ -1173,18 +1234,25 @@ $(document).ready(function() {
         var pageID = p.pageID;
         var objID = p.objID;
         var paragraphNumber = p.paragraphNumber;
+        var paragraphIdentifier = p.paragraphIdentifier
 
-        var key = objID + '-paragraph-' + paragraphNumber;
+        var key = objID + '-paragraph-' + paragraphIdentifier;
 
-        console.log(p);
-        console.log(highlightDictionary);
-        console.log(highlightDictionary[pageID]);
+        // console.log(p);
+        // console.log(highlightDictionary);
+        // console.log(highlightDictionary[pageID]);
 
+        /*
         if(highlightDictionary[pageID] != null)
             console.log(highlightDictionary[pageID][key]);
+            */
+
+        // console.log(pageID);
+        // console.log(key);
+        // console.log(highlightDictionary);
 
         if(highlightDictionary[pageID] != null && highlightDictionary[pageID][key] != null) {
-            issueEvent(document, "__removeAutoComplete", null);
+            issueEvent(document, "removeAutoComplete", null);
         }
         else {
             issueEvent(document, "requestShowingAutoComplete", {
