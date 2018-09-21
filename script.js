@@ -910,7 +910,7 @@ $(document).ready(function() {
                      console.log(createSlideResponse);
 
                      console.log(curClickedElements);
-                     console.log(paragraphNumber);
+                     console.log(paragraphIdentifier);
 
                      console.log(color);
                      addHighlight(curPageId, [objId], pageNumber, paragraphIdentifier, startIndex, endIndex, color, true);
@@ -925,6 +925,8 @@ $(document).ready(function() {
                                 "color": color,
                              });
                      });
+
+                    issueEvent(document, "TEXT_ADD_COMPLETE", null);
                  }
          });
       }
@@ -962,6 +964,8 @@ $(document).ready(function() {
                         "color": color,
                         "slideObjId": paragraphIdentifier,
              });
+
+             issueEvent(document, "TEXT_ADD_COMPLETE", null);
          }).catch(function(error) {
              console.log('cache!');
              console.log(error);
@@ -1506,7 +1510,7 @@ dataType: "json"
 
     myDB = new PouchDB('doc2slide_db')
 
-    // clearDatabase();
+    clearDatabase();
     loadData();
 });
 
