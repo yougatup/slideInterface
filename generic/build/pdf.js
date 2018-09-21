@@ -18449,6 +18449,7 @@ function enableDoc2Slide() {
              $(this).removeClass("textHighlighted " + getAllHighlightColors());
         });
 
+        console.log("HIGHLIGHT TEXT");
         highlightString(p.data.pageNumber, p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
     });
 
@@ -18677,6 +18678,27 @@ function enableDoc2Slide() {
         }*/
 
     }
+/*
+    $(document).on("removeHighlight", function(e) {
+         var p = e.detail;
+
+         console.log(p.mappingIdentifiers);
+
+         for(var i=0;i<p.mappingIdentifiers.length;i++) {
+              console.log("editor-" + p.boxID + "-paragraph-" + p.mappingIdentifiers[i]);
+
+              $("[slideobjid='editor-" + p.boxID + "-paragraph-" + p.mappingIdentifiers[i] + "'").each(function(index) {
+             $(this).removeClass("textSelected");
+
+             $(this).removeClass("textSelectedyellow");
+             $(this).removeClass("textSelectedblue");
+             $(this).removeClass("textSelectedred");
+             $(this).removeClass("textSelectedgreen");
+             
+             console.log($(this));
+            });
+         }
+    });*/
 
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
         $(".textSelected").each(function() {

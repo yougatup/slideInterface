@@ -405,7 +405,7 @@ function storeData(pageId, objIdList, pageNumber, paragraphIdentifier, startIdx,
           // handle response
             console.log("SUCCEED STORE DATA");
 
-            loadData();
+            // loadData();
         }).catch(function (err) {
           console.log(err);
         });
@@ -428,6 +428,10 @@ function registerMapping(objId, paragraphNumber, paragraphId) {
     paragraphTable[objId][paragraphNumber] = paragraphId;
 }
 
+function removeMapping(mappingId) {
+
+}
+
 function loadData() {
 	myDB.allDocs({
 	  include_docs: true,
@@ -436,16 +440,27 @@ function loadData() {
       var flag = false;
 	  console.log(result);
 
+      var paragraphIDDictionary = {};
+
+      for(var i=0;i<result.rows.length;i++) {
+         var elem = result.rows[i].doc;
+
+         if(elem.type == 'paragraphMapping') {
+              registerMapping(elem.objId, elem.paragraphNumber, elem.paragraphId);
+
+              paragraphIDDictionary[elem.paragraphId] = true;
+         }
+      }
+
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
 
          if(elem.type == 'highlight') {
             if(elem.userId == userID && elem.documentId == documentID) {
-                addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.paragraphIdentifier, elem.startIdx, elem.endIdx, elem.color, false);
+                if(elem.paragraphIdentifier in paragraphIDDictionary) {
+                    addHighlight(elem.pageId, [elem.objId], elem.pageNumber, elem.paragraphIdentifier, elem.startIdx, elem.endIdx, elem.color, false);
+                }
             }
-         }
-         else if(elem.type == 'paragraphMapping') {
-              registerMapping(elem.objId, elem.paragraphNumber, elem.paragraphId);
          }
       }
 
@@ -476,6 +491,39 @@ function createObjId() {
     return text;
 }
 
+function removeHighlight(pageID, boxID, mappingIdentifiers, lastElemIndex) {
+    // to be filled
+
+    if(highlightDictionary[pageID] == null) return;
+
+    for(var i=0;i<mappingIdentifiers.length;i++) {
+        var key = boxID + '-paragraph-' + mappingIdentifiers[i];
+        console.log(key);
+
+        if(highlightDictionary[pageID][key] == null){
+            console.log("cannot find key " + key);
+        }
+        else {
+            delete highlightDictionary[pageID][key];
+        }
+    }
+
+    if(lastElemIndex > -1) {
+        console.log(lastElemIndex);
+        for(var i=lastElemIndex;i<30;i++) {
+          var key = "paragraph__" + boxID + '-' + i;
+
+          console.log("remove " + key);
+
+          myDB.get(key).then(function(doc){
+                myDB.remove(doc);
+          }).catch(function(err) {
+            
+          });
+        }
+    }
+}
+
 function addHighlight(pageId, objIdList, pageNumber, paragraphIdentifier, startIdx, endIdx, color, flag) {
     // console.log("add highlight called!");
 
@@ -494,11 +542,6 @@ function addHighlight(pageId, objIdList, pageNumber, paragraphIdentifier, startI
         if(!(objId in highlightDictionary[pageId])) {
             highlightDictionary[pageId][objId] = [];
         }
-
-        // console.log(pageNumber);
-        // console.log(startIdx);
-        // console.log(endIdx);
-        // console.log(color);
 
         highlightDictionary[pageId][objId].push([pageNumber, startIdx, endIdx, color]);
     }
@@ -566,6 +609,8 @@ function clearDatabase() {
 
          myDB.remove(elem);
       }
+
+      console.log("clear done!");
 	}).catch(function (err) {
 	  console.log(err);
 	});
@@ -684,7 +729,6 @@ $(document).ready(function() {
           appendPre('Error: ' + response.result.error.message);
         });
       }
-
 
       $(document).on("getParagraphMapping", function(e) {
               var p = e.detail;
@@ -885,10 +929,6 @@ $(document).ready(function() {
          });
       }
 
-      function removeHighlight(pageId, objId, startIdx, endIdx) {
-          // to be filled
-      }
-
       function fillText(objId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color) {
          var requests = [ 
              /*
@@ -983,6 +1023,11 @@ $(document).ready(function() {
               addText("SLIDES_API1293859000_1", "blahblah");
      });
 
+      $(document).on("removeHighlight", function(e) {
+              var p = e.detail;
+
+              removeHighlight(p.pageID, p.boxID, p.mappingIdentifiers, p.lastElemIndex);
+              });
     $(document).on("highlighted", function(details){
             console.log(details);
 
@@ -1461,7 +1506,7 @@ dataType: "json"
 
     myDB = new PouchDB('doc2slide_db')
 
-    clearDatabase();
+    // clearDatabase();
     loadData();
 });
 
