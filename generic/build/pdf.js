@@ -14,7 +14,7 @@ var shorteningBoxSpanStartInx, shorteningBoxSpanEndInx, shorteningBoxSpanCnt;
 var myDBDB;
 var highlightColors = ['whitesmoke', 'yellow', 'red', 'blue', 'green'];
 var currentHighlightColor = 0;
-var segmentDatabase = {};
+var segmentDatabase = {}, isInitialCase = false;
 var sectionDictionary = {};
 var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
@@ -18485,7 +18485,7 @@ function enableDoc2Slide() {
         var originalSentence = sectionDictionary[sectionIndex][sectionSentenceIndex];
 
         var myKey = sectionIndex + '-' + sectionSentenceIndex;
-        var db = sentenceDatabase[myKey];
+        var db = sentenceDatabase[sectionIndex][sectionSentenceIndex];
 
         issueEvent(document, "prepareSnapshotForAutoComplete", {
             text: originalSentence,
@@ -18635,7 +18635,7 @@ function enableDoc2Slide() {
         var minIndex = 987987987, maxIndex = -1;
         var pageNumber = -1;
 
-        var objList = sentenceDatabase[key];
+        var objList = sentenceDatabase[sectionIndex][sectionSentenceIndex];
 
         var opacity = score / maxScore;
         // var opacity = Math.pow(2, score / maxScore) - 1;
@@ -18814,8 +18814,8 @@ function enableDoc2Slide() {
     myDBDB = new PouchDB('referenceLocation_DBDB');
 
     // console.log("hmM?");
-   // clearDatabase();
-     loadData();
+   //  clearDatabase();
+    loadData();
 }
 
 function clearDatabase() {
@@ -18858,7 +18858,7 @@ function storeSectionTextSegment(sectionSegment) {
         });
 }
 
-function storeData(textSegmentId, referred, section, pageNumber) {
+function storeData(textSegmentId, referred, section, sentenceIndex, sentenceWordIndex, pageNumber) {
         myDBDB.put({
           "_id": createObjId(),
           "type": "segment",
@@ -18867,6 +18867,8 @@ function storeData(textSegmentId, referred, section, pageNumber) {
           "textSegmentId": textSegmentId,
           "referred": referred,
           "section": section,
+	  "sectionsentenceindex": sentenceIndex,
+	  "sectionsentencewordindex": sentenceWordIndex,
           "pageNumber": pageNumber
         }).then(function (response) {
           // handle response
@@ -18891,11 +18893,9 @@ function loadData() {
          if(elem.type == "segment" && elem.userId == userID && elem.documentId == documentID) {
             if(segmentDatabase[elem.pageNumber] == null) {
                 segmentDatabase[elem.pageNumber] = {}
-                segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section];
-            }
-            else {
-                segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section];
-            }
+	    }
+
+            segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section, elem.sectionsentenceindex, elem.sectionsentencewordindex];
          }
       }
 
@@ -19237,8 +19237,11 @@ function printMessage(mutationList) {
     else
         disableTextLayerSelection();
 
+    isInitialCase = false;
+
     for(var i=0;i<mutationList.length;i++) {
         if($(mutationList[i].target).hasClass("textLayer")) {
+
             var pageNumber = parseInt($($(mutationList[i].target).parent()).attr("data-page-number"));
             var pageSize = jsonMetaData.pages[pageNumber-1];
             var refs = [];
@@ -19351,6 +19354,8 @@ function printMessage(mutationList) {
             // console.log(segmentDatabase);
 
             if(segmentDatabase[pageNumber] != null) {
+		console.log("hit!");
+
                 for(var j=startCnt;j<endCnt;j++) {
                     var key = "textSegment_" + pageNumber + "_" + j;
 
@@ -19364,6 +19369,7 @@ function printMessage(mutationList) {
 
                         if(segmentDatabase[pageNumber][key][1] != null) {
                             var sectionKey = "section_" + pageNumber + "_" + segmentDatabase[pageNumber][key][1];
+
                             var textSegmentID = "#textSegment_" + pageNumber + "_" + j;
                             
                             $("#textSegment_" + pageNumber + "_" + j).attr("sectionIndex", sectionKey);
@@ -19378,10 +19384,21 @@ function printMessage(mutationList) {
                         else {
                             // $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
                         }
+
+			if(segmentDatabase[pageNumber][key][2] != null) {
+			    var sectionSentenceIndex = segmentDatabase[pageNumber][key][2];
+			    var sectionSentenceWordIndex = segmentDatabase[pageNumber][key][3];
+
+                            $("#textSegment_" + pageNumber + "_" + j).attr("sectionSentenceIndex", sectionSentenceIndex);
+                            $("#textSegment_" + pageNumber + "_" + j).attr("sectionSentenceWordIndex", sectionSentenceWordIndex);
+			}
                     }
                 }
             }
             else {
+		segmentDatabase[pageNumber] = {};
+		isInitialCase = true;
+
                 for(var j=startCnt;j<endCnt;j++) {
                     var key = "textSegment_" + pageNumber + "_" + j;
 
@@ -19465,7 +19482,11 @@ function printMessage(mutationList) {
                         $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
                     }
 
-                    storeData("textSegment_" + pageNumber + "_" + j, refID, sectionID, pageNumber);
+		    segmentDatabase[pageNumber][key] = [refID, sectionID];
+
+                    // storeData("textSegment_" + pageNumber + "_" + j, refID, sectionID, pageNumber);
+		    //
+		    
                 }
             }
 
@@ -19627,8 +19648,7 @@ function printMessage(mutationList) {
                 $("#" + pageCanvasSectionID).height(figHeight);
 
             }
-        } 
-    }
+
 
     //console.log(sectionDictionary);
     //console.log(sectionTextSegment);
@@ -19640,106 +19660,152 @@ function printMessage(mutationList) {
     // console.log(sectionTextSegment);
     // console.log(sectionDictionary);
 
+    console.log("huh?");
+
     for(var i=0;i<keys.length;i++) {
-        if(sectionTextSegmentProcessed[keys[i]] == null) {
-            // console.log(keys[i]);
-            var pairs = sectionTextSegment[keys[i]];
+	var thisPage = parseInt(keys[i].split('_')[1]);
 
-            var str1Index = 0;
-            var len = 0;
+	console.log(thisPage + ' ' + pageNumber);
+	if(thisPage == pageNumber) {
+	    if(sectionTextSegmentProcessed[keys[i]] == null) {
+		// console.log(keys[i]);
+		var pairs = sectionTextSegment[keys[i]];
 
-            var str1 = sectionDictionary[keys[i]][str1Index];
-            var wordCount = 0;
-/*
-            console.log(sectionTextSegment);
-            console.log(keys[i]);
-            console.log(pairs);*/
+		var str1Index = 0;
+		var len = 0;
 
-            for(var j=0;j<pairs.length;j++) {
-                if(pairs[j][1] != '' && pairs[j][1] != ' ') {
-                    if(pairs[j][1].slice(-1) == '-') {
-                        pairs[j][1] = pairs[j][1].substr(0, pairs[j][1].length-1);
-                    }
+		var str1 = sectionDictionary[keys[i]][str1Index];
+		var wordCount = 0;
+		/*
+		   console.log(sectionTextSegment);
+		   console.log(keys[i]);
+		   console.log(pairs);*/
 
-                    var inx = str1.indexOf(pairs[j][1]);
-                    var flag = false;
+		for(var j=0;j<pairs.length;j++) {
+		    if(pairs[j][1] != '' && pairs[j][1] != ' ') {
+			if(pairs[j][1].slice(-1) == '-') {
+			    pairs[j][1] = pairs[j][1].substr(0, pairs[j][1].length-1);
+			}
 
-                    if(inx == -1) {
-                        if(str1Index+1 < sectionDictionary[keys[i]].length) {
-                            if(sectionDictionary[keys[i]][str1Index+1].indexOf(pairs[j][1]) != -1) {
-                                var myKey = keys[i] + '-' + str1Index;
-                                var db = sentenceDatabase[myKey];
+			var inx = str1.indexOf(pairs[j][1]);
+			var flag = false;
 
-                                addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
+			if(inx == -1) {
+			    if(str1Index+1 < sectionDictionary[keys[i]].length) {
+				if(sectionDictionary[keys[i]][str1Index+1].indexOf(pairs[j][1]) != -1) {
+				    var myKey = keys[i] + '-' + str1Index;
+				    var db = sentenceDatabase[keys[i]][str1Index];
 
-                                // console.log(keys[i] + ' ' + str1Index + ' ' + wordCount);
+				    addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
 
-                                feedPrefixTree(keys[i], str1Index, wordCount);
+				    // console.log(keys[i] + ' ' + str1Index + ' ' + wordCount);
 
-                                str1 = sectionDictionary[keys[i]][str1Index+1];
+				    feedPrefixTree(keys[i], str1Index, wordCount);
 
-                                str1Index = str1Index + 1;
+				    str1 = sectionDictionary[keys[i]][str1Index+1];
 
-                                wordCount = 0;
-                            }
-                            else {
-                                console.log("-1!!!!!!!! " + pairs[j][1] + ' ' + j);
-                                flag = true;
-                            }
-                        }
-                        else {
-                            console.log("-1!!!!!!!! " + pairs[j][1] + ' ' + j);
-                            flag = true;
-                        }
-                    }
+				    str1Index = str1Index + 1;
 
-                    if(!flag) {
-                        var subString = str1.substr(0, inx + pairs[j][1].length);
-                        var numSpace = subString.split(' ').length - 1;
-                        wordCount = wordCount + numSpace;
+				    wordCount = 0;
+				}
+				else {
+				    console.log("-1!!!!!!!! " + pairs[j][1] + ' ' + j);
+				    flag = true;
+				}
+			    }
+			    else {
+				console.log("-1!!!!!!!! " + pairs[j][1] + ' ' + j);
+				flag = true;
+			    }
+			}
 
-                        str1 = str1.substr(inx + pairs[j][1].length);
+			if(!flag) {
+			    var subString = str1.substr(0, inx + pairs[j][1].length);
+			    var numSpace = subString.split(' ').length - 1;
+			    wordCount = wordCount + numSpace;
 
-                        $("#" + pairs[j][0]).attr("sectionSentenceIndex", str1Index);
-                        $("#" + pairs[j][0]).attr("sectionSentenceWordIndex", wordCount);
+			    str1 = str1.substr(inx + pairs[j][1].length);
 
-                        var myKey = keys[i] + '-' + str1Index;
+			    $("#" + pairs[j][0]).attr("sectionSentenceIndex", str1Index);
+			    $("#" + pairs[j][0]).attr("sectionSentenceWordIndex", wordCount);
 
-                        var pageID = $("#" + pairs[j][0]).attr("id").split("_")[1];
-                        var segmentIndex = $("#" + pairs[j][0]).attr("id").split("_")[2];
+			    if(isInitialCase) {
+				segmentDatabase[pageNumber][pairs[j][0]].push(str1Index);
+				segmentDatabase[pageNumber][pairs[j][0]].push(wordCount);
+			    }
 
-                        if(sentenceDatabase[myKey] == null) {
-                            sentenceDatabase[myKey] = [pageID, segmentIndex, segmentIndex];
-                        }
-                        else {
-                            var minIndex = sentenceDatabase[myKey][1];
-                            var maxIndex = sentenceDatabase[myKey][2];
+			    var myKey = keys[i] + '-' + str1Index;
 
-                            sentenceDatabase[myKey] = [pageID, Math.min(minIndex, segmentIndex), Math.max(maxIndex, segmentIndex)];
-                        }
+			    var pageID = $("#" + pairs[j][0]).attr("id").split("_")[1];
+			    var segmentIndex = $("#" + pairs[j][0]).attr("id").split("_")[2];
 
-                        //                console.log(pairs[j][1] + ' ' + (inx + len));
+			    if(sentenceDatabase[keys[i]] == null) {
+				sentenceDatabase[keys[i]] = {};
+			    }
 
-                        len = len + inx + pairs[j][1].length;
-                    }
-                }
-            }
+			    if(sentenceDatabase[keys[i]][str1Index] == null) {
+				sentenceDatabase[keys[i]][str1Index] = [pageID, parseInt(segmentIndex), parseInt(segmentIndex)];
+			    }
+			    else {
+				var minIndex = sentenceDatabase[keys[i]][str1Index][1];
+				var maxIndex = sentenceDatabase[keys[i]][str1Index][2];
 
-            if(wordCount != 0) {
-                 feedPrefixTree(keys[i], str1Index, wordCount);
-                 var myKey = keys[i] + '-' + str1Index;
-                 var db = sentenceDatabase[myKey];
+				sentenceDatabase[keys[i]][str1Index] = [pageID, Math.min(minIndex, segmentIndex), Math.max(maxIndex, segmentIndex)];
+			    }
 
-                 addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
-            }
+			    //                console.log(pairs[j][1] + ' ' + (inx + len));
 
-            //        console.log(str1);
-            //        console.log(str2);
+			    len = len + inx + pairs[j][1].length;
+			}
+		    }
 
-            sectionTextSegmentProcessed[keys[i]] = true;
-        }
+		    if(isInitialCase) {
+			var instance = segmentDatabase[pageNumber][pairs[j][0]];
+
+			storeData(pairs[j][0], instance[0], instance[1], instance[2], instance[3], pageNumber);
+		    }
+		}
+
+		if(wordCount != 0) {
+		    feedPrefixTree(keys[i], str1Index, wordCount);
+
+		    var myKey = keys[i] + '-' + str1Index;
+		    var db = sentenceDatabase[keys[i]][str1Index];
+
+		    addNumberingBox(db[0], keys[i], str1Index, db[1], db[2]);
+		}
+
+		//        console.log(str1);
+		//        console.log(str2);
+
+		sectionTextSegmentProcessed[keys[i]] = true;
+	    }
+	    else {
+		// Add numbering & indexes
+		//
+
+		console.log("ADD NUMBERING : " + keys[i]);
+		if(sentenceDatabase[keys[i]] != null) {
+		    var strIndexs = Object.keys(sentenceDatabase[keys[i]]);
+
+		    for(var j=0;j<strIndexs.length;j++) {
+			var strIndex = strIndexs[j];
+			var db = sentenceDatabase[keys[i]][strIndex];
+
+			addNumberingBox(db[0], keys[i], strIndex, db[1], db[2]);
+		    }
+		}
+		else {
+		    console.log("WTF!??!?!?!@?#$%#@$!#Y%@$@#^@%@#%$%!@#$!");
+		}
+		console.log("ADD NUMBERING DONE");
+	    }
+	}
     }
 
     // console.log(prefixTree);
+        } 
+    }
+
 }
 
