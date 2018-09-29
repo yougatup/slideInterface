@@ -20,6 +20,9 @@ var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
 var sentenceDatabase = {};
 var appearedNumberBoxes = {};
+var sectionStructure = [];
+
+
 var ignoreString = [
     "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can", "can't", "cannot", "could", "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for", "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's", "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm", "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't", "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours ", "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so", "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's", "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until", "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when", "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would", "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves", "return", "aren't", "can't", "couldn't", "didn't", "doesn't", "don't", "hadn't", "hasn't", "haven't", "hes", "heres", "hows", "im", "isn't", "its", "lets", "mustn't", "shant", "shes", "shouldn't", "thats", "theres", "they'll", "they're", "they've", "wasn't", "were", "weren't", "what's", "whens", "wheres", "whos", "whys", "won't", "wouldn't", "you'd", "you'll", "you're", "you've"
 ];
@@ -19099,7 +19102,15 @@ function readTextFile(file, filetype, type)
                 else if(type == "PDF_STRUCTURE") {
                     json = $.parseJSON(allText.join([separator = '']))
                     jsonPdfStructure = $.parseJSON(allText.join([separator = '']))
-                    // console.log(jsonPdfStructure);
+                    console.log(jsonPdfStructure);
+
+                    for(var i=0;i<jsonPdfStructure.sections.length;i++) {
+                        if(jsonPdfStructure.sections[i].title != null) {
+                            sectionStructure.push(jsonPdfStructure.sections[i].title);
+                        }
+                    }
+                 
+                    console.log(sectionStructure);
                 }
 
 /*

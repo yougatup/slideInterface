@@ -337,9 +337,9 @@ function initializeGAPI() {
                 slideID: slideID,
                 slideObjs: slideObjId
             });
-            
-            console.log(slideInfo);
           }
+
+          console.log(slideInfo);
         }, function(response) {
             console.log(response);
           //appendPre('Error: ' + response.result.error.message);
@@ -518,7 +518,7 @@ function removeHighlight(pageID, boxID, mappingIdentifiers, lastElemIndex) {
         for(var i=lastElemIndex;i<30;i++) {
           var key = "paragraph__" + boxID + '-' + i;
 
-          console.log("remove " + key);
+//          console.log("remove " + key);
 
           myDB.get(key).then(function(doc){
                 myDB.remove(doc);
@@ -616,6 +616,7 @@ function clearDatabase() {
       }
 
       console.log("clear done!");
+      prepare();
 	}).catch(function (err) {
 	  console.log(err);
 	});
@@ -716,7 +717,7 @@ function removeOutlineLine(index) {
     outlineInfo.remove(index);
 }
 
-$(document).ready(function() {
+function prepare() {
        initializeGAPI();
 
       $("#createSlideButton").on("click", function() {
@@ -1495,9 +1496,11 @@ success: refSuccess,
 dataType: "json"
             });
 
-    myDB = new PouchDB('doc2slide_db')
-
-    clearDatabase();
     loadData();
+}
+
+$(document).ready(function() {
+    myDB = new PouchDB('doc2slide_db')
+    clearDatabase();
 });
 
