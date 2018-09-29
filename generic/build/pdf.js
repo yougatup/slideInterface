@@ -18811,8 +18811,8 @@ function enableDoc2Slide() {
     myDBDB = new PouchDB('referenceLocation_DBDB');
 
     // console.log("hmM?");
-    // clearDatabase();
-    loadData();
+   // clearDatabase();
+     loadData();
 }
 
 function clearDatabase() {
@@ -18880,7 +18880,7 @@ function loadData() {
 	  attachments: true
 	}).then(function (result) {
       var flag = false;
-	  // console.log(result);
+	  console.log(result);
 
       for(var i=0;i<result.rows.length;i++) {
          var elem = result.rows[i].doc;
@@ -19364,6 +19364,9 @@ function printMessage(mutationList) {
                                 sectionTextSegment[sectionKey].push(["textSegment_" + pageNumber + "_" + j, $(textSegmentID).text()]);
                             }
                         }
+                        else {
+                            // $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
+                        }
                     }
                 }
             }
@@ -19636,6 +19639,10 @@ function printMessage(mutationList) {
 
             var str1 = sectionDictionary[keys[i]][str1Index];
             var wordCount = 0;
+/*
+            console.log(sectionTextSegment);
+            console.log(keys[i]);
+            console.log(pairs);*/
 
             for(var j=0;j<pairs.length;j++) {
                 if(pairs[j][1] != '' && pairs[j][1] != ' ') {

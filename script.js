@@ -1,4 +1,4 @@
-var PRESENTATION_ID = '11Vza3FSJS7mq6CSOfHPpsF77pyGDSaVs8R5zQyNogL4'
+var PRESENTATION_ID = '1-ZGwchPm3T31PghHF5N0sSUU_Jd9BTwntcFf1ypb8ZY'
 var documentString;
 var highlightDictionary = {};
 var curPageId = null;
@@ -16,6 +16,7 @@ var dataLoaded = false;
 var segmentDatabase = {};
 var paragraphTable = {};
 
+var sectionStructure = [];
 var autoCompleteStatus = false;
 var autoCompleteObjID = null;
 var autoCompleteParagraphNumber = null;
@@ -148,8 +149,7 @@ function readTextFile(file, filetype)
 
 function initializeGAPI() {
       // Client ID and API key from the Developer Console
-      var CLIENT_ID = '1080216621788-nsdlr416il84hr9t6nkrb9fv3b663tgk.apps.googleusercontent.com';
-      var API_KEY = 'AIzaSyDtDPjTzXFIxzaYwz-qyaHAty-16vCNOJo';
+      var CLIENT_ID = '242873078831-sdfm9eu5qcvoek4k0vkq9ef7de0vqf0a.apps.googleusercontent.com';
 
       // Array of API discovery doc URLs for APIs used by the quickstart
       var DISCOVERY_DOCS = ["https://slides.googleapis.com/$discovery/rest?version=v1", "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"];
@@ -175,7 +175,6 @@ function initializeGAPI() {
       function initClient() {
           console.log("INIT");
         gapi.client.init({
-          apiKey: API_KEY,
           clientId: CLIENT_ID,
           discoveryDocs: DISCOVERY_DOCS,
           scope: SCOPES
@@ -198,12 +197,14 @@ function initializeGAPI() {
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           // signoutButton.style.display = 'block';
+          console.log("signed in!");
           listSlides();
 
           // callAppsScript(gapi.auth2.getAuthInstance());
         } else {
           authorizeButton.style.display = 'block';
           // signoutButton.style.display = 'none';
+          console.log("yay?");
         }
       }
 
@@ -266,6 +267,7 @@ function initializeGAPI() {
         gapi.client.slides.presentations.get({
           presentationId: PRESENTATION_ID
         }).then(function(response) {
+          console.log("hmm?");
           $("#outlinePlaneContent").text('');
 
           var presentation = response.result;
@@ -336,11 +338,14 @@ function initializeGAPI() {
                 slideObjs: slideObjId
             });
             
-            // console.log(slideInfo);
+            console.log(slideInfo);
           }
         }, function(response) {
             console.log(response);
           //appendPre('Error: ' + response.result.error.message);
+        }).catch(function(er) {
+            console.log("WHAT?");
+            console.log(er);
         });
       }
 
@@ -836,23 +841,6 @@ $(document).ready(function() {
       function appendText(objId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color) {
          console.log("yay");
 
-         gapi.client.request({
-            'root': 'https://script.googleapis.com',
-            'path': 'v1/scripts/16qbV0EOaVfKQhEw7d3Ug9Wc87ShtQ5PuJoYB0GQumeh9s08TYQHTTUah:run',
-            'method': 'POST',
-            'body': {
-                'function': 'myFunction',
-                'parameters': null,
-                'devMode': false 
-            }
-         }).then((response) => {
-             console.log("cool!");
-             console.log(response);
-         }).catch(function(error) {
-             console.log('cache!');
-             console.log(error);
-         });
-
          var requests = [ 
          {
            "insertText": {
@@ -873,7 +861,6 @@ $(document).ready(function() {
              console.log(error);
      
              if(error.result.error.code == 400) { // get the end index
-
                  var errorMessage = error.result.error.message;
 
                  var flag = false;
