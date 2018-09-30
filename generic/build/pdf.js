@@ -16,14 +16,14 @@ var shorteningBoxSpanStartInx, shorteningBoxSpanEndInx, shorteningBoxSpanCnt;
 var myDBDB;
 var highlightColors = ['whitesmoke', 'yellow', 'red', 'blue', 'green'];
 var currentHighlightColor = 0;
-var segmentDatabase = {}, isInitialCase = false;
+var segmentDatabase = {}, isFirstSlides = true;
 var sectionDictionary = {};
 var sectionTextSegment = {};
 var sectionTextSegmentProcessed = {};
 var sentenceDatabase = {};
 var sentenceDatabaseLoaded = {};
 var appearedNumberBoxes = {};
-var sectionStructure = [];
+var sectionStructure = [], sectionStructureSegments = [];
 
 
 var ignoreString = [
@@ -18819,8 +18819,8 @@ function enableDoc2Slide() {
     myDBDB = new PouchDB('referenceLocation_DBDB');
 
     // console.log("hmM?");
-    //  clearDatabase();
-   loadData();
+     // clearDatabase();
+    loadData();
 }
 
 function clearDatabase() {
@@ -18893,6 +18893,7 @@ function loadData() {
 	  console.log(result);
 
       for(var i=0;i<result.rows.length;i++) {
+	  isFirstSlides = false;
          var elem = result.rows[i].doc;
 
          if(elem.type == "segment" && elem.userId == userID && elem.documentId == documentID) {
@@ -18906,8 +18907,23 @@ function loadData() {
 
       // console.log(segmentDatabase);
 
+      if(isFirstSlides) {
+	  console.log(paperTitle);
+	  console.log(paperAuthors);
+	  console.log(sectionStructure);
+
+	  issueEvent(document, "initialSlideGeneration", {
+	      title: paperTitle,
+	      authors: paperAuthors,
+	      sections: sectionStructure
+	  });
+      }
+
+
       // $("#pdfjsIframe").show();
-      PDFViewerApplication.open('paperData/paper/paper.pdf');
+      //
+      // PDFViewerApplication.open('paperData/paper/paper.pdf');
+
 	}).catch(function (err) {
 	  console.log(err);
 	});
@@ -19131,6 +19147,7 @@ function readTextFile(file, filetype, type)
                     for(var i=0;i<jsonPdfStructure.sections.length;i++) {
                         if(jsonPdfStructure.sections[i].title != null) {
                             sectionStructure.push(jsonPdfStructure.sections[i].title);
+			    sectionStructureSegments.push('');
                         }
                     }
                  
@@ -19282,7 +19299,7 @@ function printMessage(mutationList) {
     else
         disableTextLayerSelection();
 
-    isInitialCase = false;
+    var isInitialCase = false;
 
     for(var i=0;i<mutationList.length;i++) {
         if($(mutationList[i].target).hasClass("textLayer")) {
@@ -19333,6 +19350,9 @@ function printMessage(mutationList) {
             }
 
             // console.log(jsonPdfStructure);
+
+	    console.log(sectionStructure);
+
             for(var j=0;j<jsonPdfStructure.sections.length;j++) {
                 var data = jsonPdfStructure.sections[j];
 
@@ -19347,8 +19367,17 @@ function printMessage(mutationList) {
                 if(data.title != null) {
                     if((data.title.page + 1) == pageNumber) {
                         sections.push(data.title);
+			console.log(data.title);
+
+			for(var k=0;k<sectionStructure.length;k++) {
+			    if(sectionStructure[k].text == data.title.text) {
+				sectionStructureSegments[k] = "section_" + pageNumber + "_" + (sections.length-1);
+			    }
+			}
                     }
                 }
+
+		console.log(sectionStructureSegments);
             }
 
             if(jsonPdfStructure.abstractText != null && (jsonPdfStructure.abstractText.page+1) == pageNumber) {
@@ -19393,7 +19422,6 @@ function printMessage(mutationList) {
 
 	    /* Title and author detection
 	     */
-	     
 	   
 	    if(pageNumber == 1) {
 		paperTitleSegments = findWordsOnSegments(paperTitle, startCnt, endCnt);
