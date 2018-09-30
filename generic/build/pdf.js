@@ -6,6 +6,8 @@ var highlightedText = '';
 var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
+var paperTitle = null, paperAuthors = [];
+var paperTitleSegments = [], paperAuthorSegments = []
 var jsonMetaData, xmlMetaData, pdffigureMetaData, jsonPdfStructure;
 var parsedListofReferences = [];
 var parsedReferences = [];
@@ -18636,7 +18638,7 @@ function enableDoc2Slide() {
         var minIndex = 987987987, maxIndex = -1;
         var pageNumber = -1;
 
-	console.log(key);
+	// console.log(key);
 
         var objList = sentenceDatabase[sectionIndex][sectionSentenceIndex];
 
@@ -18817,8 +18819,8 @@ function enableDoc2Slide() {
     myDBDB = new PouchDB('referenceLocation_DBDB');
 
     // console.log("hmM?");
-   //  clearDatabase();
-    loadData();
+    //  clearDatabase();
+   loadData();
 }
 
 function clearDatabase() {
@@ -19048,9 +19050,28 @@ function readTextFile(file, filetype, type)
                 if(type == "TEI") {
                     tei = $.parseXML(allText.join([separator = '']))
                     xmlMetaData = $.parseXML(allText.join([separator = '']));
-                    // console.log(xmlMetaData);
+                    console.log(xmlMetaData);
 
                     var listBibl = $(xmlMetaData).find('listBibl');
+
+		    paperTitle = $(xmlMetaData).find('teiHeader').find('titleStmt').find('title').text();
+
+		    var authorElements = $(xmlMetaData).find('teiHeader').find('sourceDesc').find('analytic').find('author').find('persName');
+
+		    console.log(authorElements);
+		    console.log(authorElements.length);
+
+		    for(var i=0;i<authorElements.length;i++) {
+			paperAuthors.push('');
+
+			for(var j=0;j<authorElements[i].children.length;j++) {
+			    paperAuthors[i] = paperAuthors[i] + (j == 0 ? '' : ' ') + $(authorElements[i].children[j]).text()
+			}
+		    }
+
+		    console.log(paperAuthors);
+
+
 
                     // console.log($(listBibl));
 
@@ -19227,6 +19248,32 @@ function addNumberingBox(pageId, sectionIndex, sectionSentenceIndex, startIdx, e
     $("#" + sentenceNumberBoxID).height(numberBoxHeight);
 }
 
+function findWordsOnSegments(words, startCnt, endCnt) {
+    // Assume on the first page
+
+    var splittedWords = words.split(' ');
+    var wordIndex = 0;
+    var retValue = [];
+
+    for(var i=startCnt;i<endCnt;i++) {
+	var obj = $("#textSegment_1_" + i);
+	var text = $(obj).text();
+
+	if(text != ' ' && text != '' && text.indexOf(splittedWords[wordIndex]) > -1) {
+	    if(retValue.length <= wordIndex)
+		retValue.push('');
+
+	    retValue[wordIndex] = obj;
+	    wordIndex++;
+
+	    if(wordIndex >= splittedWords.length)
+		return retValue;
+	}
+    }
+
+    return null;
+}
+
 function printMessage(mutationList) {
     // console.log(mutationList);
 
@@ -19343,6 +19390,29 @@ function printMessage(mutationList) {
             }
 
             endCnt = idCnt;
+
+	    /* Title and author detection
+	     */
+	     
+	   
+	    if(pageNumber == 1) {
+		paperTitleSegments = findWordsOnSegments(paperTitle, startCnt, endCnt);
+		console.log(paperTitleSegments);
+
+		for(var i=0;i<paperAuthors.length;i++) {
+		    var val = findWordsOnSegments(paperAuthors[i], startCnt, endCnt);
+		    paperAuthorSegments.push(val);
+		}
+
+		console.log(paperAuthorSegments);
+	    }
+
+
+
+
+
+
+
 
             /* HIGHLIGHT TEXT */
  
