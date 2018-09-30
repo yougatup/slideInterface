@@ -14,7 +14,7 @@ var currentAutoCompleteInstances = [];
 var dataLoaded = false;
 
 var initialSlideGenerationFlag = false;
-var removedSlideCnt, initialSlideCnt, createdSlideCnt;
+var removedSlideCnt, initialSlideCnt, createdSlideCnt, sectionCnt, filledSectionCnt;
 
 var segmentDatabase = {};
 var paragraphTable = {};
@@ -90,6 +90,98 @@ function highlightParagraph(pIndex) {
 	   		 	 highlightPhrase(pIndex, substrIndex, wordCount);
        		 }
 		}
+    });
+}
+
+function listSlides(callback) {
+    gapi.client.slides.presentations.get({
+	presentationId: PRESENTATION_ID
+    }).then(function(response) {
+	console.log("hmm?");
+	$("#outlinePlaneContent").text('');
+
+	var presentation = response.result;
+	var length = presentation.slides.length;
+	slideInfo = [];
+
+	for (i = 0; i < length; i++) {
+	    var slide = presentation.slides[i];
+
+	    var slideID = slide.objectId;
+	    var slideObjId = [];
+
+	    function compare(a, b) {
+		if(a.objectId > b.objectId) return true;
+		else return false;
+	    }
+
+	    slide.pageElements.sort(compare);
+
+	    for(var j=0;j<slide.pageElements.length;j++) {
+		var slideItem = slide.pageElements[j];
+
+		var slideObjParagraphId = [];
+
+		if(slideItem.shape.text != null) {
+		    var nestingLevel = 0;
+		    var isFirstTextRun = true;
+		    var paragraphId = -1;
+
+		    for(var k=0;k<slideItem.shape.text.textElements.length;k++) {
+			var textElem = slideItem.shape.text.textElements[k];
+
+			if(textElem.paragraphMarker != null) {
+			    paragraphId = paragraphId + 1;
+			}
+
+			var paragraphObjId = "editor-" + slideItem.objectId + "-paragraph-" + paragraphId;
+			var domId = '';
+
+			if(textElem.paragraphMarker != null && textElem.paragraphMarker.bullet != null) {
+			    if(textElem.paragraphMarker.bullet.nestingLevel != null) {
+				nestingLevel = parseInt(textElem.paragraphMarker.bullet.nestingLevel);
+			    }
+			    else nestingLevel = 0;
+			}
+			else if(textElem.textRun != null){
+			    var level = (j == 0? nestingLevel : nestingLevel + 1);
+
+			    // domId = appendOutlineLine(level, textElem.textRun.content, paragraphObjId);
+
+			    isFirstTextRun = false;
+
+			    slideObjParagraphId.push({
+				slideParagraphObjId: paragraphObjId,
+				domId: domId
+			    });
+			}
+		    }
+		}
+
+		slideObjId.push({
+		    slideObjId: slideItem.objectId,
+		    slideParagraphs: slideObjParagraphId
+		});
+	    }
+
+	    slideInfo.push({
+		slideID: slideID,
+		slideObjs: slideObjId
+	    });
+	}
+
+	console.log(slideInfo);
+
+	if(callback) {
+	    callback();
+	}
+
+    }, function(response) {
+	console.log(response);
+	//appendPre('Error: ' + response.result.error.message);
+    }).catch(function(er) {
+	console.log("WHAT?");
+	console.log(er);
     });
 }
 
@@ -201,7 +293,11 @@ function initializeGAPI() {
           authorizeButton.style.display = 'none';
           // signoutButton.style.display = 'block';
           console.log("signed in!");
-          listSlides();
+          listSlides(null);
+
+	  if(initialSlideGenerationFlag) {
+	      initialSlideCreationStart();
+	  }
 
           // callAppsScript(gapi.auth2.getAuthInstance());
         } else {
@@ -266,122 +362,6 @@ function initializeGAPI() {
         });
       }
 
-      function listSlides() {
-        gapi.client.slides.presentations.get({
-          presentationId: PRESENTATION_ID
-        }).then(function(response) {
-          console.log("hmm?");
-          $("#outlinePlaneContent").text('');
-
-          var presentation = response.result;
-          var length = presentation.slides.length;
-
-          for (i = 0; i < length; i++) {
-            var slide = presentation.slides[i];
-
-            var slideID = slide.objectId;
-            var slideObjId = [];
-
-            function compare(a, b) {
-                if(a.objectId > b.objectId) return true;
-                else return false;
-            }
-
-            slide.pageElements.sort(compare);
-
-            for(var j=0;j<slide.pageElements.length;j++) {
-                var slideItem = slide.pageElements[j];
-
-                var slideObjParagraphId = [];
-
-                if(slideItem.shape.text != null) {
-                    var nestingLevel = 0;
-                    var isFirstTextRun = true;
-                    var paragraphId = -1;
-
-                    for(var k=0;k<slideItem.shape.text.textElements.length;k++) {
-                        var textElem = slideItem.shape.text.textElements[k];
-
-                        if(textElem.paragraphMarker != null) {
-                            paragraphId = paragraphId + 1;
-                        }
-
-                        var paragraphObjId = "editor-" + slideItem.objectId + "-paragraph-" + paragraphId;
-                        var domId = '';
-
-                        if(textElem.paragraphMarker != null && textElem.paragraphMarker.bullet != null) {
-                            if(textElem.paragraphMarker.bullet.nestingLevel != null) {
-                                nestingLevel = parseInt(textElem.paragraphMarker.bullet.nestingLevel);
-                            }
-                            else nestingLevel = 0;
-                        }
-                        else if(textElem.textRun != null){
-                            var level = (j == 0? nestingLevel : nestingLevel + 1);
-
-                            // domId = appendOutlineLine(level, textElem.textRun.content, paragraphObjId);
-
-                            isFirstTextRun = false;
-
-                            slideObjParagraphId.push({
-                                    slideParagraphObjId: paragraphObjId,
-                                    domId: domId
-                                    });
-                        }
-                    }
-                }
-
-                slideObjId.push({
-                    slideObjId: slideItem.objectId,
-                    slideParagraphs: slideObjParagraphId
-                    });
-            }
-
-            slideInfo.push({
-                slideID: slideID,
-                slideObjs: slideObjId
-            });
-          }
-
-	  console.log(slideInfo);
-
-	  if(initialSlideGenerationFlag) {
-	      initialSlideCnt = slideInfo.length;
-	      removedSlideCnt = 0;
-
-	      for(var i=0;i<slideInfo.length;i++) {
-		  var requests = [ {
-		      "deleteObject": {
-			  "objectId": slideInfo[i].slideID,
-		      },
-		  }];
-
-		  gapi.client.slides.presentations.batchUpdate({
-		      presentationId: PRESENTATION_ID,
-		      requests: requests
-		  }).then((createSlideResponse) => {
-		      // successfully pasted the text
-
-		      console.log("succeed!");
-		      console.log(createSlideResponse);
-
-		      removedSlideCnt++;
-
-		      if(removedSlideCnt >= initialSlideCnt) {
-			  initialSlideCreation();
-		      }
-		  });
-	      }
-	  }
-
-        }, function(response) {
-            console.log(response);
-          //appendPre('Error: ' + response.result.error.message);
-        }).catch(function(er) {
-            console.log("WHAT?");
-            console.log(er);
-        });
-      }
-
       /**
        * Shows basic usage of the Apps Script API.
        *
@@ -425,6 +405,12 @@ function initializeGAPI() {
       handleClientLoad();
 }
 
+function sendSlideInfoToPDF() {
+    console.log("SEND SLIDE INFO TO PDF");
+
+    issueEvent(document, "sendSlideInfoToPDF", slideInfo);
+}
+
 function removeAllSlides() {
    gapi.client.slides.presentations.get({
      presentationId: PRESENTATION_ID
@@ -444,14 +430,90 @@ function fillSectionTitles() {
 
      var slides = response.result.slides;
 
+     sectionCnt = sectionStructure.length;
+     filledSectionCnt = 0;
+
      for(var i=1;i<slides.length;i++) {
 	 var slideTitleID = slides[i].pageElements[0].objectId;
 
- 	 putStringToObj(slideTitleID, sectionStructure[i-1].text);
+	 // 	 putStringToObj(slideTitleID, sectionStructure[i-1].text);
+	 
+	 var requests = [{
+	     insertText:   {
+		 "objectId": slideTitleID,
+		 "text": sectionStructure[i-1].text,
+	     }
+	 }];
+
+	 gapi.client.slides.presentations.batchUpdate({
+	     presentationId: PRESENTATION_ID,
+	     requests: requests
+	 }).then((createSlideResponse) => {
+	     // successfully pasted the text
+
+	     filledSectionCnt++;
+
+	     console.log("succeed!");
+	     console.log(createSlideResponse);
+
+	     if(filledSectionCnt >= sectionCnt) {
+		 googleSlideReady();
+	     }
+	 });
+     }
+   }).catch(function (err) {
+       console.log(err);
+   });
+}
+
+function googleSlideReady() {
+    // $("#slideIframe").attr("src", "https://docs.google.com/presentation/d/1-ZGwchPm3T31PghHF5N0sSUU_Jd9BTwntcFf1ypb8ZY/edit");
+
+    listSlides(sendSlideInfoToPDF);
+}
+
+function initialSlideCreationStart() {
+    /*
+   gapi.client.slides.presentations.get({
+     presentationId: PRESENTATION_ID
+   }).then(function(response) {
+     console.log(response);
+
+     var slides = response.result.slides;
+
+     initialSlideCnt = slides.length;
+     removedSlideCnt = 0;
+
+     for(var i=0;i<slides.length;i++) {
+	var pageID = slides[i].objectId;
+
+	var requests = [ {
+	    "deleteObject": {
+		"objectId": pageID,
+	    },
+	}];
+
+	gapi.client.slides.presentations.batchUpdate({
+	    presentationId: PRESENTATION_ID,
+	    requests: requests
+	}).then((createSlideResponse) => {
+	    // successfully pasted the text
+
+	    console.log("succeed!");
+	    console.log(createSlideResponse);
+
+	    removedSlideCnt++;
+
+	    if(removedSlideCnt >= initialSlideCnt) {
+		initialSlideCreation();
+	    }
+	});
      }
    }).catch(function (err) {
      console.log(err);
-   });
+   });*/
+
+ 	googleSlideReady();
 }
 
 function initialSlideCreation() {
@@ -633,6 +695,14 @@ function storeData(pageId, objIdList, pageNumber, paragraphIdentifier, startIdx,
           console.log(err);
         });
     }
+}
+
+
+function getParagraphIdentifier(objId, paragraphNumber) {
+    if(paragraphTable[objId] == null) return null;
+    if(paragraphTable[objId].length <= paragraphNumber) return null;
+
+    return paragraphTable[objId][paragraphNumber];
 }
 
 function registerMapping(objId, paragraphNumber, paragraphId) {
@@ -821,22 +891,24 @@ function updateHighlight(pageId, objIdList, paragraphIdentifier) {
 }
 
 function clearDatabase() {
+    console.log("??");
+
 	myDB.allDocs({
-	  include_docs: true,
-	  attachments: true
+	    include_docs: true,
+	    attachments: true
 	}).then(function (result) {
-	  console.log(result);
+	    console.log(result);
 
-      for(var i=0;i<result.rows.length;i++) {
-         var elem = result.rows[i].doc;
+	    for(var i=0;i<result.rows.length;i++) {
+		var elem = result.rows[i].doc;
 
-         myDB.remove(elem);
-      }
+		myDB.remove(elem);
+	    }
 
-      console.log("clear done!");
-      prepare();
+	    console.log("clear done!");
+	    prepare();
 	}).catch(function (err) {
-	  console.log(err);
+	    console.log(err);
 	});
 }
 
@@ -940,7 +1012,7 @@ function prepare() {
 
       $("#createSlideButton").on("click", function() {
         createSlide();
-        listSlides();
+        listSlides(null);
       });
 	
       function getPageInfo(pageID) {
@@ -954,20 +1026,50 @@ function prepare() {
         });
       }
 
+      $(document).on("registerMappings", function(e) {
+	  var p = e.detail;
+
+	  registerMapping(p.titleObj, 0, createObjId());
+
+	  for(var i=0;i<parseInt(p.paragraphNumber);i++) {
+	  	registerMapping(p.titleObj2, i, createObjId());
+	  }
+
+	  for(var i=0;i<p.sectionObjs.length;i++) {
+	  	registerMapping(p.sectionObjs[i], 0, createObjId());
+	  }
+
+      });
+
+      $(document).on("loadGslide", function(e) {
+    	$("#slideIframe").attr("src", "https://docs.google.com/presentation/d/1-ZGwchPm3T31PghHF5N0sSUU_Jd9BTwntcFf1ypb8ZY/edit");
+      });
+
+      $(document).on("addSectionHighlight", function(e) {
+	  var p = e.detail;
+
+	  console.log(p);
+
+          addHighlight(p.pageId, [p.objId], p.pageNumber, getParagraphIdentifier(p.objId, p.paragraphNumber), p.minIndex, p.maxIndex, 'yellow', true);
+	  // registerMapping(p.objId, 0, p.paragraphIdentifier);
+
+	  console.log(paragraphTable);
+      });
+
       $(document).on("getParagraphMapping", function(e) {
-              var p = e.detail;
+	  var p = e.detail;
 
-              console.log(p);
+	  console.log(p);
 
-              if(dataLoaded == true) {
-                issueEvent(document, "paragraphMappingData", {
-                    paragraphMapping: paragraphTable,
-                });
-              }
-              else {
-                console.log("!!$#@%%#$^%^!%$#%!@%^@%$!@#$");
-              }
-              });
+	  if(!dataLoaded) {
+	      console.log("!!$#@%%#$^%^!%$#%!@%^@%$!@#$");
+	  }
+
+	  issueEvent(document, "paragraphMappingData", {
+	      paragraphMapping: paragraphTable,
+	  });
+
+      });
 
       $(document).on("sendParagraphMappingData", function(e) {
           var p = e.detail;
@@ -1258,31 +1360,11 @@ function prepare() {
 	    initialSlideGenerationFlag = true;
 	}
 	else {
-	    console.log("WTF!@#$%^&^%$#$%^*&^%$#$%^&*(&^%$#$%^&*&^%$#");
+	    // already loaded. Let's remove
 
-	    removeAllSlides();
+	    console.log("Already loaded. Let's remove");
 
-	    gapi.client.slides.presentations.get({
-		presentationId: PRESENTATION_ID
-	    }).then(function(response) {
-		console.log(response);
-	    });
-	    /*
-	       var requests = [ {
-	       "deleteObject": {
-	       "objectId": slideInfo[0].slideID,
-	       },
-	       }];
-
-	       gapi.client.slides.presentations.batchUpdate({
-	       presentationId: PRESENTATION_ID,
-	       requests: requests
-	       }).then((createSlideResponse) => {
-	// successfully pasted the text
-
-	console.log("succeed!");
-	console.log(createSlideResponse);
-	});*/
+	    initialSlideCreationStart();
 	}
     });
 
@@ -1550,6 +1632,7 @@ function prepare() {
 
         if(highlightDictionary[pageID] != null && highlightDictionary[pageID][key] != null) {
             issueEvent(document, "removeAutoComplete", null);
+	    issueEvent(document, "PdfjsMoveScrollBar", highlightDictionary[pageID][key][0]);
         }
         else {
             issueEvent(document, "requestShowingAutoComplete", {
@@ -1756,7 +1839,7 @@ success: refSuccess,
 dataType: "json"
             });
 
-    loadData();
+    // loadData();
 }
 
 $(document).ready(function() {

@@ -6,8 +6,10 @@ var highlightedText = '';
 var popupDiv = null;
 var idCnt = 1;
 var mouseDown = 0;
+
 var paperTitle = null, paperAuthors = [];
-var paperTitleSegments = [], paperAuthorSegments = []
+var paperTitleSegments = [], paperAuthorSegments = [], paperTitleMappingProcessed = false;
+
 var jsonMetaData, xmlMetaData, pdffigureMetaData, jsonPdfStructure;
 var parsedListofReferences = [];
 var parsedReferences = [];
@@ -23,7 +25,9 @@ var sectionTextSegmentProcessed = {};
 var sentenceDatabase = {};
 var sentenceDatabaseLoaded = {};
 var appearedNumberBoxes = {};
-var sectionStructure = [], sectionStructureSegments = [];
+var slideInfo;
+var gslideLoaded = false;
+var sectionStructure = [], sectionStructureSegments = [], sectionStructureSegmentProcessed = [];
 
 
 var ignoreString = [
@@ -18708,6 +18712,21 @@ function enableDoc2Slide() {
          }
     });*/
 
+    $(document).on("PdfjsMoveScrollBar", function(e) {
+	var p = e.detail;
+
+	console.log(p);
+
+	var page = $("[data-page-number='" + p[0] + "'][class='page']");
+
+	console.log($(page));
+	console.log($(page).offset());
+	
+	var boundingClientRect = $(page)[0].getBoundingClientRect();
+
+	$("#viewerContainer").scrollTop(boundingClientRect.height * (p[0]-1));
+    });
+
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
         $(".textSelected").each(function() {
              $(this).removeClass("textSelected");
@@ -18719,6 +18738,31 @@ function enableDoc2Slide() {
 
              $(this).removeAttr("slideObjId");
         });
+    });
+
+    $(document).on("sendSlideInfoToPDF", function(e) {
+	var p = e.detail;
+
+	slideInfo = p;
+
+	console.log(slideInfo);
+
+	var slideObjIds = [];
+
+	for(var i=1;i<slideInfo.length;i++) {
+	    slideObjIds.push(slideInfo[i].slideObjs[0].slideObjId);
+	}
+
+	console.log(slideObjIds);
+
+	issueEvent(document, "registerMappings", {
+	    titleObj: slideInfo[0].slideObjs[0].slideObjId,
+	    titleObj2: slideInfo[0].slideObjs[1].slideObjId,
+	    paragraphNumber: paperAuthors.length,
+	    sectionObjs: slideObjIds
+	});
+
+      	PDFViewerApplication.open('paperData/paper/paper.pdf');
     });
 
     $(document).on('mouseenter', '.textElement', function() {
@@ -18817,28 +18861,35 @@ function enableDoc2Slide() {
     observer.observe(document, mutationConfig);
 
     myDBDB = new PouchDB('referenceLocation_DBDB');
+    /*
+    myDBDB.destroy().then(function() {
+	console.log("done!!!!");
+    });*/
 
     // console.log("hmM?");
-     // clearDatabase();
+    clearDatabase();
     loadData();
 }
 
 function clearDatabase() {
-    // console.log("??");
-	myDBDB.allDocs({
-	  include_docs: true,
-	  attachments: true
-	}).then(function (result) {
-	  console.log(result);
+    console.log("??");
 
-      for(var i=0;i<result.rows.length;i++) {
-         var elem = result.rows[i].doc;
+    myDBDB.allDocs({
+	include_docs: true,
+	attachments: true
+    }).then(function (result) {
+	console.log(result);
 
-         myDBDB.remove(elem);
-      }
-	}).catch(function (err) {
-	  console.log(err);
-	});
+	for(var i=0;i<result.rows.length;i++) {
+	    var elem = result.rows[i].doc;
+
+	    myDBDB.remove(elem);
+	}
+
+	console.log("clear done!");
+    }).catch(function (err) {
+	console.log(err);
+    });
 }
 
 function createObjId() {
@@ -18891,7 +18942,7 @@ function loadData() {
 	}).then(function (result) {
       var flag = false;
 	  console.log(result);
-
+/*
       for(var i=0;i<result.rows.length;i++) {
 	  isFirstSlides = false;
          var elem = result.rows[i].doc;
@@ -18904,7 +18955,7 @@ function loadData() {
             segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section, elem.sectionsentenceindex, elem.sectionsentencewordindex];
          }
       }
-
+*/
       // console.log(segmentDatabase);
 
       if(isFirstSlides) {
@@ -18918,10 +18969,11 @@ function loadData() {
 	      sections: sectionStructure
 	  });
       }
+      else {
+      	PDFViewerApplication.open('paperData/paper/paper.pdf');
+      }
 
 
-      // $("#pdfjsIframe").show();
-      //
       // PDFViewerApplication.open('paperData/paper/paper.pdf');
 
 	}).catch(function (err) {
@@ -19148,6 +19200,7 @@ function readTextFile(file, filetype, type)
                         if(jsonPdfStructure.sections[i].title != null) {
                             sectionStructure.push(jsonPdfStructure.sections[i].title);
 			    sectionStructureSegments.push('');
+			    sectionStructureSegmentProcessed.push(false);
                         }
                     }
                  
@@ -19377,8 +19430,9 @@ function printMessage(mutationList) {
                     }
                 }
 
-		console.log(sectionStructureSegments);
             }
+	    
+	    console.log(sectionStructureSegments);
 
             if(jsonPdfStructure.abstractText != null && (jsonPdfStructure.abstractText.page+1) == pageNumber) {
                 sections.push(jsonPdfStructure.abstractText);
@@ -19433,6 +19487,40 @@ function printMessage(mutationList) {
 		}
 
 		console.log(paperAuthorSegments);
+
+		if(isFirstSlides && !paperTitleMappingProcessed) {
+		    paperTitleMappingProcessed = true;
+		    var startSegmentID = $(paperTitleSegments[0]).attr("id");
+		    var endSegmentID = $(paperTitleSegments[paperTitleSegments.length-1]).attr("id");
+
+		    var startIndex = parseInt(startSegmentID.split('_')[2]);
+		    var endIndex = parseInt(endSegmentID.split('_')[2]);
+
+		    issueEvent(document, "addSectionHighlight", {
+			minIndex: startIndex,
+			maxIndex: endIndex,
+			pageNumber: 1,
+			paragraphNumber: 0,
+			pageId: slideInfo[0].slideID,
+			objId: slideInfo[0].slideObjs[0].slideObjId,
+		    });
+
+		    for(var i=0;i<paperAuthors.length;i++) {
+			var startSegmentID = $(paperAuthorSegments[i][0]).attr("id");
+			var endSegmentID = $(paperAuthorSegments[i][paperAuthorSegments[i].length-1]).attr("id");
+			var startIndex = parseInt(startSegmentID.split('_')[2]);
+			var endIndex = parseInt(endSegmentID.split('_')[2]);
+
+			issueEvent(document, "addSectionHighlight", {
+			    minIndex: startIndex,
+			    maxIndex: endIndex,
+			    pageNumber: 1,
+			    paragraphNumber: i,
+			    pageId: slideInfo[0].slideID,
+			    objId: slideInfo[0].slideObjs[1].slideObjId,
+			});
+		    }
+		}
 	    }
 
 
@@ -19575,7 +19663,7 @@ function printMessage(mutationList) {
                     }
 
                     if(sectionID == null) {
-                        $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
+                        // $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
                     }
 
 		    segmentDatabase[pageNumber][key] = [refID, sectionID];
@@ -19585,6 +19673,42 @@ function printMessage(mutationList) {
 		    
                 }
             }
+
+
+	    /* section header mapping if it's the first time */
+
+	    if(isFirstSlides) {
+		console.log("This is the first slide");
+
+		for(var i=0;i<sectionStructureSegments.length;i++) {
+		    if(sectionStructureSegments[i] != '' && sectionStructureSegmentProcessed[i] == false) {
+			sectionStructureSegmentProcessed[i] = true;
+
+			var minIndex = 987987987, maxIndex = -1;
+			var pageNumber = -1;
+
+			$("[sectionIndex='" + sectionStructureSegments[i] + "']").each(function(e) {
+			    minIndex = Math.min(minIndex, parseInt($(this).attr("id").split("_")[2]));
+			    maxIndex = Math.max(maxIndex, parseInt($(this).attr("id").split("_")[2]));
+
+			    pageNumber = parseInt($(this).attr("id").split("_")[1]);
+			});
+
+			console.log(sectionStructureSegments[i]);
+			console.log(minIndex + " " +  maxIndex + " " + slideInfo[i+1].slideObjs[0].slideObjId + " " + pageNumber);
+
+			issueEvent(document, "addSectionHighlight", {
+			    minIndex: minIndex,
+			    maxIndex: maxIndex,
+			    pageNumber: pageNumber,
+			    paragraphNumber: 0,
+			    pageId: slideInfo[i+1].slideID,
+			    objId: slideInfo[i+1].slideObjs[0].slideObjId,
+			});
+		    }
+		}
+	    }
+
 
             /* REFERENCES ANNOTATING */
             for(var j=0;j<refs.length;j++) {
@@ -19955,6 +20079,12 @@ function printMessage(mutationList) {
 	    }
 
     // console.log(prefixTree);
+
+	    if(!gslideLoaded) {
+		gslideLoaded = true;
+
+		issueEvent(document, "loadGslide", null);
+	    }
         } 
     }
 
