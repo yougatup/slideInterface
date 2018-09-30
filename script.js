@@ -473,7 +473,6 @@ function googleSlideReady() {
 }
 
 function initialSlideCreationStart() {
-    /*
    gapi.client.slides.presentations.get({
      presentationId: PRESENTATION_ID
    }).then(function(response) {
@@ -511,9 +510,9 @@ function initialSlideCreationStart() {
      }
    }).catch(function (err) {
      console.log(err);
-   });*/
+   });
 
- 	googleSlideReady();
+  // googleSlideReady();
 }
 
 function initialSlideCreation() {
@@ -705,7 +704,7 @@ function getParagraphIdentifier(objId, paragraphNumber) {
     return paragraphTable[objId][paragraphNumber];
 }
 
-function registerMapping(objId, paragraphNumber, paragraphId) {
+function registerMapping(objId, paragraphNumber, paragraphId, flag) {
     if(paragraphTable[objId] == null) {
         paragraphTable[objId] = [];
     }
@@ -719,6 +718,23 @@ function registerMapping(objId, paragraphNumber, paragraphId) {
     }
 
     paragraphTable[objId][paragraphNumber] = paragraphId;
+
+    if(flag) {
+	myDB.put({
+	    "_id": createObjId(),
+	    "type": "paragraphMapping",
+	    "objId": objId,
+	    "paragraphNumber": paragraphNumber,
+	    "paragraphId": paragraphId
+	}).then(function (response) {
+	    // handle response
+	    console.log("SUCCEED STORE DATA");
+
+	    // loadData();
+	}).catch(function (err) {
+	    console.log(err);
+	});
+    }
 }
 
 function removeMapping(mappingId) {
@@ -739,7 +755,7 @@ function loadData() {
          var elem = result.rows[i].doc;
 
          if(elem.type == 'paragraphMapping') {
-              registerMapping(elem.objId, elem.paragraphNumber, elem.paragraphId);
+              registerMapping(elem.objId, elem.paragraphNumber, elem.paragraphId, false);
 
               paragraphIDDictionary[elem.paragraphId] = true;
          }
@@ -893,22 +909,8 @@ function updateHighlight(pageId, objIdList, paragraphIdentifier) {
 function clearDatabase() {
     console.log("??");
 
-	myDB.allDocs({
-	    include_docs: true,
-	    attachments: true
-	}).then(function (result) {
-	    console.log(result);
-
-	    for(var i=0;i<result.rows.length;i++) {
-		var elem = result.rows[i].doc;
-
-		myDB.remove(elem);
-	    }
-
-	    console.log("clear done!");
-	    prepare();
-	}).catch(function (err) {
-	    console.log(err);
+	myDB.destroy().then(function() {
+	    console.log("done!!!!");
 	});
 }
 
@@ -1029,14 +1031,14 @@ function prepare() {
       $(document).on("registerMappings", function(e) {
 	  var p = e.detail;
 
-	  registerMapping(p.titleObj, 0, createObjId());
+	  registerMapping(p.titleObj, 0, createObjId(), true);
 
 	  for(var i=0;i<parseInt(p.paragraphNumber);i++) {
-	  	registerMapping(p.titleObj2, i, createObjId());
+	  	registerMapping(p.titleObj2, i, createObjId(), true);
 	  }
 
 	  for(var i=0;i<p.sectionObjs.length;i++) {
-	  	registerMapping(p.sectionObjs[i], 0, createObjId());
+	  	registerMapping(p.sectionObjs[i], 0, createObjId(), true);
 	  }
 
       });
@@ -1839,11 +1841,12 @@ success: refSuccess,
 dataType: "json"
             });
 
-    // loadData();
+    loadData();
 }
 
 $(document).ready(function() {
     myDB = new PouchDB('doc2slide_db')
-    clearDatabase();
+    //clearDatabase();
+    prepare();
 });
 

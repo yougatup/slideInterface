@@ -18867,28 +18867,15 @@ function enableDoc2Slide() {
     });*/
 
     // console.log("hmM?");
-    clearDatabase();
+    // clearDatabase();
     loadData();
 }
 
 function clearDatabase() {
     console.log("??");
 
-    myDBDB.allDocs({
-	include_docs: true,
-	attachments: true
-    }).then(function (result) {
-	console.log(result);
-
-	for(var i=0;i<result.rows.length;i++) {
-	    var elem = result.rows[i].doc;
-
-	    myDBDB.remove(elem);
-	}
-
-	console.log("clear done!");
-    }).catch(function (err) {
-	console.log(err);
+    myDBDB.destroy().then(function() {
+	console.log("done!!!!");
     });
 }
 
@@ -18942,7 +18929,7 @@ function loadData() {
 	}).then(function (result) {
       var flag = false;
 	  console.log(result);
-/*
+
       for(var i=0;i<result.rows.length;i++) {
 	  isFirstSlides = false;
          var elem = result.rows[i].doc;
@@ -18955,7 +18942,7 @@ function loadData() {
             segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section, elem.sectionsentenceindex, elem.sectionsentencewordindex];
          }
       }
-*/
+
       // console.log(segmentDatabase);
 
       if(isFirstSlides) {
@@ -19566,7 +19553,7 @@ function printMessage(mutationList) {
                             }
                         }
                         else {
-                            // $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
+                            $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
                         }
 
 			if(segmentDatabase[pageNumber][key][2] != null) {
