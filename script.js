@@ -45,7 +45,7 @@ function issueEvent(object, eventName, data) {
 
 function getKeyword(sentence, callback) {
     $.ajax({
-			type: 'POST',
+	    type: 'POST',
     	    url: 'http://localhost:3000',
     	    data: sentence,
     	    success:function(data){
@@ -705,6 +705,8 @@ function getParagraphIdentifier(objId, paragraphNumber) {
 }
 
 function registerMapping(objId, paragraphNumber, paragraphId, flag) {
+    console.log(objId, paragraphNumber, paragraphId, flag);
+
     if(paragraphTable[objId] == null) {
         paragraphTable[objId] = [];
     }
@@ -817,8 +819,9 @@ function removeHighlight(pageID, boxID, mappingIdentifiers, lastElemIndex) {
         }
     }
 
+    issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
+
     if(lastElemIndex > -1) {
-        console.log(lastElemIndex);
         for(var i=lastElemIndex;i<30;i++) {
           var key = "paragraph__" + boxID + '-' + i;
 
@@ -838,6 +841,7 @@ function addHighlight(pageId, objIdList, pageNumber, paragraphIdentifier, startI
 
     console.log(objIdList);
     console.log(paragraphIdentifier);
+    console.log(pageNumber, startIdx, endIdx);
 
     if(!(pageId in highlightDictionary)) {
         highlightDictionary[pageId] = {};
@@ -868,8 +872,6 @@ function updateHighlight(pageId, objIdList, paragraphIdentifier) {
     // console.log(paragraphNumber);
     // console.log(highlightDictionary);
 
-    issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
-
     if(!(pageId in highlightDictionary)) return;
 
     var clickedObjKey = null;
@@ -883,6 +885,38 @@ function updateHighlight(pageId, objIdList, paragraphIdentifier) {
        // console.log(highlightDictionary);
     }
 
+    var keys = Object.keys(highlightDictionary);
+
+    for(var i=0;i<keys.length;i++) {
+      var thisKey = keys[i];
+
+      var keys2 = Object.keys(highlightDictionary[thisKey]);
+
+      for(var j=0;j<keys2.length;j++) {
+	  var thisKey2 = keys2[j];
+
+	  for(var k=0;k<highlightDictionary[thisKey][thisKey2].length;k++) {
+	      var pageNumber = highlightDictionary[thisKey][thisKey2][k][0];
+	      var startIdx = highlightDictionary[thisKey][thisKey2][k][1];
+	      var endIdx = highlightDictionary[thisKey][thisKey2][k][2];
+	      var color = highlightDictionary[thisKey][thisKey2][k][3];
+
+	      if(thisKey == pageId && thisKey2 == clickedObjKey) __color = 'green';
+	      else if(thisKey == pageId) __color = 'blue';
+	      else __color = 'yellow';
+
+	      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
+		      {
+			  "pageNumber": pageNumber,
+			  "startIndex": startIdx,
+			  "endIndex": endIdx,
+			  "slideObjId": "editor-" + thisKey2,
+			  "color": __color,
+		      });
+	  }
+      }
+    }
+/*
     var keys = Object.keys(highlightDictionary[pageId]);
 
     for(var i=0;i<keys.length;i++) {
@@ -900,10 +934,11 @@ function updateHighlight(pageId, objIdList, paragraphIdentifier) {
                      "startIndex": startIdx,
                      "endIndex": endIdx,
                      "slideObjId": "editor-" + thisKey,
-                     "color": (thisKey == clickedObjKey ? 'blue' : color),
+                     "color": (thisKey == clickedObjKey ? 'green' : 'blue'),
           });
       }
     }
+    */
 }
 
 function clearDatabase() {
@@ -1077,29 +1112,7 @@ function prepare() {
           var p = e.detail;
           var id = "paragraph__" + p.objId + '-' + p.paragraphNumber;
 
-          myDB.get(id).then(function(doc){
-                  console.log(doc);
-                  doc.paragraphId = p.paragraphId;
-                  return myDB.put(doc);
-              }).catch(function(err) {
-                  // console.log(err);
-
-                myDB.put({
-                  "_id": id,
-                  "type": "paragraphMapping",
-                  "userId": userID,
-                  "documentId": documentID,
-                  "objId": p.objId,
-                  "paragraphNumber": p.paragraphNumber,
-                  "paragraphId": p.paragraphId,
-                }).then(function (response) {
-                  // handle response
-                    // console.log("SUCCEED STORE MAPPING DATA");
-                }).catch(function (err) {
-                  console.log(err);
-                });
-              });
-
+	  registerMapping(p.objId, p.paragraphNumber, p.paragraphId, true);
       });
 
       $(document).on("addText", function(e) {
@@ -1225,10 +1238,9 @@ function prepare() {
                      console.log(color);
                      addHighlight(curPageId, [objId], pageNumber, paragraphIdentifier, startIndex, endIndex, color, true);
 
-
                      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
                              {
-								"pageNumber": pageNumber,
+			        "pageNumber": pageNumber,
                                 "startIndex": startIndex,
                                 "endIndex": endIndex,
                                 "slideObjId": paragraphIdentifier,
@@ -1531,7 +1543,6 @@ function prepare() {
             addHighlight(autoCompletePageID, [objID], pageNumber, paragraphIdentifier, segmentStartIndex, segmentEndIndex, 'yellow', true);
         });
       }
-
     function putTextIntoParagraph(autoCompletePageID, objID, paragraphNumber, paragraphIdentifier, pageNumber, segmentStartIndex, segmentEndIndex, text) {
         console.log(text);
 
@@ -1633,7 +1644,7 @@ function prepare() {
         // console.log(highlightDictionary);
 
         if(highlightDictionary[pageID] != null && highlightDictionary[pageID][key] != null) {
-            issueEvent(document, "removeAutoComplete", null);
+            issueEvent(document, "__removeAutoComplete", null);
 	    issueEvent(document, "PdfjsMoveScrollBar", highlightDictionary[pageID][key][0]);
         }
         else {
@@ -1846,7 +1857,7 @@ dataType: "json"
 
 $(document).ready(function() {
     myDB = new PouchDB('doc2slide_db')
-    //clearDatabase();
+    // clearDatabase();
     prepare();
 });
 

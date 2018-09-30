@@ -10,6 +10,8 @@ var mouseDown = 0;
 var paperTitle = null, paperAuthors = [];
 var paperTitleSegments = [], paperAuthorSegments = [], paperTitleMappingProcessed = false;
 
+var popoverShown = false;
+
 var jsonMetaData, xmlMetaData, pdffigureMetaData, jsonPdfStructure;
 var parsedListofReferences = [];
 var parsedReferences = [];
@@ -17893,6 +17895,7 @@ function getSelectionHtml() {
                 $(firstDiv).attr("title", "Conversion options");
                 $(firstDiv).attr("data-content", "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>");
                 $(firstDiv).popover({"placement": "top", "html": true}).popover('show');
+		popoverShown = true;
             }
         }
       }
@@ -17908,11 +17911,13 @@ function getSelectionHtml() {
 
 function prevPopover() {
      $(popupDiv).popover('dispose');
+     popoverShown = false;
 
      $(popupDiv).attr("data-toggle", "popover");
      $(popupDiv).attr("title", "Conversion options");
      $(popupDiv).attr("data-content", "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>");
      $(popupDiv).popover({"placement": "top", "html": true}).popover('show');
+     popoverShown = true;
 }
 
 function sendTextAsTitle() {
@@ -17931,6 +17936,7 @@ function sendTextHighlighted() {
      console.log(highlightedText);
 
      $(popupDiv).popover('dispose');
+     popoverShown = false;
 
 /*
      $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Text conversion options");
@@ -17977,11 +17983,14 @@ function getImageQueryResult(queryString) {
 
 function figureItemClicked() {
     $(popupDiv).popover('dispose');
+    popoverShown = false;
 
     $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Figure search");
     $(popupDiv).attr("data-content", "<div id='popOverFigureContents'></div>");
 
     $(popupDiv).popover({"placement": "top", "html": true}).popover('show');
+    popoverShown = true;
+
     $(".popover").css("width", "800px");
     $(".popover").css("height", "800px");
 
@@ -18031,6 +18040,8 @@ function removePopovers() {
      $('[data-toggle="popover"]').each(function(index) {
              $(this).popover('dispose');
      });
+
+     popoverShown = false;
 }
 
 function removeParenthesis(myString) {
@@ -18059,6 +18070,8 @@ function removeParenthesis(myString) {
 function highlightString(pageNumber, start, end, color, slideObjId) {
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
         var elem = $('#textSegment_' + pageNumber + '_' + i);
+
+	$(elem).removeClass("textSelected textSelectedyellow textSelectedblue textSelectedred textSelectedgreen");
 
         $(elem).addClass("textSelected textSelected"+color);
         $(elem).attr("slideObjId", slideObjId);
@@ -18092,6 +18105,53 @@ function getSelectedString() {
         }
         else {
             result = result + $('#textSegment_' + curPageNumber + "_" + i).html();
+        }
+    }
+
+    console.log(referenceStringList);
+
+    if(referenceStringList.length != 0) {
+        result = result + ' (';
+
+        for(var i=0;i<referenceStringList.length;i++) {
+            result = (i == 0 ? result + referenceStringList[i] : result + '; ' + referenceStringList[i]);
+        }
+
+        result = result + ')';
+    }
+
+    result = result.replace(/  +/g, ' ');
+
+    return result;
+}
+
+function getSelectedStringSpecified(pageNumber, start, end) {
+    var result = '';
+    var referenceStringList = [];
+
+    for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
+        var elem = $('#textSegment_' + pageNumber + "_" + i);
+
+        if($(elem).hasClass("referred")) {
+            var referredList = getReferredList($(elem).attr('class').split(/\s+/));
+            console.log(referredList);
+
+            for(var j=0;j<referredList.length;j++) {
+                 console.log(referredList[j]);
+                 var refInfo = getRefInfo(referredList[j]);
+
+                 if(refInfo != null) {
+                    if(refInfo.authors != null) 
+                       referenceStringList.push(refInfo.authors[0] + " et al., " + refInfo.date);
+                 }
+            }
+        }
+        else if($(elem).hasClass("textSegmentLineBreak")) {
+            if(result.slice(-1) == '-') result = result.slice(0, -1);
+            else result = result + ' ';
+        }
+        else {
+            result = result + $('#textSegment_' + pageNumber + "_" + i).html();
         }
     }
 
@@ -18185,10 +18245,11 @@ function selectHighlightColor(color) {
 function prepareUI() {
     $("#toolbarViewerRight").prepend(
             "<button id='topBarCursorIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(0)> &nbsp; </button>"  +
-            "<button id='topBarYellowIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(1)> &nbsp; </button>"  +
+            "<button id='topBarYellowIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(1)> &nbsp; </button>" 
+    /*
             "<button id='topBarRedIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(2)> &nbsp; </button>"  +
             "<button id='topBarBlueIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(3)> &nbsp; </button>"  +
-            "<button id='topBarGreenIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(4)> &nbsp; </button>" 
+            "<button id='topBarGreenIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(4)> &nbsp; </button>" */
             );
 
     selectHighlightColor(0);
@@ -18274,30 +18335,32 @@ function enableDoc2Slide() {
         console.log($(elementMouseIsOver));
 
         if($(elementMouseIsOver).hasClass("textElement")) {
-            removePopovers();
+	    if(e.shiftKey) {
+		removePopovers();
 
-            curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
-            startElementInx = parseInt($(elementMouseIsOver).attr("id").split("_")[2]);
+		curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
+		startElementInx = parseInt($(elementMouseIsOver).attr("id").split("_")[2]);
 
-            var textHighlightedCnt = $(".textHighlighted").length;
-            var eachCount = 0;
+		var textHighlightedCnt = $(".textHighlighted").length;
+		var eachCount = 0;
 
-            if(textHighlightedCnt == 0) {
-                if(currentHighlightColor != 0)
-                    $(elementMouseIsOver).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
-            }
-            else {
-                $(".textHighlighted").each(function() {
-                     $(this).removeClass("textHighlighted " + getAllHighlightColors());
+		if(textHighlightedCnt == 0) {
+		    if(currentHighlightColor != 0)
+			$(elementMouseIsOver).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+		}
+		else {
+		    $(".textHighlighted").each(function() {
+			$(this).removeClass("textHighlighted " + getAllHighlightColors());
 
-                     eachCount++;
+			eachCount++;
 
-                     if(eachCount >= textHighlightedCnt) {
-                        if(currentHighlightColor != 0)
-                            $(elementMouseIsOver).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
-                     }
-                });
-            }
+			if(eachCount >= textHighlightedCnt) {
+			    if(currentHighlightColor != 0)
+				$(elementMouseIsOver).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+			}
+		    });
+		}
+	    }
         }
         else if($(elementMouseIsOver).hasClass("shorteningBoxSpan")) {
             shorteningBoxSpanStartInx = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
@@ -18326,130 +18389,157 @@ function enableDoc2Slide() {
         var x = e.clientX, y = e.clientY;
         var elementMouseIsOver = document.elementFromPoint(x, y);
 
-		var cumulativeOffset = function(element) {
-		    var top = 0, left = 0;
-		    do {
-		        top += element.offsetTop  || 0;
-		        left += element.offsetLeft || 0;
-		        element = element.offsetParent;
-		    } while(element);
-		
-		    return {
-		        top: top,
-		        left: left
-		    };
-		};
-
         console.log($(elementMouseIsOver));
 
-        if($(elementMouseIsOver).hasClass("textElement")) {
-            var textHighlightedCnt = $(".textHighlighted").length;
-            var endElement = elementMouseIsOver;
-            var eachCount = 0;
+	if(currentHighlightColor == 0) return;
 
-            if(currentHighlightColor != 0) {
-                $(".textHighlighted").each(function() {
-                        var classes = $(this).attr('class').split(/\s+/);
-                        var referredList = getReferredList(classes);
+	if(e.shiftKey) {
+	    if($(elementMouseIsOver).hasClass("textElement")) {
+		var textHighlightedCnt = $(".textHighlighted").length;
+		var endElement = elementMouseIsOver;
+		var eachCount = 0;
 
-                        $(this).removeClass("textHighlighted " + getAllHighlightColors());
+		if(currentHighlightColor != 0) {
+		    $(".textHighlighted").each(function() {
+			var classes = $(this).attr('class').split(/\s+/);
+			var referredList = getReferredList(classes);
 
-                        eachCount++;
+			$(this).removeClass("textHighlighted " + getAllHighlightColors());
 
-                        if(eachCount >= textHighlightedCnt) {
-                        endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+			eachCount++;
 
-                        for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-                        $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
-                        }
+			if(eachCount >= textHighlightedCnt) {
+			    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
 
-                        var contents = getSelectedString();
+			    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+				$("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+			    }
 
-                        console.log(contents);
+			    var contents = getSelectedString();
 
-                        // highlightedText = removeParenthesis(contents)
-                        highlightedText = contents;
+			    console.log(contents);
 
-                        console.log(highlightedText);
+			    // highlightedText = removeParenthesis(contents)
+			    highlightedText = contents;
 
-                        removePopovers();
+			    console.log(highlightedText);
 
-                        var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
-                        var content = '';
+			    removePopovers();
 
-                        popupDiv = firstDiv;
+			    var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
+			    var content = '';
 
-                        if(firstDiv != null) {
-                            highlightParts();
+			    popupDiv = firstDiv;
 
-                            if(startElementInx >= endElementInx) {
-                                $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
-                                    var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
-                                var referredList = getReferredList(classes);
+			    if(firstDiv != null) {
+				highlightParts();
 
-                                for(var i=0;i<referredList.length;i++) {
-                                    refInfo = getRefInfo(referredList[i]);
+				if(startElementInx >= endElementInx) {
+				    $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
+					var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
+				    var referredList = getReferredList(classes);
 
-                                    if(refInfo != null && refInfo.authors != null) {
-                                        content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
-                                        console.log(refInfo);
-                                    }
-                                }
-                            }
+				    for(var i=0;i<referredList.length;i++) {
+					refInfo = getRefInfo(referredList[i]);
 
-                            var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
+					if(refInfo != null && refInfo.authors != null) {
+					    content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
+					    console.log(refInfo);
+					}
+				    }
+				}
 
-                            if(content == ''){
-                                content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
-                                    content = content + "<hr />"
-                                    content = content + btnList;
-                            }
-                            else {
-                                content = content + "<br><hr />" + btnList;
-                            }
+				var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
 
-                            $(firstDiv).attr("data-toggle", "popover");
-                            $(firstDiv).attr("title", "Conversion options");
-                            $(firstDiv).attr("data-content", content);
+				if(content == ''){
+				    content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
+					content = content + "<hr />"
+					content = content + btnList;
+				}
+				else {
+				    content = content + "<br><hr />" + btnList;
+				}
 
-                            $(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
+				$(firstDiv).attr("data-toggle", "popover");
+				$(firstDiv).attr("title", "Conversion options");
+				$(firstDiv).attr("data-content", content);
 
-                            var tempHighlightedText = highlightedText + ' ';
-                            var temp = '';
+				$(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
+				popoverShown = true;
 
-                            shorteningBoxSpanCnt = 0;
+				var tempHighlightedText = highlightedText + ' ';
+				var temp = '';
 
-                            for(var i=0;i<tempHighlightedText.length;i++) {
-                                if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
-                                    if(temp != ''){
-                                        $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
-                                        shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
-                                    }
+				shorteningBoxSpanCnt = 0;
 
-                                    if(i < tempHighlightedText.length-1)  {
-                                        $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
+				for(var i=0;i<tempHighlightedText.length;i++) {
+				    if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
+					if(temp != ''){
+					    $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
+					    shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+					}
 
-                                        shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
-                                    }
+				    if(i < tempHighlightedText.length-1)  {
+					$("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
 
-                                    temp = '';
-                                }
-                                else {
-                                    temp = temp + tempHighlightedText[i];
-                                }
-                            }
-                            /*
-                               for(var i=0;i<textArray.length;i++) {
-                               $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
-                               if(i < textArray.length - 1)
-                               $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
-                               }
-                             */
-                        }
-                        }
-                });
-            }
-        }
+					shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+				    }
+
+				    temp = '';
+				}
+				    else {
+					temp = temp + tempHighlightedText[i];
+				    }
+				}
+				/*
+				   for(var i=0;i<textArray.length;i++) {
+				   $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
+				   if(i < textArray.length - 1)
+				   $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
+				   }
+				   */
+			    }
+			}
+		    });
+		}
+	    }
+	}
+	else {
+	    if($(elementMouseIsOver).hasClass("textElement")) {
+		var sectionKey = $(elementMouseIsOver).attr("sectionindex");
+		var sectionSentenceKey = $(elementMouseIsOver).attr("sectionsentenceindex");
+
+		console.log(sectionKey, sectionSentenceKey);
+
+		if(sentenceDatabase[sectionKey] != null && sentenceDatabase[sectionKey][sectionSentenceKey] != null) {
+		    var db = sentenceDatabase[sectionKey][sectionSentenceKey];
+
+		    var pageNumber = db[0];
+		    var startIndex = db[1];
+		    var endIndex = db[2];
+
+		    highlightedText = sectionDictionary[sectionKey][sectionSentenceKey];
+
+		    startElementInx = startIndex;
+		    endElementInx = endIndex;
+		    curPageNumber = pageNumber;
+
+		    console.log(highlightedText);
+		}
+
+
+		sendTextHighlighted();
+
+		/* 
+                "text": highlightedText,
+                "pageNumber": curPageNumber,
+                "startIndex": startElementInx,
+                "endIndex": endElementInx,
+                "color": highlightColors[currentHighlightColor]
+		*/
+
+	    }
+	}
     });
 
     $(document).on("PDFJS_HIGHLIGHT_TEXT", function(e) {
@@ -18765,37 +18855,72 @@ function enableDoc2Slide() {
       	PDFViewerApplication.open('paperData/paper/paper.pdf');
     });
 
-    $(document).on('mouseenter', '.textElement', function() {
-        if(mouseDown) {
-            if(currentHighlightColor != 0) {
-                var textHighlightedCnt = $(".textHighlighted").length;
-                var endElement = this;
-                var eachCount = 0;
+    $(document).on('mouseenter', '.textElement', function(e) {
+	if(currentHighlightColor == 0) return;
 
-                $(".textHighlighted").each(function() {
-                     $(this).removeClass("textHighlighted " + getAllHighlightColors());
+	if(e.shiftKey) {
+	    if(mouseDown) {
+		if(currentHighlightColor != 0) {
+		    var textHighlightedCnt = $(".textHighlighted").length;
+		    var endElement = this;
+		    var eachCount = 0;
 
-                     eachCount++;
+		    $(".textHighlighted").each(function() {
+			$(this).removeClass("textHighlighted " + getAllHighlightColors());
 
-                     if(eachCount >= textHighlightedCnt) {
-                        endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+			eachCount++;
 
-                        for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-                           $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
-                        }
-                     }
-                });
-            }
-        }
-        else if($(this).hasClass("textSelected")) {
-            var objId = $(this).attr("slideObjId");
+			if(eachCount >= textHighlightedCnt) {
+			    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
 
-            // highlightSlideObject(objId);
+			    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+				$("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+			    }
+			}
+		    });
+		}
+	    }
+	    else if($(this).hasClass("textSelected")) {
+		/*
+		var objId = $(this).attr("slideObjId");
 
-            issueEvent(document, "getSlideObjectForHighlight", {
-                    "slideObjId": objId
-            });
-        }
+		// highlightSlideObject(objId);
+
+		issueEvent(document, "getSlideObjectForHighlight", {
+		    "slideObjId": objId
+		});*/
+	    }
+	    else if(!popoverShown){
+		$(".textHighlighted").each(function() {
+		    $(this).removeClass("textHighlighted " + getAllHighlightColors());
+		});
+	    }
+	}
+	else if(!popoverShown) {
+	    console.log("here");
+
+	    $(".textHighlighted").each(function() {
+		$(this).removeClass("textHighlighted " + getAllHighlightColors());
+	    });
+
+	    var sectionKey = $(this).attr("sectionindex");
+	    var sectionSentenceKey = $(this).attr("sectionsentenceindex");
+
+	    if(sentenceDatabase[sectionKey] != null && sentenceDatabase[sectionKey][sectionSentenceKey] != null) {
+		console.log(sentenceDatabase[sectionKey][sectionSentenceKey]);
+
+		var pageNumber = sentenceDatabase[sectionKey][sectionSentenceKey][0];
+		var startIndex = sentenceDatabase[sectionKey][sectionSentenceKey][1];
+		var endIndex = sentenceDatabase[sectionKey][sectionSentenceKey][2];
+
+		for(var i=startIndex;i<=endIndex;i++) {
+		    var textSegmentID = "textSegment_" + pageNumber + "_" + i;
+
+		    $("#" + textSegmentID).addClass("textHighlighted textHighlightedYellow");
+		}
+	    }
+	}
+
      });
 
     $(document).on('mouseleave', '.textElement', function() {
