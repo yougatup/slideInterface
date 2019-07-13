@@ -1,0 +1,281 @@
+[{
+  "renderDpi": 150,
+  "name": "1",
+  "page": 0,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 327.84,
+    "y1": 422.88,
+    "x2": 557.28,
+    "y2": 596.16
+  },
+  "caption": "Figure 1. SketchPoint Interface. The left workspace is an electronic notebook and the storyboard on the right is for presentation authoring. The bar separating the two can be dragged to adjust the size of two workspaces. The stroke sketched from left to right will produce slides based on the selected notes and insert them into the storyboard.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure1-1.png",
+  "captionBoundary": {
+    "x1": 330.59991455078125,
+    "y1": 602.2560424804688,
+    "x2": 555.1436157226562,
+    "y2": 660.95849609375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "11",
+  "page": 5,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 84.96,
+    "y1": 73.92,
+    "x2": 270.24,
+    "y2": 207.35999999999999
+  },
+  "caption": "Figure 11. Line-based clusters organized in a title-list structure. Users can add strokes to an ink-based cluster, and they can drag recognized objects, e.g., words, as shown here. Three horizontal lines are hyperlinks to other slides.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure11-1.png",
+  "captionBoundary": {
+    "x1": 63.899391174316406,
+    "y1": 212.7959442138672,
+    "x2": 291.4591369628906,
+    "y2": 250.3798828125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "12",
+  "page": 5,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 348.96,
+    "y1": 73.92,
+    "x2": 534.24,
+    "y2": 204.48
+  },
+  "caption": "Figure 12. A structure patch containing a flowchart. Both the nodes and links of the flowchart can be adjusted. Users can switch between the recognized and original ink views of the patch by tapping with the pen.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure12-1.png",
+  "captionBoundary": {
+    "x1": 335.75970458984375,
+    "y1": 209.7959442138672,
+    "x2": 547.4496459960938,
+    "y2": 247.3790283203125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 1,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 66.72,
+    "y1": 528.96,
+    "x2": 279.36,
+    "y2": 670.0799999999999
+  },
+  "caption": "Figure 2. Idea processing requires iterative cycles of Idea Capture & Production followed by Idea Communication before eventual Idea Publication. The denser the hash marks indicates more people are involved in that step.",
+  "imageText": ["Idea", "Publication", "Idea", "Communication", "Idea", "Capture", "&", "Production", "Public", "feedback", "Gathering", "and", "Refinement", "of", "idea"],
+  "renderURL": "imageOutputpaper-Figure2-1.png",
+  "captionBoundary": {
+    "x1": 63.4202880859375,
+    "y1": 677.9158935546875,
+    "x2": 282.78265380859375,
+    "y2": 715.4990234375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "14",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 88.8,
+    "y1": 541.92,
+    "x2": 266.4,
+    "y2": 661.4399999999999
+  },
+  "caption": "Figure 14. Gestures used in SketchPoint. The Erase gesture is a dense squiggle drawn on top of other strokes. The Convert gesture (illustrated in figure 1) is determined by the start and end positions of the stroke.",
+  "imageText": ["Select", "Cross", "out", "List", "Insert", "a", "slide", "Erase."],
+  "renderURL": "imageOutputpaper-Figure14-1.png",
+  "captionBoundary": {
+    "x1": 64.74029541015625,
+    "y1": 675.5159301757812,
+    "x2": 292.0704040527344,
+    "y2": 713.0989990234375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "13",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 78.72,
+    "y1": 73.92,
+    "x2": 273.12,
+    "y2": 200.16
+  },
+  "caption": "Figure 13. Conducting an informal presentation. Annotations can be sketched on the slide during the presentation and later retrieved by time or slide.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure13-1.png",
+  "captionBoundary": {
+    "x1": 77.03941345214844,
+    "y1": 206.49595642089844,
+    "x2": 275.1834716796875,
+    "y2": 233.51934814453125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "4",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 67.67999999999999,
+    "y1": 592.8,
+    "x2": 285.59999999999997,
+    "y2": 690.24
+  },
+  "caption": "Figure 4. Common organizations used in informal presentations.",
+  "imageText": ["(a)", "title-list", "structure", "(b)", "title-graphic", "structure", "title", "item", "item", "item", "title"],
+  "renderURL": "imageOutputpaper-Figure4-1.png",
+  "captionBoundary": {
+    "x1": 80.70028686523438,
+    "y1": 697.4760131835938,
+    "x2": 272.5820617675781,
+    "y2": 713.9398803710938
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 82.08,
+    "y1": 73.92,
+    "x2": 530.88,
+    "y2": 350.4
+  },
+  "caption": "Figure 3. Whiteboards are often used to create and capture informal presentations.",
+  "imageText": ["Graphic", "or", "title-graphic", "Link", "List", "or", "title-list"],
+  "renderURL": "imageOutputpaper-Figure3-1.png",
+  "captionBoundary": {
+    "x1": 147.77972412109375,
+    "y1": 357.2760009765625,
+    "x2": 467.122802734375,
+    "y2": 363.17999267578125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "5",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 337.91999999999996,
+    "y1": 73.92,
+    "x2": 534.24,
+    "y2": 173.28
+  },
+  "caption": "Figure 5. SketchPoint users can specify an outline by explicit gesture, i.e., large brackets. The solid triangles or squares, called manipulators, are produced by SketchPoint based on structure parsing. These are used to manipulate the outline, e.g., collapsing or expanding it.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure5-1.png",
+  "captionBoundary": {
+    "x1": 324.66058349609375,
+    "y1": 179.49595642089844,
+    "x2": 547.6571044921875,
+    "y2": 227.63873291015625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "8",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 386.88,
+    "y1": 502.56,
+    "x2": 492.0,
+    "y2": 677.28
+  },
+  "caption": "Figure 8. SketchPoint automatically produces the presentation skeleton with hyperlinks to later slides from the outline of Figure 6.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure8-1.png",
+  "captionBoundary": {
+    "x1": 329.6402893066406,
+    "y1": 682.89599609375,
+    "x2": 548.8866577148438,
+    "y2": 709.9193725585938
+  }
+}, {
+  "renderDpi": 150,
+  "name": "6",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 372.96,
+    "y1": 237.6,
+    "x2": 496.32,
+    "y2": 338.4
+  },
+  "caption": "Figure 6. An outline can also be specified implicitly by indenting text as it is written.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure6-1.png",
+  "captionBoundary": {
+    "x1": 330.3595886230469,
+    "y1": 344.4360046386719,
+    "x2": 538.4151000976562,
+    "y2": 360.8996887207031
+  }
+}, {
+  "renderDpi": 150,
+  "name": "7",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 328.8,
+    "y1": 370.56,
+    "x2": 543.36,
+    "y2": 481.44
+  },
+  "caption": "Figure 7. Internal structure of the outline in Figure 6.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure7-1.png",
+  "captionBoundary": {
+    "x1": 333.0003356933594,
+    "y1": 487.2960205078125,
+    "x2": 538.7117919921875,
+    "y2": 493.20001220703125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "10",
+  "page": 4,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 339.84,
+    "y1": 462.71999999999997,
+    "x2": 528.0,
+    "y2": 647.04
+  },
+  "caption": "Figure 10. At the Overview level, only rough views of slides are shown (If a slide has a title, only the title is shown). In this figure, a user is dragging a page with a title “h”. The user can resequence or delete a slide by dragging and dropping it to a new position in the storyboard or away from the storyboard, respectively.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure10-1.png",
+  "captionBoundary": {
+    "x1": 329.9997253417969,
+    "y1": 652.8359985351562,
+    "x2": 538.7134399414062,
+    "y2": 711.5385131835938
+  }
+}, {
+  "renderDpi": 150,
+  "name": "9",
+  "page": 4,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 361.91999999999996,
+    "y1": 238.56,
+    "x2": 514.0799999999999,
+    "y2": 422.4
+  },
+  "caption": "Figure 9. Users can sketch hyperlinks from a cluster in a slide to a target slide to allow jumps during a presentation.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure9-1.png",
+  "captionBoundary": {
+    "x1": 325.140625,
+    "y1": 428.5559997558594,
+    "x2": 550.8580322265625,
+    "y2": 445.0196838378906
+  }
+}]

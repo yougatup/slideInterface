@@ -1,0 +1,706 @@
+"CHI 2018 Paper CHI 2018, April 21–26, 2018, Montréal, QC, Canada",,
+Understanding the Effect of In-Video Prompting on,,
+,Learners and Instructors,
+Hyungyu Shin1,Eun-Young Ko 1 Joseph Jay Williams2,Juho Kim1
+,"1KAIST, Daejeon, Republic of Korea",
+"2National University of Singapore, Singapore, Singapore",,
+"{hyungyu.sh, eunyoungko, juhokim}@kaist.ac.kr",,williams@comp.nus.edu.sg
+ABSTRACT,,
+"Online instructional videos are ubiquitous, but it is difficult",,
+for instructors to gauge learners’ experience and their level,,
+of comprehension or confusion regarding the lecture video.,,
+"Moreover, learners watching the videos may become disen-",,
+gaged or fail to reflect and construct their own understanding.,,
+This paper explores instructor and learner perceptions of in-,,
+video prompting where learners answer reflective questions,,
+while watching videos. We conducted two studies with crowd,,
+"workers to understand the effect of prompting in general, and",,
+the effect of different prompting strategies on both learners and,,
+instructors. Results show that some learners found prompts to,,
+"be useful checkpoints for reflection, while others found them",,Figure 1: An example of in-video prompting supported by a
+distracting. Instructors reported the collected responses to be,,video learning interface. Once the playhead reaches the red
+generally more specific than what they have usually collected.,,"bar, the prompt appears. This example asks a question about"
+"Also, different prompting strategies had different effects on",,the learner’s comprehension on a specific part of the video.
+the learning experience and the usefulness of responses as,,"While common, it’s not the only possible prompting type. This"
+feedback.,,"paper explores the design space of in-video prompting, and"
+,,presents how learners perceive the general idea of in-video
+,,prompting and different prompting designs.
+ACM Classification Keywords,,
+K.3.1. Computer Uses in Education,,
+Author Keywords,,Research shows that learner-generated data such as artifacts in
+Online Education; In-Video Prompting; MOOC; Reflection;,,discussion forums and learner surveys are important in moni-
+Feedback; Learners; Instructors.,,toring online courses [20] and preparing future iterations of
+,,the course [27]. Discussion forums and review websites are
+,,popular communication channels where learners share their
+INTRODUCTION,,comprehension and evaluation of the course. Through discus-
+"In online learning environments, an important task for instruc-",,"sion forums, instructors can check how learners understand"
+tors is to inspect learners’ level of comprehension and learning,,concepts and correct misconceptions by intervening in discus-
+experience regarding their lecture videos. Such inspection,,sions among learners [15]. Review websites address various
+enables instructors to gain insights into what to teach and how,,"dimensions of a course, such as the level of difficulty, quality"
+to teach in future instruction. Online learning platforms such,,"of contents, and instruction delivery. From these channels,"
+as Coursera and edX collect data from multiple sources and,,instructors can assess how learners perceive their material and
+provide dashboard interfaces for instructors to support this,,"course design, which could serve as useful feedback."
+"task. Available data streams include video clickstream logs,",,
+"responses to in-video quizzes, submissions for assignments",,"However, existing channels for collecting learners’ responses"
+"and exams, platform interaction data, discussion forum posts,",,and input are insufficient as a source of feedback. Posts on
+and course reviews.,,discussion forums could give insights into the level of com-
+,,"prehension, but only a small portion of learners participate in"
+Permission to make digital or hard copies of all or part of this work for personal or,,
+classroom use is granted without fee provided that copies are not made or distributed,,the discussion forums [3]. Posts on review websites capture
+for profit or commercial advantage and that copies bear this notice and the full citation,,"subjective learning experiences, but their granularity is at the"
+on the first page. Copyrights for components of this work owned by others than the,,"course level, which is not specific enough for instructors to"
+"author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or",,
+"republish, to post on servers or to redistribute to lists, requires prior specific permission",,identify which specific parts of the lecture need to be improved.
+and/or a fee. Request permissions from permissions@acm.org.,,
+"CHI 2018, April 21–26, 2018, Montreal, QC, Canada",,
+,,"To address these challenges, we investigate in-video prompt-"
+© 2018 Copyright held by the owner/author(s).,Publication rights licensed to ACM.,
+ISBN 978-1-4503-5620-6/18/04. . . $15.00,,ing as a channel for collecting learners’ feedback on lecture
+DOI: https://doi.org/10.1145/3173574.3173893,,
+Paper 319,,Page 1
+
+"CHI 2018 Paper CHI 2018, April 21–26, 2018, Montréal, QC, Canada",,
+"Table 1: The design space of in-video prompting questions, segmented by comprehension-experience orientation and the level of",,
+specificity. Comprehension-centered/Experience-centered questions ask about learners’ comprehension and learning experience.,,
+General/Specific questions determine whether the questions refer to lecture content or not. Table 1a shows example questions for,,
+"each prompting strategy, and Table 1b shows sample responses for each prompting condition.",,
+,Comprehension-centered,Experience-centered
+General,Describe what you have learned so far.,Describe something unsatisfying about the lecture so far.
+,,Describe something unsatisfying about calculating the standard
+,Describe how to calculate the standard deviation.,"deviation. You can consider how clear the explanation was,"
+Specific,You may assume you want to calculate the,
+,,"how fast the explanation was, and what information was"
+,standard deviation of five numbers.,
+,,missing.
+(a) Sample questions for each prompting condition.,,
+,Comprehension-centered,Experience-centered
+,Population standard deviation and how it is,
+General,calculated and what it means if it is a larger,The instructor’s handwriting is a little bad.
+,number.,
+,The standard deviation is calculated by taking the,Explanation of change from squared units to units was slightly
+Specific,square root of the variance.,too fast.
+"(b) Sample responses to each question presented in Table 1a, submitted by crowd workers in our study.",,
+videos while minimizing disruption in learners’ experience.,,"by the questions, we also need to understand how learners"
+In-video prompting presents reflective questions to learners,,perceive in-video prompting. To understand the effect of in-
+"while they are watching the video, in order to get specific",,"video prompting on both learners and instructors, we pose the"
+comments on their level of comprehension or learning expe-,,following research questions:
+rience. Figure 1 shows an example video learning interface,,
+,,• RQ1. What are learners’ perceptions of in-video prompting?
+equipped with in-video prompting. Unique properties of in-,,
+video prompting are that (1) all learners who watch the video,,
+"encounter the prompts, which is likely to yield a high response",,• RQ2. How do different in-video prompting strategies affect
+"rate, (2) prompting at an inopportune time might distract learn-",,the learning experience?
+"ers from learning, and (3) since the prompts are given in the",,• RQ3. How useful are learner responses to in-video prompts
+"middle of learners’ video watching session, they can ask spe-",,as feedback to instructors?
+cific questions to learners about the material just covered in,,
+the video.,,We focus on two dimensions in exploring the design space of
+,,in-video prompting: the type of information collected from
+Little research has investigated the effect of in-video prompt-,,"learners, and the specificity of the question. Table 1a illustrates"
+ing and its design space. A common type of in-video prompt-,,the combinations of these two dimensions (the comprehension-
+"ing is in-video quizzes [13], which are commonly multiple",,experience orientation and the level of specificity) with ex-
+choice questions or short-answer questions that pop up during,,ample questions. The comprehension-experience orienta-
+playback to maintain engagement and check understanding.,,tion represents which information learners need to submit:
+But the types of possible in-video prompts are not limited to,,comprehension-centered questions ask about the level of com-
+"quizzes. For example, they could allow a more detailed insight",,"prehension, while experience-centered questions ask about"
+"into learners’ interpretation of video content. Also, carefully",,the learning experience. The level of specificity represents
+"designed prompts could enhance learning, as research shows",,whether the questions refer to lecture content or not. General
+"that reflective prompts improve learning outcomes [5, 24].",,questions prompt for reflection on the lecture content without
+The design of questions used for prompting is important in,,"referencing specific context, whereas specific questions ask"
+determining the type and quality of comments that instruc-,,about the lecture content in detail. Table 1b shows examples
+tors collect and students’ learning experience. Depending,,of learner responses for each prompting questions.
+on what goal the instructor wishes to achieve with in-video,,"To answer the three research questions, we conducted a series"
+"prompting, questions could focus on either revealing learn-",,of studies and interviews. To understand the learners’ per-
+"ers’ level of comprehension, or understanding their subjective",,"spective, we conducted two studies with crowd workers to"
+learning experience. As the learning experience is affected,,explore both the effect of prompting in general (RQ1) and the
+Paper 319,,Page 2
+
+CHI 2018 Paper,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada",
+effect of different prompting strategies (RQ2). We collected,,it has limitation as feedback in that instructors cannot control,
+open-ended responses about the pros and cons of prompting,,"the types of learner comments. In this paper, we explore in-",
+from learners and found evidence that learners generally pre-,,"video prompting, which yields specific and controlled learner",
+fer comprehension-centered prompting to experience-centered,,"comments, as a channel for collecting more useful feedback.",
+prompting. We conducted interviews with instructors and,,,
+instructional designers to understand the usefulness of the,,Providing Feedback on Online Lecture Videos,
+collected learner responses as feedback on how the learners,,Vidcrit [17] supports asynchronous video review and sharing,
+"were doing, and if the course iterations needed change (RQ3).",,"feedback on videos, but is designed for reviewers who indicate",
+It turns out that collected responses are generally more spe-,,"problems or offer suggestions, not for learners. Mudslide [9]",
+cific than what they have usually collected. Instructors found,,attempts to collect spatially contextualized ‘muddy’ points in,
+responses to experience-centered questions provided more ac-,,"a video with specific explanations, which enables instructors",
+tionable feedback than those from comprehension-centered,,to figure out the common points of confusion with reasons.,
+questions. Instructional designers provided insights into de-,,"We see Mudslide as a case of in-video prompting, which uses",
+signing better prompting strategies.,,spatial anchoring at the end of the video as its prompt. In this,
+The contributions of this paper are as follows:,,"work, we aim to understand the effect of in-video prompting",
+,,broadly by exploring two specific design dimensions described,
+• Results from a study on learners’ perception of in-video,,in Table 1a.,
+"prompting, organized into a list of pros and cons.",,,
+• Results from a study on learners’ perception of four differ-,,Collecting Qualitative Comments in Offline Classroom,
+"ent prompting strategies, which span general versus specific,",,"In a physical classroom, classroom assessment techniques",
+and comprehension-centered versus experience-centered.,,(CAT) can be used to collect qualitative comments [8]. A tech-,
+,,"nique described in CAT is called One-Minute paper, which",
+• Results from interviews with instructors and instructional,,asks questions to students at the end of the class. The ques-,
+designers about the usefulness of learner responses as feed-,,tions include “What are the most important concepts you have,
+back on lecture videos.,,"learned today?”, and “What are the most confusing points?”.",
+,,It not only provides students with a better learning experi-,
+The rest of paper is organized as follows.,"First, we survey","ence [21] and higher scores on tests for some cases [7], but",
+"related work. Second, we present instructor perspectives on",,,
+,,also enables instructors to improve teaching with formative,
+"learner feedback on lectures. Third, we present two studies",,,
+,,evaluation. Our work seeks to explore the design space of in-,
+designed to understand how in-video prompting affects learn-,,,
+,,video prompting and to help design effective online prompts,
+"ers. Fourth, we report results from interviews with instructors",,,
+,,that provide benefits to both learners and instructors like the,
+and instructor designers to understand how learner responses,,,
+"to in-video prompting serve as feedback. Finally, we conclude",,One-Minute paper.,
+with the discussion of the effect of in-video prompting.,,,
+,,Effect of Reflective Prompting on Students,
+RELATED WORK,,Many studies have demonstrated that students can learn more,
+In-video prompting involves promoting learner reflection and,,when they are prompted to explain the meaning of what they,
+providing feedback to instructors. We briefly review prior re-,,"are learning. For example, prompting students to explain what",
+"search on these topics, such as methods for collecting feedback",,they understand from biology texts enhances the accuracy of,
+in both offline and online settings and the effect of reflective,,"students’ mental models about the circulatory system, arguably",
+prompting on learners.,,by helping students generate inferences and spot gaps in their,
+,,understanding [5]. Williams et al. [24] suggest that explaining,
+,,why a fact is true drives learners to discover underlying pat-,
+Utilizing Learners’ Interaction Data,,"terns or principles. On the other hand, there are many known",
+Existing online learning platforms have been collecting learn-,,,
+ers’ interaction data in both passive and active ways. Click-,,"cases where prompts to reflect do not enhance learning, and",
+stream and in-video dropout data are passively collected in that,,many more that are likely unreported. There are even cases,
+,,"where prompts to reflect can hurt learning, by causing learners",
+the data is naturally collected regardless of learners’ intention.,,,
+,,"to overgeneralize [25], ignore details [23], or rely on incor-",
+Although research has investigated presenting [11] and ana-,,,
+,,rect prior knowledge rather than observed facts [6].,These
+"lyzing passive data [4, 26], the conclusions that can be drawn",,,
+,,contradictory finding underscore the importance of exploring,
+are limited as feedback because users’ true intentions behind,,,
+,,the design space of how prompts to reflect impact learners.,
+traces are unknown. Forum posts are actively collected in that,,,
+,,"In particular, it is important to understand the strengths and",
+learners explicitly give the data to the platforms. Agrawal et al.,,,
+,,"weaknesses of different kinds of prompting strategies, and how",
+[1] and Wen et al. [22] have investigated analyzing discussion,,,
+forum posts to get meaningful insights from them. The granu-,,these are perceived by learners.,
+"larity of forum posts is at the course-level, which makes it hard",,"In the context of learning online video, platforms like Cours-",
+for instructors to figure out which specific parts of the lecture,,era allow instructors to insert in-video multiple choice quizzes.,
+need to be improved. Singh et al. [19] and Lee et al. [14],,While there have been studies of how they affects learners’,
+facilitate discussion among learners within a lecture video.,,"video navigation [13], there is less evidence about the causal",
+"Although instructors can get more specific learner comments,",,"impact on learning. In addition, in-video quizzes must be",
+Paper 319,,Page 3,
+
+CHI 2018 Paper,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada",
+"designed for the specific content of a video, while work on re-",,INVESTIGATING IN-VIDEO PROMPTING,
+flective prompting tends to use general prompts that aren’t tied,,We aim to understand the effect of in-video prompting on both,
+to specific content. There has been relatively little research,,learners and instructors. Our investigation is organized as fol-,
+"on the effects of adding general prompts to online videos, as",,lows. We first present two studies designed to understand the,
+existing work focuses more on different formats of video pre-,,effect of in-video prompting on learners. Then we consider the,
+"sentation [16]. In addition, educational studies of prompting",,usefulness of collected responses as feedback from instructors’,
+have focused more on learning outcomes than on learners’ sub-,,"view as well as from instructional designers’ view. Finally,",
+jective experiences. And as most studies of prompting have,,we wrap up the studies by discussing the complexity of con-,
+"been conducted in laboratory settings or physical classrooms,",,sidering viewpoints of multiple stakeholders when designing,
+little is known about what instructors might learn by being,,prompting strategies.,
+able to rapidly view students’ responses to prompts. In this,,,
+,,We conducted two studies to understand the effect of in-video,
+"work, we attempt to fill this gap in literature.",,prompting on learners. The first study explored learners’ qual-,
+,,itative experience of receiving in-video prompts. Learners,
+INSTRUCTOR PERSPECTIVES ON LEARNER FEEDBACK,,"watched videos with and without reflective prompts, and an-",
+ON LECTURE VIDEOS,,swered open-ended questions about their experience. The,
+To better understand instructors’ perspectives on learner feed-,,second study investigated how the type of prompt might influ-,
+"back on lecture videos, we conducted interviews with three in-",,"ence learners’ perceptions, comparing specific versus general",
+structors on campus and a web-based survey with five MOOC,,"prompts, and prompts focused on comprehension versus shar-",
+instructors outside of campus. We aimed to understand (1),,ing one’s experience with the instructor. The second study,
+what learner feedback instructors collect in their current prac-,,also collected quantitative measures of learners’ experience.,
+"tice, and (2) how useful learner feedback is in improving in-",,"Learners received prompts to reflect at the beginning, middle,",
+"struction. Among the interviewees, one instructor had experi-",,and end of each video. Prompts at the beginning could prepare,
+"ence in teaching a MOOC, and two instructors had experience",,"people for learning [18], prompts in the middle can maintain",
+in the flipped classroom method. Each interview session took,,"engagement with mid-video prompts, and prompts at the end",
+"about an hour, and the expected completion time for the survey",,help in review the material as a whole [10].,
+was 15 minutes. We summarize the main findings below.,,,
+,,STUDY 1. LEARNER PERCEPTIONS OF PROMPTING,
+Lack of learner comments. Instructors reported having few,,,
+,,The objective of the first study was to gain a qualitative un-,
+learner comments to work with in the first place.,In the in-,derstanding of how learners perceive the addition of in-video,
+"terview, the MOOC instructor said there were approximately",,,
+,,"reflective prompts, by asking them to compare learning expe-",
+10 questions per each video. The flipped classroom instruc-,,,
+tors pointed out that they do not typically ask for feedback,,riences with and without prompts.,
+because students tend to passively consume the lecture video,,,
+,,Study Design & Procedure,
+and they did not expect students to be willing to provide useful,,,
+,,"Participants watched two 8 minute lecture videos, one with",
+comments.,,"reflective prompts, and one without any prompts. The videos",
+Lack of Specificity. Even in the context where learners leave,,"were from Khan Academy, titled “Population standard devi-",
+"comments in forums, instructors responded that the comments",,"ation” and “Logarithms”, respectively. The order of presen-",
+are not specific enough to understand what causes the confu-,,tation and pairing of prompting condition with topic were,
+sion or problem. Two of the survey respondents expressed that,,counterbalanced.,
+they would like to receive comments specifically anchored to,,,
+,,"After participants watched both videos, they were asked open-",
+"the lecture content, such as “I would like more examples of this",,,
+,,"ended questions about their experience in either condition, to",
+"algorithm”, and “How do Japan and China name Japanese",,,
+,,"compare their experience with respect to enjoyment, cognitive",
+invasions of Korea described in slide 17?”. One of the survey,,1,
+,,"goal, and the perceived benefits to learning.",The prompting
+respondents expressed the need for feedback on her instruction,,,
+,,condition was counterbalanced over all four prompting strate-,
+"delivery, such as the tone of speech and sentence length.",,"gies (see Table 1a), which we discuss in more depth in Study",
+"From the interviews and the survey, we confirmed that there",,2.,
+"are few learner comments, and the comments are generally",,,
+not specific enough to be used as feedback. We anticipate that,,Participants,
+in-video prompting can address these challenges by actively,,"We recruited 100 participants (55 male, mean age 35.1) on",
+asking questions while learners are watching lecture videos.,,"Amazon Mechanical Turk, paying $6 for an hour-long study.",
+"However, it is hard for learners to provide a large amount of",,Recruiting crowd workers enables us to (1) obtain a more gen-,
+specific feedback. Questions that drive our investigation in,,eral population compared to lab settings and (2) have greater,
+in-video prompting include: How should we design questions,,experimental control to collect more extensive data about learn-,
+in prompts to collect useful feedback? What is the effect of,,"ing experiences, even though the motivation and background",
+prompting on the learning experience? How distracting is it for,,knowledge of crowd workers may be different from those of,
+learners to answer the questions while watching a video? How,,learners in online learning platforms.,
+useful are the collected responses as feedback to instructors?,,"1 We also administered pretests and posttests to measure learning, but",
+"To answer these questions, we conducted a series of studies.",,did not see significant effects.,
+Paper 319,,,Page 4
+
+"CHI 2018 Paper CHI 2018, April 21–26, 2018, Montréal, QC, Canada",,,,,,,,,
+Table 2: Main pros and cons of in-video prompting from learners’ perspective (number of mentions in parenthesis),,,,,,,,,
+,Pros,,Cons,,,,,,
+Concentration,- Enhance learners’ concentration. (42),,- Distract from the learning process. (59),,,,,,
+Learning process,"- Encourage reflection. (57)
+- Split the lecture into small pieces. (16)
+- Help grasp key concepts. (10)",,- Provide no feedback on responses. (9),,,,,,
+Emotional responses,- Provide interactivity. (5),,- Cause anxiety. (17),,,,,,
+Qualitative Results,,Distract from the learning process. Prompting might break,,,,,,,
+"To analyze participants’ comments, we first separated com-",,the flow of concentration. Forcing learners to respond to the,,,,,,,
+ments consisting of more than one point into multiple com-,,questions even if they are following the lecture very well can,,,,,,,
+ments so that each comment contains only one idea. We then,,"lead to a negative learning experience. A participant noted,",,,,,,,
+categorized each comment into two groups based on whether it,,“it might cause you to lose focus on the material in the video,,,,,,,
+"was positive or negative. Out of 231 comments, 130 were pos-",,by breaking your chain of thought because you are basically,,,,,,,
+"itive and 101 were negative. For comments in each group, one",,being interrupted.”,,,,,,,
+researcher conducted open coding to categorize each response.,,,,,,,,,
+"Afterwards, another researcher verified the coded labels and re-",,Provide no feedback on responses. Learners wish to receive,,,,,,,
+solved conflicts with discussion. Table 2 describes the reported,,feedback on their response to make sure that they properly re-,,,,,,,
+,,"spond to the questions. Without feedback, learners may be less",,,,,,,
+pros and cons of in-video prompting from learners’ perspec-,,,,,,,,,
+,,"motivated to respond to prompts. A participant commented,",,,,,,,
+tive. The extracted categories of participants’ comments are,,,,,,,,,
+,,“there is no feedback so even if I answer the prompt question,,,,,,,
+as follows:,,,,,,,,,
+,,"and I’m confident, I may be wrong.”",,,,,,,
+Enhance learners’ concentration.,Prompting encourages,,,,,,,,
+,,Cause anxiety. Some learners feel worried about giving in-,,,,,,,
+learners to pay more attention to the video.,Responding to,,,,,,,,
+,,appropriate or inadequate responses. They feel the responses,,,,,,,
+"the question ensures that learners are on the right track, which",,,,,,,,,
+,,"are being monitored, which makes learners frustrated when",,,,,,,
+"makes learners more engaged. A participant mentioned, “the",,,,,,,,,
+,,they struggle to come up with an appropriate response: “I felt,,,,,,,
+prompts gave me a good attention check to make sure I under-,,,,,,,,,
+,,frustrated that it appeared difficult for me to explain what I,,,,,,,
+stood what was being discussed.”,,,,,,,,,
+,,learned thus far.”,,,,,,,
+Encourage reflection. Prompting asks learners to reflect what,,,,,,,,,
+"they have learned. It reinforces the knowledge, which leads",,STUDY,2.,EFFECTS,OF,DIFFERENT,PROMPTING,,
+"to a better learning experience. A participant wrote, “it helps",,,,,,,,,
+you think about what you know and have learned through the,,STRATEGIES,,,,,,,
+,,Study 2 investigated how different kinds of prompts might be,,,,,,,
+"video, making you actively recall and cement your learning",,,,,,,,,
+,,"perceived by learners, and collected quantitative measures of",,,,,,,
+right away.”,,how learners perceived prompts.,,,,,,,
+Split the lecture into small pieces.,Prompting splits the,,,,,,,,
+knowledge to digest in a more fine-grained way.,By forc-,We,investigated,two,dimensions,of,prompting,questions:,
+,,the comprehension-experience orientation and the level of,,,,,,,
+"ing learners to stop and think at checkpoints, the amount of",,,,,,,,,
+,,specificity.,,The comprehension-experience orientation rep-,,,,,
+"knowledge to absorb at once is reduced: “With prompts, the",,,,,,,,,
+,,resents,which,information,the,question,seeks,to,reveal.
+learning is broken down into stages and you have to think and,,,,,,,,,
+,,Comprehension-centered questions (“Describe what you have,,,,,,,
+"reiterate what you’ve learned so far, which makes it easier to",,,,,,,,,
+,,learned so far.”) asked learners to reflect on the contents of,,,,,,,
+remember.”,,the lecture and their current comprehension. These questions,,,,,,,
+Help grasp key concepts. Prompting helps learners to grasp,,"promote self-explanation in learners, which previous research",,,,,,,
+the most important concepts of the lecture. Participants per-,,"suggests could be beneficial for their learning [24, 5]. Re-",,,,,,,
+"ceived the moment of prompting as important checkpoints,",,sponses to comprehension-centered questions allow instruc-,,,,,,,
+which makes learners think about the most important concepts,,tors to identify how well learners are following the lecture.,,,,,,,
+"they have learned so far. A participant pointed out, “Having a",,Experience-centered questions (“Describe something unsatis-,,,,,,,
+prompt helps to indicate exactly what the key concept was so,,fying about the lecture so far.”) reveal learning experiences,,,,,,,
+you can take a moment and decide if you fully understand it.”,,during the lecture video. By directly asking what makes learn-,,,,,,,
+,,"ers unsatisfied, instructors can collect actionable feedback on",,,,,,,
+Provide interactivity.,Prompting is an interactive activity.,,,,,,,,
+Participants said they enjoyed the interactivity and felt they,,their instruction.,,,,,,,
+have learned more. This sentiment is echoed by a participant:,,The level of specificity determines whether the prompting,,,,,,,
+“I think prompts make videos more hands-on and interactive,,question refers directly to lecture content. General questions,,,,,,,
+and deliver a more educational experience.”,,(“Describe something unsatisfying about the lecture so far.”),,,,,,,
+,,do not refer to the content of the lecture.,,,,,These questions,,
+Paper 319,,,,,,,,Page 5,
+
+CHI 2018 Paper,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada",
+could be shown anywhere in a given video. Specific questions,Study Procedure,
+(“Describe how to calculate a mean.”) refer to concepts in,"Participants were asked to (1) take a pretest with six problems,",
+the lecture video. Instructors should consider what to ask at,"(2) watch a video with prompting, (3) respond to a survey",
+"specific moments, which requires more effort for instructors","related to the video watching experience, and then (4) take",
+to build the prompting questions. Table 1a shows the design,a posttest. The session ended with a final survey asking for,
+"space of prompting questions that we cover, and examples of",participants’ general experiences in free-form text.,
+each.,,
+"In addition, we investigated whether perceptions of prompt",Results,
+types might vary based on learners’ prior knowledge of the,Different prompting strategies had different effects on partic-,
+video content.,ipants’ perceived learning experience. As shown in Figure,
+,"2, learners rated comprehension-centered prompts as more",
+We investigated the following research questions.,"helpful than experience-centered prompts on average, as mea-",
+• RQ2a.,sured by judgments on the positive questions Q1-Q4 (2-way,
+How does the effect of in-video prompting vary,"ANOVA, F(1, 196) = 10.04 and p < 0.005, F(1, 196) = 33.11",
+according to the kind of prompting strategy?,"and p < 0.0001, F(1, 196) = 33.00 and p < 0.0001, and F(1,",
+,"196) = 16.67 and p < 0.0001 for Q1, Q2, Q3, and Q4 respec-",
+• RQ2b. How do learners with different levels of achievement,tively). Participants in the comprehension-centered conditions,
+perceive each prompting strategy?,"mentioned that they could take a breather, have time to reflect",
+,"on what has been learned, and assess their understanding on",
+,"their own. One participant remarked, “It was a way to help",
+Study Design,ensure I understood the whole process by breaking it down,
+"The study used a between-subjects design, where each student","with questions to answer, instead of trying to absorb it all at",
+was randomly assigned to one of the four prompting strategies,once and remember everything after.”,
+described in Table 1a. Each participant watched a lecture video,,
+from Khan Academy on “Population standard deviation”. We,Participants rated the experience-centered prompts as more,
+"gave prompts at the beginning, middle, and end of the video.","distracting (2-way ANOVA, F(1,196)=17.13 and p<0.0001",
+We denote each condition using four-letter codes; Co-Ge for,for Q5). Participants in the experience-centered conditions,
+"the comprehension-centered and general condition, Co-Sp for",mentioned that it was hard to learn from the video while at the,
+"comprehension and specific, Ex-Ge for experience and general,",same time trying to give comments on how the instructor could,
+and Ex-Sp for experience and specific.,"improve the video. One participant remarked, “Prompting had",
+,me thinking about many things at once.,This caused me to
+"To understand the differences between prompting strategies,","lose focus.” However, there is also a bright side of experience-",
+we included quantitative measures of learners’ experiences.,"centered prompts, especially regarding the learners’ emotional",
+"After watching the video, learners were asked to rate their",experience. Participants said that they liked being able to leave,
+agreement on a seven points scale with six statements about,a subjective comment to the instructor and it made them feel,
+"their experience. For example, a learner would be asked to rate",involved in the lecture.,
+on a scale from 1 (Strongly Disagree) to 7 (Strongly Agree),,
+whether “Prompting helped me to pay attention to the lecture”,Although participants could take advantage of comprehension-,
+(Q1). The six statements about experience with prompting are,"centered prompts in their learning, being asked about the con-",
+listed in Figure 2. These asked about the extent to which learn-,tents of the lecture in depth irritated some learners. On the,
+ers agreed or disagreed that prompting helped them pay atten-,"other hand, experience-centered prompts ask about partici-",
+"tion to the video, understand, grasp the most important ideas,",pants’ subjective opinion regarding the lecture and therefore,
+"was enjoyable, interrupted their learning process, or made",it can be thought to be less pressure for learners. Our survey,
+them worried about giving inappropriate responses. These,"results show that, however, there is no such difference between",
+statements were chosen by using the qualitative dimensions,comprehension-centered and experience-centered prompting,
+identified in Study 1.,strategies (Q6).,
+Participants also answered two questions about their cognitive,The effect of learners’ prior knowledge,
+load while watching the video [12]. They rated on a sliding,The qualitative comments suggest that learners differ in their,
+scale from 0 to 100: “How much mental demand did you,opinions about the value of prompting.,To understand the
+experience watching this lecture?” and “How much effort did,effect of each prompting strategy for learners with unequal,
+it take you to watch this lecture?”.,"prior knowledge, we divided each group into two subgroups",
+,based on participants’ pretest scores and discovered how the,
+,experience differed for each subgroup. As the cut-off point,
+Participants,"to separate the two groups we used a score of 2 out of 6, the",
+"We recruited 200 participants on Amazon Mechanical Turk,",median pretest score of all participants.,Table 3 shows the
+paying $3.5 for a 35-minute long study. Participants’ mean,,
+age was 36.8 (SD = 11.5; min = 20; max = 72) with 102 male.,number of participants in each subgroup.,
+"For each subgroup by prompting strategy (Co-Sp, Co-Ge, Ex-",Figure 3a illustrates self-reported cognitive load of each group,
+"Sp, Ex-Ge), the mean ages were 39.2, 36.1, 37.3, and 36.6,",for four different prompting conditions. The high-score group,
+respectively.,perceived significantly less cognitive load under the general,
+Paper 319,,Page 6
+
+CHI 2018 Paper,,,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada",,,,,
+Figure 2: Participants’ self-reported learning experiences captured by responses to 6 survey questions (Q1-Q6). Bar graphs show,,,,,,,,,
+the responses to each question for each of the four prompting strategies. Questions on the left column (Q1-Q4) address positive,,,,,,,,,
+experiences while questions on the right column (Q5-Q6) address negative experiences. Error bar: +/- 1 standard error of the,,,,,,,,,
+mean.,,,,,,,,,
+Table 3: The number of participants in each group and sub-,,,,"However, study data collected from this experiment could pro-",,,,,
+"group. Co-Sp: comprehension-centered and specific, Co-",,,,"vide alternative explanations for this result. First, a number of",,,,,
+"Ge: comprehension-centered and general, Ex-Sp: Experience-",,,,participants in the low-score group provided simple responses,,,,,
+"centered and specific, and Ex-Ge: experience-centered and",,,,"under general prompting conditions (e.g., “population standard",,,,,
+general. High: participants with high pretest scores; Low:,,,,deviation” for the prompt “Describe what you have learned so,,,,,
+participants with low pretest scores.,,,,"far”), leaving less chance of being wrong. In addition, with",,,,,
+,,,,"the experience-general prompts, many high-score participants",,,,,
+,Total,High,Low,mentioned it was hard for them to find unsatisfying points in,,,,,
+Co-Sp,50,22,28,"the lecture, increasing their anxiety regarding their responses.",,,,,
+Co-Ge,50,21,29,"The result indicates that the high-score group and the low-
+score group perceived a different level of cognitive load and",,,,,
+Ex-Sp,50,23,27,anxiety. The low-score group reported higher cognitive load,,,,,
+Ex-Ge,50,31,19,"than the high-score group and the differences were especially
+large for general prompting conditions. Regarding the level of",,,,,
+,,,,"anxiety, the low and high-score group behaved differently for",,,,,
+,,,,the specific and general conditions.,,,,,
+"prompting conditions (ANOVA, p<0.05 for both conditions).",,,,,,,,,
+This result corresponds to the findings from earlier research,,,,,,,,,
+[2] that high-performing students are good at providing an,,,,LEARNER,RESPONSES,AS,FEEDBACK,TO,INSTRUC-
+answer to generic questions.,,,,,,,,,
+,,,,TORS,,,,,
+Figure 3b shows how each subgroup perceived anxiety for,,,,We conducted a series of interviews with instructors and in-,,,,,
+different prompting conditions. The result indicates that the,,,,structional designers to understand the usefulness of learner,,,,,
+low-score group felt more anxiety than the high-score group,,,,responses as feedback. Instructors and instructional designers,,,,,
+under specific prompting condition and the opposite pattern is,,,,"are important stakeholders in in-video prompting, as they are",,,,,
+observed for the general prompting conditions. This outcome,,,,the ones who author the prompts and potentially benefit from,,,,,
+may seem incongruous with the previous finding that the high-,,,,the collected learner responses. This section presents results,,,,,
+score group exhibit lower cognitive load with general prompts.,,,,from the interview study with instructors.,,,,,
+Paper 319,,,,,,,,,Page 7
+
+CHI 2018 Paper,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada",
+"(a) Self-reported cognitive load, out of 100. *: the difference between low",(b) Average scores for Q6: Prompting made me worried about giving inap-,
+and high-score group is significant with p<0.05.,propriate responses. *: the difference between low and high-score group is,
+,significant with p<0.05.,
+Figure 3: Perceived experience for Low and High group in each prompting condition. (a) The low-score group reported higher,,
+cognitive load than the high-score group when they encountered general prompts. (b) The low-score group reported higher anxiety,,
+than the high-score group when they were given a comprehension-centered and specific prompt. Error bar:+/-1 standard error of,,
+the mean.,,
+Procedure,,"(e.g., “The instructor’s handwriting is a little bad”) tend to"
+We had 1-hour long interviews with instructors asking how,,"point out the problems on instructional delivery, but the re-"
+useful the collected responses to in-video prompts from learn-,,"sponses from comprehension-centered questions (e.g., “The"
+ers might be as feedback. We recruited 3 instructors who had,,standard deviation is calculated by taking the square root
+experience in publishing lecture videos. Two instructors had,,of the variance.”) describe their comprehension. Instructors
+"published 8 hours and 10 hours of lecture video in total, re-",,were not sure whether the responses from comprehension-
+spectively. The other instructor had led a flipped classroom,,centered questions reflect learners’ true level of comprehen-
+"for 8 semesters. After explaining the prompting strategies,",,"sion. An instructor noted, “If learners’ responses are not"
+we presented the learner responses as well as the correspond-,,"good in comprehension-centered questions, it is hard to know"
+ing questions collected in Study 2 and asked how they would,,"whether the learner doesn’t know, or the learner is just tired.”"
+make use of the responses as feedback. Instructors explored,,
+"the learner responses for 10-15 minutes. After the exploration,",,Instructors had different opinions on which questions help
+,,learning more. Two instructors said asking comprehension-
+we asked questions about using the responses as feedback.,,
+,,centered questions is more helpful for learners because they
+,,promote reflection on the lecture while describing learning
+Results,,experience is not quite relevant to learning. One of the instruc-
+Specificity of learners’ responses.,Instructors found that,"tors said, “I think learners feel like unnecessarily respond-"
+the collected responses are helpful as feedback because the,,"ing to experience-centered questions, and feel like checking"
+responses were specific. They noted that asking questions,,their understanding when they respond to comprehension-
+in the middle of a video yields more specific responses. An,,"centered questions.” However, another instructor mentioned"
+"instructor remarked, “If instructors ask for comments at the",,experience-centered questions help learning more: “I think
+"end of the lecture, it is hard for learners to give comments on",,experience-centered responses are going to inherently be more
+specific points of the lecture because they are likely to have,,specific than comprehension-centered. [ . . . ]When we are talk-
+forgotten details.”,,"ing about learning a particular topic, it’s just going to be"
+Needs for organizing learners’ comments. Instructors ex-,,way more useful to talk about the thing that we can both see
+"pressed needs for clustering the responses, based on criteria",,clearly between the two of us [ . . . ]. That’s going to be a more
+"such as whether the comments are about visuals, pronuncia-",,productive discussion than what’s going on inside my head.”
+"tion, or lack of information. An instructor said, “I thought it",,Specific vs. General. Instructors observed that different
+would be easier to read the comments if they were organized.”,,levels of specificity in prompts result in different types of
+Comprehension-centered vs. Experience-centered. In-,,"feedback. For experience-centered questions, instructors said"
+structors responded that experience-centered questions yield,,responses to general questions could serve as feedback on
+more actionable feedback than comprehension-centered ques-,,"instruction delivery (e.g., “It was good, just a little slow”),"
+tions. The responses from experience-centered questions,,"such as the speed of speech, but responses to specific questions"
+Paper 319,,Page 8
+
+CHI 2018 Paper,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada"
+"could serve as content-related feedback (e.g., “if the entire",,prompting that involve handling trade-offs and making design
+"equation was done in meters, I would have a better and eas-",,decisions.
+"ier understanding of how it works”), such as the clarity of a",,
+particular explanation.,,Trade-off Between Learners and Instructors
+,,One observation from our studies was that learners and instruc-
+INSTRUCTIONAL DESIGNERS’ VIEW ON RESPONSES,,tors might prefer different prompting strategies for different
+To understand the usefulness of the responses as feedback from,,reason. Learners perceive comprehension-centered prompt-
+"an educational point of view, we interviewed instructional",,"ing as enjoyable, less interrupting, and helping them learn."
+designers.,,"However, instructors generally found that the responses from"
+,,"experience-centered questions to be more actionable, which"
+Procedure,,makes it easy for instructors to figure out the points that need
+"Similar to the interview study with instructors, we presented",,"to be improved. With this trade-off in mind, prompting strate-"
+the responses as well as corresponding questions. Then we,,gies should be carefully designed to maximize the benefits for
+explained the prompting strategies and the instructional de-,,both stakeholders.
+signers explored the responses. We conducted 1-hour long,,
+,,One way to address the trade-off is to design a hybrid prompt-
+interviews with three instructional designers who are manag-,,"ing strategy, in which multiple prompt types are presented to a"
+"ing online courses on campus, including those on Coursera.",,"learner while watching a video, as suggested by instructional"
+,,"designers we interviewed. However, several issues could arise."
+Results,,It might be the case that drawbacks of both prompt types could
+Instructional designers commented that the responses could,,
+,,"be observed. Moreover, presenting both prompt types makes"
+"serve as feedback to instructors, identified problems in our",,
+,,learners respond to two different types of questions in a lecture
+"current prompts, and suggested ways to improve the design of",,
+,,"video, which may increase their cognitive load. Further study"
+prompting strategies.,,is needed to determine whether and how this hybrid prompting
+Feedback to instructors. Instructional designers said that the,,strategy helps learners.
+"responses are useful as self-checklists for instructors, but to",,
+"improve the lecture, the responses should be coupled with",,Trade-off Between Questions and Responses for Instruc-
+instructional design components that the instructor should,,tors
+"consider in the lecture. Also, they remarked that high-level",,Designing specific prompts is more expensive than designing
+feedback such as comments on learning objectives and organi-,,general prompts because specific prompts needs to be cou-
+zation of presentations is more useful for instructors.,,"pled with lecture content. For the responses, however, specific"
+,,"prompting tends to yield more specific responses, which in-"
+Importance of specific questions. Upon inspecting the cur-,,structors might find useful. Instructors should choose the level
+"rent question prompts, instructional designers identified issues",,
+,,"of specificity of the questions, but it is not a straightforward"
+in the questions.,They mentioned some questions were not,
+,,"task. Also, specific questions could yield responses that are too"
+concrete enough and too superficial to diagnose issues with the,,
+lecture. Designers suggested including more specific questions,,"narrow, which could compromise the diversity of responses."
+such as “Is the pitch of the instructor’s voice appropriate?”.,,It is important to balance the level of specificity to get di-
+,,verse but insightful responses. One way to meet the balance
+Mixing multiple prompting strategies. Instructional design-,,"is to design multiple specific questions. For example, we cur-"
+ers suggested using multiple prompting strategies even in a,,"rently consider content-related specificity, but we also can"
+single video. They said asking experience-centered questions,,
+,,"consider instructional delivery-related specificity, such as the"
+multiple times during a single lecture video could distract,,
+,,"pace of lecture, the tone of voice, and the speed of speech. By"
+learners and damage the learning experience.,Presenting,
+,,considering multiple types of specificity in parallel in their
+experience-centered questions at the end and comprehension-,,
+,,"prompt design, instructors could potentially receive diverse"
+centered questions in the middle of the video could be effective,,
+for both learners and instructors.,,and specific responses.
+,,Learner Feedback from Multiple Points of View
+DISCUSSION,,
+,,"Through the interviews, we observed that the meaning of use-"
+"In this research, we attempt to understand the effect of in-",,
+,,ful feedback is different between instructors and instructional
+"video prompting, an under-explored yet complex topic.",In-,
+,,designers. Instructors found it useful to get actionable feed-
+video prompting has potential to make video-based learning,,
+,,"back, whereas instructional designers found it useful to get"
+"more interactive and even increase learning, while provid-",,
+ing instructors with valuable data. Our goal is not to show,,more high-level feedback.
+that a particular prompting strategy is better than others or to,,This leads us to think about what good feedback is for in-
+conclude that prompting should be designed in a particular,,structors and instructional designers. We demonstrated how
+"way for all videos, but rather (1) to contribute an in-depth",,"collecting actionable comments from learners is possible, but"
+understanding of differing perspectives on in-video prompting,,"making sense of them, finding patterns in them, and deriving"
+"between learners, instructors, and instructional designers, and",,high-level points require extra work. Future work could inves-
+(2) to explore the design space of in-video prompting and,,tigate collecting and processing the responses of learners to
+the trade-offs involved. We discuss several issues in in-video,,"generate more high-level, aggregate feedback to instructors."
+Paper 319,,Page 9
+
+CHI 2018 Paper,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada"
+Exploring the Design Space of In-video Prompting,Designing personalized prompting strategies could be an in-,
+It is hard to say that one prompting strategy always outper-,"teresting future work. By leveraging learners’ data, we could",
+"forms another. As discussed above, there is a trade-off along",choose the most beneficial prompting strategies. For exam-,
+the dimensions of prompting strategies for different stakehold-,"ple, if the learner is already good at the subject covered by",
+"ers. However, there still remains much room for improvement","the lecture, the instructor could provide prompting with more",
+in designing effective prompts.,challenging questions.,
+The effects of in-video prompting highly depend on (1) who,Future work could also investigate the design of the instruc-,
+"the learners are, (2) how difficult or well-structured the video",tor dashboard. Interview results suggest that instructors have,
+"is, and (3) what the prompts ask about. For example, as we",needs for efficiently organizing and exploring the collected,
+"observed in our study with crowd workers, prompting for",learner responses to easily grasp the overall perception of com-,
+negative feedback will generate only meager responses if the,"ments. Automatically organizing, aggregating, and visualizing",
+"video is already well-structured, while learners may have a",learner responses could be an interesting future direction to,
+"hard time writing their response. Likewise, requiring too",explore.,
+detailed knowledge in in-video prompting may frustrate low-,,
+"performing learners, who are already prone to drop out. In an",CONCLUSION,
+"online learning environment, where thousands of videos meet",This paper investigated the effects of in-video prompting on,
+"millions of learners, thoughtfully designed and adjusted in-",both learners and instructors. In-video prompting enables,
+video prompting has potential to provide significant benefits,instructors to collect specific comments from learners. To,
+to both learners and instructors. Future work could explore,understand how in-video prompting affects the learning ex-,
+the feasibility of dynamically adjusting the prompting strategy,"perience, we conducted two studies with crowd workers. Re-",
+"for each video (content-specific), or generating a personalized",sults showed that different prompting strategies have different,
+prompt plan based on learners’ course interaction (learner-,effects on the learning experience. Learners perceive that,
+specific).,"learning-centered questions are less interrupting, more enjoy-",
+,"able, and more helpful for learning. Interviews with instructors",
+,revealed that in-video prompting gives specific comments to,
+LIMITATIONS AND FUTURE WORK,them and that responses from experience-centered questions,
+This work aims to provide guidance to instructors and re-,are more actionable. Instructional designers emphasized the,
+"searchers about how learners perceive in-video prompts, and",importance of coupling question design with instructional de-,
+"when it might be worth including them, and in what form.",sign components for more useful feedback.,
+"Due to the exploratory nature of this work, however, it leaves",,
+several points unanswered.,ACKNOWLEDGMENTS,
+,This work was supported by Institute for Information & com-,
+We did not investigate how in-video prompting affects learning,munications Technology Promotion (IITP) grant funded by,
+outcomes since our goal is not to yield a clear conclusion,"the Korean government (MSIT) (No. 20160005640022007,",
+about how effective in-video prompting is. As research shows,Development of Intelligent Interaction Technology Based on,
+"that reflective prompting could yield learning gains [5, 24],",Context Awareness and Human Intention Understanding).,
+future work could address the relationship between prompting,,
+strategies and learning outcomes.,REFERENCES,
+This paper only covers a subset of dimensions in designing,1.,"Akshay Agrawal, Jagadish Venkatraman, Shane Leonard,"
+prompting strategies: comprehension-experience orientation,,and Andreas Paepcke. 2015. YouEDU: addressing
+and the level of specificity. For the prompt positions in our,,confusion in MOOC discussion forums by
+"studies, the rationale followed the affordance of time-anchored",,recommending instructional video clips. (2015).
+video prompting; the positioning of reflective prompts afford,2.,"Vincent Aleven, Niels Pinkwart, Kevin Ashley, and"
+"different levels of specificity, e.g., a prompt at the end of a",,Collin Lynch. 2006. Supporting self-explanation of
+"video could ask to reflect more generally, whereas a prompt",,argument transcripts: Specific v. generic prompts. In
+in the middle could refer to the specific concept just covered.,,Workshop of Intelligent Tutoring Systems for Ill-Defined
+We recognize that there might be other important design fac-,,"domains, 8th International Conference on Intelligent"
+tors not addressed in this work. Future work could address,,Tutoring Systems. 47–55.
+other dimensions such as frequency of prompting and mode,,
+of learner responses.,3.,"Lori Breslow, David E Pritchard, Jennifer DeBoer,"
+,,"Glenda S Stump, Andrew D Ho, and Daniel T Seaton."
+"We collected responses from crowd workers, which could bias",,
+"results, e.g., due to selection bias or non-representativeness. It",,2013. Studying learning in the worldwide classroom:
+is not clear whether our findings might generalize to learners,,Research into edX’s first MOOC. Research & Practice in
+"in online learning platforms. Moreover, the crowd workers",,Assessment 8 (2013).
+responded to all the prompting questions partly because of,4.,"Yuanzhe Chen, Qing Chen, Mingqian Zhao, Sebastien"
+monetary reward. Future work should perform a deployment,,"Boyer, Kalyan Veeramachaneni, and Huamin Qu. 2016."
+study to test the effect of in-video prompting in real-world,,DropoutSeer: Visualizing learning patterns in Massive
+educational settings.,,Open Online Courses for dropout reasoning and
+Paper 319,,Page 10
+
+CHI 2018 Paper,,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada"
+,prediction. In Visual Analytics Science and Technology,15.,Margaret Mazzolini and Sarah Maddison. 2007. When to
+,"(VAST), 2016 IEEE Conference on. IEEE, 111–120. DOI:",,jump in: The role of the instructor in online discussion
+,http://dx.doi.org/10.1109/VAST.2016.7883517,,"forums. Computers & Education 49, 2 (2007), 193–213."
+,,,DOI:http://dx.doi.org/10.1016/j.compedu.2005.06.011
+5.,"Michelene TH Chi, Nicholas Leeuw, Mei-Hung Chiu,",,
+,and Christian LaVancher. 1994. Eliciting,16.,"Samuel T Moulton, Selen Türkay, and Stephen M"
+,self-explanations improves understanding. Cognitive,,Kosslyn. 2017. Does a presentation’s medium affect its
+,"science 18, 3 (1994), 439–477. DOI:",,"message? PowerPoint, Prezi, and oral presentations. PloS"
+,http://dx.doi.org/10.1207/s15516709cog1803_3,,"one 12, 7 (2017), e0178774. DOI:"
+,,,http://dx.doi.org/10.1371/journal.pone.0186673
+6.,Clark A Chinn and William F Brewer. 1993. The role of,,
+,anomalous data in knowledge acquisition: A theoretical,17.,"Amy Pavel, Dan B Goldman, Björn Hartmann, and"
+,framework and implications for science instruction.,,Maneesh Agrawala. 2016. VidCrit: Video-based
+,"Review of educational research 63, 1 (1993), 1–49. DOI:",,Asynchronous Video Review. In Proceedings of the 29th
+,http://dx.doi.org/10.3102/00346543063001001,,Annual Symposium on User Interface Software and
+,,,"Technology. ACM, 517–528. DOI:"
+7.,John F Chizmar and Anthony L Ostrosky. 1998. The,,
+,,,http://dx.doi.org/10.1145/2984511.2984552
+,one-minute paper: Some empirical findings. The Journal,,
+,"of Economic Education 29, 1 (1998), 3–10. DOI:",18.,Daniel L Schwartz and Taylor Martin. 2004. Inventing to
+,http://dx.doi.org/10.1080/00220489809596436,,prepare for future learning: The hidden efficiency of
+,,,encouraging original student production in statistics
+8.,K Patricia Cross and Thomas A Angelo. 1988. Classroom,,
+,Assessment Techniques. A Handbook for Faculty. (1988).,,"instruction. Cognition and Instruction 22, 2 (2004),"
+,,,129–184. DOI:
+9.,"Elena L Glassman, Juho Kim, Andrés",,http://dx.doi.org/10.1207/s1532690xci2202_1
+,"Monroy-Hernández, and Meredith Ringel Morris. 2015.",,
+,,19.,"Vikash Singh, Sarah Abdellahi, Mary Lou Maher, and"
+,Mudslide: A spatially anchored census of student,,Celine Latulipe. 2016. The Video Collaboratory as a
+,confusion for online lecture videos. In Proceedings of the,,
+,,,Learning Environment. In Proceedings of the 47th ACM
+,33rd Annual ACM Conference on Human Factors in,,
+,,,Technical Symposium on Computing Science Education.
+,"Computing Systems. ACM, 1555–1564. DOI:",,
+,,,"ACM, 352–357. DOI:"
+,http://dx.doi.org/10.1145/2702123.2702304,,
+,,,http://dx.doi.org/10.1145/2839509.2844588
+10.,Jeffrey D Karpicke and Janell R Blunt. 2011. Retrieval,,
+,,20.,"Kristin Stephens-Martinez, Marti A Hearst, and Armando"
+,practice produces more learning than elaborative studying,,
+,,,Fox. 2014. Monitoring moocs: which information
+,"with concept mapping. Science 331, 6018 (2011),",,
+,,,sources do instructors value?. In Proceedings of the first
+,772–775. DOI:,,
+,,,"ACM conference on Learning@ scale conference. ACM,"
+,http://dx.doi.org/10.1126/science.1199327,,
+,,,79–88. DOI:http://dx.doi.org/10.1145/2556325.2566246
+11.,"Juho Kim, Philip J Guo, Carrie J Cai, Shang-Wen Daniel",,
+,,21.,Richard L Weaver and Howard W Cotrell. 1985. Mental
+,"Li, Krzysztof Z Gajos, and Robert C Miller. 2014.",,
+,,,aerobics: The half-sheet response. Innovative Higher
+,Data-driven interaction techniques for improving,,
+,,,"Education 10, 1 (1985), 23–31. DOI:"
+,navigation of educational videos. In Proceedings of the,,
+,27th annual ACM symposium on User interface software,,http://dx.doi.org/10.1007/BF00893466
+,"and technology. ACM, 563–572. DOI:",22.,"Miaomiao Wen, Diyi Yang, and Carolyn Rose. 2014."
+,http://dx.doi.org/10.1145/2642918.2647389,,Sentiment Analysis in MOOC Discussion Forums: What
+,,,does it tell us?. In Educational data mining 2014.
+12.,"René F Kizilcec, Jeremy N Bailenson, and Charles J",,
+,Gomez. 2015. The instructor’s face in video instruction:,23.,Joseph J Williams and Tania Lombrozo. 2010. The role
+,Evidence from two large-scale field studies. Journal of,,of explanation in discovery and generalization: Evidence
+,"Educational Psychology 107, 3 (2015), 724. DOI:",,"from category learning. Cognitive Science 34, 5 (2010),"
+,http://dx.doi.org/10.1037/edu0000013,,776–806. DOI:
+,,,http://dx.doi.org/10.1111/j.1551-6709.2010.01113.x
+13.,Geza Kovacs. 2016. Effects of in-video Quizzes on,,
+,MOOC lecture viewing. In Proceedings of the Third,24.,"Joseph Jay Williams, Tania Lombrozo, Anne Hsu, Bernd"
+,"(2016) ACM Conference on Learning@ Scale. ACM,",,"Huber, and Juho Kim. 2016. Revising Learner"
+,31–40. DOI:http://dx.doi.org/10.1145/2876034.2876041,,Misconceptions Without Feedback: Prompting for
+,,,Reflection on Anomalies. In Proceedings of the 2016 CHI
+14.,"Yi-Chieh Lee, Wen-Chieh Lin, Fu-Yin Cherng,",,Conference on Human Factors in Computing Systems.
+,"Hao-Chuan Wang, Ching-Ying Sung, and Jung-Tai King.",,
+,2015. Using time-anchored peer comments to enhance,,"ACM, 470–474. DOI:"
+,,,http://dx.doi.org/10.1145/2858036.2858361
+,social interaction in online educational videos. In,,
+,Proceedings of the 33rd Annual ACM Conference on,25.,"Joseph Jay Williams, Tania Lombrozo, and Bob Rehder."
+,"Human Factors in Computing Systems. ACM, 689–698.",,2013. The hazards of explanation: Overgeneralization in
+,DOI:http://dx.doi.org/10.1145/2702123.2702349,,the face of exceptions. Journal of Experimental
+,,,"Psychology: General 142, 4 (2013), 1006. DOI:"
+,,,http://dx.doi.org/10.1037/a0030996
+Paper 319,,,Page 11
+
+CHI 2018 Paper,,,"CHI 2018, April 21–26, 2018, Montréal, QC, Canada"
+26.,"Han Zhang, Maosong Sun, Xiaochen Wang, Zhengyang",27.,"Saijing Zheng, Pamela Wisniewski, Mary Beth Rosson,"
+,"Song, Jie Tang, and Jimeng Sun. 2017. Smart Jump:",,and John M Carroll. 2016. Ask the Instructors:
+,Automated Navigation Suggestion for Videos in MOOCs.,,Motivations and Challenges of Teaching Massive Open
+,In Proceedings of the 26th International Conference on,,Online Courses. In Proceedings of the 19th ACM
+,World Wide Web Companion. International World Wide,,Conference on Computer-Supported Cooperative Work &
+,"Web Conferences Steering Committee, 331–339. DOI:",,"Social Computing. ACM, 206–221. DOI:"
+,http://dx.doi.org/10.1145/3041021.3054166,,http://dx.doi.org/10.1145/2818048.2820082
+Paper 319,,,Page 12

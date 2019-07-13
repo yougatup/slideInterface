@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/lopez/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.5.1-SNAPSHOT" ident="GROBID" when="2018-08-15T15:46+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Understanding the Effect of In-Video Prompting on Learners and Instructors</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher>ACM Press</publisher>
+				<availability status="unknown"><p>Copyright ACM Press</p>
+				</availability>
+				<date type="published" when="2018">2018</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hyungyu</forename><surname>Shin</surname></persName>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Eun-Young</forename><surname>Ko</surname></persName>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Joseph</forename><forename type="middle">Jay</forename><surname>Williams</surname></persName>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Juho</forename><surname>Kim</surname></persName>
+						</author>
+						<title level="a" type="main">Understanding the Effect of In-Video Prompting on Learners and Instructors</title>
+					</analytic>
+					<monogr>
+						<title level="m">Proceedings of the 2018 CHI Conference on Human Factors in Computing Systems - CHI &apos;18</title>
+						<meeting>the 2018 CHI Conference on Human Factors in Computing Systems - CHI &apos;18						</meeting>
+						<imprint>
+							<publisher>ACM Press</publisher>
+							<date type="published" when="2018" />
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1145/3173574.3173893</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>ACM Classification Keywords K31 Computer Uses in Education Author Keywords Online Education</term>
+					<term>In-Video Prompting</term>
+					<term>MOOC</term>
+					<term>Reflection</term>
+					<term>Feedback</term>
+					<term>Learners</term>
+					<term>Instructors</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Online instructional videos are ubiquitous, but it is difficult for instructors to gauge learners&apos; experience and their level of comprehension or confusion regarding the lecture video. Moreover, learners watching the videos may become disengaged or fail to reflect and construct their own understanding. This paper explores instructor and learner perceptions of in-video prompting where learners answer reflective questions while watching videos. We conducted two studies with crowd workers to understand the effect of prompting in general, and the effect of different prompting strategies on both learners and instructors. Results show that some learners found prompts to be useful checkpoints for reflection, while others found them distracting. Instructors reported the collected responses to be generally more specific than what they have usually collected. Also, different prompting strategies had different effects on the learning experience and the usefulness of responses as feedback.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INTRODUCTION</head><p>In online learning environments, an important task for instruc- tors is to inspect learners' level of comprehension and learning experience regarding their lecture videos. Such inspection enables instructors to gain insights into what to teach and how to teach in future instruction. Online learning platforms such as Coursera and edX collect data from multiple sources and provide dashboard interfaces for instructors to support this task. Available data streams include video clickstream logs, responses to in-video quizzes, submissions for assignments and exams, platform interaction data, discussion forum posts, and course reviews.</p><p>Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than the author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from permissions@acm.org.  While common, it's not the only possible prompting type. This paper explores the design space of in-video prompting, and presents how learners perceive the general idea of in-video prompting and different prompting designs.</p><p>Research shows that learner-generated data such as artifacts in discussion forums and learner surveys are important in moni- toring online courses <ref type="bibr" coords="1,409.44,465.48,16.93,8.91" target="#b19">[20]</ref> and preparing future iterations of the course <ref type="bibr" coords="1,365.32,476.44,15.58,8.91">[27]</ref>. Discussion forums and review websites are popular communication channels where learners share their comprehension and evaluation of the course. Through discus- sion forums, instructors can check how learners understand concepts and correct misconceptions by intervening in discus- sions among learners <ref type="bibr" coords="1,408.99,531.24,15.52,8.91" target="#b14">[15]</ref>. Review websites address various dimensions of a course, such as the level of difficulty, quality of contents, and instruction delivery. From these channels, instructors can assess how learners perceive their material and course design, which could serve as useful feedback.</p><p>However, existing channels for collecting learners' responses and input are insufficient as a source of feedback. Posts on discussion forums could give insights into the level of com- prehension, but only a small portion of learners participate in the discussion forums <ref type="bibr" coords="1,412.40,635.85,10.79,8.91" target="#b2">[3]</ref>. Posts on review websites capture subjective learning experiences, but their granularity is at the course level, which is not specific enough for instructors to identify which specific parts of the lecture need to be improved.</p><p>To address these challenges, we investigate in-video prompt- ing as a channel for collecting learners' feedback on lecture <ref type="table" coords="2,53.60,63.16,30.07,8.96">Table 1</ref>: The design space of in-video prompting questions, segmented by comprehension-experience orientation and the level of specificity. Comprehension-centered/Experience-centered questions ask about learners' comprehension and learning experience. General/Specific questions determine whether the questions refer to lecture content or not. <ref type="table" coords="2,414.17,85.20,150.19,8.91;2,53.93,96.16,151.70,8.91">Table 1a shows example questions for  each prompting strategy, and Table 1b</ref> shows sample responses for each prompting condition.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Comprehension-centered</head><p>Experience-centered</p><p>General Describe what you have learned so far. Describe something unsatisfying about the lecture so far.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Specific</head><p>Describe how to calculate the standard deviation. You may assume you want to calculate the standard deviation of five numbers.</p><p>Describe something unsatisfying about calculating the standard deviation. You can consider how clear the explanation was, how fast the explanation was, and what information was missing.</p><p>(a) Sample questions for each prompting condition.</p><p>Comprehension-centered Experience-centered</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>General</head><p>Population standard deviation and how it is calculated and what it means if it is a larger number.</p><p>The instructor's handwriting is a little bad.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Specific</head><p>The standard deviation is calculated by taking the square root of the variance.</p><p>Explanation of change from squared units to units was slightly too fast.</p><p>(b) Sample responses to each question presented in <ref type="table" coords="2,309.89,338.70,25.85,7.13">Table 1a</ref>, submitted by crowd workers in our study.</p><p>videos while minimizing disruption in learners' experience. In-video prompting presents reflective questions to learners while they are watching the video, in order to get specific comments on their level of comprehension or learning expe- rience. <ref type="figure" coords="2,85.35,417.75,34.43,8.91" target="#fig_1">Figure 1</ref> shows an example video learning interface equipped with in-video prompting. Unique properties of in- video prompting are that (1) all learners who watch the video encounter the prompts, which is likely to yield a high response rate, (2) prompting at an inopportune time might distract learn- ers from learning, and (3) since the prompts are given in the middle of learners' video watching session, they can ask spe- cific questions to learners about the material just covered in the video.</p><p>Little research has investigated the effect of in-video prompt- ing and its design space. A common type of in-video prompt- ing is in-video quizzes <ref type="bibr" coords="2,150.42,544.27,15.58,8.91" target="#b12">[13]</ref>, which are commonly multiple choice questions or short-answer questions that pop up during playback to maintain engagement and check understanding. But the types of possible in-video prompts are not limited to quizzes. For example, they could allow a more detailed insight into learners' interpretation of video content. Also, carefully designed prompts could enhance learning, as research shows that reflective prompts improve learning outcomes <ref type="bibr" coords="2,256.90,620.99,10.79,8.91" target="#b4">[5,</ref><ref type="bibr" coords="2,270.18,620.99,11.83,8.91" target="#b23">24]</ref>.</p><p>The design of questions used for prompting is important in determining the type and quality of comments that instruc- tors collect and students' learning experience. Depending on what goal the instructor wishes to achieve with in-video prompting, questions could focus on either revealing learn- ers' level of comprehension, or understanding their subjective learning experience. As the learning experience is affected by the questions, we also need to understand how learners perceive in-video prompting. To understand the effect of in- video prompting on both learners and instructors, we pose the following research questions:</p><p>• RQ1. What are learners' perceptions of in-video prompting?</p><p>• RQ2. How do different in-video prompting strategies affect the learning experience?</p><p>• RQ3. How useful are learner responses to in-video prompts as feedback to instructors?</p><p>We focus on two dimensions in exploring the design space of in-video prompting: the type of information collected from learners, and the specificity of the question. <ref type="table" coords="2,491.47,526.26,32.69,8.91">Table 1a</ref> illustrates the combinations of these two dimensions (the comprehension- experience orientation and the level of specificity) with ex- ample questions. The comprehension-experience orienta- tion represents which information learners need to submit: comprehension-centered questions ask about the level of com- prehension, while experience-centered questions ask about the learning experience. The level of specificity represents whether the questions refer to lecture content or not. General questions prompt for reflection on the lecture content without referencing specific context, whereas specific questions ask about the lecture content in detail. <ref type="table" coords="2,461.42,646.80,34.79,8.91">Table 1b</ref> shows examples of learner responses for each prompting questions.</p><p>To answer the three research questions, we conducted a series of studies and interviews. To understand the learners' per- spective, we conducted two studies with crowd workers to explore both the effect of prompting in general (RQ1) and the effect of different prompting strategies (RQ2). We collected open-ended responses about the pros and cons of prompting from learners and found evidence that learners generally pre- fer comprehension-centered prompting to experience-centered prompting. We conducted interviews with instructors and instructional designers to understand the usefulness of the collected learner responses as feedback on how the learners were doing, and if the course iterations needed change (RQ3). It turns out that collected responses are generally more spe- cific than what they have usually collected. Instructors found responses to experience-centered questions provided more ac- tionable feedback than those from comprehension-centered questions. Instructional designers provided insights into de- signing better prompting strategies.</p><p>The contributions of this paper are as follows:</p><p>• Results from a study on learners' perception of in-video prompting, organized into a list of pros and cons.</p><p>• Results from a study on learners' perception of four differ- ent prompting strategies, which span general versus specific, and comprehension-centered versus experience-centered.</p><p>• Results from interviews with instructors and instructional designers about the usefulness of learner responses as feed- back on lecture videos.</p><p>The rest of paper is organized as follows. First, we survey related work. Second, we present instructor perspectives on learner feedback on lectures. Third, we present two studies designed to understand how in-video prompting affects learn- ers. Fourth, we report results from interviews with instructors and instructor designers to understand how learner responses to in-video prompting serve as feedback. Finally, we conclude with the discussion of the effect of in-video prompting.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>RELATED WORK</head><p>In-video prompting involves promoting learner reflection and providing feedback to instructors. We briefly review prior re- search on these topics, such as methods for collecting feedback in both offline and online settings and the effect of reflective prompting on learners.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Utilizing Learners' Interaction Data</head><p>Existing online learning platforms have been collecting learn- ers' interaction data in both passive and active ways. Click- stream and in-video dropout data are passively collected in that the data is naturally collected regardless of learners' intention. Although research has investigated presenting <ref type="bibr" coords="3,244.04,587.03,16.93,8.91" target="#b10">[11]</ref> and ana- lyzing passive data <ref type="bibr" coords="3,131.53,597.99,10.75,8.91">[4,</ref><ref type="bibr" coords="3,144.76,597.99,11.78,8.91" target="#b25">26]</ref>, the conclusions that can be drawn are limited as feedback because users' true intentions behind traces are unknown. Forum posts are actively collected in that learners explicitly give the data to the platforms. Agrawal et al.</p><p>[1] and Wen et al. <ref type="bibr" coords="3,126.91,641.82,16.32,8.91" target="#b21">[22]</ref> have investigated analyzing discussion forum posts to get meaningful insights from them. The granu- larity of forum posts is at the course-level, which makes it hard for instructors to figure out which specific parts of the lecture need to be improved. Singh et al. <ref type="bibr" coords="3,198.47,685.66,16.93,8.91" target="#b18">[19]</ref> and Lee et al. <ref type="bibr" coords="3,280.08,685.66,16.93,8.91" target="#b13">[14]</ref> facilitate discussion among learners within a lecture video. Although instructors can get more specific learner comments, it has limitation as feedback in that instructors cannot control the types of learner comments. In this paper, we explore in- video prompting, which yields specific and controlled learner comments, as a channel for collecting more useful feedback.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Providing Feedback on Online Lecture Videos</head><p>Vidcrit <ref type="bibr" coords="3,350.95,135.11,16.65,8.91" target="#b16">[17]</ref> supports asynchronous video review and sharing feedback on videos, but is designed for reviewers who indicate problems or offer suggestions, not for learners. Mudslide <ref type="bibr" coords="3,552.48,157.03,11.70,8.91" target="#b8">[9]</ref> attempts to collect spatially contextualized 'muddy' points in a video with specific explanations, which enables instructors to figure out the common points of confusion with reasons.</p><p>We see Mudslide as a case of in-video prompting, which uses spatial anchoring at the end of the video as its prompt. In this work, we aim to understand the effect of in-video prompting broadly by exploring two specific design dimensions described in <ref type="table" coords="3,331.34,244.70,32.31,8.91">Table 1a</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Collecting Qualitative Comments in Offline Classroom</head><p>In a physical classroom, classroom assessment techniques (CAT) can be used to collect qualitative comments <ref type="bibr" coords="3,520.01,292.33,10.37,8.91" target="#b7">[8]</ref>. A tech- nique described in CAT is called One-Minute paper, which asks questions to students at the end of the class. The ques- tions include "What are the most important concepts you have learned today?", and "What are the most confusing points?".</p><p>It not only provides students with a better learning experi- ence <ref type="bibr" coords="3,342.56,358.08,16.93,8.91" target="#b20">[21]</ref> and higher scores on tests for some cases <ref type="bibr" coords="3,534.06,358.08,10.79,8.91" target="#b6">[7]</ref>, but also enables instructors to improve teaching with formative evaluation. Our work seeks to explore the design space of in- video prompting and to help design effective online prompts that provide benefits to both learners and instructors like the One-Minute paper.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Effect of Reflective Prompting on Students</head><p>Many studies have demonstrated that students can learn more when they are prompted to explain the meaning of what they are learning. For example, prompting students to explain what they understand from biology texts enhances the accuracy of students' mental models about the circulatory system, arguably by helping students generate inferences and spot gaps in their understanding <ref type="bibr" coords="3,378.85,515.30,10.37,8.91" target="#b4">[5]</ref>. Williams et al. <ref type="bibr" coords="3,455.61,515.30,16.27,8.91" target="#b23">[24]</ref> suggest that explaining why a fact is true drives learners to discover underlying pat- terns or principles. On the other hand, there are many known cases where prompts to reflect do not enhance learning, and many more that are likely unreported. There are even cases where prompts to reflect can hurt learning, by causing learners to overgeneralize <ref type="bibr" coords="3,394.41,581.05,15.58,8.91" target="#b24">[25]</ref>, ignore details <ref type="bibr" coords="3,475.60,581.05,15.58,8.91" target="#b22">[23]</ref>, or rely on incor- rect prior knowledge rather than observed facts <ref type="bibr" coords="3,520.10,592.01,10.79,8.91" target="#b5">[6]</ref>. These contradictory finding underscore the importance of exploring the design space of how prompts to reflect impact learners.</p><p>In particular, it is important to understand the strengths and weaknesses of different kinds of prompting strategies, and how these are perceived by learners.</p><p>In the context of learning online video, platforms like Cours- era allow instructors to insert in-video multiple choice quizzes. While there have been studies of how they affects learners' video navigation <ref type="bibr" coords="3,390.36,696.62,15.41,8.91" target="#b12">[13]</ref>, there is less evidence about the causal impact on learning. In addition, in-video quizzes must be designed for the specific content of a video, while work on re- flective prompting tends to use general prompts that aren't tied to specific content. There has been relatively little research on the effects of adding general prompts to online videos, as existing work focuses more on different formats of video pre- sentation <ref type="bibr" coords="4,92.90,120.36,15.49,8.91" target="#b15">[16]</ref>. In addition, educational studies of prompting have focused more on learning outcomes than on learners' sub- jective experiences. And as most studies of prompting have been conducted in laboratory settings or physical classrooms, little is known about what instructors might learn by being able to rapidly view students' responses to prompts. In this work, we attempt to fill this gap in literature.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INSTRUCTOR PERSPECTIVES ON LEARNER FEEDBACK</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ON LECTURE VIDEOS</head><p>To better understand instructors' perspectives on learner feed- back on lecture videos, we conducted interviews with three in- structors on campus and a web-based survey with five MOOC instructors outside of campus. We aimed to understand <ref type="formula" coords="4,285.83,273.21,11.85,8.91">(1)</ref> what learner feedback instructors collect in their current prac- tice, and <ref type="formula" coords="4,91.01,295.12,11.85,8.91">(2)</ref> how useful learner feedback is in improving in- struction. Among the interviewees, one instructor had experi- ence in teaching a MOOC, and two instructors had experience in the flipped classroom method. Each interview session took about an hour, and the expected completion time for the survey was 15 minutes. We summarize the main findings below.</p><p>Lack of learner comments. Instructors reported having few learner comments to work with in the first place. In the in- terview, the MOOC instructor said there were approximately 10 questions per each video. The flipped classroom instruc- tors pointed out that they do not typically ask for feedback because students tend to passively consume the lecture video and they did not expect students to be willing to provide useful comments.</p><p>Lack of Specificity. Even in the context where learners leave comments in forums, instructors responded that the comments are not specific enough to understand what causes the confu- sion or problem. Two of the survey respondents expressed that they would like to receive comments specifically anchored to the lecture content, such as "I would like more examples of this algorithm", and "How do Japan and China name Japanese invasions of Korea described in slide 17?". One of the survey respondents expressed the need for feedback on her instruction delivery, such as the tone of speech and sentence length.</p><p>From the interviews and the survey, we confirmed that there are few learner comments, and the comments are generally not specific enough to be used as feedback. We anticipate that in-video prompting can address these challenges by actively asking questions while learners are watching lecture videos. However, it is hard for learners to provide a large amount of specific feedback. Questions that drive our investigation in in-video prompting include: How should we design questions in prompts to collect useful feedback? What is the effect of prompting on the learning experience? How distracting is it for learners to answer the questions while watching a video? How useful are the collected responses as feedback to instructors?</p><p>To answer these questions, we conducted a series of studies.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INVESTIGATING IN-VIDEO PROMPTING</head><p>We aim to understand the effect of in-video prompting on both learners and instructors. Our investigation is organized as fol- lows. We first present two studies designed to understand the effect of in-video prompting on learners. Then we consider the usefulness of collected responses as feedback from instructors' view as well as from instructional designers' view. Finally, we wrap up the studies by discussing the complexity of con- sidering viewpoints of multiple stakeholders when designing prompting strategies.</p><p>We conducted two studies to understand the effect of in-video prompting on learners. The first study explored learners' qual- itative experience of receiving in-video prompts. Learners watched videos with and without reflective prompts, and an- swered open-ended questions about their experience. The second study investigated how the type of prompt might influ- ence learners' perceptions, comparing specific versus general prompts, and prompts focused on comprehension versus shar- ing one's experience with the instructor. The second study also collected quantitative measures of learners' experience.</p><p>Learners received prompts to reflect at the beginning, middle, and end of each video. Prompts at the beginning could prepare people for learning <ref type="bibr" coords="4,399.97,319.12,15.39,8.91" target="#b17">[18]</ref>, prompts in the middle can maintain engagement with mid-video prompts, and prompts at the end help in review the material as a whole <ref type="bibr" coords="4,474.44,341.04,15.27,8.91" target="#b9">[10]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>STUDY 1. LEARNER PERCEPTIONS OF PROMPTING</head><p>The objective of the first study was to gain a qualitative un- derstanding of how learners perceive the addition of in-video reflective prompts, by asking them to compare learning expe- riences with and without prompts.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Study Design &amp; Procedure</head><p>Participants watched two 8 minute lecture videos, one with reflective prompts, and one without any prompts. The videos were from Khan Academy, titled "Population standard devi- ation" and "Logarithms", respectively. The order of presen- tation and pairing of prompting condition with topic were counterbalanced.</p><p>After participants watched both videos, they were asked open- ended questions about their experience in either condition, to compare their experience with respect to enjoyment, cognitive goal, and the perceived benefits to learning. <ref type="bibr" coords="4,497.43,540.31,3.69,6.59" target="#b0">1</ref> The prompting condition was counterbalanced over all four prompting strate- gies (see <ref type="table" coords="4,358.28,564.09,32.08,8.91">Table 1a</ref>), which we discuss in more depth in Study 2.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Participants</head><p>We recruited 100 participants (55 male, mean age 35.1) on Amazon Mechanical Turk, paying $6 for an hour-long study.</p><p>Recruiting crowd workers enables us to (1) obtain a more gen- eral population compared to lab settings and (2) have greater experimental control to collect more extensive data about learn- ing experiences, even though the motivation and background knowledge of crowd workers may be different from those of learners in online learning platforms.  To analyze participants' comments, we first separated com- ments consisting of more than one point into multiple com- ments so that each comment contains only one idea. We then categorized each comment into two groups based on whether it was positive or negative. Out of 231 comments, 130 were pos- itive and 101 were negative. For comments in each group, one researcher conducted open coding to categorize each response. Afterwards, another researcher verified the coded labels and re- solved conflicts with discussion. <ref type="table" coords="5,181.83,294.31,28.33,8.91">Table 2</ref> describes the reported pros and cons of in-video prompting from learners' perspec- tive. The extracted categories of participants' comments are as follows:</p><p>Enhance learners' concentration. Prompting encourages learners to pay more attention to the video. Responding to the question ensures that learners are on the right track, which makes learners more engaged. A participant mentioned, "the prompts gave me a good attention check to make sure I under- stood what was being discussed."</p><p>Encourage reflection. Prompting asks learners to reflect what they have learned. It reinforces the knowledge, which leads to a better learning experience. A participant wrote, "it helps you think about what you know and have learned through the video, making you actively recall and cement your learning right away."</p><p>Split the lecture into small pieces. Prompting splits the knowledge to digest in a more fine-grained way. By forc- ing learners to stop and think at checkpoints, the amount of knowledge to absorb at once is reduced: "With prompts, the learning is broken down into stages and you have to think and reiterate what you've learned so far, which makes it easier to remember."</p><p>Help grasp key concepts. Prompting helps learners to grasp the most important concepts of the lecture. Participants per- ceived the moment of prompting as important checkpoints, which makes learners think about the most important concepts they have learned so far. A participant pointed out, "Having a prompt helps to indicate exactly what the key concept was so you can take a moment and decide if you fully understand it."</p><p>Provide interactivity. Prompting is an interactive activity. Participants said they enjoyed the interactivity and felt they have learned more. This sentiment is echoed by a participant: "I think prompts make videos more hands-on and interactive and deliver a more educational experience."</p><p>Distract from the learning process. Prompting might break the flow of concentration. Forcing learners to respond to the questions even if they are following the lecture very well can lead to a negative learning experience. A participant noted, "it might cause you to lose focus on the material in the video by breaking your chain of thought because you are basically being interrupted."</p><p>Provide no feedback on responses. Learners wish to receive feedback on their response to make sure that they properly re- spond to the questions. Without feedback, learners may be less motivated to respond to prompts. A participant commented, "there is no feedback so even if I answer the prompt question and I'm confident, I may be wrong."</p><p>Cause anxiety. Some learners feel worried about giving in- appropriate or inadequate responses. They feel the responses are being monitored, which makes learners frustrated when they struggle to come up with an appropriate response: "I felt frustrated that it appeared difficult for me to explain what I learned thus far."</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>STUDY 2. EFFECTS OF DIFFERENT PROMPTING</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>STRATEGIES</head><p>Study 2 investigated how different kinds of prompts might be perceived by learners, and collected quantitative measures of how learners perceived prompts.</p><p>We investigated two dimensions of prompting questions: the comprehension-experience orientation and the level of specificity. The comprehension-experience orientation rep- resents which information the question seeks to reveal. Comprehension-centered questions ("Describe what you have learned so far.") asked learners to reflect on the contents of the lecture and their current comprehension. These questions promote self-explanation in learners, which previous research suggests could be beneficial for their learning <ref type="bibr" coords="5,514.69,581.05,16.09,8.91" target="#b23">[24,</ref><ref type="bibr" coords="5,534.38,581.05,7.34,8.91" target="#b4">5]</ref>. Re- sponses to comprehension-centered questions allow instruc- tors to identify how well learners are following the lecture. Experience-centered questions ("Describe something unsatis- fying about the lecture so far.") reveal learning experiences during the lecture video. By directly asking what makes learn- ers unsatisfied, instructors can collect actionable feedback on their instruction.</p><p>The level of specificity determines whether the prompting question refers directly to lecture content. General questions ("Describe something unsatisfying about the lecture so far.") do not refer to the content of the lecture. These questions could be shown anywhere in a given video. Specific questions ("Describe how to calculate a mean.") refer to concepts in the lecture video. Instructors should consider what to ask at specific moments, which requires more effort for instructors to build the prompting questions. <ref type="table" coords="6,191.13,109.41,34.39,8.91">Table 1a</ref> shows the design space of prompting questions that we cover, and examples of each.</p><p>In addition, we investigated whether perceptions of prompt types might vary based on learners' prior knowledge of the video content.</p><p>We investigated the following research questions.</p><p>• RQ2a. How does the effect of in-video prompting vary according to the kind of prompting strategy?</p><p>• RQ2b. How do learners with different levels of achievement perceive each prompting strategy?</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Study Design</head><p>The study used a between-subjects design, where each student was randomly assigned to one of the four prompting strategies described in <ref type="table" coords="6,102.87,315.58,31.18,8.91">Table 1a</ref>. Each participant watched a lecture video from Khan Academy on "Population standard deviation". We gave prompts at the beginning, middle, and end of the video. We denote each condition using four-letter codes; Co-Ge for the comprehension-centered and general condition, Co-Sp for comprehension and specific, Ex-Ge for experience and general, and Ex-Sp for experience and specific.</p><p>To understand the differences between prompting strategies, we included quantitative measures of learners' experiences. After watching the video, learners were asked to rate their agreement on a seven points scale with six statements about their experience. For example, a learner would be asked to rate on a scale from 1 (Strongly Disagree) to 7 (Strongly Agree) whether "Prompting helped me to pay attention to the lecture" (Q1). The six statements about experience with prompting are listed in <ref type="figure" coords="6,87.31,485.94,31.46,8.91" target="#fig_2">Figure 2</ref>. These asked about the extent to which learn- ers agreed or disagreed that prompting helped them pay atten- tion to the video, understand, grasp the most important ideas, was enjoyable, interrupted their learning process, or made them worried about giving inappropriate responses. These statements were chosen by using the qualitative dimensions identified in Study 1.</p><p>Participants also answered two questions about their cognitive load while watching the video <ref type="bibr" coords="6,179.65,579.59,15.58,8.91" target="#b11">[12]</ref>. They rated on a sliding scale from 0 to 100: "How much mental demand did you experience watching this lecture?" and "How much effort did it take you to watch this lecture?".</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Participants</head><p>We recruited 200 participants on Amazon Mechanical Turk, paying $3.5 for a 35-minute long study. Participants' mean age was 36.8 (SD = 11.5; min = 20; max = 72) with 102 male. For each subgroup by prompting strategy (Co-Sp, Co-Ge, Ex- Sp, Ex-Ge), the mean ages were 39.2, 36.1, 37.3, and 36.6, respectively.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Study Procedure</head><p>Participants were asked to (1) take a pretest with six problems, (2) watch a video with prompting, (3) respond to a survey related to the video watching experience, and then (4) take a posttest. The session ended with a final survey asking for participants' general experiences in free-form text.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>Different prompting strategies had different effects on partic- ipants' perceived learning experience. As shown in <ref type="figure" coords="6,537.64,166.34,26.53,8.91;6,321.09,177.30,3.81,8.91" target="#fig_2">Figure  2</ref>, learners rated comprehension-centered prompts as more helpful than experience-centered prompts on average, as mea- sured by judgments on the positive questions Q1-Q4 (2-way ANOVA, F(1, 196) = 10.04 and p &lt; 0.005, F(1, 196) = 33.11 and p &lt; 0.0001, F(1, 196) = 33.00 and p &lt; 0.0001, and F(1, 196) = 16.67 and p &lt; 0.0001 for Q1, Q2, Q3, and Q4 respec- tively). Participants in the comprehension-centered conditions mentioned that they could take a breather, have time to reflect on what has been learned, and assess their understanding on their own. One participant remarked, "It was a way to help ensure I understood the whole process by breaking it down with questions to answer, instead of trying to absorb it all at once and remember everything after."</p><p>Participants rated the experience-centered prompts as more distracting (2-way ANOVA, F(1,196)=17.13 and p&lt;0.0001 for Q5). Participants in the experience-centered conditions mentioned that it was hard to learn from the video while at the same time trying to give comments on how the instructor could improve the video. One participant remarked, "Prompting had me thinking about many things at once. This caused me to lose focus." However, there is also a bright side of experience- centered prompts, especially regarding the learners' emotional experience. Participants said that they liked being able to leave a subjective comment to the instructor and it made them feel involved in the lecture.</p><p>Although participants could take advantage of comprehension- centered prompts in their learning, being asked about the con- tents of the lecture in depth irritated some learners. On the other hand, experience-centered prompts ask about partici- pants' subjective opinion regarding the lecture and therefore it can be thought to be less pressure for learners. Our survey results show that, however, there is no such difference between comprehension-centered and experience-centered prompting strategies (Q6).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>The effect of learners' prior knowledge</head><p>The qualitative comments suggest that learners differ in their opinions about the value of prompting. To understand the effect of each prompting strategy for learners with unequal prior knowledge, we divided each group into two subgroups based on participants' pretest scores and discovered how the experience differed for each subgroup. As the cut-off point to separate the two groups we used a score of 2 out of 6, the median pretest score of all participants. <ref type="table" coords="6,489.51,657.76,30.65,8.91" target="#tab_1">Table 3</ref> shows the number of participants in each subgroup.  Ex-Ge 50 31 19 prompting conditions (ANOVA, p&lt;0.05 for both conditions). This result corresponds to the findings from earlier research <ref type="bibr" coords="7,53.93,613.93,11.85,8.91" target="#b1">[2]</ref> that high-performing students are good at providing an answer to generic questions. <ref type="figure" coords="7,53.93,641.82,40.05,8.91" target="#fig_4">Figure 3b</ref> shows how each subgroup perceived anxiety for different prompting conditions. The result indicates that the low-score group felt more anxiety than the high-score group under specific prompting condition and the opposite pattern is observed for the general prompting conditions. This outcome may seem incongruous with the previous finding that the high- score group exhibit lower cognitive load with general prompts.</p><p>However, study data collected from this experiment could pro- vide alternative explanations for this result. First, a number of participants in the low-score group provided simple responses under general prompting conditions (e.g., "population standard deviation" for the prompt "Describe what you have learned so far"), leaving less chance of being wrong. In addition, with the experience-general prompts, many high-score participants mentioned it was hard for them to find unsatisfying points in the lecture, increasing their anxiety regarding their responses.</p><p>The result indicates that the high-score group and the low- score group perceived a different level of cognitive load and anxiety. The low-score group reported higher cognitive load than the high-score group and the differences were especially large for general prompting conditions. Regarding the level of anxiety, the low and high-score group behaved differently for the specific and general conditions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>LEARNER RESPONSES AS FEEDBACK TO INSTRUC- TORS</head><p>We conducted a series of interviews with instructors and in- structional designers to understand the usefulness of learner responses as feedback. Instructors and instructional designers are important stakeholders in in-video prompting, as they are the ones who author the prompts and potentially benefit from the collected learner responses. This section presents results from the interview study with instructors.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>CHI 2018 Paper CHI 2018, April 21-26, 2018, Montréal, QC, Canada</head><p>(a) Self-reported cognitive load, out of 100. *: the difference between low and high-score group is significant with p&lt;0.05.</p><p>(b) Average scores for Q6: Prompting made me worried about giving inap- propriate responses. *: the difference between low and high-score group is significant with p&lt;0.05. The low-score group reported higher anxiety than the high-score group when they were given a comprehension-centered and specific prompt. Error bar:+/-1 standard error of the mean.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Procedure</head><p>We had 1-hour long interviews with instructors asking how useful the collected responses to in-video prompts from learn- ers might be as feedback. We recruited 3 instructors who had experience in publishing lecture videos. Two instructors had published 8 hours and 10 hours of lecture video in total, re- spectively. The other instructor had led a flipped classroom for 8 semesters. After explaining the prompting strategies, we presented the learner responses as well as the correspond- ing questions collected in Study 2 and asked how they would make use of the responses as feedback. Instructors explored the learner responses for 10-15 minutes. After the exploration, we asked questions about using the responses as feedback.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>Specificity of learners' responses. Instructors found that the collected responses are helpful as feedback because the responses were specific. They noted that asking questions in the middle of a video yields more specific responses. An instructor remarked, "If instructors ask for comments at the end of the lecture, it is hard for learners to give comments on specific points of the lecture because they are likely to have forgotten details."</p><p>Needs for organizing learners' comments. Instructors ex- pressed needs for clustering the responses, based on criteria such as whether the comments are about visuals, pronuncia- tion, or lack of information. An instructor said, "I thought it would be easier to read the comments if they were organized."</p><p>Comprehension-centered vs. Experience-centered. In- structors responded that experience-centered questions yield more actionable feedback than comprehension-centered ques- tions. The responses from experience-centered questions (e.g., "The instructor's handwriting is a little bad") tend to point out the problems on instructional delivery, but the re- sponses from comprehension-centered questions (e.g., "The standard deviation is calculated by taking the square root of the variance.") describe their comprehension. Instructors were not sure whether the responses from comprehension- centered questions reflect learners' true level of comprehen- sion. An instructor noted, "If learners' responses are not good in comprehension-centered questions, it is hard to know whether the learner doesn't know, or the learner is just tired."</p><p>Instructors had different opinions on which questions help learning more. Two instructors said asking comprehension- centered questions is more helpful for learners because they promote reflection on the lecture while describing learning experience is not quite relevant to learning. One of the instruc- tors said, "I think learners feel like unnecessarily respond- ing to experience-centered questions, and feel like checking their understanding when they respond to comprehension- centered questions." However, another instructor mentioned experience-centered questions help learning more: "I think experience-centered responses are going to inherently be more specific than comprehension-centered.</p><p>[ . . . ]When we are talk- ing about learning a particular topic, it's just going to be way more useful to talk about the thing that we can both see clearly between the two of us <ref type="bibr" coords="8,437.74,621.47,19.60,8.91">[ . . . ]</ref>. That's going to be a more productive discussion than what's going on inside my head."</p><p>Specific vs. General. Instructors observed that different levels of specificity in prompts result in different types of feedback. For experience-centered questions, instructors said responses to general questions could serve as feedback on instruction delivery (e.g., "It was good, just a little slow"), such as the speed of speech, but responses to specific questions could serve as content-related feedback (e.g., "if the entire equation was done in meters, I would have a better and eas- ier understanding of how it works"), such as the clarity of a particular explanation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INSTRUCTIONAL DESIGNERS' VIEW ON RESPONSES</head><p>To understand the usefulness of the responses as feedback from an educational point of view, we interviewed instructional designers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Procedure</head><p>Similar to the interview study with instructors, we presented the responses as well as corresponding questions. Then we explained the prompting strategies and the instructional de- signers explored the responses. We conducted 1-hour long interviews with three instructional designers who are manag- ing online courses on campus, including those on Coursera.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Results</head><p>Instructional designers commented that the responses could serve as feedback to instructors, identified problems in our current prompts, and suggested ways to improve the design of prompting strategies.</p><p>Feedback to instructors. Instructional designers said that the responses are useful as self-checklists for instructors, but to improve the lecture, the responses should be coupled with instructional design components that the instructor should consider in the lecture. Also, they remarked that high-level feedback such as comments on learning objectives and organi- zation of presentations is more useful for instructors.</p><p>Importance of specific questions. Upon inspecting the cur- rent question prompts, instructional designers identified issues in the questions. They mentioned some questions were not concrete enough and too superficial to diagnose issues with the lecture. Designers suggested including more specific questions such as "Is the pitch of the instructor's voice appropriate?".</p><p>Mixing multiple prompting strategies. Instructional design- ers suggested using multiple prompting strategies even in a single video. They said asking experience-centered questions multiple times during a single lecture video could distract learners and damage the learning experience. Presenting experience-centered questions at the end and comprehension- centered questions in the middle of the video could be effective for both learners and instructors.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DISCUSSION</head><p>In this research, we attempt to understand the effect of in- video prompting, an under-explored yet complex topic. In- video prompting has potential to make video-based learning more interactive and even increase learning, while provid- ing instructors with valuable data. Our goal is not to show that a particular prompting strategy is better than others or to conclude that prompting should be designed in a particular way for all videos, but rather (1) to contribute an in-depth understanding of differing perspectives on in-video prompting between learners, instructors, and instructional designers, and (2) to explore the design space of in-video prompting and the trade-offs involved. We discuss several issues in in-video prompting that involve handling trade-offs and making design decisions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Trade-off Between Learners and Instructors</head><p>One observation from our studies was that learners and instruc- tors might prefer different prompting strategies for different reason. Learners perceive comprehension-centered prompt- ing as enjoyable, less interrupting, and helping them learn. However, instructors generally found that the responses from experience-centered questions to be more actionable, which makes it easy for instructors to figure out the points that need to be improved. With this trade-off in mind, prompting strate- gies should be carefully designed to maximize the benefits for both stakeholders.</p><p>One way to address the trade-off is to design a hybrid prompt- ing strategy, in which multiple prompt types are presented to a learner while watching a video, as suggested by instructional designers we interviewed. However, several issues could arise. It might be the case that drawbacks of both prompt types could be observed. Moreover, presenting both prompt types makes learners respond to two different types of questions in a lecture video, which may increase their cognitive load. Further study is needed to determine whether and how this hybrid prompting strategy helps learners.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Trade-off Between Questions and Responses for Instruc- tors</head><p>Designing specific prompts is more expensive than designing general prompts because specific prompts needs to be cou- pled with lecture content. For the responses, however, specific prompting tends to yield more specific responses, which in- structors might find useful. Instructors should choose the level of specificity of the questions, but it is not a straightforward task. Also, specific questions could yield responses that are too narrow, which could compromise the diversity of responses.</p><p>It is important to balance the level of specificity to get di- verse but insightful responses. One way to meet the balance is to design multiple specific questions. For example, we cur- rently consider content-related specificity, but we also can consider instructional delivery-related specificity, such as the pace of lecture, the tone of voice, and the speed of speech. By considering multiple types of specificity in parallel in their prompt design, instructors could potentially receive diverse and specific responses.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Learner Feedback from Multiple Points of View</head><p>Through the interviews, we observed that the meaning of use- ful feedback is different between instructors and instructional designers. Instructors found it useful to get actionable feed- back, whereas instructional designers found it useful to get more high-level feedback.</p><p>This leads us to think about what good feedback is for in- structors and instructional designers. We demonstrated how collecting actionable comments from learners is possible, but making sense of them, finding patterns in them, and deriving high-level points require extra work. Future work could inves- tigate collecting and processing the responses of learners to generate more high-level, aggregate feedback to instructors.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Exploring the Design Space of In-video Prompting</head><p>It is hard to say that one prompting strategy always outper- forms another. As discussed above, there is a trade-off along the dimensions of prompting strategies for different stakehold- ers. However, there still remains much room for improvement in designing effective prompts.</p><p>The effects of in-video prompting highly depend on (1) who the learners are, (2) how difficult or well-structured the video is, and <ref type="formula" coords="10,83.57,159.72,11.85,8.91">(3)</ref> what the prompts ask about. For example, as we observed in our study with crowd workers, prompting for negative feedback will generate only meager responses if the video is already well-structured, while learners may have a hard time writing their response. Likewise, requiring too detailed knowledge in in-video prompting may frustrate low- performing learners, who are already prone to drop out. In an online learning environment, where thousands of videos meet millions of learners, thoughtfully designed and adjusted in- video prompting has potential to provide significant benefits to both learners and instructors. Future work could explore the feasibility of dynamically adjusting the prompting strategy for each video (content-specific), or generating a personalized prompt plan based on learners' course interaction (learner- specific).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>LIMITATIONS AND FUTURE WORK</head><p>This work aims to provide guidance to instructors and re- searchers about how learners perceive in-video prompts, and when it might be worth including them, and in what form. Due to the exploratory nature of this work, however, it leaves several points unanswered.</p><p>We did not investigate how in-video prompting affects learning outcomes since our goal is not to yield a clear conclusion about how effective in-video prompting is. As research shows that reflective prompting could yield learning gains <ref type="bibr" coords="10,267.96,454.53,11.01,8.91" target="#b4">[5,</ref><ref type="bibr" coords="10,282.16,454.53,12.07,8.91" target="#b23">24]</ref>, future work could address the relationship between prompting strategies and learning outcomes.</p><p>This paper only covers a subset of dimensions in designing prompting strategies: comprehension-experience orientation and the level of specificity. For the prompt positions in our studies, the rationale followed the affordance of time-anchored video prompting; the positioning of reflective prompts afford different levels of specificity, e.g., a prompt at the end of a video could ask to reflect more generally, whereas a prompt in the middle could refer to the specific concept just covered. We recognize that there might be other important design fac- tors not addressed in this work. Future work could address other dimensions such as frequency of prompting and mode of learner responses.</p><p>We collected responses from crowd workers, which could bias results, e.g., due to selection bias or non-representativeness. It is not clear whether our findings might generalize to learners in online learning platforms. Moreover, the crowd workers responded to all the prompting questions partly because of monetary reward. Future work should perform a deployment study to test the effect of in-video prompting in real-world educational settings.</p><p>Designing personalized prompting strategies could be an in- teresting future work. By leveraging learners' data, we could choose the most beneficial prompting strategies. For exam- ple, if the learner is already good at the subject covered by the lecture, the instructor could provide prompting with more challenging questions.</p><p>Future work could also investigate the design of the instruc- tor dashboard. Interview results suggest that instructors have needs for efficiently organizing and exploring the collected learner responses to easily grasp the overall perception of com- ments. Automatically organizing, aggregating, and visualizing learner responses could be an interesting future direction to explore.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>CONCLUSION</head><p>This paper investigated the effects of in-video prompting on both learners and instructors. In-video prompting enables instructors to collect specific comments from learners. To understand how in-video prompting affects the learning ex- perience, we conducted two studies with crowd workers. Re- sults showed that different prompting strategies have different effects on the learning experience. Learners perceive that learning-centered questions are less interrupting, more enjoy- able, and more helpful for learning. Interviews with instructors revealed that in-video prompting gives specific comments to them and that responses from experience-centered questions are more actionable. Instructional designers emphasized the importance of coupling question design with instructional de- sign components for more useful feedback.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,57.91,690.47,153.36,6.87;1,55.38,702.03,240.86,6.23;1,55.91,710.00,117.62,6.23;1,55.91,720.05,179.26,7.15"><head>CHI 2018 ,</head><label>2018</label><figDesc>April 21-26, 2018, Montreal, QC, Canada © 2018 Copyright held by the owner/author(s). Publication rights licensed to ACM. ISBN 978-1-4503-5620-6/18/04. . . $15.00 DOI: https://doi.org/10.1145/3173574.3173893</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="1,321.09,326.55,243.08,9.03;1,320.85,337.62,243.33,8.91;1,321.09,348.58,243.08,8.91;1,321.09,359.54,244.82,8.91;1,320.63,370.50,243.55,8.91;1,321.09,381.46,243.08,8.91;1,321.09,392.42,243.08,8.91;1,321.09,403.38,173.81,8.91"><head>Figure 1 :</head><label>1</label><figDesc>Figure 1: An example of in-video prompting supported by a video learning interface. Once the playhead reaches the red bar, the prompt appears. This example asks a question about the learner's comprehension on a specific part of the video. While common, it's not the only possible prompting type. This paper explores the design space of in-video prompting, and presents how learners perceive the general idea of in-video prompting and different prompting designs.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="5,104.97,63.16,433.79,9.03;5,243.15,88.43,17.71,8.91;5,449.74,88.43,20.48,8.91;5,72.85,105.27,56.45,8.91;5,153.60,105.27,156.35,8.91;5,361.58,105.27,163.56,8.91;5,66.91,132.82,68.34,8.91;5,153.60,119.81,110.71,8.91;5,153.60,132.96,160.54,8.91;5,153.60,146.11,125.40,8.91;5,361.58,132.82,158.43,8.91;5,59.71,161.96,197.49,8.91;5,361.58,161.96,83.51,8.91;5,53.93,195.47,80.72,8.42"><head>2 :</head><label>2</label><figDesc>Main pros and cons of in-video prompting from learners' perspective (number of mentions in parenthesis) Pros Cons Concentration -Enhance learners' concentration. (42) -Distract from the learning process. (59) Learning process -Encourage reflection. (57) -Split the lecture into small pieces. (16) -Help grasp key concepts. (10) -Provide no feedback on responses. (9) Emotional responses -Provide interactivity. (5) -Cause anxiety. (17) Qualitative Results</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="6,321.09,685.66,243.08,8.91;6,321.09,696.62,243.08,8.91;6,321.09,707.58,243.08,8.91"><head>FigureFigure 2 :</head><label>2</label><figDesc>Figure 3a illustrates self-reported cognitive load of each group for four different prompting conditions. The high-score group perceived significantly less cognitive load under the general</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="8,53.93,288.30,510.42,9.03;8,53.93,299.38,510.60,8.91;8,53.93,310.34,510.26,8.91;8,53.93,321.30,38.74,8.91"><head>Figure 3 :</head><label>3</label><figDesc>Figure 3: Perceived experience for Low and High group in each prompting condition. (a) The low-score group reported higher cognitive load than the high-score group when they encountered general prompts. (b) The low-score group reported higher anxiety than the high-score group when they were given a comprehension-centered and specific prompt. Error bar:+/-1 standard error of the mean.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="5,79.03,63.16,23.44,8.96"><head>Table</head><label></label><figDesc coords="5,79.03,63.16,23.44,8.96"></figDesc><table></table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="7,53.60,403.95,245.07,139.49"><head>Table 3 :</head><label>3</label><figDesc coords="7,53.60,403.95,34.47,8.96"></figDesc><table coords="7,53.93,404.07,244.74,139.37">The number of participants in each group and sub-
+group. Co-Sp: comprehension-centered and specific, Co-
+Ge: comprehension-centered and general, Ex-Sp: Experience-
+centered and specific, and Ex-Ge: experience-centered and 
+general. High: participants with high pretest scores; Low: 
+participants with low pretest scores. 
+
+Total High Low 
+
+Co-Sp 
+50 
+22 
+28 
+
+Co-Ge 
+50 
+21 
+29 
+
+Ex-Sp 
+50 
+23 
+27 
+
+</table></figure>
+
+			<note place="foot" n="1"> We also administered pretests and posttests to measure learning, but did not see significant effects.</note>
+
+			<note place="foot">Paper 319</note>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="10,338.03,491.28,227.39,8.91;10,338.03,502.24,199.81,8.91;10,338.03,513.20,169.09,8.91;10,338.03,524.16,192.05,8.91" xml:id="b0">
+	<monogr>
+		<title level="m" type="main">YouEDU: addressing confusion in MOOC discussion forums by recommending instructional video clips</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Akshay</forename><surname>Agrawal</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jagadish</forename><surname>Venkatraman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Shane</forename><surname>Leonard</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Andreas</forename><surname>Paepcke</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,338.03,541.46,204.96,8.91;10,338.03,552.42,203.81,8.91;10,338.03,563.38,208.96,8.91;10,337.20,574.43,223.70,8.59;10,338.03,585.39,210.41,8.59;10,337.47,596.26,100.75,8.91" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Supporting self-explanation of argument transcripts: Specific v. generic prompts</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Niels</forename><surname>Vincent Aleven</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kevin</forename><surname>Pinkwart</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Collin</forename><surname>Ashley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Lynch</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Workshop of Intelligent Tutoring Systems for Ill-Defined domains, 8th International Conference on Intelligent Tutoring Systems</title>
+		<imprint>
+			<date type="published" when="2006" />
+			<biblScope unit="page" from="47" to="55" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="10,338.03,613.56,202.37,8.91;10,338.03,624.52,215.59,8.91;10,338.03,635.48,211.60,8.91;10,338.03,646.44,226.14,8.91;10,337.42,657.40,84.57,8.91" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Studying learning in the worldwide classroom: Research into edX&apos;s first MOOC</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Lori</forename><surname>Breslow</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><forename type="middle">E</forename><surname>Pritchard</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jennifer</forename><surname>Deboer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Glenda</forename><forename type="middle">S</forename><surname>Stump</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Andrew</forename><forename type="middle">D</forename><surname>Ho</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Daniel T</forename><surname>Seaton</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Research &amp; Practice in Assessment</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,65.57,218.63,8.91;11,70.20,76.53,229.37,8.91;11,70.87,88.60,179.92,6.97" xml:id="b3">
+	<monogr>
+				<idno type="doi">10.1109/VAST.2016.7883517</idno>
+		<ptr target="http://dx.doi.org/10.1109/VAST.2016.7883517" />
+		<title level="m">Visual Analytics Science and Technology (VAST), 2016 IEEE Conference</title>
+		<imprint>
+			<biblScope unit="page" from="111" to="120" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,104.03,215.56,8.91;11,70.87,114.98,163.26,8.91;11,70.87,125.94,209.75,8.91;11,70.87,136.90,146.54,8.91;11,70.87,148.97,184.11,6.97" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Eliciting self-explanations improves understanding</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><forename type="middle">H</forename><surname>Michelene</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nicholas</forename><surname>Chi</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mei-Hung</forename><surname>Leeuw</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Christian</forename><surname>Chiu</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Lavancher</surname></persName>
+		</author>
+		<idno type="doi">10.1207/s15516709cog1803_3</idno>
+		<ptr target="http://dx.doi.org/10.1207/s15516709cog1803_3" />
+	</analytic>
+	<monogr>
+		<title level="j">Cognitive science</title>
+		<imprint>
+			<biblScope unit="volume">18</biblScope>
+			<biblScope unit="page" from="439" to="477" />
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,164.40,224.05,8.91;11,70.87,175.36,222.27,8.91;11,70.87,186.32,205.52,8.91;11,70.56,197.28,226.99,8.91;11,70.87,209.35,179.92,6.97" xml:id="b5">
+	<analytic>
+		<title level="a" type="main">The role of anomalous data in knowledge acquisition: A theoretical framework and implications for science instruction</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Clark</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">William F</forename><surname>Chinn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Brewer</surname></persName>
+		</author>
+		<idno type="doi">10.3102/00346543063001001</idno>
+		<ptr target="http://dx.doi.org/10.3102/00346543063001001" />
+	</analytic>
+	<monogr>
+		<title level="j">Review of educational research</title>
+		<imprint>
+			<biblScope unit="volume">63</biblScope>
+			<biblScope unit="page" from="1" to="49" />
+			<date type="published" when="1993" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,224.77,210.02,8.91;11,70.87,235.73,226.14,8.91;11,70.87,246.69,195.81,8.91;11,70.87,258.76,179.92,6.97" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">The one-minute paper: Some empirical findings</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">F</forename><surname>John</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anthony L</forename><surname>Chizmar</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Ostrosky</surname></persName>
+		</author>
+		<idno type="doi">10.1080/00220489809596436</idno>
+		<ptr target="http://dx.doi.org/10.1080/00220489809596436" />
+	</analytic>
+	<monogr>
+		<title level="j">The Journal of Economic Education</title>
+		<imprint>
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="page" from="3" to="10" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,274.19,226.15,8.91;11,70.51,285.15,228.24,8.91" xml:id="b7">
+	<monogr>
+		<title level="m" type="main">Classroom Assessment Techniques. A Handbook for Faculty</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Patricia</forename><surname>Cross</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Thomas A</forename><surname>Angelo</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1988" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,301.68,150.81,8.91;11,70.87,312.64,222.92,8.91;11,70.87,323.60,197.07,8.91;11,70.87,334.56,226.14,8.91;11,70.37,345.61,208.16,8.59;11,70.54,356.48,181.31,8.91;11,70.87,368.55,171.55,6.97" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Mudslide: A spatially anchored census of student confusion for online lecture videos</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Juho</forename><surname>Elena L Glassman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Andrés</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Meredith Ringel</forename><surname>Monroy-Hernández</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Morris</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2702123.2702304</idno>
+		<ptr target="http://dx.doi.org/10.1145/2702123.2702304" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems</title>
+		<meeting>the 33rd Annual ACM Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015" />
+			<biblScope unit="page" from="1555" to="1564" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,383.98,218.15,8.91;11,70.87,394.94,226.15,8.91;11,70.51,405.89,197.84,8.91;11,70.62,416.85,60.77,8.91;11,70.87,428.92,171.55,6.97" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Retrieval practice produces more learning than elaborative studying with concept mapping</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Jeffrey</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Janell</forename><forename type="middle">R</forename><surname>Karpicke</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Blunt</surname></persName>
+		</author>
+		<idno type="doi">10.1126/science.1199327</idno>
+		<ptr target="http://dx.doi.org/10.1126/science.1199327" />
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">331</biblScope>
+			<biblScope unit="page" from="772" to="775" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,444.35,226.06,8.91;11,70.87,455.31,200.35,8.91;11,70.87,466.27,195.35,8.91;11,70.87,477.23,219.56,8.91;11,70.62,488.28,226.33,8.59;11,70.87,499.14,153.93,8.91;11,70.87,511.22,171.55,6.97" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Data-driven interaction techniques for improving navigation of educational videos</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Juho</forename><surname>Kim</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Philip</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Carrie</forename><forename type="middle">J</forename><surname>Guo</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Shang-Wen Daniel</forename><surname>Cai</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Li</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Z</forename><surname>Krzysztof</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Robert C</forename><surname>Gajos</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Miller</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2642918.2647389</idno>
+		<ptr target="http://dx.doi.org/10.1145/2642918.2647389" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 27th annual ACM symposium on User interface software and technology</title>
+		<meeting>the 27th annual ACM symposium on User interface software and technology</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="563" to="572" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,526.64,208.64,8.91;11,70.87,537.60,223.21,8.91;11,70.87,548.56,218.06,8.91;11,70.56,559.52,199.15,8.91;11,70.87,571.59,150.63,6.97" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">The instructor&apos;s face in video instruction: Evidence from two large-scale field studies</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeremy</forename><forename type="middle">N</forename><surname>René F Kizilcec</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Charles J</forename><surname>Bailenson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Gomez</surname></persName>
+		</author>
+		<idno type="doi">10.1037/edu0000013</idno>
+		<ptr target="http://dx.doi.org/10.1037/edu0000013" />
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Educational Psychology</title>
+		<imprint>
+			<biblScope unit="volume">107</biblScope>
+			<biblScope unit="page">724</biblScope>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,587.01,203.46,8.91;11,70.87,597.97,208.13,8.91;11,70.20,608.93,212.32,8.91;11,70.87,619.89,222.36,8.91" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Effects of in-video Quizzes on MOOC lecture viewing</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Geza</forename><surname>Kovacs</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2876034.2876041</idno>
+		<ptr target="http://dx.doi.org/10.1145/2876034.2876041" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Third (2016) ACM Conference on Learning@ Scale</title>
+		<meeting>the Third (2016) ACM Conference on Learning@ Scale</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="31" to="40" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,70.87,636.43,187.93,8.91;11,70.87,647.39,227.81,8.91;11,70.87,658.35,217.20,8.91;11,70.87,669.31,196.19,8.91;11,70.56,680.36,210.21,8.59;11,70.51,691.22,222.64,8.91;11,70.87,702.20,192.48,8.40" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">Using time-anchored peer comments to enhance social interaction in online educational videos</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Yi-Chieh</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Wen-Chieh</forename><surname>Lin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Fu-Yin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hao-Chuan</forename><surname>Cherng</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ching-Ying</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jung-Tai</forename><surname>Sung</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>King</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2702123.2702349</idno>
+		<ptr target="http://dx.doi.org/10.1145/2702123.2702349" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems</title>
+		<meeting>the 33rd Annual ACM Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2015" />
+			<biblScope unit="page" from="689" to="698" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,65.57,226.14,8.91;11,338.03,76.53,217.84,8.91;11,338.03,87.49,224.33,8.91;11,338.03,98.47,217.58,8.40" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">When to jump in: The role of the instructor in online discussion forums</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Margaret</forename><surname>Mazzolini</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Sarah</forename><surname>Maddison</surname></persName>
+		</author>
+		<idno type="doi">10.1016/j.compedu.2005.06.011</idno>
+		<ptr target="http://dx.doi.org/10.1016/j.compedu.2005.06.011" />
+	</analytic>
+	<monogr>
+		<title level="j">Computers &amp; Education</title>
+		<imprint>
+			<biblScope unit="volume">49</biblScope>
+			<biblScope unit="page" from="193" to="213" />
+			<date type="published" when="2007" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,114.98,198.97,8.91;11,338.03,125.94,219.40,8.91;11,338.03,136.90,226.13,8.91;11,338.03,147.86,136.03,8.91;11,338.03,159.93,192.48,6.97" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Does a presentation&apos;s medium affect its message? PowerPoint, Prezi, and oral presentations</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Selen</forename><surname>Samuel T Moulton</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Türkay</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Stephen M Kosslyn</surname></persName>
+		</author>
+		<idno type="doi">10.1371/journal.pone.0186673</idno>
+		<idno>e0178774. DOI</idno>
+		<ptr target="http://dx.doi.org/10.1371/journal.pone.0186673" />
+	</analytic>
+	<monogr>
+		<title level="j">PloS one</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<date type="published" when="2017" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,175.36,203.72,8.91;11,338.03,186.32,192.29,8.91;11,337.67,197.28,225.82,8.91;11,337.42,208.33,204.41,8.59;11,337.47,219.19,138.35,8.91;11,338.03,231.27,171.55,6.97" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">VidCrit: Video-based Asynchronous Video Review</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Amy</forename><surname>Pavel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Björn</forename><surname>Dan B Goldman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Maneesh</forename><surname>Hartmann</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Agrawala</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2984511.2984552</idno>
+		<ptr target="http://dx.doi.org/10.1145/2984511.2984552" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 29th Annual Symposium on User Interface Software and Technology</title>
+		<meeting>the 29th Annual Symposium on User Interface Software and Technology</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="517" to="528" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,246.69,226.07,8.91;11,338.03,257.65,208.53,8.91;11,338.03,268.61,206.72,8.91;11,338.03,279.57,204.97,8.91;11,337.28,290.53,60.77,8.91;11,338.03,302.60,179.92,6.97" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Inventing to prepare for future learning: The hidden efficiency of encouraging original student production in statistics instruction</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Daniel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Taylor</forename><surname>Schwartz</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Martin</surname></persName>
+		</author>
+		<idno type="doi">10.1207/s1532690xci2202_1</idno>
+		<ptr target="http://dx.doi.org/10.1207/s1532690xci2202_1" />
+	</analytic>
+	<monogr>
+		<title level="j">Cognition and Instruction</title>
+		<imprint>
+			<biblScope unit="volume">22</biblScope>
+			<biblScope unit="page" from="129" to="184" />
+			<date type="published" when="2004" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,318.02,215.79,8.91;11,338.03,328.98,208.87,8.91;11,338.03,339.94,223.54,8.91;11,337.47,350.99,224.19,8.59;11,337.67,361.86,88.05,8.91;11,338.03,373.93,171.55,6.97" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">The Video Collaboratory as a Learning Environment</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Vikash</forename><surname>Singh</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Sarah</forename><surname>Abdellahi</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mary</forename><forename type="middle">Lou</forename><surname>Maher</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Celine</forename><surname>Latulipe</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2839509.2844588</idno>
+		<ptr target="http://dx.doi.org/10.1145/2839509.2844588" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 47th ACM Technical Symposium on Computing Science Education</title>
+		<meeting>the 47th ACM Technical Symposium on Computing Science Education</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="352" to="357" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,389.36,226.12,8.91;11,338.03,400.31,198.88,8.91;11,338.03,411.27,223.06,8.91;11,337.42,422.23,225.77,8.91;11,337.78,433.19,222.37,8.91" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">Monitoring moocs: which information sources do instructors value</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kristin</forename><surname>Stephens-Martinez</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Marti</forename><forename type="middle">A</forename><surname>Hearst</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Armando</forename><surname>Fox</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2556325.2566246</idno>
+		<ptr target="http://dx.doi.org/10.1145/2556325.2566246" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the first ACM conference on Learning@ scale conference</title>
+		<meeting>the first ACM conference on Learning@ scale conference</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="79" to="88" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,449.73,223.73,8.91;11,338.03,460.69,211.32,8.91;11,337.72,471.65,148.21,8.91;11,338.03,483.72,150.63,6.97" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">Mental aerobics: The half-sheet response</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Richard</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Howard</forename><forename type="middle">W</forename><surname>Weaver</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Cotrell</surname></persName>
+		</author>
+		<idno type="doi">10.1007/BF00893466</idno>
+		<ptr target="http://dx.doi.org/10.1007/BF00893466" />
+	</analytic>
+	<monogr>
+		<title level="j">Innovative Higher Education</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="page" from="23" to="31" />
+			<date type="published" when="1985" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,499.14,211.01,8.91;11,338.03,510.10,226.15,8.91;11,338.03,521.06,197.04,8.91" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">Sentiment Analysis in MOOC Discussion Forums: What does it tell us</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Miaomiao</forename><surname>Wen</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Diyi</forename><surname>Yang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Carolyn</forename><surname>Rose</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Educational data mining</title>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,537.60,220.73,8.91;11,338.03,548.56,226.14,8.91;11,338.03,559.52,221.65,8.91;11,337.78,570.48,60.77,8.91;11,338.03,582.55,209.71,6.97" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">The role of explanation in discovery and generalization: Evidence from category learning</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Joseph</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tania</forename><surname>Williams</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Lombrozo</surname></persName>
+		</author>
+		<idno type="doi">10.1111/j.1551-6709.2010.01113.x</idno>
+		<ptr target="http://dx.doi.org/10.1111/j.1551-6709.2010.01113.x" />
+	</analytic>
+	<monogr>
+		<title level="j">Cognitive Science</title>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="page" from="776" to="806" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,597.97,226.15,8.91;11,338.03,608.93,184.32,8.91;11,338.03,619.89,200.55,8.91;11,338.03,630.85,226.14,8.91;11,337.70,641.90,216.02,8.59;11,337.67,652.77,88.05,8.91;11,338.03,664.84,171.55,6.97" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Revising Learner Misconceptions Without Feedback: Prompting for Reflection on Anomalies</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Joseph Jay</forename><surname>Williams</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tania</forename><surname>Lombrozo</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anne</forename><surname>Hsu</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Bernd</forename><surname>Huber</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Juho</forename><surname>Kim</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2858036.2858361</idno>
+		<ptr target="http://dx.doi.org/10.1145/2858036.2858361" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems</title>
+		<meeting>the 2016 CHI Conference on Human Factors in Computing Systems</meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="470" to="474" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="11,338.03,680.27,224.61,8.91;11,338.03,691.22,225.06,8.91;11,338.03,702.18,189.03,8.91;11,337.72,713.14,191.85,8.91;11,338.03,725.21,142.27,6.97" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">The hazards of explanation: Overgeneralization in the face of exceptions</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Joseph Jay</forename><surname>Williams</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tania</forename><surname>Lombrozo</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Bob</forename><surname>Rehder</surname></persName>
+		</author>
+		<idno type="doi">10.1037/a0030996</idno>
+		<ptr target="http://dx.doi.org/10.1037/a0030996" />
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Experimental Psychology: General</title>
+		<imprint>
+			<biblScope unit="volume">142</biblScope>
+			<biblScope unit="page">1006</biblScope>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,70.87,65.57,223.05,8.91;12,70.87,76.53,207.88,8.91;12,70.51,87.49,228.18,8.91;12,70.87,98.45,220.84,8.91;12,70.04,109.41,221.39,8.91;12,70.40,120.36,218.52,8.91;12,70.87,132.44,171.55,6.97" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">Smart Jump: Automated Navigation Suggestion for Videos in MOOCs</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Han</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Maosong</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Xiaochen</forename><surname>Wang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Zhengyang</forename><surname>Song</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jie</forename><surname>Tang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jimeng</forename><surname>Sun</surname></persName>
+		</author>
+		<idno type="doi">10.1145/3041021.3054166</idno>
+		<ptr target="http://dx.doi.org/10.1145/3041021.3054166" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 26th International Conference on World Wide Web Companion. International World Wide Web Conferences Steering Committee</title>
+		<meeting>the 26th International Conference on World Wide Web Companion. International World Wide Web Conferences Steering Committee</meeting>
+		<imprint>
+			<date type="published" when="2017" />
+			<biblScope unit="page" from="331" to="339" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,321.09,65.57,238.36,8.91;12,338.03,76.53,186.24,8.91;12,338.03,87.49,220.33,8.91;12,338.03,98.45,195.17,8.91;12,337.70,109.50,226.80,8.59;12,337.78,120.36,164.71,8.91;12,338.03,132.44,171.55,6.97" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Ask the Instructors: Motivations and Challenges of Teaching Massive Open Online Courses</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Pamela</forename><surname>Zheng</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mary</forename><forename type="middle">Beth</forename><surname>Wisniewski</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">John M</forename><surname>Rosson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Carroll</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2818048.2820082</idno>
+		<ptr target="http://dx.doi.org/10.1145/2818048.2820082" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 19th ACM Conference on Computer-Supported Cooperative Work &amp; Social Computing. ACM</title>
+		<meeting>the 19th ACM Conference on Computer-Supported Cooperative Work &amp; Social Computing. ACM</meeting>
+		<imprint>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="206" to="221" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

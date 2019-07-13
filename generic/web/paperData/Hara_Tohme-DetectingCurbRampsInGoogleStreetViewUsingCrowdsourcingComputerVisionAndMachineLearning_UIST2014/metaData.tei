@@ -1,0 +1,1414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/lopez/test/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.5.1-SNAPSHOT" ident="GROBID" when="2018-08-16T18:17+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Tohme: Detecting Curb Ramps in Google Street View Using Crowdsourcing, Computer Vision, and Machine Learning</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kotaro</forename><surname>Hara</surname></persName>
+							<email>kotaro@cs.umd.edu</email>
+							<affiliation key="aff0">
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="laboratory">Makeability Lab | 2 Human Computer Interaction Lab (HCIL)</orgName>
+								<orgName type="institution">University of Maryland</orgName>
+								<address>
+									<settlement>College Park</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jin</forename><surname>Sun</surname></persName>
+							<email>jinsun@cs.umd.edu</email>
+							<affiliation key="aff0">
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="laboratory">Makeability Lab | 2 Human Computer Interaction Lab (HCIL)</orgName>
+								<orgName type="institution">University of Maryland</orgName>
+								<address>
+									<settlement>College Park</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Robert</forename><surname>Moore</surname></persName>
+							<email>rmoore15@umd.edu</email>
+							<affiliation key="aff0">
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="laboratory">Makeability Lab | 2 Human Computer Interaction Lab (HCIL)</orgName>
+								<orgName type="institution">University of Maryland</orgName>
+								<address>
+									<settlement>College Park</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Jacobs</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="laboratory">Makeability Lab | 2 Human Computer Interaction Lab (HCIL)</orgName>
+								<orgName type="institution">University of Maryland</orgName>
+								<address>
+									<settlement>College Park</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jon</forename><forename type="middle">E</forename><surname>Froehlich</surname></persName>
+							<email>jonf@cs.umd.edu</email>
+							<affiliation key="aff0">
+								<orgName type="department">Computer Science Department</orgName>
+								<orgName type="laboratory">Makeability Lab | 2 Human Computer Interaction Lab (HCIL)</orgName>
+								<orgName type="institution">University of Maryland</orgName>
+								<address>
+									<settlement>College Park</settlement>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Tohme: Detecting Curb Ramps in Google Street View Using Crowdsourcing, Computer Vision, and Machine Learning</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1145/2642918.2647403</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Author Keywords Crowdsourcing accessibility</term>
+					<term>computer vision</term>
+					<term>Google Street View</term>
+					<term>Amazon Mechanical Turk</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Building on recent prior work that combines Google Street View (GSV) and crowdsourcing to remotely collect information on physical world accessibility, we present the first &quot;smart&quot; system, Tohme, that combines machine learning, computer vision (CV), and custom crowd interfaces to find curb ramps remotely in GSV scenes. Tohme consists of two workflows, a human labeling pipeline and a CV pipeline with human verification, which are scheduled dynamically based on predicted performance. Using 1,086 GSV scenes (street intersections) from four North American cities and data from 403 crowd workers, we show that Tohme performs similarly in detecting curb ramps compared to a manual labeling approach alone (F-measure: 84% vs. 86% baseline) but at a 13% reduction in time cost. Our work contributes the first CV-based curb ramp detection system, a custom machine-learning based workflow controller, a validation of GSV as a viable curb ramp data source, and a detailed examination of why curb ramp detection is a hard problem along with steps forward.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INTRODUCTION</head><p>Recent work has examined how to leverage massive online map datasets such as Google Street View (GSV) along with crowdsourcing to collect information about the accessibility of the built environment <ref type="bibr" coords="1,422.23,490.55,12.90,8.96" target="#b20">[22]</ref><ref type="bibr" coords="1,435.13,490.55,4.30,8.96" target="#b21">[23]</ref><ref type="bibr" coords="1,435.13,490.55,4.30,8.96" target="#b22">[24]</ref><ref type="bibr" coords="1,435.13,490.55,4.30,8.96" target="#b23">[25]</ref><ref type="bibr" coords="1,439.44,490.55,12.90,8.96" target="#b24">[26]</ref>. Early results have been promising; for example, using a manually curated set of static GSV images, Hara et al. <ref type="bibr" coords="1,449.95,513.47,16.61,8.96" target="#b22">[24]</ref> found that minimally trained crowd workers in Amazon Mechanical Turk (turkers) could find four types of street-level accessibility problems with 81% accuracy. However, the sole reliance on human labor limits scalability.</p><p>In this paper, we present Tohme 1 , a scalable system for remotely collecting geo-located curb ramp data using a combination of crowdsourcing, Computer Vision (CV), machine learning, and online map data. Tohme lowers the overall human time cost of finding accessibility problems in GSV while maintaining result quality ( <ref type="figure" coords="1,484.43,634.58,33.58,8.96" target="#fig_1">Figure 1</ref>). As the first work in this area, we limit ourselves to sidewalk curb ramps (sometimes called "curb cuts"), which we selected because of their visual salience, geospatial properties (e.g., often located on corners), and significance to accessibility. <ref type="bibr" coords="1,316.85,711.13,2.52,4.54">1</ref> Tohme is a Japanese word that roughly translates to "remote eye."</p><p>Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than ACM must be honored. Abstracting with credit is permitted. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. Request permissions from Permissions@acm.org.   For example, in a precedent-setting US court case in 1993, the court ruled that the "lack of curb cuts is a primary obstacle to the smooth integration of those with disabilities into the commerce of daily life" and that "without curb cuts, people with ambulatory disabilities simply cannot navigate the city" <ref type="bibr" coords="2,90.14,120.90,10.68,8.96" target="#b0">[2]</ref>.</p><p>While some cities maintain a public database of curb ramp information (e.g., <ref type="bibr" coords="2,134.66,149.94,10.87,8.96">[1,</ref><ref type="bibr" coords="2,152.03,149.94,11.51,8.96" target="#b10">12]</ref>), this data can be outdated, erroneous, and expensive to collect. Moreover, it is not integrated into modern mapping tools. In a recent report, the National Council on Disability noted that they could not find comprehensive information on the "degree to which sidewalks are accessible" across the US <ref type="bibr" coords="2,224.69,207.42,15.43,8.96" target="#b36">[38]</ref>. In addition, the quality of data available in government systems is contingent on the specific policies and technical infrastructure of that particular local administration (e.g., at the city and/or county level). While federal US legislation passed in 1990 mandates the use of ADA-compliant curb ramps in all new road construction and renovation <ref type="bibr" coords="2,258.89,276.45,15.43,8.96" target="#b43">[45]</ref>, this is not the case across the globe. Our overarching goal is to design a scalable system that can remotely collect accessibility information for any city across the world that has streetscape imagery, which is now broadly available in GSV, Microsoft Bing Maps, and Nokia City Scene.</p><p>Tohme is comprised of four custom parts: (i) a web scraper for downloading street intersection data; (ii) two crowd worker interfaces for finding, labeling, and verifying the presence of curb ramps; (iii) state-of-the-art CV algorithms for automatic curb ramp detection; and (iv) a machine learning-based workflow controller, which predicts CV performance and dynamically allocates work to either a human labeling pipeline or a CV + human verification pipeline. While Tohme is purely a data collection system, we envision future work that integrates Tohme's output into accessibility-aware map tools (e.g., a heatmap visualization of a city's accessibility or a smart navigation system that recommends accessible routes).</p><p>To evaluate Tohme, we conducted two studies using data we collected from 1,086 intersections across four North American cities. First, to validate the use of GSV imagery as a reliable source of curb ramp knowledge, we conducted physical audits in two of these cities and compared our results to GSV-based audit data. As with previous work exploring the concordance between GSV and the physical world <ref type="bibr" coords="2,82.10,583.43,10.87,8.96" target="#b2">[4,</ref><ref type="bibr" coords="2,97.78,583.43,7.52,8.96" target="#b7">9,</ref><ref type="bibr" coords="2,110.11,583.43,12.44,8.96" target="#b20">22,</ref><ref type="bibr" coords="2,127.36,583.43,12.55,8.96" target="#b24">26,</ref><ref type="bibr" coords="2,144.60,583.43,11.96,8.96" target="#b39">41]</ref>, we found high correspondence between the virtual and physical audit data. Second, we evaluated Tohme's performance in detecting curb ramps across our entire dataset with 403 turkers. Alone, the computer vision sub-system currently finds 67% of the curb ramps in the GSV scenes. However, by dynamically allocating work to the CV module or to the slower but more accurate human workers, Tohme performs similarly in detecting curb ramps compared to a manual labeling approach alone (F-measure: 84% vs. 86% baseline) but at a 13% reduction in human time cost.</p><p>In summary, the primary contribution of this paper is the design and evaluation of the Tohme system as a whole, with secondary contributions being: (i) the first design and evaluation of a computer vision system for automatically detecting curb ramps in images; (ii) the design and study of a "smart" workflow controller that dynamically allocates work based on predicted scene complexity from GIS data and CV output; (iii) a comparative physical vs. virtual curb ramp audit study (Study 1), which establishes that GSV is a viable data source for collecting curb ramp data; and (iv) a detailed examination of why curb ramp detection is a hard problem and opportunities for future work in this domain.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>RELATED WORK</head><p>We describe work in sidewalk assessment, crowdsourcing, computer vision, and dynamic workflow allocation.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Sidewalk Assessment</head><p>Traditionally, sidewalk assessment has been conducted via in-person street audits <ref type="bibr" coords="2,413.35,268.65,15.90,8.96" target="#b40">[42,</ref><ref type="bibr" coords="2,433.70,268.65,13.38,8.96">47]</ref> which are labor intensive and costly <ref type="bibr" coords="2,364.87,280.17,15.43,8.96" target="#b39">[41]</ref>, or via citizen call-in reports, which are done on a reactive basis. Recent mobile apps such as seeclickfix.com or NYC311 allow citizens to report street infrastructure problems including damaged or missing curb ramps. However, these systems require in situ observation and thus do not scale as well as remote, virtual inquiry.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Crowdsourcing</head><p>Recently, <ref type="bibr" coords="2,358.99,365.49,57.67,8.96">Bigham et al.</ref> argued that current technological infrastructure provides unprecedented access to large sources of human power that can be harnessed to address accessibility challenges <ref type="bibr" coords="2,424.51,399.93,11.69,8.96" target="#b4">[6]</ref> (e.g., via crowdsourcing). Examples include VizWiz <ref type="bibr" coords="2,424.75,411.45,11.69,8.96" target="#b3">[5]</ref> and Legion:Scribe <ref type="bibr" coords="2,515.62,411.45,15.43,8.96" target="#b33">[35]</ref>. Most relevant to this paper is the recent exploration of combining GSV and crowdsourcing for collecting street-level accessibility data including sidewalks <ref type="bibr" coords="2,474.46,446.03,15.43,8.96" target="#b22">[24]</ref>, bus stops <ref type="bibr" coords="2,538.90,446.03,15.43,8.96" target="#b24">[26]</ref>, and intersections <ref type="bibr" coords="2,387.07,457.43,15.43,8.96" target="#b20">[22]</ref>. Though this prior work demonstrates GSV as a potential accessibility data source, the studies do not examine semi-automatic methods (e.g., using machine learning or CV) as we do here.</p><p>Tohme's performance is contingent on crowd workers' speed and accuracy in processing GSV imagery. Prior work exists in studying how to efficiently collect image labels (e.g., <ref type="bibr" coords="2,342.91,543.95,15.79,8.96" target="#b12">[14,</ref><ref type="bibr" coords="2,364.34,543.95,11.53,8.96" target="#b41">43]</ref>). Su et al. investigated cost-performance tradeoff between majority vote based labeling and verification based data collection <ref type="bibr" coords="2,468.70,566.99,15.43,8.96" target="#b41">[43]</ref>, finding quality control via verification improves cost-effectiveness. Recent work by Deng <ref type="bibr" coords="2,392.59,590.03,16.72,8.96" target="#b12">[14]</ref> explores methods of efficiently collecting multiclass image annotations by incorporating heuristics such as correlation, hierarchy, and sparsity (e.g., the presence of a keyboard in an image also suggests the presence of correlated objects such as mouse and monitor); however, to our knowledge, no prior work exists on efficiently collecting image labels from crowd workers on large panoramic imagery.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Computer Vision</head><p>There is a growing body of research applying CV techniques to GSV <ref type="bibr" coords="2,405.79,709.81,12.86,8.96" target="#b46">[49]</ref><ref type="bibr" coords="2,418.65,709.81,4.29,8.96" target="#b47">[50]</ref><ref type="bibr" coords="2,418.65,709.81,4.29,8.96" target="#b48">[51]</ref><ref type="bibr" coords="2,418.65,709.81,4.29,8.96" target="#b49">[52]</ref><ref type="bibr" coords="2,422.94,709.81,12.86,8.96" target="#b50">[53]</ref>. For example, <ref type="bibr" coords="2,508.65,709.81,49.40,8.96">Xiao et al.</ref> introduced automatic approaches to model 3D structures of streetscape and building façades using GSV <ref type="bibr" coords="3,233.57,360.81,15.90,8.96" target="#b46">[49,</ref><ref type="bibr" coords="3,252.24,360.81,11.99,8.96" target="#b47">50]</ref>. <ref type="bibr" coords="3,270.88,360.81,24.19,8.96;3,54.00,372.33,21.19,8.96">Zamir et al.</ref> showed that large-scale image localization, tracking, and commercial entity identification are possible <ref type="bibr" coords="3,261.05,383.85,12.86,8.96" target="#b48">[51]</ref><ref type="bibr" coords="3,273.91,383.85,4.29,8.96" target="#b49">[52]</ref><ref type="bibr" coords="3,278.20,383.85,12.86,8.96" target="#b50">[53]</ref>. This work demonstrates the potential of combining CV with GSV; however, automatically detecting curb ramps or other accessibility features has not been studied.</p><p>Tohme builds on top of existing object detection algorithms from the CV community <ref type="bibr" coords="3,157.34,447.35,15.90,8.96" target="#b9">[11,</ref><ref type="bibr" coords="3,176.24,447.35,12.55,8.96" target="#b15">17,</ref><ref type="bibr" coords="3,191.80,447.35,12.04,8.96" target="#b44">46]</ref>. For example, we use Deformable Part Models (DPMs) <ref type="bibr" coords="3,195.14,458.87,15.90,8.96" target="#b15">[17,</ref><ref type="bibr" coords="3,214.52,458.87,11.92,8.96" target="#b16">18]</ref>, one of the topperforming approaches in the PASCAL Visual Object Classes (VOC) challenge, a major object detection and recognition competition <ref type="bibr" coords="3,153.98,493.31,15.43,8.96" target="#b15">[17]</ref>. Despite a decade-long effort, however, object detection remains an open problem <ref type="bibr" coords="3,265.73,504.83,10.87,8.96" target="#b5">[7,</ref><ref type="bibr" coords="3,279.49,504.83,11.89,8.96" target="#b45">48]</ref>. For example, even the DPM, which won the "Lifetime Achievement" Prize at the aforementioned PASCAL VOC challenge, has reached 30% precision and 70% recall in 'car' detection <ref type="bibr" coords="3,117.62,550.79,15.43,8.96" target="#b15">[17]</ref>. Due to their variation in size, shape, and appearance, curb ramps are similarly difficult to detect. Consequently, we incorporate a "smart" workflow algorithm that attempts to predict poor CV performance and, in those instances, route work to human labelers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Dynamic Workflow Allocation</head><p>Tohme uses machine learning to control its workflow for efficiently collecting data from GSV. Typical workflow adaptions include: varying the number of workers to recruit for a task <ref type="bibr" coords="3,99.86,659.18,15.90,8.96" target="#b29">[31,</ref><ref type="bibr" coords="3,120.33,659.18,11.98,8.96" target="#b45">48]</ref>, assigning stronger workers to harder versions of a task <ref type="bibr" coords="3,129.98,670.70,15.43,8.96" target="#b8">[10]</ref>, and/or fundamentally changing the task an individual worker is given <ref type="bibr" coords="3,194.54,682.22,15.90,8.96" target="#b28">[30,</ref><ref type="bibr" coords="3,213.33,682.22,13.38,8.96" target="#b34">36]</ref> These workflow decisions are made automatically by workflow controllers often by analyzing worker performance history, inferring task difficulty, or estimating cost.</p><p>Most relevant to our work is workflow adaptation research in crowdsourcing systems <ref type="bibr" coords="3,424.51,389.85,16.02,8.96" target="#b29">[31,</ref><ref type="bibr" coords="3,443.53,389.85,12.55,8.96" target="#b34">36,</ref><ref type="bibr" coords="3,458.97,389.85,12.04,8.96" target="#b45">48]</ref>. For example, <ref type="bibr" coords="3,534.04,389.85,24.06,8.96;3,316.85,401.25,89.98,8.96">Lin et al. and Welinder et al.</ref> rely on worker performance histories to either assign different tasks <ref type="bibr" coords="3,455.35,412.77,16.72,8.96" target="#b34">[36]</ref> or recruit different numbers of workers <ref type="bibr" coords="3,401.83,424.29,15.43,8.96" target="#b45">[48]</ref>. More similar to our work is <ref type="bibr" coords="3,542.14,424.29,15.90,8.96" target="#b28">[30,</ref><ref type="bibr" coords="3,316.85,435.83,13.40,8.96" target="#b29">31]</ref> who infer task difficulty via automated methods and adapt work accordingly. For example, Kamar et al. <ref type="bibr" coords="3,541.30,447.35,16.72,8.96" target="#b29">[31]</ref> analyzed image features with CV algorithms to predict worker behaviors a priori on image annotation tasks and used this to dynamically decide the number of workers to recruit.</p><p>Though similar, our work is different both in problem domain (finding curb ramps) as well as in approach. Rather than vary the number of workers per task, our workflow controller infers CV performance and decides whether to use crowd worker labor for verifications or labeling. In addition, we do not simply rely on image features or CV output to determine workflow but also contextual information such as intersection complexity and 3D-point cloud data.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DATASET</head><p>Because sidewalk infrastructure can vary in quality, design, and appearance across geographic areas, our study sites include a range of neighborhoods from four North American cities: Washington DC, Baltimore, Los Angeles, and Saskatoon, Saskatchewan <ref type="figure" coords="3,440.22,676.70,36.35,8.96">(Figure 2</ref>; <ref type="table" coords="3,483.44,676.70,29.45,8.96" target="#tab_1">Table 1</ref>). For each city, we collected data from dense urban cores (shown in blue) and semi-urban residential areas (shown in red). We   emphasized neighborhoods with potential high demand for sidewalk accessibility (e.g., areas with schools, shopping centers, libraries, and medical clinics).</p><p>We used two data collection approaches: (i) an automated web scraper tool that we developed called svCrawl, which downloads GIS-based intersection data, including GSV images, within a geographically defined region; and (ii) a physical survey of a subset of our study sites (four neighborhoods totaling 273 intersections), which was used to validate curb ramp infrastructure found in the GSV images. In all, we used svCrawl to download data from 1,086 intersections across 11.3km 2 ( <ref type="table" coords="4,199.88,364.29,31.70,8.96" target="#tab_1">Table 1)</ref>.</p><p>To create a ground truth dataset, two members of our research team independently labeled all 1,086 scenes using our custom labeling tool (svLabel). Label disagreements were resolved by consensus. From the ground truth data, we discovered 2,877 curb ramps and 647 missing curb ramps ( <ref type="figure" coords="4,58.19,439.31,32.89,8.96" target="#fig_4">Figure 3</ref>). Of the 1,086 scenes, 218 GSV scenes did not require marking a curb ramp or missing curb ramp because the location was not a traditional intersection (e.g., an alleyway with no vertical drop from the sidewalk). These 218 scenes are useful for exploring false positive labeling behavior and were kept in our dataset. The remaining 868 intersections had on average 3.3 curb ramps (SD=2.3) and 0.75 missing curb ramps (SD=1.3) per intersection. A total of 603/868 intersections were marked as not missing any curb ramps. We use the ground truth labels for training and testing our machine learning and CV algorithms and to evaluate crowd worker performance.</p><p>At download time (summer 2013), the average age of the GSV images was 2.2 years (SD=1.3). As image age is one potential limitation in our approach, it is necessary to first show that GSV is a reasonable data source for deriving curb ramp information, which we do next.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>STUDY 1: ASSESSING GSV AS A DATA SOURCE</head><p>To establish GSV as a viable curb ramp data source, we must show: (i) that it presents unoccluded views of curb ramps, (ii) that the curb ramps can be reliably found by humans and, potentially, machines, and (iii) that the curb ramps found in GSV adequately reflect the state of the physical world. This study addresses each of these points. Multiple studies have previously demonstrated high concordance between GSV-based audits and audits conducted in the physical world <ref type="bibr" coords="4,456.79,97.86,10.76,8.96" target="#b2">[4,</ref><ref type="bibr" coords="4,471.88,97.86,7.52,8.96" target="#b7">9,</ref><ref type="bibr" coords="4,483.85,97.86,12.44,8.96" target="#b20">22,</ref><ref type="bibr" coords="4,500.62,97.86,12.24,8.96" target="#b24">26]</ref>; however, prior work has not examined curb ramps specifically. Though this audit study was labor intensive, it is important to establish GSV as a reliable data source for curb ramp information, as it is the crux of our system's approach.</p><p>We conducted physical audits in the summer of 2013 across a subset of our GSV dataset: 273 intersections spanning urban and residential areas in Washington DC and Baltimore ( <ref type="figure" coords="4,364.02,195.90,31.81,8.96" target="#fig_1">Figure 1</ref>). We followed a physical audit process similar to Hara et al. <ref type="bibr" coords="4,424.75,207.42,15.43,8.96" target="#b24">[26]</ref>. Research team members physically visited each intersection, capturing geotimestamped pictures (Mean=15 per intersection; SD=5). These images were analyzed post hoc for the actual audit. Surveying the 273 intersections took approximately 25 hours as calculated by image capture timestamps.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Auditing Methodology.</head><p>For the auditing process itself, two additional research assistants (different from the above) independently counted the number of curb ramps and missing curb ramps at each intersection in both the physical and GSV image datasets. An initial visual codebook was composed based on US government standards for sidewalk accessibility <ref type="bibr" coords="4,521.74,350.25,15.90,8.96" target="#b30">[32,</ref><ref type="bibr" coords="4,542.21,350.25,11.99,8.96" target="#b43">45]</ref>. Following the iterative coding method prescribed by Hruschka et al. <ref type="bibr" coords="4,391.27,373.29,15.43,8.96" target="#b27">[29]</ref>, a small subset of the data was individually coded first (five intersections from each area).</p><p>The coders then met, compared their count data, and updated the codebook appropriately to help reduce ambiguity in edge cases. Both datasets were then coded in entirety (including the original subset, which was recoded). This process was iterated until high agreement was reached.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Calculating Inter-Rater Reliability between Auditors</head><p>Before comparing the physical audit data to the GSV audit data, which is the primary goal of Study 1, we first calculated inter-rater reliability between the two coders for each dataset. We applied the Krippendorff's Alpha (α) statistical measure, which is used for calculating inter-rater reliability of count data (see <ref type="bibr" coords="4,433.87,527.63,15.17,8.96" target="#b32">[34]</ref>). Results after each of the three coding passes using the iterative scheme from <ref type="bibr" coords="4,526.54,539.15,16.72,8.96" target="#b27">[29]</ref> are shown in <ref type="table" coords="4,358.51,550.67,30.52,8.96" target="#tab_3">Table 2</ref>. Agreement was consistently high, with the 3 rd pass representing the reliability of codes in the final code set. There was initially greater inconsistency in coding missing curb ramps vs. coding existing curb ramps, perhaps because identifying a missing ramp requires a deeper understanding of the intersection and proper ramp placement.   </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Comparing Physical vs. GSV Audit Data</head><p>With high agreement verified within each dataset, we can now compare the count scores between the datasets. Similar to <ref type="bibr" coords="5,67.94,96.78,15.90,8.96" target="#b24">[26,</ref><ref type="bibr" coords="5,89.97,96.78,11.90,8.96" target="#b39">41]</ref>, we calculate a Spearman rank correlation between the two count sets (physical and GSV). This was done for both the curb ramp and missing curb ramp counts.</p><p>To enable this calculation, however, we first merged the two auditor's counts by taking the average of their counts for missing curb ramps and the average for present curb ramps at each intersection. Using these average counts, a Spearman rank correlation was computed, which shows high correspondence between datasets: ρ=0.996 for curb ramps and ρ=0.977 for missing curb ramps (p &lt; 0.001).</p><p>Overall, 1,008 curb ramps were identified in the virtual audit compared to 1,002 with the physical audit; differences were due to construction. The number of missing curb ramps was exactly the same for both datasets (89).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Study 1 Summary</head><p>Though the age of images in GSV remains a concern, Study 1 demonstrates that there is remarkably high concordance between curb ramp infrastructure in GSV and the physical world, even though the average image age of our dataset was 2.2 years. With GSV established as a curb ramp dataset source, we now move on to describing Tohme.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A SCALABLE SYSTEM FOR CURB RAMP DETECTION</head><p>Tohme is a custom-designed tool for remotely collecting geo-located curb ramp information using a combination of crowdsourcing, CV, machine learning, and online map data. It is comprised of four parts depicted in <ref type="figure" coords="5,218.61,393.93,33.08,8.96">Figure 4</ref>: (i) a web scraper, Street View Crawl (svCrawl), for downloading street intersection data; (ii) two crowd worker interfaces for finding, labeling, and verifying the presence of curb ramps called svLabel and svVerify; (iii) state-of-the-art CV algorithms for automatically detecting curb ramps (svDetect); and (iv) a machine learning-based workflow, called svControl, which predicts CV performance on a scenes and allocates work accordingly.</p><p>We designed Tohme iteratively with small, informal pilot studies in our laboratory to test early interface ideas. We also performed larger experiments on Amazon Mechanical Turk (MTurk) with a subset of our data to understand how different interfaces affected crowd performance and, more generally, how well crowds could perform our tasks. The CV sub-system, svDetect, also evolved across multiple iterations, and was trained and evaluated using the aforementioned ground truth labels. While our ultimate goal is to deploy Tohme publicly on the web, the current prototype and experiments were deployed on MTurk. Below, we describe each Tohme sub-system.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svCrawl: Automatic Intersection Scraping</head><p>svCrawl is a custom web scraper tool written in Python that downloads GIS-related intersection data over a predefined geographic region ( <ref type="figure" coords="5,134.29,680.90,31.93,8.96">Figure 2</ref>). It uses the Google Maps API (GMaps API) to enumerate and extract street intersection points within selected boundaries. For each intersection, svCrawl downloads four types of data:</p><p>1. A GSV panoramic image at its source resolution <ref type="bibr" coords="5,522.92,295.46,35.17,8.10;5,334.87,305.66,30.66,8.10">(13,312 x 6,656px)</ref>. This is our primary data element (e.g., <ref type="figure" coords="5,511.78,305.66,28.94,8.10" target="#fig_1">Figure 1</ref>). 2. A 3D-point cloud, which is captured by the GSV car using</p><p>LiDAR <ref type="bibr" coords="5,364.87,328.46,9.70,8.10" target="#b1">[3]</ref>. The depth data overlays the GSV panorama but at a coarser resolution (512 x 256px; <ref type="figure" coords="5,471.58,338.78,33.22,8.10" target="#fig_1">Figure 10</ref>). This is used by svDetect to automatically cull the visual search space and by svControl as an intersection complexity input feature. 3. A top-down abstract map image of the intersection obtained from the GMaps API ( <ref type="figure" coords="5,450.96,382.22,32.21,8.10" target="#fig_1">Figure 13</ref>), which is used as a training feature in our work scheduler, svControl, to infer intersection complexity (like the depth data). 4. Associated intersection GIS metadata, also provided by the GMaps API, such as latitude/longitude, GSV image age, street and city names, and intersection topology.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svLabel: Human-Powered GSV Image Labeling</head><p>In Tohme, intersections are labeled either manually, via svLabel, or automatically via svDetect. svLabel is a fully interactive online tool written in Javascript and PHP for finding and labeling curb ramps and missing curb ramps in GSV images ( <ref type="bibr" coords="5,377.32,508.91,48.60,8.96">Figures 5-7)</ref>. Unlike much previous crowdsourcing GSV work, which uses static imagery to collect labels <ref type="bibr" coords="5,344.59,531.83,12.86,8.96" target="#b20">[22]</ref><ref type="bibr" coords="5,357.45,531.83,4.29,8.96" target="#b21">[23]</ref><ref type="bibr" coords="5,361.73,531.83,12.86,8.96" target="#b22">[24]</ref>, our labeling tool builds on Bus Stop CSI <ref type="bibr" coords="5,316.85,543.35,16.72,8.96" target="#b24">[26]</ref> to provide a fully interactive 360 degree view of the GSV panoramic image. While this freedom increases userinteraction complexity, it allows the user to more naturally explore the intersection and maintain spatial context while searching for curb ramps. For example, the user can pan around the virtual 3D-space from one corner to the next within an intersection.</p><p>Using svLabel. When a turker accepts our HIT, they are immediately greeted by a three-stage interactive tutorial (see supplementary video included with paper). The stages progressively teach the turker about the interface (e.g., the location of buttons and other widgets), user interactions (e.g., how to label, zoom, and pan), and task concepts (e.g., the definition of a curb ramp). If mistakes are made, our tutorial tool automatically provides corrective guidance. Turkers must successfully complete one tutorial stage before moving on to the next.</p><p>Once the tutorials are completed, we automatically position the turker in one of the audit area intersections and the labeling task begins in earnest. Similar to Bus Stop CSI <ref type="bibr" coords="6,316.85,526.67,15.45,8.96" target="#b24">[26]</ref>, svLabel has two primary modes of interaction: Explorer Mode and Labeling Mode ( <ref type="figure" coords="6,473.25,538.07,33.04,8.96" target="#fig_6">Figure 6</ref>). When the user first drops into a scene, s/he defaults into Explorer Mode, which allows for exploration using Street View's native controls. Users are instructed to pan around to explore the 360 degree view of the intersection and visual feedback is provided to track their progress (bottom-right corner of <ref type="figure" coords="6,357.43,607.10,33.03,8.96" target="#fig_6">Figure 6</ref>). Note: users' movement is restricted to the drop location.</p><p>When the user clicks on either the Curb Ramp or Missing Curb Ramp buttons, the interface switches automatically to Labeling Mode. Here, mouse interactions no longer control the camera view. Instead, the cursor changes to a pen, allowing the user to draw an outline around the visual target-a curb ramp or lack thereof ( <ref type="figure" coords="6,466.51,693.61,31.62,8.96">Figure 5</ref>). We chose to have users outline the area rather than simply clicking or</p><p>The user clicks on either the Curb Ramp button or the Missing Curb Ramp button to enter the Labeling Mode. The mouse cursor turns into a pen icon directing users to draw a label. In the Labeling Mode, the camera angle and location is fixed. The interface automatically returns to Explore Mode after each label is drawn.  The Explorer Mode allows the user to control the GSV camera angle.</p><p>(c) The user begins labeling the new corner in the zoomed view</p><p>The GSV pane is the primary interaction area for exploring and labeling.</p><p>If the user cannot find anything to label in the scene, they can click the Skip button and provide details about their skip reasoning.</p><p>The Status side panel provides details on the user's progress. drawing a bounding box because the detailed outlines provide a higher degree of granularity for developing and experimenting with our CV algorithms. Once an outline is drawn, the user continues to search the intersection. Our tool automatically tracks the camera angle and repositions any applied labels in their correct location as the intersection view changes. In this way, the labels appear to "stick" to their associated targets. Once the user has surveyed the entire intersection by panning 360 degrees, s/he can submit the task and move on to the next task in the HIT, until all tasks are complete.</p><p>Ground Truth Seeding. A single HIT is comprised of either five or six intersections depending on whether it contains a ground truth scene (a scene is just an intersection). This "ground truth seeding" <ref type="bibr" coords="7,150.26,230.46,16.72,8.96" target="#b38">[40]</ref> approach is commonly used to dynamically examine, provide feedback about, and improve worker performance. In our case, if a user makes a mistake at a ground truth scene, after hitting the submit button, we provide visual feedback about the error and show the proper corrective action (see video). The user must correct all mistakes before submitting a ground truth task. If no mistakes are detected, the user is congratulated for their good performance. In our current system, there is a 50% chance that a HIT will contain one ground truth scene. The user is not able to tell whether they are working on a ground truth scene until after they submit their work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svVerify: Human-Powered GSV Label Verification</head><p>In addition to providing "curb ramp" and "missing curb ramp" labels, we rely on crowd workers to examine and verify the correctness of previously entered labels. This verification step is common in crowdsourcing systems to increase result quality (e.g., <ref type="bibr" coords="7,167.66,430.79,15.79,8.96" target="#b22">[24,</ref><ref type="bibr" coords="7,186.10,430.79,11.54,8.96" target="#b41">43]</ref>). svVerify <ref type="figure" coords="7,245.45,430.79,36.22,8.96" target="#fig_9">(Figure 8</ref>) is similar to svLabel in appearance and general workflow but has a simplified interaction (clicking and panning only) and is for an easier task (clicking on incorrect labels).</p><p>While we designed both svLabel and svVerify to maximize worker efficiency and accuracy, our expectation was that the verification task would be significantly faster than initially providing manual labels <ref type="bibr" coords="7,201.29,517.31,15.43,8.96" target="#b41">[43]</ref>. For verification, users need not perform a time-consuming visual search looking for curb ramps to label but rather can quickly scan for incorrect labels (false positives) to delete. And, unlike labeling, which requires drawing polygonal outlines, the delete interaction is a single click over the offending label (similar to <ref type="bibr" coords="7,102.38,586.31,15.09,8.96" target="#b44">[46]</ref>). This enables users to rapidly eliminate false positive labels in a scene.</p><p>To maintain verification efficiency, however, we did not allow the user to spatially locate false negatives. This would essentially turn the verification task into a labeling task, by asking users to apply new "curb ramp" or "curb ramp missing" labels when they noticed a valid location that had not been labeled. Instead, svVerify gathers information on false negatives at a coarser-grained level by asking the user if the current scene was missing any labels after s/he clicks the submit button. Thus, svVerify can detect the presence of false negatives in an intersection but not their specific location or quantity.</p><p>Similar to svLabel, svVerify requires turkers to complete an interactive tutorial before beginning a HIT, which includes instructions about the task, the interface itself, and successfully verifying one intersection. Because verifications are faster than providing labels, we included 10 scenes in each HIT (vs. the 5 or 6 in svLabel). In addition, we inserted one ground truth scene into every svVerify HIT rather than with 50% probability as was done with svLabel. Note that not all scenes are sent to svVerify for verification, as discussed in the svControl section below. We move now to describing the two more technical parts of Tohme: svDetect and svControl.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svDetect: Detecting Curb Ramps Automatically</head><p>While svLabel relies on manual labeling for finding curb ramps, svDetect attempts to do this automatically using CV. Because CV-based object detection is still an open problem-even for well-studied targets such as cars <ref type="bibr" coords="7,541.42,480.35,16.72,8.96" target="#b16">[18]</ref> and people <ref type="bibr" coords="7,370.75,491.87,20.01,8.96" target="#b9">[11]</ref>-our goal is to create a system that functions well enough to reduce the cost of curb ramp detection vs. a manual approach alone.</p><p>svDetect uses a three-stage detection process. First, we train a Deformable Part Model (DPM) <ref type="bibr" coords="7,464.98,543.83,15.43,8.96" target="#b16">[18]</ref>, one of the most successful recent approaches in object detection (e.g., <ref type="bibr" coords="7,535.66,555.35,15.01,8.96" target="#b13">[15]</ref>), as a first-pass curb ramp detector. Second, we post-process the resulting bounding boxes using non-maximum suppression <ref type="bibr" coords="7,370.15,589.79,16.72,8.96" target="#b35">[37]</ref> and 3D-point cloud data to eliminate detector redundancies and false positives. Finally, the remaining bounding boxes are classified using a Support Vector Machine (SVM) <ref type="bibr" coords="7,428.95,624.38,10.69,8.96" target="#b6">[8]</ref>, which uses features not leveraged by the DPM, further eliminating false positives.</p><p>svDetect was designed and tested iteratively. We attempted multiple algorithmic approaches and used preliminary experiments to guide and refine our approach. For example, we previously used a linear SVM with a Histograms of Oriented Gradients (HOG) feature descriptor <ref type="bibr" coords="7,500.02,699.37,16.72,8.96" target="#b25">[27]</ref> but found that the DPM was able to recognize curb ramps with larger variations. In addition, we found that though the raw GSV image size is 13,312 x 6,656 pixels, there were no detection performance benefits beyond 4,096 x 2,048px (the resolution used throughout this paper). Because it helps explain our design rationale for Tohme, we include our evaluation experiments for svDetect in this section rather than later in the paper.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>First Stage: The Curb Ramp Deformable Part Model (DPM)</head><p>DPMs are comprised of two parts: a coarse-grained model, called a root filter, and a higher resolution parts model, called a parts filter. DPMs are commonly applied to human detection in images, which provides a useful example. For human detection, the root filter captures the whole human body while part filters are for individual body parts such as the head, hand, and legs (see <ref type="bibr" coords="8,173.42,396.21,15.09,8.96" target="#b15">[17]</ref>). The individual parts are learned automatically by the DPM-that is, they are not explicitly defined a priori. In addition, how these parts can be positioned around the body (the root filter) is also learned and modeled via displacement costs. This allows a DPM to recognize different configurations of the human body (e.g., sitting vs. standing).</p><p>In our case, the root filter describes the general appearance of a curb ramp while part filters account for individual components (e.g., edges of the ramp and transitions to the road). DPM creates multiple components for a single model <ref type="figure" coords="8,54.00,528.71,36.36,8.96" target="#fig_10">(Figure 9</ref>) based on bounding box aspect ratios. We suspect that each component implicitly captures different viewpoints of a curb ramp. For our DPM, we used code provided by <ref type="bibr" coords="8,104.54,563.15,15.43,8.96" target="#b18">[20]</ref>.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Second Stage: Post-Processing DPM Output</head><p>In the second stage, we post-process the DPM output in two ways. First, similar to <ref type="bibr" coords="8,166.94,602.54,15.43,8.96" target="#b35">[37]</ref>, we use non-maximum suppression (NMS) to eliminate redundant bounding boxes. NMS is common in CV and works by greedily selecting bounding boxes with high confidence values and removing overlapping boxes with lower scores. Overlap is defined as the ratio of intersection of the two bounding boxes over the union of those boxes. Based on the criteria established by the PASCAL Visual Object Classes challenge <ref type="bibr" coords="8,246.29,683.06,15.43,8.96" target="#b14">[16]</ref>, we set our NMS overlap threshold to 50%.</p><p>Our second post-processing step uses the 3D-point cloud data to eliminate curb ramp detections that occur above the ground plane (e.g., bounding boxes in the sky are removed).</p><p>To do so, the 512 x 256px depth image is resized to the GSV image size (4096 x 2048px) using bilinear interpolation. For each pixel, we calculate a normal vector and generate a mask for those pixels with a strong vertical component. These pixels correspond to the ground plane. Bounding boxes outside of this pixel mask are eliminated ( <ref type="figure" coords="8,321.04,290.73,37.69,8.96" target="#fig_1">Figure 10</ref> and 11).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Third Stage: SVM-Based Classification</head><p>Finally, in the third stage, the remaining bounding boxes are fed into an additional classifier: an SVM. Because the DPM relies solely on gradient features in an image, it does not utilize other important discriminable information such as color or position of the bounding box. Given that street intersections have highly constrained geometrical configurations, curb ramps tend to occur in similar locations-so detection position is important. Thus, for each bounding box, we create a feature vector that includes: RGB color histograms, the top-left and bottom-right corner coordinates of the bounding box in the GSV image along with its width and height, and the detection confidence score from the DPM detector. We use the SVM as a binary classifier to keep or discard detection results from the second stage.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svDetect Training and Results</head><p>Two of the three svDetect stages require training: the DPM in Stage 1 and the SVM in Stage 3. For training and testing, we used two-fold cross validation across the 1,086 GSV scenes and 2,877 ground truth curb ramp labels. The GSV scenes were randomly split in half (543 scenes per fold) with one fold initially assigned for training and the other for testing. This process was then repeated with the training and testing folds switched.</p><p>To train the DPM (Stage 1), we transform the polygonal ground truth labels into rectangular bounding boxes, which are used as positive training examples. DPM uses a sliding window approach, so the rest of the GSV scene is treated as negative examples (i.e., comprised of negative windows).</p><p>For each image in the training set, the DPM produces a set of bounding boxes with associated confidence scores. The number of bounding boxes produced per scene is contingent on a minimum score threshold. This threshold is often learned empirically (e.g., <ref type="bibr" coords="8,429.79,708.97,10.49,8.96">[1]</ref>). A high threshold would  produce a small number of bounding boxes, which would likely result in high precision and low recall; a low threshold would likely lead to low precision and high recall. Though there is no universal standard for evaluating "good area overlap" in object detection research, we use 20% overlap (from <ref type="bibr" coords="9,113.18,425.73,15.10,8.96" target="#b17">[19]</ref>). Prior work suggests that even 10-15% overlap agreement at the pixel level would be sufficient to confidently localize accessibility problems in images <ref type="bibr" coords="9,275.93,448.67,15.43,8.96" target="#b22">[24]</ref>. Thus, positive samples are boxes that overlap with ground truth by more than 20%; negative samples are all other boxes. We extract the aforementioned training features from both the positive and negative bounding boxes. Note that SVM parameters (e.g., coefficient for slack variables) are automatically selected by grid search during training.</p><p>Results. To analyze svDetect's overall performance and to determine an appropriate confidence score cutoff for svDetect, we stepped through various DPM detection thresholds (from -3-to-3 with a 0.01 step) and measured the results. For each threshold, we calculated true positive, false positive, and false negative detections for each scene. True positives were assessed as bounding boxes that had 20% overlap with ground truth labels and that had a detection score higher than the currently set threshold. The results are graphed on a precision-recall curve in <ref type="figure" coords="9,253.73,638.78,37.30,8.96" target="#fig_1">Figure 12</ref>.</p><p>To balance the number of true positive detections and false positives in our system, we selected a DPM detection threshold of -0.99. At this threshold, svDetect generates an average of 7.0 bounding boxes per intersection (SD=3.7); see <ref type="figure" coords="9,73.31,696.25,42.69,8.96" target="#fig_1">Figure 11</ref> for examples. Note: svDetect failed to generate a bounding box for 15 of the 1,086 intersections. These are still included in our performance comparison.</p><p>In the ideal, our three-stage detection framework would have both high precision and high recall. As can be observed in <ref type="figure" coords="9,370.20,368.25,39.26,8.96" target="#fig_1">Figure 12</ref>, this is obviously not the case as ~20% of the curb ramps are never detected (i.e., the recall metric never breaches 80%). With that said, automatically finding curb ramps using CV is a hard problem due to viewpoint variation, illumination, and within/between class variation. This is why Tohme combines automation with manual labor using svControl.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svControl: Scheduling Work via Performance Prediction</head><p>svControl is a machine-learning module for predicting CV performance and assigning work to either a manual labor pipeline (svLabel) or an automated pipeline with human verification (svDetect + svVerify)-see <ref type="figure" coords="10,233.57,74.92,36.88,8.96">Figure 4</ref>. We designed svControl based on three principles: first, that human-based verifications are fast and relatively low-cost compared to human-based labeling; second, CV is fast and inexpensive but error prone both in producing high false positives and false negatives; third, false negatives are more expensive to correct than false positives.</p><p>From these principles, we derived two overarching design questions: first, given the high cost of human labeling and relative low-cost of human verification, could we optimize CV performance with a bias towards a low false negative rate (even if it meant an increase in false positives)? Second, given that false negatives cannot be eliminated completely from svDetect, can we predict their occurrence based on features of an intersection and use this to divert work to svLabel instead for human labeling?</p><p>Towards the first question, biasing CV performance towards a certain rate of false negatives is trivial. It is simply a matter of selecting the appropriate threshold on the precision/recall curve (recall that the threshold that we selected was -0.99). The second question is more complex.</p><p>We iterated over a number of prediction techniques and intersection features before settling on a linear SVM and Lasso regression model <ref type="bibr" coords="10,152.78,351.45,16.72,8.96" target="#b42">[44]</ref> with the following three types of input features:</p><p> svDetect results (16 features): For each GSV image, we include the raw number of bounding boxes output from svDetect, the average, median, standard deviation, and range of confidence scores of all bounding boxes in the image, and descriptive statistics for their XY-coordinates. Importantly, we did not use the correctness of the bounding box as a feature since this would be unknown during testing.  Intersection complexity (2 features): We calculate intersection complexity via two measures: cardinality (i.e., how many streets are connected to the target intersection) and an indirect measure of complexity, for which we count the number of street pixels in a stylized top-down Google Map. We found that high pixel counts correlate to high intersection complexity ( <ref type="figure" coords="10,114.09,515.92,35.79,8.10" target="#fig_1">Figure 13)</ref>.  3D-point cloud data (5 features): svDetect struggles to detect curb ramps that are distant in a scene-e.g., because the intersection is large or because the GSV car is in a sub-optimal position to photograph the intersection. Thus, we include descriptive statistics of depth information of each scene (e.g., average, median, variance).</p><p>We combine the above features into a single 23-dimensional feature vector for training and classification.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>svControl Training and Test Results</head><p>We train and test svControl with two-fold cross validation using the same train and test data as used for svDetect. Given that the goal of svControl is to predict svDetect performance, namely the occurrence of false negatives, we define a svDetect failure as a GSV scene with at least one false negative curb ramp detection. The SVM model is trained to make a binary failure prediction with the aforementioned features. Similarly, the Lasso regression model is trained to predict the raw number of false negatives of svDetect (regression value &gt; 0.5 is failure).</p><p>To help better understand the important features in our models, we present the top three correlation coefficients for both. For the SVM, the top coefficients were the label's xcoordinate variance (0.91), the mean confidence score of automatically detected labels (0.69), and the minimum scene depth (0.67). For the Lasso model, the top three were mean scene depth (0.69), median scene depth (-0.28), and, similar to the SVM, the mean confidence score of the automatically detected labels (0.21). If either the SVM or the Lasso model predicts failure on a particular GSV scene, svControl routes that scene to svLabel instead of svVerify.</p><p>svControl Results. We assessed svControl's prediction performance across the 1,086 scenes. While not perfect, our results show that svControl is capable of identifying svDetect failures with high probability-we correctly predicted 397 of the 439 svDetect failures (86.3%); however, this high recall comes at a cost of precision: 404 of the total 801 scenes (50.4%) marked as failures were false positives. Given that we designed svControl to be conservative (i.e., pass more work to svLabel if in doubt about svDetect), this accuracy balance is reasonable. Below, we examine whether this is sufficient to provide performance benefits for Tohme.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>STUDY 2: EVALUATING TOHME</head><p>To examine the effectiveness of Tohme for finding curb ramps in GSV images and to compare its performance to a baseline approach, we performed an online study with MTurk in spring 2014. Our goal here is threefold: first, and most importantly, to investigate whether Tohme provides performance benefits over manual labeling alone (baseline); second, to understand the effectiveness of each of Tohme's sub-systems (svLabel, svVerify, svDetect, and svControl); and third, to uncover directions for future work in preparation for a public deployment.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Tohme Study Method</head><p>Similar to Hara et al. <ref type="bibr" coords="10,413.83,680.54,15.43,8.96" target="#b22">[24]</ref>, we collected more data than necessary in practice so that we could simulate performance with different workflow configurations post hoc. To allow us to compare Tohme vs. feeding all scenes to either workflow on their own (svLabel and svDetect+svVerify), we ran all GSV scenes through both. To avoid interaction effects, turkers hired for one workflow (labeling) could not work on the other (verifying) and vice versa.</p><p>Second, to more rigorously assess Tohme and to reduce the influence of any one turker on our results, we hired at least three turkers per scene for each workflow and used this data to perform Monte Carlo simulations. More specifically, for both workflows, we randomly sampled one turker from each scene, calculated performance statistics (e.g., precision), and repeated this process 1,000 times. Admittedly, this is a more complex evaluation than simply hiring one turker per scene and computing the results; however, the Monte Carlo simulation allows us to derive a more robust indicator of Tohme's expected future performance.</p><p>Of the 1,086 GSV scenes (street intersections) in our dataset, we reserved 40 for ground truth seeding, which were randomly selected from the eight geographic areas (5 scenes from each). We calculated HIT payment rates based on MTurk pilot studies: $0.80 for svLabel HITs (five intersections; $0.16 per intersection) and $0.80 for svVerify (ten intersections; $0.08 per intersection). As noted in our system description, turkers had to successfully complete interactive tutorials before beginning the tasks.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Analysis Metrics</head><p>To assess Tohme, we used the following measures:</p><p> Label overlap compared to ground truth: as described in the svDetect section, we use 20% overlap as our correctness threshold (from <ref type="bibr" coords="11,126.14,534.88,13.58,8.10" target="#b22">[24]</ref>).  We calculate standard object detection performance metrics including precision, recall, and F-measure based on this 20% area overlap-the same overlap used by svDetect.  Human time cost: cost is calculated by measuring completion times for each intersection in svLabel and svVerify.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Tohme Study Results</head><p>We first present high-level descriptive statistics of the MTurk HITs before focusing on the comparison between Tohme vs. our baseline approach (pure manual labeling with svLabel). We provide additional analyses that help explain the underlying trends in our results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Descriptive Statistics of MTurk Work</head><p>To gather data for our analyses, we hired 242 distinct turkers for the svLabel pipeline and 161 turkers for the svVerify pipeline <ref type="table" coords="11,390.67,239.10,36.77,8.96" target="#tab_5">(Table 3)</ref>. As noted previously, all 1,046 GSV scenes were fed through both workflows. For svLabel, turkers completed 1,270 HITs (6,350 labeling tasks) providing 17,327 curb ramp labels and 3,462 missing curb ramp labels. For svVerify, turkers completed 582 HITs (5,820 verification tasks) and verified a total of 42,226 curb ramp labels. On average, turkers eliminated 4.9 labels per intersection (SD=2.9). We hired an average of 6.1 (SD=0.6) turkers per intersection for svLabel and 5.6 (SD=0.6) for svVerify.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Evaluating Tohme's Performance</head><p>To evaluate Tohme's overall performance, we first examined how well each pipeline would perform on its own across the entire dataset (1,046 scenes). This provides two baselines for comparison: (i) the svDetect + svVerify results show how well Tohme would perform if the svControl module passed all work to this pipeline and, similarly, (ii) the svLabel results show what would happen if we only relied on manual labor for finding and labeling curb ramps.</p><p>We found that Tohme achieved similar but slightly lower curb ramp detection results compared to the manual approach alone (F-measure: 84% vs. 86%) but with a much lower time cost (13% reduction); see <ref type="figure" coords="11,494.26,503.03,41.49,8.96" target="#fig_0">Figure 14</ref>. As   This is work that could have been routed to svVerify but was sent to svLabel (svControl is overly conservative)</p><p>Low false negative rate indicates tasks were correctly routed svControl Prediction Accuracy and Task Allocation expected, while the svDetect + svVerify pipeline is relatively inexpensive, it performed the worst (F-measure: 63%). These findings show that the svControl module routed work appropriately to maintain high accuracy but at a reduced cost. Tohme reduces the average per-scene processing time by 12 seconds compared to svLabel alone. The overall task completion times were 12.3, 27.3, and 23.7 hours for svDetect + svVerify, svLabel, and Tohme respectively.</p><p>The above results were calculated using the aforementioned Monte Carlo method. If we, instead, use only the first turker to arrive and complete the task, our results are largely the same. The F-measures are 63%, 86%, and 85% respectively for svDetect + svVerify, svLabel, and Tohme with a 10% drop in cost for Tohme (rather than 13%). This includes 65 distinct turkers for svDetect + svVerify, 97 for svLabel, and 149 for Tohme.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Task Allocation by svControl</head><p>As the workflow scheduler, the svControl module is a critical component of Tohme. Because the svVerify interface does not allow for labeling (e.g., correcting false negatives), the svControl system is conservative-it routes most of the work to svLabel otherwise many curb ramps would possibly remain undetected. Of the 1,046 scenes, svControl predicted svDetect to fail on 769 scenes (these results are the same as presented in the svControl section but with the 40 ground truth scenes removed). Thus, 73.5% of all scenes were routed to svLabel for manual work and the rest (277) were fed to svVerify for human verification ( <ref type="figure" coords="12,58.19,657.26,41.24,8.96" target="#fig_1">Figure 15)</ref>. Again, svControl's true positive rate is high: 86%. However, if svControl worked as a perfect classifier, 439 scenes would have been forwarded to svLabel and 607 to svVerify. In this idealized case, Tohme's cost drops to 27.7% compared to a manual labeling approach with the same F-measure as before (84%). Thus, assuming limited improvements in CV-based curb ramp detections in the near future, a key area for future work will be improving the workflow control system.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Where Humans and Computers Struggle</head><p>The key to improving both CV and human labeling performance is to understand where and why each subsystem makes mistakes. To assess the detection accuracy of human labelers, we calculated the average F-measure score per scene based on the average number of true positives (TP), false positives (FP), and false negatives (FN). For example, if the average for a scene was (TP, FP, FN) = (1, 1, 2), then (Precision, Recall, F-measure) = (0.5, 0.3, 0.4). For CV, we simply used the F-measure score for each scene based on our svDetect results. We sorted the two F-measure lists and visually inspected the best and worst performing scenes for each. For the top and bottom 10, the average Fmeasure scores were 99% and 0% for CV and 100% and 25% for human labeling respectively. Common problems are summarized in <ref type="figure" coords="12,393.09,536.27,36.99,8.96" target="#fig_1">Figure 16</ref>.</p><p>Crowd workers struggled with labeling distant curb ramps (scale) or due to placement and angle (viewpoint variation).</p><p>To mitigate this, future labeling interfaces could allow the worker to "walk" around the intersection to select better viewpoints (similar to <ref type="bibr" coords="12,415.03,599.78,15.28,8.96" target="#b24">[26]</ref>); however, this will increase user-interaction complexity and labeling time. Perhaps as should be expected, crowd workers were much more adept at dealing with occlusion than CV-even if a majority of a curb ramp was occluded, a worker could infer its location and shape (e.g., middle occlusion picture). CV struggled for all the reasons noted in <ref type="figure" coords="12,419.47,668.78,38.80,8.96" target="#fig_1">Figure 16</ref>. Given the tremendous variation in curb ramp design and capture angles, a larger training set may have improved our results. Moreover, because multiple views of a single intersection are available in GSV via neighboring panoramas, these additional perspectives could be combined to potentially improve scene structure understanding and mitigate issues with occlusion, illumination, scale, and viewpoint variation. The semantic issues-e.g., confusing structures similar to curb ramps-are obviously much more difficult for CV than humans. We describe other areas for improvement in the Discussion.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Effect of Area Overlap Threshold on Performance</head><p>As noted previously, there is no universal standard for selecting an area overlap threshold in CV; this decision is often domain dependent. To investigate the effect of changing the overlap threshold on performance, we measured precision, recall, and F-measure at different values from 0-50% at a step size of 10% ( <ref type="figure" coords="13,232.95,371.73,36.77,8.96" target="#fig_1">Figure 17</ref>). For overlap=0%, at least 1px of a detected bounding must overlap with a ground truth label to be considered correct.</p><p>A few observations: first, as expected, performance decreases as the overlap threshold increases; however, the relative performance difference between Tohme and baseline (svLabel) stays roughly the same. For example, at 0% overlap, the (Precision, Recall, F-measure) of Tohme is (85%, 89%, 87%) and (86%, 90%, 88%) for svLabel and at 50% overlap, (54%, 55%, 55%) vs. (57%, 59%, 58%). Thus, Tohme's relative performance is consistent regardless of overlap threshold (i.e., slightly poorer performance but cheaper). Second, there appears to be a more substantial performance drop starting at ~30%, which suggests that obtaining curb ramp label agreement at the pixel level between human labelers and ground truth after this point is difficult. Finally, though svDetect + svVerify has much greater precision than svDetect alone, this increase comes at a cost of recall-a gap which widens as the overlap threshold becomes more aggressive. So, though human verifiers help increase precision, they are imperfect and sometimes delete true positive labels.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DISCUSSION</head><p>Our research advances recent work using GSV and crowdsourcing to remotely collect data on accessibility features of the physical world (e.g., <ref type="bibr" coords="13,224.21,670.22,13.20,8.96" target="#b20">[22]</ref><ref type="bibr" coords="13,237.41,670.22,4.40,8.96" target="#b21">[23]</ref><ref type="bibr" coords="13,241.80,670.22,13.20,8.96" target="#b22">[24]</ref><ref type="bibr" coords="13,261.73,670.22,12.60,8.96" target="#b24">26]</ref>) by integrating CV and a machine learning-based workflow scheduler. We showed that a trained CV-based curb ramp detector (svDetect) found 63% of curb ramps in GSV scenes and fast, human-based verifications further improved the overall results. We also demonstrated that a novel machine-learning based workflow controller, svControl, could predict CV performance and route work accordingly. Below, we discuss limitations and opportunities for future work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Improving Human Interfaces</head><p>How much context is necessary for verification? We were surprised that verification tasks were only 2.2x faster than labeling tasks. Though we attempted to design both interfaces for rapid user interaction, there is some basic overhead incurred by panning and searching in the 360-degree GSV view. In an attempt to eliminate this overhead, we have designed a completely new type of verification interface, quickVerify, that simply presents detected bounding boxes in a grid view <ref type="figure" coords="13,448.15,240.78,41.19,8.96" target="#fig_1">(Figure 18</ref>). Similar to the facial recognition verifier in Google Picasa, these boxes can be rapidly confirmed or rejected with a single-click and a new bounding box appears in its place. In a preliminary experiment using 160 GSV scenes and 59 distinct turkers, however, we found that accuracy with quickVerify dropped significantly. Unlike faces, we believe that curb ramps require some level of surrounding context to accurately perceive their existence. More work is needed to determine the appropriate amount of surrounding view context to balance speed and accuracy.</p><p>Improving human labeling. Human labeling time could be reduced if point-and-click interactions were used for labeling targets rather than outlining; however, as demonstrated in <ref type="figure" coords="13,384.31,407.73,37.30,8.96" target="#fig_1">Figure 16</ref>, curb ramps vary dramatically in size, scale, and shape. Clicking alone would be insufficient for CV training. Moreover, labeling will always be more costly than verification because it is a more difficult task (i.e., finding elements in an image requires visual search and a higher mental load). With that said, we currently discard all svDetect bounding boxes-even those with a high confidence score-when a scene is routed to svLabel. Future work should explore how to, instead, best utilize this CV data to improve worker performance (e.g., by showing  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Area Overlap Amount</head><p>detected bounding boxes with high scores to the user or as a way to help verify human labels). Finally, similar to quickVerify, future work could explore GSV panorama labeling that is not projected onto a 3D-sphere but is instead flattened into a 2D zoomable interface (e.g., <ref type="bibr" coords="14,260.57,109.38,16.00,8.96" target="#b31">[33]</ref>) or specially rendered to increase focus on intersection corners.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Improving Automated Approaches</head><p>As the first work in automatically detecting curb ramps using CV, there are no prior systems with which to directly compare our performance. Having said that, there is much room for improvement and advances in CV will only increase the overall efficacy of our system.</p><p>Improving CV-based curb ramp detection. We are currently exploring three areas of future work: (i) Context integration. While we use some context information in Tohme (e.g., 3D-depth data, intersection complexity inference), we are exploring methods to include broader contextual cues about buildings, traffic signal poles, crosswalks, and pedestrians as well as the precise location of corners from top-down map imagery. (ii) 3D-data integration. Due to low-resolution and noise, we currently use 3D-point cloud data as a ground plane mask rather than as a feature to our CV algorithms. We plan to explore approaches that combine the 3D and 2D imagery to increase scene structure understanding (e.g., <ref type="bibr" coords="14,234.89,350.25,15.09,8.96" target="#b26">[28]</ref>). If higher resolution depth data becomes available, this may be useful to directly detect the presence of a curb or corner, which would likely improve our results. (iii) Training. Our CV algorithms are currently trained using GSV scenes from all eight city regions in our dataset. Given the variation in curb ramp appearance across geographic areas, we expect that performance could be improved if we trained and tested per city. However, in preliminary experiments, we found no difference in performance. We suspect that this is due to the decreased training set size. In the future, we would like to perform training experiments to study the effects of per-city training and to identify minimal training set size. Relatedly, we plan to explore active learning approaches where crowd labels train the system over time.</p><p>Improving the workflow controller. While our current workflow controller focuses on predicting CV performance, future systems should explore modeling and predicting human worker performance and adapting work assignments accordingly. For example, struggling workers could be fed scenes that are predicted to be easy, or hard scenes can be assigned to more than one worker to take majority vote <ref type="bibr" coords="14,279.41,597.83,15.90,8.96" target="#b8">[10,</ref><ref type="bibr" coords="14,54.00,609.26,11.97,8.96" target="#b29">31]</ref>. Similar to CV detection, per-city training and active learning should also be explored.</p><p>Who pays? The question of who will pay for data collection (or if payment is even necessary) in the future is an important, unresolved one. Our immediate plans are to build an open website where anyone can contribute voluntarily. From conversations with motor impaired (MI) persons and the accessibility community as a whole (e.g., non-profit organizations, families of those with MI), we believe there is a strong demand for this system. For example, with a public version of Tohme, a concerned, motivated father could easily label over 100 intersections in his neighborhood in a few hours. A website akin to walkscore.com could then visualize the accessibility of that neighborhood using heatmaps and also calculate accessible pedestrian routes.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Limitations</head><p>There are two primary limitations to our work. First, there is a workload imbalance between svLabel and svDetect. svLabel gathers explicit data on both curb ramps and missing curb ramps while svDetect only detects the former. It is likely that if the svLabel task involved only labeling curb ramps, the labeling task completion time would go down, which would affect our primary results. And, while the lack of a detected curb ramp could be equated to a missing curb ramp label for svDetect, <ref type="bibr" coords="14,486.59,252.30,11.50,8.96">we</ref> have not yet performed this analysis. Clearly, more explorations are needed here but we believe our initial examinations are sufficient to show the potential of Tohme.</p><p>Second, there is no assessment of how our curb ramp detection results compare to traditional auditing approaches (e.g., performed by city governments). Anecdotally, we have found many errors in the DC government curb ramp dataset <ref type="bibr" coords="14,351.67,350.25,15.66,8.96" target="#b10">[12]</ref>; however, more research is necessary to uncover whether our approach is faster, cheaper, and/or more accurate. Ultimately, Tohme must produce sufficiently good data to enable new types of accessibilityaware GIS applications (e.g., pedestrian directions routed through an accessible sidewalk path).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>CONCLUSION</head><p>This paper contributes the design and evaluation of a new tool, Tohme, for semi-automatically detecting curb ramps in GSV images using crowdsourcing, computer vision, and machine learning. To our knowledge, we are the first work to design and investigate CV algorithms for curb ramp detection, an important sidewalk accessibility attribute. We are also the first to combine crowdsourcing with automated methods for collecting accessibility information about the physical world in GSV scenes. Tohme's custom workflow controller predicts CV performance and routes work accordingly to balance accuracy and human labor. Through an MTurk study of 1,086 intersections across four North American cities, we showed that Tohme could provide comparable curb ramp detection accuracy at a 13% reduction in cost. As computer vision and machine learning algorithms continue to improve, Tohme should only become more efficient.</p><p>While this paper focuses specifically on curb ramps, we believe a similar approach could be applied to analyze the accessibility of external building facades (e.g., the presence of stairways), the safety of intersections (e.g., the presence of painted cross walks), or even the accessibility of store aisles as mapping companies increasingly focus on the indoors (e.g., <ref type="bibr" coords="14,372.19,706.09,15.02,8.96" target="#b19">[21]</ref>).</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="1,54.00,700.70,146.62,6.26;1,54.00,708.74,157.14,6.26;1,54.00,716.78,122.88,6.26"><head>UIST ' 14 ,</head><label>14</label><figDesc>October 05 -08 2014, Honolulu, HI, USA Copyright 2014 ACM 978-1-4503-3069-5/14/10$15.00. http://dx.doi.org/10.1145/2642918.2647403</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="1,53.40,383.00,487.81,7.24;1,53.40,392.24,449.71,7.24"><head>Figure 1 : In this paper, we present Tohme, a scalable system for semi-automatically finding curb ramps in Google Streetview (GSV) panoramic imagery using computer vision, machine learning, and crowdsourcing. The images above show an actual result from our evaluation.</head><label>1</label><figDesc>Figure 1: In this paper, we present Tohme, a scalable system for semi-automatically finding curb ramps in Google Streetview (GSV) panoramic imagery using computer vision, machine learning, and crowdsourcing. The images above show an actual result from our evaluation.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="1,54.36,185.93,99.94,8.09;1,54.36,251.24,100.96,8.09;1,54.36,259.40,105.31,8.09;1,54.48,315.08,103.23,8.09;1,507.22,250.64,48.09,8.09;1,510.10,315.20,45.09,8.09"><head>(</head><label></label><figDesc>a) Raw Google Street View (GSV) image (b) Results of computer vision curb ramp detection (lighter red is higher confidence) (c) Results after crowdsourced verification TP=8; FP=10; FN=0 TP=8; FP=0; FN=0</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="3,54.60,246.17,503.17,7.24;3,54.60,255.32,192.79,7.24;3,247.37,253.86,2.52,4.54;3,249.89,255.32,293.43,7.24"><head>Figure 2 : The eight urban (blue) and residential (red) audit areas used in our studies from Washington DC, Baltimore, LA, and Saskatoon. This includes 1, 086 intersections across a total area of 11.3km 2 . Among these areas, we physically surveyed 273 intersections (see annotations in a-d).</head><label>2086</label><figDesc>Figure 2: The eight urban (blue) and residential (red) audit areas used in our studies from Washington DC, Baltimore, LA, and Saskatoon. This includes 1,086 intersections across a total area of 11.3km 2 . Among these areas, we physically surveyed 273 intersections (see annotations in a-d).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="4,54.48,209.69,217.26,7.24;4,54.48,218.93,148.47,7.24"><head>Figure 3 : Example curb ramps (top two rows) and missing curb ramps (bottom row) from our GSV dataset.</head><label>3</label><figDesc>Figure 3: Example curb ramps (top two rows) and missing curb ramps (bottom row) from our GSV dataset.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,316.85,701.77,240.29,7.24;5,316.85,711.01,232.65,7.24"><head>Figure 5 : Example curb ramp and missing curb ramp labels from our turk studies. The green/pink outline points denote presence/Figure 4 : A workflow diagram depicting Tohme's four main sub- systems. In summary, svDetect processes every GSV scene producing curb ramp detections with confidence scores. svControl predicts whether the scene/detections contain a false negative. If so, the detections are discarded and the scene is fed to svLabel for manual labeling. If not, the scene/detections are forwarded to svVerify for verification. The workflow attempts to optimize accuracy and speed.</head><label>54</label><figDesc>Figure 5: Example curb ramp and missing curb ramp labels from our turk studies. The green/pink outline points denote presence/absence.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,54.84,360.56,505.12,7.24;6,54.84,369.80,505.16,7.24;6,54.84,378.92,194.05,7.24"><head>Figure 6 : The svLabel interface. Crowd workers use the Explorer Mode to interactively explore the intersection (via pan and zoom) and switch to the Labeling Mode to label curb ramps and missing curb ramps. Clicking the Submit button uploads the target labels. The turker is then transported to a new location unless the HIT is complete.</head><label>6</label><figDesc>Figure 6: The svLabel interface. Crowd workers use the Explorer Mode to interactively explore the intersection (via pan and zoom) and switch to the Labeling Mode to label curb ramps and missing curb ramps. Clicking the Submit button uploads the target labels. The turker is then transported to a new location unless the HIT is complete.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,54.84,494.14,504.97,7.24;6,54.84,501.71,504.71,8.91;6,54.84,512.62,410.71,7.24"><head>Figure 7 : svLabel automatically tracks the camera angle and repositions any applied labels in their correct location as the view changes. When the turker pans the scene, the overlay on the map view is updated and the green "explored" area increases (bottom right of interface). Turkers can zoom in up to two levels to inspect distant corners. Labels can be applied at any zoom level and are scaled appropriately.</head><label>7</label><figDesc>Figure 7: svLabel automatically tracks the camera angle and repositions any applied labels in their correct location as the view changes. When the turker pans the scene, the overlay on the map view is updated and the green "explored" area increases (bottom right of interface). Turkers can zoom in up to two levels to inspect distant corners. Labels can be applied at any zoom level and are scaled appropriately.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="6,513.70,159.49,45.71,9.34;6,519.46,168.73,39.95,9.34;6,523.90,177.97,35.47,9.34;6,518.38,187.33,41.00,9.34;6,508.42,196.57,51.04,9.34;6,516.82,205.93,42.57,9.34;6,519.34,215.17,40.02,9.34;6,513.58,224.53,45.79,9.34;6,511.90,233.77,47.49,9.34;6,513.46,243.13,46.11,9.34;6,513.70,252.40,45.63,9.34;6,542.86,261.64,16.56,9.34;6,524.86,271.00,34.67,9.34;6,518.38,305.56,41.04,9.34;6,527.38,314.80,32.02,9.34;6,510.46,324.16,48.95,9.34;6,528.34,333.40,31.21,9.34;6,56.04,481.54,136.98,8.09;6,224.69,480.58,108.97,8.09"><head></head><label></label><figDesc>The user clicks the Submit button to upload their labels (a) After labeling one corner, the user pans to the right. (b) The user then zooms to get a closer look</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="7,316.85,218.45,240.03,7.24;7,316.85,227.69,239.95,7.24;7,316.85,236.81,239.64,7.24;7,316.85,246.05,219.41,7.24"><head>Figure 8 : The svVerify interface is similar to svLabel but is designed for verifying rather than labeling. When the mouse hovers over a label, the cursor changes to a garbage can and a click removes the label. The user must pan 360 degrees before submitting the task.</head><label>8</label><figDesc>Figure 8: The svVerify interface is similar to svLabel but is designed for verifying rather than labeling. When the mouse hovers over a label, the cursor changes to a garbage can and a click removes the label. The user must pan 360 degrees before submitting the task.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="8,55.20,175.73,238.97,7.24;8,55.20,184.97,238.88,7.24;8,55.20,194.09,238.89,7.24;8,55.20,203.57,153.78,7.24"><head>Figure 9 : The trained curb ramp DPM model. Each row represents an automatically learned viewpoint variation. The root and parts filter visualize learned weights for the gradient features. The displacement costs for parts are shown in (c).</head><label>9</label><figDesc>Figure 9: The trained curb ramp DPM model. Each row represents an automatically learned viewpoint variation. The root and parts filter visualize learned weights for the gradient features. The displacement costs for parts are shown in (c).</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="8,318.53,152.94,239.68,8.91;8,318.53,163.85,239.68,7.24;8,318.53,173.33,168.62,7.24"><head>Figure 10 : Using code from [ 39 ], we download GSV's 3D-point cloud data and use this to create a ground plane mask to post-process DPM output. The 3D depth data is coarse: 512 x 256px.</head><label>1039512</label><figDesc>Figure 10: Using code from [39], we download GSV's 3D-point cloud data and use this to create a ground plane mask to post-process DPM output. The 3D depth data is coarse: 512 x 256px.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_12" coords="9,54.00,356.73,241.14,8.96;9,54.00,368.25,241.08,8.96;9,54.00,379.65,241.03,8.96;9,54.00,391.17,240.96,8.96"><head>To train the SVM (Stage 3 )</head><label>3</label><figDesc>, we use the post-processed DPM bounding boxes from Stage 2. The bounding boxes are partitioned into positive and negative samples by calculating area overlap with the ground truth labels.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_13" coords="9,54.84,269.37,501.51,8.91;9,54.84,280.28,496.17,7.24;9,54.84,287.85,481.35,8.91;9,54.84,298.88,352.17,7.24"><head>Figure 11 : Example results from svDetect's three-stage curb ramp detection framework. Bounding boxes are colored by confidence score (lighter is higher confidence). As this figure illustrates, setting the detection threshold to - 0 . 99 results in a relatively low false negative rate at a cost of a high false positive rate (false negatives are more expensive to correct). Many false positives are eliminated in Stages 2 and 3. The effect of Stage 2's ground plane mask is evident in (b). Acronyms: TP=true positive; FP=false positive; FN=false negative.Figure 12 : The precision-recall curve of the three-stage curb ramp detection process constructed by stepping through various DPM detection thresholds (from - 3 -to- 3 with a 0 . 01 step). For the final svDetect module, we selected a DPM detection threshold of - 0 . 99 , which balances true positive detections with false positives.</head><label>110991233001099</label><figDesc>Figure 11: Example results from svDetect's three-stage curb ramp detection framework. Bounding boxes are colored by confidence score (lighter is higher confidence). As this figure illustrates, setting the detection threshold to -0.99 results in a relatively low false negative rate at a cost of a high false positive rate (false negatives are more expensive to correct). Many false positives are eliminated in Stages 2 and 3. The effect of Stage 2's ground plane mask is evident in (b). Acronyms: TP=true positive; FP=false positive; FN=false negative.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_14" coords="10,317.45,187.37,240.98,7.24;10,317.45,196.49,240.97,7.24;10,317.45,206.09,183.27,7.24"><head>Figure 13 : We use top-down stylized Google Maps (bottom row) to infer intersection complexity by counting black pixels (streets) in each scene. A higher count correlates to higher complexity.</head><label>13</label><figDesc>Figure 13: We use top-down stylized Google Maps (bottom row) to infer intersection complexity by counting black pixels (streets) in each scene. A higher count correlates to higher complexity.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_15" coords="11,316.85,202.25,241.05,7.24;11,316.85,211.49,241.26,7.24;11,316.85,220.85,66.26,7.24"><head>Figure 14 : Tohme achieves comparable results to a manual labeling approach alone but with a 13% reduction in time cost. Error bars are standard deviation. Curb Ramp Detections Results from Monte Carlo Simulations ( 1 , 046 GSV Scenes)Figure 15 : svControl allocated 769 scenes to svLabel and 277 scenes to svVerify. 379 out of 439 scenes ( 86 .3%) where svDetect failed were allocated "correctly" to svLabel. Recall that svControl is conservative in routing work to svVerify because false negative labels are expensive to correct; thus, the 86.3% comes at a high false positive cost ( 390 ).</head><label>1410461537986390</label><figDesc>Figure 14: Tohme achieves comparable results to a manual labeling approach alone but with a 13% reduction in time cost. Error bars are standard deviation.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_16" coords="12,54.24,271.64,502.07,7.24;12,54.24,280.88,502.73,7.24;12,54.24,290.12,502.69,7.24;12,54.24,299.24,470.06,7.24"><head>Figure 16 : Finding curb ramps in GSV imagery can be difficult. Common problems include occlusion, illumination, scale differences because of distance, viewpoint variation (side, front, back), between class similarity, and within class variation. For between class similarity, many structures exist in the physical world that appear similar to curb ramps but are not. For within class variation, there are a wide variety of curb ramp designs that vary in appearance. White arrows are used in some images to draw attention to curb ramps. Some images contain multiple problems.</head><label>16</label><figDesc>Figure 16: Finding curb ramps in GSV imagery can be difficult. Common problems include occlusion, illumination, scale differences because of distance, viewpoint variation (side, front, back), between class similarity, and within class variation. For between class similarity, many structures exist in the physical world that appear similar to curb ramps but are not. For within class variation, there are a wide variety of curb ramp designs that vary in appearance. White arrows are used in some images to draw attention to curb ramps. Some images contain multiple problems.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_17" coords="13,317.93,670.21,239.19,7.24;13,317.93,679.33,239.13,7.24;13,317.93,686.89,239.39,8.91;13,317.93,697.69,239.05,7.24;13,317.93,707.29,215.39,7.24"><head>Figure 18 : In the quickVerify interface, workers could randomly verify CV curb ramp detection patches. After providing an answer for a given detection, the patch would "explode" (bottom left) and a new one would load in its place. Though fast, verification accuracies went down in an experiment of 160 GSV scenes and 59 turkers.</head><label>18</label><figDesc>Figure 18: In the quickVerify interface, workers could randomly verify CV curb ramp detection patches. After providing an answer for a given detection, the patch would "explode" (bottom left) and a new one would load in its place. Though fast, verification accuracies went down in an experiment of 160 GSV scenes and 59 turkers.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_18" coords="13,54.72,170.81,247.63,7.24;13,54.72,179.93,247.54,7.24;13,54.72,189.41,143.81,7.24"><head>Figure 17 : As expected, performance drops as the area overlap threshold increases; however, the relative difference between Tohme and baseline (svLabel) remains consistent.</head><label>17</label><figDesc>Figure 17: As expected, performance drops as the area overlap threshold increases; however, the relative difference between Tohme and baseline (svLabel) remains consistent.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="3,54.60,334.64,442.25,7.24"><head>Table 1 :</head><label>1</label><figDesc coords="3,54.60,334.64,28.32,7.24"></figDesc><table coords="3,84.98,334.64,411.87,7.24">A breakdown of our eight audit areas. Age calculated from summer 2013. *These counts are based on ground truth data. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="4,315.29,672.86,244.87,45.63"><head>Table 2 :</head><label>2</label><figDesc coords="4,315.29,674.53,30.06,7.24"></figDesc><table coords="4,315.29,672.86,244.87,45.63">Krippendorff's alpha inter-rater agreement scores between 
+two researchers on both the physical audit and GSV audit image 
+datasets. Following Hruschka et al.'s iterative coding methodology, a 
+3rd audit pass was conducted with an updated codebook to achieve 
+high-agreement scores-in our case, α &gt; 0.996. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_5" validated="false" coords="11,54.96,109.61,238.97,53.20"><head>Table 3 :</head><label>3</label><figDesc coords="11,54.96,109.61,30.35,7.24"></figDesc><table coords="11,54.96,109.61,238.97,53.20">An overview of the MTurk svLabel and svVerify HITs. 
+While Tohme's svControl system would, in practice, split work 
+between the svLabel and svDetect+svVerify pipelines, we fed every 
+GSV scene to both to perform our analyses. Acronyms above include 
+CRs=Curb Ramps; MCRs=Missing Curb Ramps; RLs=Removed 
+Labels; KLs=Kept Labels. svVerify was 2.2x faster than svLabel. 
+
+</table></figure>
+
+			<note place="foot">svDetect&apos;s final confidence score threshold was set to -0.99, which results in 67% recall and 26% precision.</note>
+		</body>
+		<back>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="15,100.56,89.87,194.74,8.10;15,86.06,100.31,32.35,8.10" xml:id="b0">
+	<monogr>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Circuit</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Of</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="1993" />
+			<biblScope unit="page" from="93" to="1168" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,116.63,208.95,8.10;15,86.06,126.95,208.98,8.10;15,86.06,137.27,208.94,8.10;15,86.06,147.71,131.16,8.10" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Google Street View: Capturing the World at Street Level</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Anguelov</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Dulong</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Filip</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Frueh</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Lafon</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Lyon</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Ogale</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Vincent</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Weaver</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computer</title>
+		<imprint>
+			<biblScope unit="volume">43</biblScope>
+			<biblScope unit="page" from="32" to="38" />
+			<date type="published" when="2010-06" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,164.03,209.06,8.10;15,86.06,174.35,209.11,8.10;15,86.06,184.67,209.20,8.10;15,86.06,193.24,209.28,9.96;15,86.06,205.43,101.60,8.10" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Can virtual streetscape audits reliably replace physical streetscape audits</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">H</forename><forename type="middle">M</forename><surname>Badland</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Opit</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Witten</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">A</forename><surname>Kearns</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Mavoa</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of urban health : bulletin of the New York Academy of Medicine</title>
+		<imprint>
+			<biblScope unit="volume">87</biblScope>
+			<biblScope unit="page" from="1007" to="1023" />
+			<date type="published" when="2010-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,221.75,208.95,8.10;15,86.06,232.07,208.91,8.10;15,86.06,242.51,209.21,8.10;15,86.06,252.83,209.18,8.10;15,86.06,263.18,209.07,8.10;15,86.06,273.50,186.34,8.10" xml:id="b3">
+	<analytic>
+		<title level="a" type="main">VizWiz: nearly real-time answers to visual questions</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">P</forename><surname>Bigham</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Jayant</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">H</forename><surname>Ji</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">G</forename><surname>Little</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">C</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Tatarowicz</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><surname>White</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>White</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><surname>Yeh</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 23nd annual ACM symposium on User interface software and technology</title>
+		<meeting>the 23nd annual ACM symposium on User interface software and technology<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="333" to="342" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,289.94,208.95,8.10;15,86.06,300.26,209.21,8.10;15,86.06,310.58,209.11,8.10;15,86.06,319.03,209.08,9.96;15,86.06,331.34,131.16,8.10" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">The design of human-powered access technology</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">P</forename><surname>Bigham</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">E</forename><surname>Ladner</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Y</forename><surname>Borodin</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">The proceedings of the 13th international ACM SIGACCESS conference on Computers and accessibility (ASSETS &apos;11)</title>
+		<meeting><address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="3" to="10" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,347.66,208.80,8.10;15,86.06,357.98,208.94,8.10;15,86.06,368.30,209.15,8.10;15,86.06,378.74,185.53,8.10" xml:id="b5">
+	<monogr>
+				<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Branson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Wah</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><surname>Babenko</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">F</forename><surname>Schroff</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Welinder</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Perona</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Belongie</surname></persName>
+		</author>
+		<title level="m">Visual Recognition with Humans in the Loop. European Conference on Computer Vision (ECCV)</title>
+		<meeting><address><addrLine>Heraklion, Crete</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,395.06,209.11,8.10;15,86.06,405.38,209.20,8.10;15,86.06,415.70,161.86,8.10" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">A Tutorial on Support Vector Machines for Pattern Recognition</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">C</forename><surname>Burges</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Data Mining and Knowledge Discovery</title>
+		<imprint>
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="121" to="167" />
+			<date type="published" when="1998" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,432.16,209.06,8.10;15,86.06,442.48,209.13,8.10;15,86.06,452.80,209.04,8.10;15,86.06,463.12,201.12,8.10" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Using Google Earth to conduct a neighborhood audit: reliability of a virtual audit instrument</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Clarke</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Ailshire</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Melendez</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Bader</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Morenoff</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Health &amp; place</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="issue">6</biblScope>
+			<biblScope unit="page" from="1224" to="1233" />
+			<date type="published" when="2010-11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,479.44,208.94,8.10;15,86.06,489.88,209.18,8.10;15,86.06,500.20,26.34,8.10" xml:id="b8">
+	<analytic>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Dai</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Mausam</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><forename type="middle">S</forename><surname>Weld</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Artificial Intelligence for Artificial Artificial Intelligence. AAAI</title>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,516.52,209.02,8.10;15,86.06,526.84,209.29,8.10;15,86.06,537.28,209.07,8.10;15,86.06,547.60,202.74,8.10" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Histograms of oriented gradients for human detection</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">N</forename><surname>Dalal</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><surname>Triggs</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">IEEE Computer Society Conference on Computer Vision and Pattern Recognition</title>
+		<imprint>
+			<date type="published" when="2005" />
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="page" from="886" to="893" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,563.92,121.91,8.10" xml:id="b10">
+	<monogr>
+		<title level="m" type="main">Data Catalog</title>
+		<ptr target="http://data.dc.gov" />
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,580.24,209.03,8.10;15,86.06,590.68,208.97,8.10;15,86.06,601.03,209.03,8.10;15,86.06,611.35,209.25,8.10;15,86.06,621.67,209.25,8.10;15,86.06,632.11,20.35,8.10" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">Fast, Accurate Detection of 100,000 Object Classes on a Single Machine</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><surname>Dean</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><forename type="middle">A</forename><surname>Ruzon</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Segal</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Shlens</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Vijayanarasimhan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Yagnik</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">{IEEE} Conference on Computer Vision and Pattern Recognition ({CVPR)}</title>
+		<imprint>
+			<date type="published" when="2013-06" />
+			<biblScope unit="page" from="1814" to="1821" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,86.06,648.43,209.01,8.10;15,86.06,658.75,209.28,8.10;15,86.06,669.07,209.12,8.10;15,86.06,677.64,209.25,9.97;15,86.06,689.83,20.15,8.10" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Scalable Multi-label Annotation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Deng</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">O</forename><surname>Russakovsky</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Krause</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Berg</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Fei-Fei</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;14</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;14</meeting>
+		<imprint>
+			<publisher>TBD</publisher>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,63.21,209.00,8.10;15,348.91,73.53,209.09,8.10;15,348.91,83.87,196.90,8.10" xml:id="b13">
+	<monogr>
+				<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Everingham</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Van~gool</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">K I</forename><surname>Williams</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Winn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Zisserman</surname></persName>
+		</author>
+		<title level="m">The {PASCAL} {V}isual {O}bject {C}lasses {C}hallenge 2012 {(VOC2012)} {R}esults</title>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,100.31,209.00,8.10;15,348.91,110.63,209.11,8.10;15,348.91,120.95,209.17,8.10;15,348.91,131.27,165.34,8.10" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">The Pascal Visual Object Classes (VOC) Challenge</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Everingham</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Van~gool</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">K I</forename><surname>Williams</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Winn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Zisserman</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Computer Vision</title>
+		<imprint>
+			<biblScope unit="volume">88</biblScope>
+			<biblScope unit="page" from="303" to="338" />
+			<date type="published" when="2010-06" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,147.71,209.02,8.10;15,348.91,158.03,209.10,8.10;15,348.91,168.35,79.03,8.10" xml:id="b15">
+	<monogr>
+				<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Felzenszwalb</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Mcallester</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Ramaman</surname></persName>
+		</author>
+		<title level="m">A Discriminatively Trained, Multiscale, Deformable Part Model. CVPR</title>
+		<imprint>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,184.67,209.00,8.10;15,348.91,195.11,208.95,8.10;15,348.91,205.43,209.27,8.10;15,348.91,215.75,209.12,8.10;15,348.91,226.07,123.00,8.10" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Object Detection with Discriminatively Trained Part-Based Models. Pattern Analysis and Machine Intelligence</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><forename type="middle">F</forename><surname>Felzenszwalb</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">B</forename><surname>Girshick</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Mcallester</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Ramanan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">32</biblScope>
+			<biblScope unit="page" from="1627" to="1645" />
+			<date type="published" when="2010-09" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,242.51,209.00,8.10;15,348.91,252.83,208.99,8.10;15,348.91,263.18,209.14,8.10;15,348.91,273.50,174.72,8.10" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Groups of Adjacent Contour Segments for Object Detection. Pattern Analysis and Machine Intelligence</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">V</forename><surname>Ferrari</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Fevrier</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">F</forename><surname>Jurie</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Schmid</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on</title>
+		<imprint>
+			<biblScope unit="volume">30</biblScope>
+			<biblScope unit="page" from="36" to="51" />
+			<date type="published" when="2008-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,289.94,209.03,8.10;15,348.91,300.26,209.13,8.10;15,348.91,310.58,36.92,8.10" xml:id="b18">
+	<analytic>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">B</forename><surname>Girshick</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><forename type="middle">F</forename><surname>Felzenszwalb</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Mcallester</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Discriminatively Trained Deformable Part Models</title>
+		<imprint/>
+	</monogr>
+	<note>Release 5</note>
+</biblStruct>
+
+<biblStruct coords="15,348.91,326.90,26.41,8.10;15,411.53,326.90,20.04,8.10;15,467.78,326.90,32.06,8.10;15,536.03,326.90,21.93,8.10;15,348.91,337.34,204.96,8.10;15,348.91,347.66,96.08,8.10" xml:id="b19">
+	<monogr>
+				<ptr target="http://www.google.com/maps/about/partners/businessview/.Accessed" />
+		<title level="m">Google Maps Business View</title>
+		<imprint>
+			<biblScope unit="page" from="2014" to="2018" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,363.98,209.10,8.10;15,348.91,374.30,209.06,8.10;15,348.91,384.74,209.21,8.10;15,348.91,395.06,209.15,8.10;15,348.91,403.51,182.63,9.97" xml:id="b20">
+	<analytic>
+		<title level="a" type="main">CrossingGuard: exploring information content in navigation aids for visually impaired pedestrians</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Guy</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Truong</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;12)</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;12)<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="405" to="414" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,421.70,209.12,8.10;15,348.91,432.16,209.07,8.10;15,348.91,442.48,209.29,8.10;15,348.91,452.80,209.08,8.10;15,348.91,461.25,209.12,9.96;15,348.91,473.44,173.87,8.10" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">A Feasibility Study of Crowdsourcing and Google Street View to Determine Sidewalk Accessibility</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Hara</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">V</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Froehlich</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 14th international ACM SIGACCESS conference on Computers and accessibility (ASSETS &apos;12)</title>
+		<meeting>the 14th international ACM SIGACCESS conference on Computers and accessibility (ASSETS &apos;12)<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<publisher>Poster Session</publisher>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="273" to="274" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,489.88,209.19,8.10;15,348.91,500.20,209.07,8.10;15,348.91,510.52,209.29,8.10;15,348.91,520.84,209.09,8.10;15,348.91,529.41,209.13,9.97;15,348.91,541.60,33.80,8.10" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Combining Crowdsourcing and Google Street View to Identify Street-level Accessibility Problems</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Hara</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">V</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Froehlich</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;13)</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;13)<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2013-05" />
+			<biblScope unit="page" from="631" to="640" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,557.92,209.04,8.10;15,348.91,568.24,209.06,8.10;15,348.91,578.68,209.03,8.10;15,348.91,589.00,209.14,8.10;15,348.91,599.32,71.11,8.10" xml:id="b23">
+	<monogr>
+		<title level="m" type="main">Exploring Early Solutions for Automatically Identifying Inaccessible Sidewalks in the Physical World Using Google Street View</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Hara</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">V</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Jacobs</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Froehlich</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013" />
+			<publisher>Human Computer Interaction Consortium</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,348.91,615.67,209.07,8.10;15,348.91,626.11,208.99,8.10;15,348.91,636.43,209.07,8.10;15,348.91,646.75,209.12,8.10;15,348.91,657.07,209.09,8.10;15,348.91,667.51,209.18,8.10;15,348.91,677.83,209.14,8.10;15,348.91,688.15,67.28,8.10" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">Improving Public Transit Accessibility for Blind Riders by Crowdsourcing Bus Stop Landmark Locations with Google Street View</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Hara</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Shiri</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Campbell</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><surname>Cynthia</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">V</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Pannella</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Moore</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Minckler</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Ng</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Froehlich</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 15th International ACM SIGACCESS Conference on Computers and Accessibility Technology</title>
+		<meeting>the 15th International ACM SIGACCESS Conference on Computers and Accessibility Technology</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="1" to="16" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,63.21,208.96,8.10;16,86.06,73.53,208.94,8.10;16,86.06,83.87,209.20,8.10;16,86.06,94.31,209.22,8.10;16,86.06,104.63,209.10,8.10;16,86.06,113.08,148.05,9.97" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">An Initial Study of Automatic Curb Ramp Detection with Crowdsourced Verification using Google Street View Images</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Hara</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Sun</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Chazan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Jacobs</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Froehlich</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 1st Conference on Human Computation and Crowdsourcing (HCOMP&apos;13)</title>
+		<meeting>the 1st Conference on Human Computation and Crowdsourcing (HCOMP&apos;13)</meeting>
+		<imprint>
+			<publisher>Progress</publisher>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,131.27,209.15,8.10;16,86.06,141.71,209.18,8.10;16,86.06,152.03,134.87,8.10" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Putting Objects in Perspective</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Hoiem</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Efros</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Hebert</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">International Journal of Computer Vision</title>
+		<imprint>
+			<biblScope unit="volume">80</biblScope>
+			<biblScope unit="page" from="3" to="15" />
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,168.35,209.30,8.10;16,86.06,178.67,209.03,8.10;16,86.06,189.11,209.03,8.10;16,86.06,199.43,209.19,8.10;16,86.06,209.75,82.27,8.10" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Reliability in Coding Open-Ended Data: Lessons Learned from HIV Behavioral Research</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><forename type="middle">J</forename><surname>Hruschka</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Schwartz</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>St</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><forename type="middle">C</forename><surname>John</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">E</forename><surname>Piconedecaro</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">A</forename><surname>Jenkins</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">W</forename><surname>Carey</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Field Methods</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="307" to="331" />
+			<date type="published" when="2004-08" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,226.07,208.92,8.10;16,86.06,236.51,209.07,8.10;16,86.06,246.83,148.18,8.10" xml:id="b28">
+	<analytic>
+		<title level="a" type="main">Predicting Sufficient Annotation Strength for Interactive Foreground Segmentation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><forename type="middle">D</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><surname>Grauman</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ICCV</title>
+		<imprint>
+			<biblScope unit="page" from="1313" to="1320" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,263.18,209.12,8.10;16,86.06,273.50,209.20,8.10;16,86.06,283.94,209.15,8.10;16,86.06,294.26,209.11,8.10;16,86.06,304.58,187.30,8.10" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Combining Human and Machine Intelligence in Large-scale Crowdsourcing</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">E</forename><surname>Kamar</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Hacker</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">E</forename><surname>Horvitz</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 11th International Conference on Autonomous Agents and Multiagent Systems</title>
+		<meeting>the 11th International Conference on Autonomous Agents and Multiagent Systems<address><addrLine>Richland, SC</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="page" from="467" to="474" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,320.90,209.02,8.10;16,86.06,331.34,208.98,8.10;16,86.06,341.66,209.11,8.10;16,86.06,351.98,146.76,8.10" xml:id="b30">
+	<monogr>
+		<title level="m" type="main">Designing Sidewalks and Trails for Access, Part II of II: Best Practices Design Guide</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">B</forename><surname>Kirschbaum</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><forename type="middle">W</forename><surname>Axelson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><forename type="middle">E</forename><surname>Longmuir</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><forename type="middle">M</forename><surname>Mispagel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">A</forename><surname>Stein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><forename type="middle">A</forename><surname>Yamada</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,368.30,208.93,8.10;16,86.06,378.74,209.11,8.10;16,86.06,389.06,209.11,8.10;16,86.06,397.51,117.55,9.97" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Street Slide: Browsing Street Level Imagery</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Kopf</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><surname>Chen</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Szeliski</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Cohen</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of SIGGRAPH 2010)</title>
+		<meeting>SIGGRAPH 2010)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="volume">29</biblScope>
+			<biblScope unit="page" from="1" to="96" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,415.70,209.21,8.10;16,86.06,426.14,202.21,8.10" xml:id="b32">
+	<monogr>
+		<title level="m" type="main">Content Analysis: An Introduction to Its Methodology</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><forename type="middle">H</forename><surname>Krippendorff</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2003" />
+			<publisher>Sage Publications, Inc</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,442.48,208.87,8.10;16,86.06,452.80,209.30,8.10;16,86.06,463.12,209.25,8.10;16,86.06,473.44,209.19,8.10;16,86.06,483.88,209.14,8.10;16,86.06,494.20,24.80,8.10" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Realtime captioning by groups of non-experts</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">W</forename><surname>Lasecki</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Sadilek</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Abumoussa</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Borrello</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Kushalnagar</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Bigham</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 25th annual ACM symposium on User interface software and technology</title>
+		<meeting>the 25th annual ACM symposium on User interface software and technology<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="23" to="34" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,510.52,208.93,8.10;16,86.06,520.84,209.02,8.10;16,86.06,531.28,209.17,8.10;16,86.06,539.73,199.06,9.97" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Dynamically switching between synergistic workflows for crowdsourcing</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">H</forename><surname>Lin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Daniel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Weld</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 26th AAAI Conference on Artificial Intelligence</title>
+		<meeting>the 26th AAAI Conference on Artificial Intelligence</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page">12</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,557.92,209.04,8.10;16,86.06,568.24,209.12,8.10;16,86.06,578.68,81.55,8.10" xml:id="b35">
+	<analytic>
+		<title level="a" type="main">Ensemble of Exemplar-SVMs for Object Detection and Beyond</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><surname>Malisiewicz</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Gupta</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">A</forename><surname>Efros</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ICCV</title>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,595.00,209.30,8.10;16,86.06,605.35,209.18,8.10;16,86.06,615.67,147.84,8.10" xml:id="b36">
+	<monogr>
+				<title level="m">The Impact of the Americans with Disabilities Act: Assessing the Progress Toward Achieving the Goals of the ADA</title>
+		<imprint>
+			<date type="published" when="2007" />
+		</imprint>
+		<respStmt>
+			<orgName>National Council on Disability</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,86.06,632.11,34.48,8.10;16,181.43,632.11,24.04,8.10;16,266.24,632.11,29.00,8.10;16,86.06,642.43,209.30,8.10;16,86.06,652.75,23.37,8.10" xml:id="b37">
+	<monogr>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Toolkit</forename><surname>Princeton Vision</surname></persName>
+		</author>
+		<ptr target="http://vision.princeton.edu/code.html.Accessed" />
+		<imprint>
+			<biblScope unit="page" from="2014" to="2018" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,63.21,209.09,8.10;16,348.91,73.53,209.03,8.10;16,348.91,83.87,209.11,8.10;16,348.91,94.31,209.10,8.10;16,348.91,104.63,68.35,8.10" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Human Computation: A Survey and Taxonomy of a Growing Field</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">J</forename><surname>Quinn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><forename type="middle">B</forename><surname>Bederson</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems<address><addrLine>New York, NY, USA</addrLine></address></meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1403" to="1412" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,120.95,209.04,8.10;16,348.91,131.27,209.09,8.10;16,348.91,141.71,209.10,8.10;16,348.91,152.03,209.21,8.10;16,348.91,162.35,54.80,8.10" xml:id="b39">
+	<monogr>
+		<title level="m" type="main">Using Google Street View to audit neighborhood environments. American journal of preventive medicine</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">G</forename><surname>Rundle</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><forename type="middle">D M</forename><surname>Bader</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">A</forename><surname>Richards</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><forename type="middle">M</forename><surname>Neckerman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">O</forename><surname>Teitler</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2011-01" />
+			<biblScope unit="volume">40</biblScope>
+			<biblScope unit="page" from="94" to="100" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,178.67,209.31,8.10;16,348.91,189.11,86.13,8.10" xml:id="b40">
+	<monogr>
+		<title level="m" type="main">Pedestrian Mobility and Safety Audit Guide</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">E</forename><forename type="middle">R</forename><surname>Stollof</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">M</forename><surname>Barlow</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2008" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,205.43,209.23,8.10;16,348.91,215.75,209.25,8.10;16,348.91,226.07,185.86,8.10" xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Crowdsourcing Annotations for Visual Object Detection</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">H</forename><surname>Su</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Deng</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Fei-Fei</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">AAAI Technical Report</title>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+	<note>4th Human Computation Workshop</note>
+</biblStruct>
+
+<biblStruct coords="16,348.91,242.51,209.02,8.10;16,348.91,252.83,209.15,8.10;16,348.91,263.18,110.11,8.10" xml:id="b42">
+	<analytic>
+		<title level="a" type="main">Regression Shrinkage and Selection Via the Lasso</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>Tibshirani</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Royal Statistical Society, Series B</title>
+		<imprint>
+			<biblScope unit="volume">58</biblScope>
+			<biblScope unit="page" from="267" to="288" />
+			<date type="published" when="1994" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,279.50,209.09,8.10;16,348.91,289.94,209.43,8.10;16,348.91,300.26,68.13,8.10" xml:id="b43">
+	<analytic>
+		<title level="a" type="main">Americans with Disabilities Act of 1990</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">R D</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Pub. L</title>
+		<imprint>
+			<biblScope unit="page" from="101" to="336" />
+			<date type="published" when="1990" />
+		</imprint>
+		<respStmt>
+			<orgName>United States Department of Justice,</orgName>
+		</respStmt>
+	</monogr>
+	<note>104 Stat. 328</note>
+</biblStruct>
+
+<biblStruct coords="16,348.91,316.58,209.03,8.10;16,348.91,326.90,209.33,8.10;16,348.91,337.34,209.11,8.10;16,348.91,347.66,110.52,8.10" xml:id="b44">
+	<analytic>
+		<title level="a" type="main">Rapid Object Detection using a Boosted Cascade of Simple Features. Computer Vision and Pattern Recognition</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Viola</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Jones</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Computer Society Conference on</title>
+		<imprint>
+			<biblScope unit="volume">1</biblScope>
+			<biblScope unit="page">511</biblScope>
+			<date type="published" when="2001" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,401.06,208.99,8.10;16,348.91,411.38,209.13,8.10;16,348.91,421.70,209.12,8.10;16,348.91,432.16,47.11,8.10" xml:id="b45">
+	<analytic>
+		<title level="a" type="main">Online crowdsourcing: rating annotators and obtaining cost-effective labels</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Welinder</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Perona</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">W. on Advancing Computer Vision with Humans in the Loop</title>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,448.48,208.93,8.10;16,348.91,458.80,209.27,8.10;16,348.91,469.12,148.06,8.10" xml:id="b46">
+	<analytic>
+		<title level="a" type="main">Image-based Fa\ÇAde Modeling</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Xiao</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><surname>Fang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Tan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">E</forename><surname>Ofek</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Quan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Graph</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="issue">10</biblScope>
+			<biblScope unit="page" from="1" to="161" />
+			<date type="published" when="2008-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,485.44,208.94,8.10;16,348.91,495.88,209.35,8.10;16,348.91,506.20,173.50,8.10" xml:id="b47">
+	<analytic>
+		<title level="a" type="main">Image-based Street-side City Modeling</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Xiao</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><surname>Fang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">P</forename><surname>Zhao</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Lhuillier</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Quan</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Graph</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="page">12</biblScope>
+			<date type="published" when="2009-12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,522.52,209.08,8.10;16,348.91,532.84,209.18,8.10;16,348.91,543.28,160.67,8.10" xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Street View Challenge: Identification of Commercial Entities in Street View Imagery</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">R</forename><surname>Zamir</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Darino</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Shah</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ICMLA</title>
+		<imprint>
+			<biblScope unit="issue">2</biblScope>
+			<biblScope unit="page" from="380" to="383" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,559.60,209.31,8.10;16,348.91,569.92,209.03,8.10;16,348.91,580.24,195.34,8.10" xml:id="b49">
+	<monogr>
+		<title level="m" type="main">GMCPTracker: Global Multi-object Tracking Using Generalized Minimum Clique Graphs</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">R</forename><surname>Zamir</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Dehghan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Shah</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="343" to="356" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="16,348.91,596.68,209.00,8.10;16,348.91,607.03,208.96,8.10;16,348.91,617.35,209.15,8.10;16,348.91,627.67,82.86,8.10" xml:id="b50">
+	<analytic>
+		<title level="a" type="main">Accurate Image Localization Based on Google Maps Street View</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">R</forename><surname>Zamir</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Shah</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the European Conference on Computer Vision (ECCV)</title>
+		<meeting>the European Conference on Computer Vision (ECCV)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

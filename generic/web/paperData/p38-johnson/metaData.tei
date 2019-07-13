@@ -1,0 +1,929 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/lopez/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.5.1-SNAPSHOT" ident="GROBID" when="2018-08-15T15:45+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">Creating Presentation Slides: A Study of User Preferences for Task-Specific versus Generic Application Software User Preferences for Task-Specific versus Generic Software c 39</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+				<date type="published" when="1996-03">March 1996</date>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeff</forename><forename type="middle">A</forename><surname>Johnson</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="institution">SunSoft</orgName>
+								<address>
+									<addrLine>2550 Garcia Avenue, MS UMPK 16-303</addrLine>
+									<postCode>94043</postCode>
+									<settlement>Mountain View</settlement>
+									<region>CA</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Sun</forename><surname>Microsystems</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="institution">SunSoft</orgName>
+								<address>
+									<addrLine>2550 Garcia Avenue, MS UMPK 16-303</addrLine>
+									<postCode>94043</postCode>
+									<settlement>Mountain View</settlement>
+									<region>CA</region>
+								</address>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Bonnie</forename><forename type="middle">A</forename><surname>Nardi</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="institution">SunSoft</orgName>
+								<address>
+									<addrLine>2550 Garcia Avenue, MS UMPK 16-303</addrLine>
+									<postCode>94043</postCode>
+									<settlement>Mountain View</settlement>
+									<region>CA</region>
+								</address>
+							</affiliation>
+						</author>
+						<title level="a" type="main">Creating Presentation Slides: A Study of User Preferences for Task-Specific versus Generic Application Software User Preferences for Task-Specific versus Generic Software c 39</title>
+					</analytic>
+					<monogr>
+						<title level="j" type="main">Apple Computer, ACM Transactions on Computer-Human Interaction</title>
+						<imprint>
+							<biblScope unit="volume">3</biblScope>
+							<biblScope unit="issue">1</biblScope>
+							<biblScope unit="page" from="38" to="65"/>
+							<date type="published" when="1996-03">March 1996</date>
+						</imprint>
+					</monogr>
+					<note>Authors&apos; addresses:J. A. Johnson,</note>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>H12 [Information Systems]: User/MachineSysteme-hwncm factors</term>
+					<term>H4O[Information Systems Applications]: General</term>
+					<term>H52 [Information Interfaces and Presentation]: User Interfaces</term>
+					<term>134 [Computer Graphics]: Graphics Utilities-application packages</term>
+					<term>graphics editors</term>
+					<term>K81 [Personal Computing]: Application Packages+raphics General Terms: Human Factors Additional Key Words and Phrases: Application software, slide presentations,task analysis, task specific interoperability, interview study,</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>Apple Computer We mnducteda studyto investigatethe use of genericversustask-specificapplicationsoftwareby peoplewhocreateandmaintainpresentationslides.Sixteenpeoplewere interviewedto determine how they prepareslides,what softwarethey use to prepareand maintainslides,and how well the softwarethey use supportavarious aspects of the task. The informantsvaried in how central slidenmkingwas to their jobs. The hypothesesdriving the study were that (1) some software applicationsare task generic,intendedfor use in a wide variety of tasks, while others are task S@C, intinded to SUPPOrtvery s@c tasks; (2) task-specificeothvareis preferable,but is often not used becauseof cost, learningeffort, or lack of availability and (3) people who infrequently performa tasktind to usegenerictools,whilepeoplewhooftenperformit tendto usetask-specific tools.Our findingssuggestthat severalfactorsinfluencechoiceof slidemakingsoftware,including desiredquality,productiontime,userskill,willingnessto use multipletools,whetherpeoplework alone or in teams, and company policy. Furthermore,the task specificity/genericness of an application program is not a simple matter of a!egree,because it depends on several ffirly independentsoftwaredesign issues. We (1) concludethat developingapplicationsoftwarethat supportsall aapectaof a task well is extremelydiflicultand (2) suggestan alternativeapproach that may be more ftuitful:providingcollectionsof interoperabletools and seMces.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="1.">INTRODUCTION</head><p>Despite significant advances in user interface technology since the mid- 1970s, the majority of households in the industrialized world do not yet own a personal computer <ref type="bibr" coords="2,256.80,106.01,49.74,9.04" target="#b3">[Fox 1995;</ref><ref type="bibr" coords="2,312.72,106.01,48.37,9.04">SPA 1995]</ref>. One plausible reason is that most people are not interested in mastering and using computers per se, but only in performing tasks in familiar domains. People who use computers must often master unfamiliar concepts (e.g., files, directories, commands and arguments, control characters, cursors, modes, text strings, selection) that are about computation, rather than about the person's task or problem domain. Furthermore, computers-even those with graphical, WYSIWYG, menu-based user interfaces-require their users to supply the mapping between the objects and operations provided by the computer and the goals, objects, and operations of the task domain. It is, however, well established that people cannot easily provide this mapping: they cannot easily decompose their tasks into pieces that match the capabilities of today's computers, and they cannot easily combine the computer's capabil- ities so as to produce a solution to their problem <ref type="bibr" coords="2,379.44,267.53,107.58,9.04">[Hutchins et al. 1986;</ref><ref type="bibr" coords="2,127.68,280.01,108.13,9.04">Lewis and Olson 1987]</ref>. People want to work in their own domain-specific idioms, not those of the computer [Fischer and <ref type="bibr" coords="2,356.40,292.73,59.17,9.04">Lemke 1988]</ref>.</p><p>An antidote to the limitations of computer-centric software might be to provide highly task specific applications that allow people to work in the actual task domain rather than having to map that domain to the domain of computation. This idea underlies research efforts to prototype interactive applications that supply a high degree of task semantics <ref type="bibr" coords="2,418.32,355.37,69.12,9.04;2,128.16,367.37,22.45,9.04">[Fischer et al. 1989]</ref>, as well as several projects to develop software development environ- ments that support the development of such applications <ref type="bibr" coords="2,420.00,379.85,62.25,9.04" target="#b0">[Casner 1991</ref>; <ref type="bibr" coords="2,127.68,392.33,121.74,9.04">Fischer and Lemke 1988;</ref><ref type="bibr" coords="2,254.64,392.33,85.98,9.04" target="#b4">Gould et al. 1991;</ref><ref type="bibr" coords="2,345.36,392.33,97.50,9.04">Johnson et al. 1993;</ref><ref type="bibr" coords="2,448.08,392.33,39.79,9.04;2,127.68,405.29,40.14,9.04">Olsen et al. 1992;</ref><ref type="bibr" coords="2,172.08,405.29,126.38,9.04" target="#b13">Vlissides and Linton 1990]</ref>.</p><p>The present study was conducted as part of an effort to better understand what it means for software to provide "task-specific" support for a task. In what ways do computer-based applications vary in their degree of support for tasks? Under what circumstances is a high degree of task support necessary or unnecessary? Because of our interest in fostering the develop- ment of task-specific applications in a variety of domains <ref type="bibr" coords="2,415.68,479.45,72.00,9.04;2,128.40,491.69,23.82,9.04">[Johnson et al. 1993;</ref><ref type="bibr" coords="2,160.08,491.69,59.34,9.04" target="#b9">Nardi 1993;</ref><ref type="bibr" coords="2,227.52,491.69,126.30,9.04" target="#b9">Nardi and Zarmer 1993;</ref><ref type="bibr" coords="2,361.92,491.69,100.45,9.04" target="#b14">Zarmer et al. 1992]</ref>, we conducted a study to gain some insight into the determinants of user preferences for task-specific versus generic software. The task domain we studied is the creation and editing of slides for visual presentations.</p><p>We began with a working hypothesis, but some background is necessary before we state it and describe the study. First, we give some examples of software applications and discuss their varying levels of task specificity. Next, we compare the support that various types of programs provide for slidemaking and then state our initial working hypothesis. Finally, we describe the study and our findings and offer some conclusions.</p><p>ACM Transactions on Computer-Human Interaction, Vol. 3, No. 1, <ref type="bibr" coords="2,446.64,634.51,41.78,6.56" target="#b15">March 1996.</ref> semantic support for any particular application of that functionality, would be considered integrated but not task integrated by <ref type="bibr" coords="4,388.09,84.88,95.85,9.04" target="#b10">Nielsen et al. [1986]</ref>. We will return to this point in the Conclusions section.</p><p>Nielsen et al. <ref type="bibr" coords="4,215.04,109.61,27.43,9.04">[1986]</ref> also refer to specialized, standalone application programs, but mean by that something independent of task specificity. Whereas they would classify a simple text editor as "specialized" because it is not integrated with anything else, we would call it "generic" because it is nearly devoid of task semantics. On the other hand, a standalone family tree editor that embodied semantics of how family trees are constructed, which we would consider "task specific," would also be considered by Nielsen as "specialized," again because of its lack of integration. Thus, whether a program is "specialized" in their terminology has nothing to do with whether it is "task specific" in ours.</p><p>After we have described our interview study, we will have more to say about application software task specificity.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.2">Creating Presentation Slides</head><p>Slide preparation is a task for which a wide variety of computer-based tools are used. By slides, we mean both 35mm slides and overhead transparen- cies. People prepare slides using text editors, desktop publishing systems, painting programs, drawing programs, spreadsheets, statistical analysis programs, business graphics programs, animation programs, and, recently, presentation-making programs.</p><p>Many people use structured drawing programs for making presentation slides. With drawing programs, users place manipulable graphical objects on a canvas. Text and graphics, once placed, can be edited, moved, or copied. However, the drawing programs' degree of support for slidemaking is limited. They offer, for example, no notion of a presentation set of slides. Users can compensate by putting slides into separate files and grouping them in folders or directories, or by placing all the drawings of a presenta- tion together on one canvas; but such workarounds are inconvenient and inefficient. Additional drawbacks of drawing programs as tools for slide- making are: -They provide no support for consistency of format, font, and layout in a presentation. To have the same margins on every slide, drawing pro- gram users must painstakingly arrange things that way, separately for each slide. If the formatting requirements change, users must change every slide. -Standard slide content, such as logos, headers, and footers, must be explicitly placed on every slide, and changes require editing every slide. -They provide little help in changing the structure of a presentation's content. Splitting one slide into two requires much explicit copying, moving, and deleting of graphic objects. -They provide no support for the actual presentation, e.g., attaching speakers' notes to a slide. Put succinctly, drawing programs lack the concepts of slides, relation- ships between slides, and presentations.</p><p>Most of the other types of software used for preparing slides also lack support for the process of creating and editing presentation slides. Nonetheless, they are commonly used for that task.</p><p>In recent years, software designed specifically for creating presentations has become available (e.g., Charisma 'M, PersuasionTM, and PowerPointTM). Since such programs are intended only for slidemaking, they can provide much more support for that task. Slides comprising a presentation are contained in one file. The format and common content of slides are specified once for the presentation, rather than separately for each slide. Typical slide-editing actions, like removing or adding a level of detail, are explicitly supported. Finally, many such programs support the task of giving the presentation.</p><p>Note that-given enough time, skill, and talent-any slide or presenta- tion that can be produced with a presentation program can also be produced with a drawing program. Presentation programs facilitate the process of creating, editing, and maintaining presentations by providing built-in domain knowledge. Supporting the process of performing a task may be more important for the usability of a software application than getting the user interface right-at least as the term "user interface" has conventionally been used. We illustrate this with a story from the experi- ence of the first author.</p><p>In the early 1980s, at a company where the first author worked, employ- ees made presentation slides using a text editor in conjunction with a slide-formatting program. To make a set of slides, employees created a text file containing the textual slide content and embedded formatting com- mands. The text file was then "compiled" using the slide formatter, produc- ing a set of graphics files containing images of the slides. Employees had many complaints about this process. The formatting commands were hard to learn; it was hard to tell how a particular slide would look from its source file; one had to "compile" the entire set to check how a single slide looked.</p><p>When interactive painting and drawing programs became available, most employees switched to them immediately. The new programs were easier to learn and provided much better feedback than did the text editor/forrnatter combination.</p><p>However, people soon learned that the new programs, for all their user friendliness, did not support slidemaking very well. With the new pro- grams, it was hard to obtain consistent formatting, hard to manage sets of slides, and hard to edit slides. After a short honeymoon, most employees switched back to the old programs, occasionally using the new ones to enhance slides generated by the slide formatter.</p><p>At the time, this mass retreat to the old tools was perplexing. People had, unaccountably, eschewed the advantages of direct-manipulation interfaces and WYSIWYG interaction to return to an old-fashioned text-based com- mand language and tedious edit-compile-debug cycle.</p><p>User Preferences for Task-Specific versus Generic Software . <ref type="bibr" coords="6,481.69,46.43,8.72,7.33">43</ref> </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="2.3">Working Hypothesis</head><p>As we began our research on user-centered development of task-specific applications <ref type="bibr" coords="6,195.12,96.88,104.05,9.04">[Johnson et al. 1993]</ref>, we explained the foregoing story as follows. People abandoned the new tools because these tools were not task specific. They were not slidemaking programs, but rather generic painting and drawing programs. Though the new tools made some aspects of the slidemaking task easier, they made others harder. The aspects of the task that became easier were those in the domain of the "user interface"; they had more to do with controlling-and learning to control-the software than with making slides. The aspects of slidemaking that the new tools made more difficult were the deeper, more task-related aspects, e.g., assuring graphical consistency between slides. While employees could, with effort and talent, make nicer-looking presentations with the new tools, more people could produce acceptable presentations much more quickly with the old tools. Having a "task-friendly" application was more important to users than was having a "user-friendly" interface. We also reasoned that the order in which people learned these tools played a role in their ultimate preference. After switching to the WYSIWIG tools, they were willing to switch back to the textually controlled slide compiler despite its being hard to learn, because they did not have to learn it; they already knew how to use it. Had the slide compiler become available after the WYSIWIG-but-generic drawing tools, most employees-mainly those who produce relatively few slide presentations-would probably have stayed with the generic drawing and painting tools. The effort required to learn to use the slide compiler would not have been worth the expected return. We assumed that people who produced slide presentations fre- quently, but learned the generic painting and drawing tools first, would probably invest the time to take advantage of the slide compiler's greater semantic support for slidemaking.</p><p>Stated more formally, our initial analysis and experience with interactive computer-based applications led us to the following four-part hypothesis:</p><p>(1) Task specificity: The more knowledge of a particular task is built into a software application, the more specific it is to that task, i.e., the less applicable it is to other tasks. Software applications can be considered to occupy a position along a continuum, from completely generic to completely task specific. (2) Task-specific tools preferred: It is best to have a tool designed specifi- cally for the task one is performing. For example, for preparing sche- matic drawings, a schematic editor is preferable to a drawing editor. Good support for a task is even more important for overall usability and productivity than is a good "user interface" in the traditional sense of the term.</p><p>(3) Limited market: The more task specific a software application is, the smaller its potential market, requiring the developer to either charge a higher price or be satisfied with less revenue. (4) Factors of choice: People use generic applications when ones that are more task specific are either unavailable, cost too much, or require too much (incremental) learning effort. In today's software market, and given the state of application development technology <ref type="bibr" coords="7,422.41,108.69,63.18,9.04">[Myers 1989;</ref><ref type="bibr" coords="7,143.76,121.17,130.45,9.04" target="#b14">Zarmer and Johnson 1990]</ref>, these conditions usually hold. Most com- puter users therefore "get by" with generic tools-e.g., text editors and drawing editors-because their level of need does not justifi the cost of obtaining and learning to use task-specific ones. People prefer task- specific tools when they perform a task frequently. Their level of use justifies the overhead of acquiring and learning to use the tool.</p><p>Based on these beliefs, we (and other colleagues) began developing an Application Construction Environment (ACE) designed to facilitate the development of task-specific software applications <ref type="bibr" coords="7,381.13,222.93,104.94,9.04">[Johnson et al. 1993;</ref><ref type="bibr" coords="7,126.00,235.17,115.50,9.04" target="#b9">Nardi and Zarmer 1993;</ref><ref type="bibr" coords="7,245.76,235.17,89.41,9.04" target="#b14">Zarmer et al. 1992]</ref>. One goal of ACE was to make development of many business applications easy and cheap enough that it would be cost effective to develop highly task specific applications for small, specialized markets and short-term tasks. This was done by prepackaging commonly needed functionality in extensible application frameworks that could, like spreadsheets, be specialized for specific tasks <ref type="bibr" coords="7,424.33,294.21,61.74,9.04" target="#b9">[Nardi 1993;</ref><ref type="bibr" coords="7,126.24,305.97,108.78,9.04">Nardi and Miller 1990;</ref>. A related goal was to promote a development process based heavily on task analysis and to move the center of the development process much closer to the computer users, who best under- stand their goals and tasks. A third goal was to provide support for representing task semantics more explicitly than do conventional software development tools.</p><p>As we developed ACE, we were aware that our four-part hypothesis should be empirically tested. Over time, we began to suspect that parts of it were incorrect. For example, a colleague who had previously worked as a graphic artist producing presentation slides for others indicated that experienced professional slidemakers prefer generic drawing and painting software for creating slides because it does not restrict them from doing what they want, while dedicated slidemaking programs often impose over- simplified views of the task and restrict the results that can be produced. Based on this counterclaim and on our own further analysis of the nature of task specificity, we decided to conduct an empirical study as a first step in evaluating and correcting our working hypothesis. We chose the domain of slidemaking because of the large variety of software tools used for that task, the relative accessibility of informants, and, not least, the challenge posed by our graphic artist colleague.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.">METHOD</head><p>We conducted an interview study to examine how people use computer software to create presentation slides. Since the marketplace for software used in slidemaking changes rapidly, it is important to note that we conducted the interviews in January through February of 1992. As refer- ence points, the versions of Microsoft WordTM,Microsoft PowerPointTM, and ACMTransactions on Computer-Human Interaction, Vol.3, No. 1, <ref type="bibr" coords="7,354.00,642.23,39.87,6.56" target="#b15">March 1996</ref> User Preferences for Task-Specific versus Generic Software</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>. 45</head><p>Aldus PersuasionTM in use among our informants then were 4.0, 2.0, and 2.0, respectively.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.1">Informants</head><p>The informants were 17 people whose jobs involved creating, editing, and maintaining slide preeentations, Two were a husband and wife who worked-and were interviewed-together; for the purpose of this study, they were treated as one informant. All informants were college educated with several years experience making slides. The y worked for a variety of companies, ranging from one-person independent consultantships to large multinational corporations in the San Francisco Bay Area (most outaide of Silicon Valley). Six of the 16 informants worked in research or marketing and made slides for their own use in presentations, with slidemaking being only one of many of their job responsibilities. The other 10 informants can be considered professional slidemakers; they had, as a significant (for some, dominant) part of their job, the creation of presentation slides for others, in a variety of business areas: legal, advertising, reeearch, and general business.</p><p>Our informants were quite happy to talk about their slidemaking soft- ware. Several warned when scheduling the interview that their busy schedule could accommodate only a brief interview, but then in the inter- view they seemed willing to talk for as long as the interviewer would listen. People apparently have strong opinions, both positive and negative, about the software they use.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.2">Procedure</head><p>We developed a set of questions that covered the issues of interest in thie study (see Appendix A). Most of the interviews were conducted at the informant's workplace, often with a computer slidemaking system ready-at- hand so that we could see the user's work online.</p><p>The interviewer began each interview by explaining that the purpose of the study was to learn what is involved in making slide presentations, what sorts of software people use for the task, and what people's reasons are for using or not using various software tools. The interviewer then asked the informant to describe the entire slidemaking process, from start to finish. The interviewer allowed the conversation to flow, more or less, naturally rather than strictly following the list of questions, but made sure that answers to each of the predetermined questions were captured on tape. The interviewer did not explain the distinction between task-specific versus generic software, or our initial working hypothesis. Interviews ranged from 1 to 3 hours per informant.</p><p>Interviews were audiotaped, then transcribed onto computer text files. About 250 pages of transcripts resulted from the interviews.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="3.3">Data Analysis</head><p>We read transcripts of each interview, in some cases referring to the audiotape to clarify transcription problems or informant intent. A summary ACM 'lkansactions on Computer-Human Interaction, Vol. 3, No. 1, March 199S.</p><p>was made of each interview that included: the informant's job role and involvement in slidemaking, the context in which slides were being pro- duced, a summary of the slide production process as described by the informant, the software the informant uses or has used for slidemaking, the informant's reasons for using it, software features that the informant considered useful or a hindrance in slidemaking, and informant comments (if any) that seemed especially germane to the study. From these summa- ries, we constructed tables summarizing our findings and computed some summary statistics.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.">RESULTS</head><p>The 16 informants in our study reported using a total of 25 sofiware programs for preparing slide presentations. The average number of pro- grams per informant was 4.4, ranging from 1 to 8, The average was 5.6 for our informants who were professional graphic artists, and 2.5 for our other informants. All six who were not graphic artists ranked below the median number of programs used for slidemaking, which would be highly improb- able by chance. This is of course not surprising: one would expect graphics professionals to have a larger collection of tools for slidemaking than amateurs. <ref type="table" coords="9,127.92,347.49,35.11,9.04" target="#tab_0">Table I</ref> lists all of the types of software used by informants in preparing presentations and gives examples of each software type. "Desktop publish- ing" refers to WYSIWYG document editors and page layout programs. "Document compiler" refers to programs that compile text containing embedded formatting commands into formatted documents. <ref type="table" coords="9,420.97,395.97,34.87,9.04" target="#tab_0">Table I</ref> shows that even though the number of informants interviewed in our study was relatively small (16), our informants, as a group, used a wide variety of types of software to prepare slide presentations.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="4.1">Tabulation of Interview Data</head><p>Readers who wish to see a "raw" tabulation of the interview data should refer to Appendix B. Appendix B also includes a discussion of methodolog- ical issues we encountered in tabulating the interview data. For present purposes, tables that aggregate the raw data, thereby showing tendencies, will suffice.</p><p>Table II categorizes informants into types (professional slidemaker ver- sus amateur) and indicates, for each type of software, what types of users used it. It separates creating or organizing presentations from creating presentation content. It shows that for creating and organizing slide presentations, presentation and desktop publishing programs were the two most popular types, for both professional and amateur slidemakers. For generating presentation content, drawing and charting programs were popular among professional graphic artist informants. Informants who were slidemaking amateurs tended to stick to one program and not use auxiliary software to produce slide content; the few who used auxiliary programs mainly used spreadsheets to produce charts.    <ref type="table" coords="10,191.28,332.56,42.35,9.04" target="#tab_0">Table III</ref>, spreadsheet, database, and custom programs were included in the Graphics category along with drawing, painting, and charting programs because informants told us that for slidemaking they used those types of software to generate data-driven graphics. Desktop publishing programs and document compilers were categorized as Docu- ment. <ref type="table" coords="10,162.00,392.09,41.83,9.04" target="#tab_0">Table III</ref> shows that the two most common combinations of software tools used by graphics professionals were Graphics only (four professionals) and Presentation, Document, and Graphics (four professionals). It also shows that professional graphic artists tend to use a larger collection of software programs for preparing slides than do "amateur" slidemakers, i.e., people who create presentations only as a small part of their jobs. The "graphics professional" listed as using only Presentation software was in fact a group of graphics clericals, referred to as "secretaries" by the informant who managed them. Among graphics amateurs, who tend not to use more than one program for making slides, Document software was the most popular category,</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.">DISCUSSION</head><p>As the tabulated data show, the main finding of the study was that our original hypothesis was right in some respects and wrong in others and that the truth is more complex than either we or our graphic artist colleague understood. Four out of six of the informants for whom slidemak- ing was peripheral to their job used whatever general-purpose software they used for other work, e.g., document production. However, two such informants took the time to learn how to use task-specific presentation  Informants who use more than one type of software for slidemaking are counted once for each type of sottwarethey use.</p><p>programs. Though no statistical tests are feasible here, the trend favors our initial hypothesis that people who create few presentations tend to use generic software to prepare slide presentations.</p><p>However, contrary to our hypothesis but in agreement with the claims of our graphic artist colleague, few of our informants who are full-time slidemakers rely mainly on task-specific presentation programs. Most made extensive use of generic software such as drawing, painting, and word processing programs rather than sticking to slidemaking programs. In the following sections, we describe the factors aiTecting software choice that emerged from our interviews, then revise our analysis of task specificity.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1">Factors Affecting Choice of Siidemaking Software</head><p>We found that the choices of software to accomplish a particular slidemak- ing task are highly dependent on specific requirements. Furthermore, the requirements are not fixed for a given person; they vary from specific task to specific task within the domain of creating and maintaining slide presentations. User requirements vary according to several factors.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.1">Presentation Quality, production Time, and User Skill Level.</head><p>One factor that influences professional slidemakers' choice of software is the   desired quality of a presentation. Closely related to this is the time one has or takes to produce the presentation. Our data make it clear that slidemak- ing tasks vary a great deal in requirements. Some presentations are for coworkers, and some are for external customers. Some presentations are considered ordinary while others are 'fancy" or "very important ." Most presentations are relatively mundane; others have millions of dollars riding on the impression they make. The goal of producing a fancy presentation leads to different choices than the goal of producing an ordinary presenta- tion. Each kind of presentation entails organization, illustration, and other subtasks, but the differing goals mandate optimizing different aspects of the overall process.</p><p>Presentation slides are often produced on very short schedules, with production time being more important than illustration quality. To quote from two of our informants:</p><p>Usually speed is an issue here rather than quality. it's always like down to the last minute. They always wanted everything yesterday. They will come tome with very little time to turn around slides.</p><p>Though many presentations are prepared on tight deadlines, not all are. Some-usually the very important, fancy ones-are anticipated and planned well in advance.</p><p>Many slidemaking organizations use different software, processes, and even personnel for producing plain presentations-the majority-than they 50 q J. A. Johnson and B. A. Nardi do for producing fancy or very important ones, of which there are relatively few. To produce plain presentations quickly, professional slidemakers tend to use dedicated slidemaking programs (though factors such as familiarity and availability sometimes limit this tendency). This is as we had predicted. However, for fancier presentations, professional slide- makers usually use generic drawing, painting, desktop publishing, or animation software, though sometimes with presentation programs serv- ing as the final container and organizer.</p><p>Some firms employ less-skilled graphics personnel to produce the simpler slide presentations, and more highly trained graphic designers and artists to produce fancy graphics and presentations. For example, one firm has a specialist who creates high-quality color presentations and fancy graphics using generic illustration software, and "everyone else just does straight charts and graphs" and "word slides" using a presentation program. Our initial working hypothesis distinguished only between people for whom slidemaking is peripheral to their job (e.g., researchers who give conference papers) and those for whom slidemaking is their main job, but our inter- views made it clear that the latter category consists of two quite different sorts of workers. Some full-time slidemakers are highly trained artists; they have a lot of talent, skill, and knowledge in the task domain (e.g., presentation</p><p>style, graphic art). They tend to use tools that provide more freedom to exercise their domain knowledge and creativity, i.e., collections of generic software. Other full-time slidemakers are graphic clerieals; they may have training and skill at operating their tools, but their training and skill in the graphic art task domain is low compared to graphic artists. These are people who are either (1) more concerned about being productive than they are about acquiring graphic art skills or (2) in jobs allowing them less autonomy and creativity. They tend to use tools that provide the bulk of the task knowledge (and assumptions about what sorts of presentations one will want) built-in, i.e., presentation-making programs. This explains why some of our findings regarding full-time slidemakers initially seemed split between those conforming to our original hypothesis and those that agreed with the claims of our graphic artist colleague.</p><p>One aspect of presentation quality is the quality of the graphic art. their graphs that much. You know? It's like they would have to. . work at such a simplelevel to make a presentation,that nobody, they can't, the [clients]can't cut down on the complexity of their slides, to be able to fit in with the limitationsof a program like that. Persuasion and PowerPoint are sort of integrated programs, and they're good for someonewho isn't a power word processor, who isn't a power graphic artist, where they basically want to type in their own headers and dot points; and it's great for that. . . But if you have to go beyond that where you're. doing real serious word processing, or doing some real elaborate graphics, it just doesn't cut it either way. . . . There hasn 't been any software that does everything weil.</p><p>[emphasisadded]</p><p>Because of this, professional graphic artists who create illustrations for slides tend to use generic drawing and painting tools, which give them the freedom to use their skills and to produce the illustrations they want. Some illustration programs provide image-enhancing features such as antialias- ing, three-dimensional effects, and highlighting, which are absent in dedi- cated slidemaking programs. This is similar to the findings of Nielsen et al. <ref type="bibr" coords="14,134.40,269.45,25.77,9.04">[1986]</ref>, although as explained in the Introduction, their terminology differs from ours:</p><p>As the example with presentation graphs shows, a key reason for the lack of use of integrated packages seems to be lack of functionality in them compared with specialized stand-alone application programs. In many cases we found users who simply needed the added functionality of a specialized program and therefore used it for one of the applications they theoretically had available in their integrated package <ref type="bibr" coords="14,262.32,354.39,117.99,8.14">[Nielsen et al. 1986, p. 164]</ref>.</p><p>Professional slidemakers producing fancy presentations provide a mirror image example to our story in which people retreated from new "user- -friendly" generic illustration software to their old slide formatter. The people in that story did not want or need to optimize illustration; for them the goal was to produce acceptable slides quickly, rather than to produce beautifully illustrated slides. In contrast, a professional slidemaker prepar- ing a fancy presentation is most concerned about graphic quality.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.2">Willingness</head><p>to Use Multiple Programs in Concert.</p><p>To get the functionality they require, professional slidemakers often use s)idemaking programs as only one of a set of interoperable tools. This is clear from <ref type="table" coords="14,134.39,499.61,87.34,9.04">Tables H and 111</ref>. What is not shown in the tables is that professional slidemakers often use slidemaking programs, ironically, not to make slides but rather to contain and organize them. For example, one informant said: Thus, the programs that we had regarded as task-specific tools that supported, end to end, the entire slidemaking process, were in many cases being used as tools to support a specific subtask of slidemaking, namely, containing and organizing slides for presentations. However, some graphic q J. A. Johnson and B. A. Nardi artist informants ignored even the organizing functionality of dedicated presentation software. One informant, for example, told us she used a drawing program for that purpose:</p><p>Everything comes through MacDraw Pro no matter where it starts.</p><p>Of course, even though there has been much progress in software integrat- ion and interoperability since Nielsen et al. [19861 conducted their study of software use, few programs used by our informants were designed to be used together, and not surprisingly they often cannot be. Interoperability is very important to professional slidemakers: they do not think much of dedicated slidemaking tools that cannot easily accept text and graphics from a variety of sources. One feature that several informants said is missing from most of their tools is the ability to share-rather than copy-content between applications, allowing a single piece of content to appear in multiple presentations at once and to be updated everywhere automatically when the source ie changed. Macromind DirectorTMand, to a lesser extent, FramemakerTM were the only programs that our informants used that possessed this kind of interoperability.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.3">Teamwork.</head><p>A fourth factor in determining the users' choice of slidemaking software is whether the degree of teamwork supported or allowed by the software matches the work practice of the users' organiza- tion (see Nardi [19931 for a discussion of collaborative application develop- ment practices). Most slidemaking programs are designed to support an individual who produces slides alone. However, we found that, in many settings, people work in teams to produce and maintain slides. Existing dedicated slidemaking programs make it difilcult to do this. According to one informant: I looked at Persuasion, because everybody was saying that Persuasion was great. And I think a bunch of the secretaries.. used it ae well. And I think the programsthat are that specific are very well designed for a person who is going to sit down and think up a presentationand create the presentationright there. But the way we work is that, you know, there are dozens of people out there thinking up things, and we integrate presentations for all of them. And so for us to be able to distribute that work amongst enough people to get it done, we need to break it down into smaller units. . . . For each job here, if we used Persuasion, each job. . would have its own. . file with all of its slides in it. But slides get used from one job to another. . . . And so, I think [that] because of that it wouldn't work. The outlining, you know, is wonderful. But it's really designed for a different type of work atmosphere. It's is designed for the guy who's sitting down and going to do his own presentation.</p><p>Though more-generic tools do not provide real support for team produc- tion, they at least do not interfere with it in the sense that they impose little structure on the process at all. Whereas presentation programs keep an entire presentation together on one file, generic programs produce small pieces of presentations, allowing-indeed, requiring-users to produce, organize, and distribute the pieces as needed. While task-specific software User Preferences for Task-Specific versus Generic Software . <ref type="bibr" coords="16,481.93,46.67,8.72,7.33">53</ref> could, in principle, support teamwork, today's dedicated slidemaking pro- grams do not encourage sharing of slides and files, either between individ- uals or between presentations. This seems to be an important factor in some people's choice to use generic software for slidemaking.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.1.4">Company Policy.</head><p>Some of our informants reported that the soft- ware tools they used for slidemaking were determined by company policy or simply by what software the company already owned. Most of our infor- mants who were not professional graphic artists said that they decided themselves what software to use to produce presentations for their own use. One such informant initially used PowerPoint but switched to Persua- sion because the latter is what the corporate graphic art department used and because he wanted to be able to exchange presentations and graphics with them easily.</p><p>Among informants who were professional slidemakers, corporate graphic artists apparently have more influence over the choice of software than do freelance artists. Of the six corporate graphic artists we interviewed, three claimed that they decided unilaterally what software to use, and three claimed that they were involved in the decision. Of the four freelance graphic artists interviewed, none said that they decide unilaterally; three said that they were involved in the decision; and one said that the software is determined by the client company. The last of these was actually a husband-wife team who worked as freelance graphics consultants and used different tools at each of two different client companies because each company had previously developed slidemaking procedures around those tools. Each company had decided that one program (PowerPointTM in one; PageMakerTM in the other) would be the container/organizer for slide content created using other programs. Finally, it is clear that the software tools used by graphics clericals who produce "ordinary" business presenta- tions are much more likely to be determined by management than are the tools of graphic artists who produce the 'fancy" presentations.</p><p>Clearly, company policy plays a role in deciding what software is used. Of course, company policy is often based on history: as one informant pointed out, because presentation content and formatting are often reused, it is dit%cult for a company to change slidemaking software once a large archival base of presentations has been built up.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="5.2">Rethinking Task Specificity</head><p>Our tindings indicate to us that our initial analysis of task specificity was naive about both parts of the term "task specific."</p><p>First we had an overly simple notion of task. We assumed that tasks exist in some a priori sense, i.e., that there is a set of preexisting, well-defined tasks that people perform, fixed across circumstance. We regarded creating slide presentations as a task. In fact, the tasks people are trying to accomplish when they create or edit slide presentations vary tremendously. More useful concepts for capturing invariance across situations and for understanding similarities and differences between application programs q J. A. Johnson and B. A. Nardi are provided by classical software engineering and activity theory. Soft- ware engineering provides the concept of a task domain <ref type="bibr" coords="17,396.48,85.64,90.78,9.04">[Prieto-Diaz 19901:</ref> application programs are designed to support people working within a task domain rather than on a task. A task domain is defined-independent of any particular software program-in terms of what objects exist to be acted upon by the user and what actions can be performed on those objects. Activity theory provides a conceptual framework for understanding how people's goals interact with a task domain to give rise to activity <ref type="bibr" coords="17,455.77,156.93,29.27,9.04;17,126.48,169.17,24.25,9.04">[Nardi 19961</ref>. It suggests that within a task domain, people's goals, and hence their tasks and activities, vary: different people, or the same person at different times, may need to carry out different actions within the domain and may have different criteria for success.</p><p>Second, we oversimplified what it means for a tool to be specific to a task. We had originally regarded task specificity as being a continuum, with completely generic tools at one extreme and ones that are totally task specific at the other. In fact, tools-including application programs-vary in several different ways that are related to the notion of task specificity:</p><p>-Relative support for actions within a task domain: Real-world task domains contain many objects and actions. Tasks in such domains require the execution of multiple actions, which appear in people's behavior as different activities. For example, creating a slide presenta- tion may include creating a topic outline, writing text content, drawing graphic content, designing a consistent format, determining the slide order, producing transparencies or photographic slides as output, pro- ducing talking notes, filing and retrieving slides, and other activities. Software is expensive to develop, making it infeasible for any program to provide ideal support for all activities within the target task domain; developers must choose which ones to focus limited resources on in designing their program. For example, many dedicated slidemaking programs provide good support for creating textual content, but poor support for creating graphical content (see below). According to one graphic artist informant:</p><p>PowerPoint is like one of these. . software packages that try to incorporate everything, yet no particular area is very strong.</p><p>Application programs therefore, differ from one another in which parts of the users' task they support best.</p><p>-Support for actions that are common across task domains:</p><p>Because of the problem of limited development resources described in the previous paragraph, some software developers maximize their mar- ket by designing software tools to support activities that are common to many task domains (e.g., creating outlines, drawing figures). The target task domain of such tools is a subdomain of many larger task domains. Application programs may therefore be specific in that they provide good support for a narrow activity, but generic in that they maybe used for tasks in quite different task domains. i.e., making sure they are executed in the right order, each with the right inputs and tools. Another distinguished activity is storing and organizing the products of steps in the overall task. These activities concern the overall process, rather than any part or intermediate product of it. Again, because development resources are limited, some software tools focus on sup- porting these activities. For example, some slidemaking programs are good for producing an organization for a slide presentation from an outline, or for maintaining and organizing slide presentations, but poor for creating slide content. To provide explicit support for the overall process, a tool must embody significant task domain knowledge. To the extent that a tool succeeds at this, it can relieve its users of the need to have or supply it. In contrast, when a person uses a tool that supports only one of many activities in a task domain, the person must supply the domain knowledge, because the tool does not. Tools that support the overall process necessarily make assumptions about how their users will want to perform tasks in the domain and organize the products of their work. Those assumptions are crucial: they may be wrong for a given individual or organization or may be based on a naive understanding of the task domain, -Special inability:</p><p>Some tools are designed to be specializable for tasks and as such do not have fixed task specificity. For example, a power beater has different attachments, which make it into a batter mixer, a blender, a dough kneader, etc. Similarly, some software is designed to be specializable. Spreadsheets programs, most computer-assisted design (CAD) systems, some word processing programs, and other programs provide extension facilities such as formula and macro languages, stylesheets, and templates to allow users and local developers to add semantics to support specific tasks. For example, one graphic artist informant told us that at his company the preferred tool for slidemaking is a document editor, which through the use of stylesheets and template files is specialized to provide good support for creating and editing presentations, even very high quality ones.</p><p>The contrast between some of these different aspects of task specificity is exemplified in kitchen tools by a vegetable peeler and a breadmaking machine. A vegetable peeler is highly specific in the sense that it supports a narrow activity well, but generic in the sense that it can be used in service of a variety of high-level goals (e.g., making salad, baking a carrot cake, making stew, making carrot sticks). The knowledge for the high-level task must be provided by the user of the peeler. A breadmaking machine is highly specific in the sense of automating a particular high-level task (i.e., ingredients in; bread out ), but includes a variety of subtasks (i.e., mixing, kneading, rising, baking). The machine embodies a great deal of breadmak- ing knowledge, in fact substituting for breadmaking knowledge and skill on q J. A. Johnson and B. A. Nardi the part of the person using it, but also limiting the variety and quality of bread that can be made. Breadmaking machines are therefore for people who make a lot of fresh bread, but either lack breadmaking skill or, if they have the skill, value convenience over quality.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.">CONCLUSIONS</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1">Revised Hypothesis</head><p>Our findings require extensive revision of our initial four-point hypothesis. In this section, we take each point in turn, discussing how it should be modified in light of our findings.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.1">Task Specificity.</head><p>We began the study thinking that software ap- plications vary along a continuum of task specificity, and we found that it is not that simple. The concept of a task as an invariant upon which software designs and behavioral predictions can be based must be replaced with the more complex concept of a task domain, within which people's goals and specific tasks vary and, with them, their choice of tools.</p><p>Furthermore, we realized that building domain semantics into an appli- cation is not simply a matter of degree. Software applications for a given task domain vary in which domain activities they support (not to mention the degree to which their design is based upon task analysis). Software applications also vary in the applicability of their objects and actions across task domains and in whether they provide extension mechanisms, which allow users to add semantics.</p><p>We no longer believe that the only way to provide task-specific support is to build extensive domain semantics into a single application. Following the revised hypothesis, we discuss an alternative, perhaps more promising approach.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.2">Task-Specific Tools Preferred.</head><p>We still believe that people would, ideally, prefer software designed specifically to support the task domain they are working in. However, we learned that this is nearly impossible to achieve via single high-semantics applications except in very small, con- strained task domains (e.g., household accounting).</p><p>We also still believe that the degree of support that software provides for carrying out actions within its users' task domain is more important than whether its user interface is graphical or textual, direct or indirect, menu or command based. Many of today's software applications have user inter- faces that merely facilitate manipulation of abstract computation concepts rather than allowing people to work within the task domain.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.3">Limited Market.</head><p>To our claim that more task domain support means a smaller market, we must add the caveat that not all domain knowledge is equal. Building coordination and process semantics into a tool makes it less flexible in the sorts of results it can produce and the sorts of work practices it allows. Thus, software that incorporates that sort of task domain semantics has a more limited market than software that incorpo-User Preferences for Task-Specific versus Generic Software . 57 rates other kinds of task domain semantics, e.g., support for specific intermediate work products.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.1.4">Factors of Choice.</head><p>Our original hypothesis assumed that the pri- mary hindrance to the use of what we were calling task-specific software is acquisition and learning costs. Though it is true that tools people already have and know have a strong advantage, our findings indicate that cost is not the whole story. We found several additional factors that affect what tools will be used to make presentations (see above). To summarize the factors:</p><p>-Speed us. quality:</p><p>How important is it that presentations be fancy versus done quickly? Often, there are two separate production pro- cesses: one for most presentations, using tools that optimize the process rather than the product, operated by people possessing less domain expertise, and another for the few fancy or unusual presentations, using tools that optimize the product, operated by task domain experts. -Power US. skill: How much domain knowledge and skill about slide- making do prospective users have? Those who have high domain skills apparently prefer tools that stay out of their way and let them exercise their skill. Tools that supply significant domain knowledge are mainly for people who lack either domain skill or the time or desire to exercise their skill (though such tools face the aforementioned cost/benefit hur- dle). -Interoperability:</p><p>Can a tool easily take input from others? Profes- sional slidemakers prefer using collections of tools, each of which provides needed support for certain slidemaking activities. Such people often use dedicated presentation programs as containers and organizers of content produced elsewhere. -Support for teamwork:</p><p>Does the tool support people working together on a presentation, if that is how presentations are produced at the worksite in question? Most presentation programs assume a single user working alone, but many presentations are created by teams, with different people contributing different parts. -Company policy:</p><p>What tools does the company prefer, for whatever reason, e.g., history, business relationships, price, familiarity, or stan- dardization?</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.2">Better Task Support through Modularity and Interoperability</head><p>How might software developers provide better support for people who are skilled in a task domain, since tools that are intended to be comprehensive within a task domain clearly do not work well for them? Our finding that many professional slidemakers use collections of programs in concert suggests that the most practical approach for software developers may be q J. A. <ref type="bibr" coords="21,201.12,47.67,101.06,7.33">Johnson and B.A. Nardi</ref> to support this way of working intentionally and explicitly. That is, perhaps software developers should provide collections of interoperable tools and services that computer users mix and match as needed to accomplish the goals of the moment, rather than a single tool intended to support a wide range of tasks within a specified domain, end to end.</p><p>Modular interoperable tools and services allow not only for task differ- ences, but also for individual user differences, whether in skill level, job type, or personal preference. Computer workers could select and bundle modules according to need and preference into packets that capture regu- larities in their daily work instead of being faced with trying to use a program having a nonoptimal bundle of services, documented by a fat manual containing mainly irrelevant detail. Local developers <ref type="bibr" coords="21,430.33,203.97,55.63,9.04;21,125.76,216.45,40.38,9.04">[Johnson et al. 1993;</ref><ref type="bibr" coords="21,171.60,216.45,112.87,9.04" target="#b8">Nardi and Miller 1991]</ref> might bundle services for individuals or groups or help end-users do that.</p><p>The need to support teamwork is a third argument for preferring a set of modular interoperable tools and services over single tools that try to "do everything." With interoperable tools, each contributor to a presentation can use the best-or favorite-tools for his or her part of the presentation; then the work can be put together.</p><p>Interoperability is often regarded as the ability to copy data freely between tools, but that is actually only a minimum requirement. A higher form of interoperability is dynamic sharing of information between applica- tions and between coworkers. Interoperability of this sort is extremely rare in software for making slide presentations. Proposed open-document proto- cols from computer and software vendors are intended to allow for this sort of interoperability, but can only do so if application developers avail themselves of the new capabilities.</p><p>Even more ambitiously, interoperability can include support for main- taining desired relationships between separately produced parts of a pre- sentation and support for work flow between tools and team members. Our findings suggest, however, that slidemaking tools that were interoperable in this way could succeed with professional slidemakers only if the relation- ships and workflow model were user definable rather than fixed.</p><p>The idea of providing collections of interoperable software tools is not new. <ref type="bibr" coords="21,151.19,486.45,95.11,9.04" target="#b10">Nielsen et al. [1986]</ref> alluded to it in the conclusions to their study. At that time, the ability of application programs to exchange data with other programs was much lower than it is today, so the most practical way of achieving interoperability then was to put into one large program function- ality that otherwise would be in several distinct applications (e.g., word processing, drawing, and spreadsheet). Therefore, Nielsen et al. argued mainly for more multiapplications. However, they quoted one of their informants as saying:</p><p>[Software developers] have a handle on program integration but not task integration. I want task integration. <ref type="bibr" coords="21,311.28,606.69,11.59,9.04">[1]</ref> don't care about product integration <ref type="bibr" coords="21,144.47,617.97,120.54,9.04">[Nielsen et al. 1986, p. 167;</ref><ref type="bibr" coords="21,266.88,617.97,88.14,9.04">brackets in original]</ref>.</p><p>Explaining this, Nielsen et al. wrote:</p><p>We believe that what is relevant for professionalbusiness users is not necessar- ily product integration but task integration.</p><p>Task-integration looks at what data and manipulations of that data match the requirements of users' tasks. These task requirements may or may not match the application boundaries of. integrated systems <ref type="bibr" coords="22,254.64,134.13,119.57,9.04">[Nielsen et al. 1986, p. 167]</ref>.</p><p>Fischer and Lemke <ref type="bibr" coords="22,239.52,155.49,27.43,9.04">[1988]</ref> reached similar conclusions. They suggested that application software would be more usable and useful if it were provided in the form of high-semantics construction kits (e.g., Electronic Arts' Pinball Construction SetTM),allowing users to construct applications as needed for specific situations. Even better, according to Fischer and Lemke, is software that provides not only task domain components but also domain-specific guidance in combining them. Design environments is their term for such software.</p><p>An even earlier, albeit primitive, embodiment of the "interoperable tools" approach is Unix. The primary user interface of the Unix operating system, referred to as the shell, is based heavily on a simple form of interoperabil- ity: shell users solve information-processing problems by directing streams of data through ad hoc sequences of programs, with each program perform- ing a specific function on the data stream. Unix can be-and has been- criticized soundly for anarchic command naming, cryptic syntax, and general lack of attention to principles of good user interface design <ref type="bibr" coords="22,466.09,335.97,23.29,9.04;22,130.56,347.73,49.45,9.04">[Norman 19811</ref>. Its promoters can also be faulted for attempting to foist it onto task domains and user populations for which it was not designed (e.g., office information processing). However, the fact remains that it has been enormously successful within its original target task domains (software development and technical documentation) and users (sofiware engineers).</p><p>What sort of interoperable tools or services might be useful for slidemak- ing? One example is outlining. Outlining is a service that is useful in many tasks, including slidemaking. Outlining could be selected from a set of services and applied to the task of slidemaking, as appropriate.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head n="6.3">Limitationsof Results and Directions for Future Research</head><p>Our interest was in exploring the costs and benefits-and computer users' perceptions thereof as manifested in their choice of tools-of task-specific versus task-generic application software. For resource reasons, our study focused on a particular task domain and a limited user population.</p><p>Obviously, restricting the study to slidemaking limits the generalizabil- ity of our findings. It is perhaps less obvious how our choice of informants limits the generalizability of our results. Though we interviewed business and engineering professionals who create slide presentations infrequently, as well as professional graphic artists whose primary vocation is creating slide presentations, we did not interview nongraphic artists who create large numbers of slide presentations (e.g., college professors) or graphic artists who only infrequently create slide presentations. Including such q J. A. Johnson and B, A. Nardi informants might have helped clarify some of the findings that remain unclear.</p><p>Despite the limitations, we feel that our findings do speak to the more general issues raised in our working hypothesis. A focused look at the work of real computer users in a single task domain led us to rethink our key assumptions and to consider an alternative way of supporting end-user application development, i.e., collections of interoperable tools and services.</p><p>Of course, the generality of the findings reported here should be vali- dated through comparable studies in other task domains and with other user populations. We believe that the results of the present interview study also suggest the need for in-depth ethnographic research on how people use software in the slidemaking and other task domains. Within the slidemak- ing task domain, more structured-perhaps experimental-studies would shed additional light on issues such as the tradeoff between task support and learning cost. We hope that this article will stimulate researchers to try to clarify the issue that our findings so successfully muddied, i.e., what it means for application software to provide good versus poor support for its users' tasks. Finally, we hope that this article will stimulate software developers to give more thought to how best to support the work of the people who will use the software.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>APPENDIX</head></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>A. QUESTIONS ADDRESSED IN INTERVIEWS</head><p>1. What is your role in producing presentation slides?</p><p>1.1 Do you produce slides yourself or do you supervise others who do it? 3.5.3.2 A company logo or standard border must be added to every slide in a presentation. 3.5.3.3 The order of slides in a presentation must be changed. 3.5.3.4 The round bullets throughout a presentation must be changed to square bullets. 3.5.3.5 The font used throughout a presentation must be changed. 3.5.3.6 Each of the points on a particular slide must be expanded into a separate slide.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>B. TABULATED INTERVIEW DATA</head><p>Table IV tabulates much of the data gathered in the interviews. It shows the type(s) of software used by each informant (or people they supervised) in preparing presentations. It also shows that professional slidemakers tend to distinguish, in the software they use, between preparing "plain" presentations and "fancy" presentations. Finally, <ref type="table" coords="25,374.64,261.81,43.70,9.04" target="#tab_0">Table IV</ref> contains an entry for a type of slidemaking professional that our initial hypothesis overlooked: graphics clericals (see row 2). Abbreviations used in <ref type="table" coords="25,244.08,297.81,40.18,9.04" target="#tab_0">Table IV</ref>: presentation = pres, drawing = draw, painting = paint, charting = chart, desktop publishing = pub, document compiler = doccomp, animation = anim, spreadsheet = spread, database = dbase, image processing = image, custom = custm.</p><p>Tabulating the interview data was neither straightforward nor totally objective. If an informant said something like, "I used to use Program X, but I don't anymore, " it was not clear whether to include Program X in the software used by the informant. Our tendency was to be inclusive: if an informant used a particular software program for slidemaking until re- cently, we included it; if he or she abandoned it years before, we excluded it. On the other hand, if an informant said something like, "I've tried Program X, but I don't like it and don't use it," we did not count Program X as being in that informant's tool collection.</p><p>It was also not perfectly clear what work processes to tabulate as "working in teams" versus "working alone." In some sense, any situation in which a nongraphic artist has a professional graphic artist produce a presentation involves teamwork: the nonartist sketches or describes the slides; the artist produces a first draft; the nonartist critiques the draft; and the artist revises the presentation until it is satisfactory. In this view, "working alone" includes only cases in which someone creates a presenta- tion for his or her own use. However, we used a more conservative criterion, classif@g work processes as "working alone" unless multiple people were working with slidemaking software and sharing datafiles.</p><p>If an informant said, "I use Program X, but the people I manage make slides with Program Y," it was not clear whether or how to tabulate Program Y. Our judgment was that software used by slidemaking subordi- nates should be included in the tables. For this reason, the number of users in some of the tables exceeds the number of informants we interviewed.</p><p>User Preferences for Task-Specific versus Generic Software . 63 However, for lack of a better rule, we counted references by informants to people they manage as one <ref type="formula" coords="26,269.52,476.55,10.56,8.14">(1)</ref> user regardless of the number of people being referred to. Note that these tables do not reflect relative frequencies of use of the various types of software. If an informant said that he or she sometimes used a particular program to prepare slide presentations, no matter how infrequently, we included it. Having not asked informants to assign rela- tive usage weights to their slidemaking software tools, we found that we could not objectively extract usage weighings from the interview tran- scripts. Nonetheless, it was clear to us from the interviews that profes- sional graphic artist informants were much less reliant on dedicated slidemaking programs than our initial hypothesis had predicted them to be. Thus, for example, <ref type="table" coords="26,225.84,613.35,41.72,8.14" target="#tab_0">Table IV</ref> does not indicate that, though informant 5</p><p>ACMTransactions on Computer-Human Interaction, <ref type="bibr" coords="26,400.32,632.83,88.58,6.56">Vol. 3, No. 1, March 1996.</ref> </p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="9,127.92,640.75,186.25,8.14;9,308.64,640.75,92.89,8.14;10,185.28,50.51,248.66,7.33;10,457.93,50.51,2.20,7.33;10,481.21,50.51,8.72,7.33"><head>User Preferences for Task-Specific versus Generic Software . 47</head><label>47</label><figDesc></figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="11,126.72,646.07,270.03,6.56;12,186.96,49.31,248.66,7.33;12,459.37,49.31,2.20,7.33;12,482.89,49.31,8.72,7.33"><head>ACM</head><label></label><figDesc>Transactions on Computsr-Human Interaction, Vol. 3, No. 1, March 1S9S. User Preferences for Task-Specific versus Generic Software . 49</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="12,361.68,139.28,4.80,7.99;12,419.76,139.52,4.80,7.99;12,466.32,124.43,16.60,7.33;12,466.08,140.28,5.19,6.79;12,361.20,152.96,4.80,7.99;12,419.76,153.03,4.80,8.14;12,465.36,153.03,4.80,8.14;12,465.36,166.71,4.80,8.14;12,360.96,166.47,4.80,8.14;12,420.48,167.40,5.19,6.79;12,361.20,180.32,4.80,7.99;12,419.76,180.56,4.80,7.99;12,465.36,180.56,4.80,7.99;12,465.36,194.07,4.80,8.14;12,361.68,195.00,5.19,6.79;12,420.00,194.75,4.40,7.33;12,355.92,198.91,2.83,6.56;12,414.48,199.32,3.47,5.77;12,460.32,200.94,1.20,4.00;12,360.72,208.64,4.80,7.99;12,420.24,209.40,5.19,6.79;12,465.84,209.40,5.19,6.79;12,465.84,223.63,3.87,6.56;12,465.84,237.24,5.19,6.79;12,360.72,222.56,4.80,7.99;12,420.24,223.32,5.19,6.79;12,419.52,236.48,4.80,7.99;12,361.44,237.00,5.19,6.79;12,356.40,242.75,2.20,7.33;12,414.48,240.11,4.40,7.33;12,460.09,240.11,4.40,7.33;12,360.72,249.75,4.80,8.14;12,414.24,249.92,9.84,7.99;12,460.08,249.04,9.84,9.04;12,361.68,263.67,4.80,8.14;12,419.28,263.84,4.80,7.99;12,360.72,278.27,4.40,7.33;12,419.52,278.03,4.40,7.33;12,465.85,264.11,4.40,7.33;12,465.12,277.35,4.80,8.14;12,402.48,281.60,2.88,7.99;12,142.08,296.07,351.36,8.14;12,132.00,306.15,361.91,8.14;12,132.00,316.47,362.65,8.14;12,132.00,326.55,204.49,8.14"><head></head><label></label><figDesc>The document category includes desktop publishing and document compiler software. The graphics category includes drawing, painting, charting, image processing, spreadsheet,data- base, and custom software. The Graphics Professional column includes four people managed by informants as well as the informantsthemselves.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="13,124.56,483.79,358.32,8.14;13,124.80,495.79,220.12,8.14;13,360.00,495.79,116.43,8.14;13,124.80,507.55,352.58,8.14;13,124.80,519.31,89.31,8.14;13,142.80,542.11,167.30,8.14;13,143.52,554.83,338.88,8.38;13,142.80,566.11,175.22,8.14;13,143.28,578.83,171.62,8.14;13,142.56,592.03,341.27,8.14;13,143.04,602.83,177.87,8.38;13,143.28,615.55,340.08,8.14;13,143.04,626.35,337.45,8.38;14,188.40,46.19,248.42,7.33;14,460.81,46.19,2.20,7.33;14,484.33,46.19,8.72,7.33"><head>User Preferences for Task-Specific versus Generic Software . 51</head><label>51</label><figDesc>Highly trained graphic artists often use generic illustration software be- cause the drawing capabilities of slidemaking programs are insufficient and limiting from their point of view. Here are some illustrative quotations from our interviews: Persuasion's not the best drawing tool. . . .the graphic tools in Persuasion are kind of low-end, not very powerfid. Persuasion's drawing tools are too weak. [With MacDraw] you have more control. You can do it in PowerPoint, but depending on the art, sometimes it's fast- er. . .to do it in MacDraw and paste it in. I think the main point about why we use MacDraw is because, yeah. . .Persua- sion would be better for a lot of word slides. . .But nobody's willing to simpli~</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="14,152.64,541.12,340.09,9.04;14,152.88,552.87,341.80,8.14;14,152.64,563.67,48.74,8.14"><head></head><label></label><figDesc>At [company X], they use PowerPoint. They offer MacDraw, Freehand, Illustra- tor for the illustration part of it. But it's all driven by PowerPoint. It's all put in PowerPoint.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_0" validated="false" coords="10,173.04,72.15,277.20,198.34"><head>Table I . Sofl.wareTypes Found in Study, with Examples of Each Type</head><label>I</label><figDesc coords="10,173.04,72.15,277.20,8.14"></figDesc><table coords="10,177.12,91.98,261.41,178.51">1 
+
+Software Type 
+Example Software 
+
+Presentation 
+PowerPointm, PersuasionTM, CharismaTM 
+
+Drawing 
+MacDrawTM, IllustratorTM, Corell DrawTM 
+
+Painting 
+MacPaintTM 
+
+Charting 
+CricketGraphTM, Harvard GraphicsTM 
+
+Desktop Publishing 
+FrameMakerTM, WordTM, PageMakerTM 
+
+Document Compiler LaTeX, troff 
+
+Animation 
+Macromind DirectorTM 
+
+Spreadsheet 
+123TM, ExcelTM 
+
+Database 
+ParadoxTM 
+
+Image Processing 
+PhotoShopTM 
+
+Custom 
+.. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_1" validated="false" coords="10,131.28,296.56,359.53,45.04"><head>Table III groups</head><label>III</label><figDesc coords="10,141.12,296.56,78.25,9.04"></figDesc><table coords="10,131.28,296.56,359.53,45.04">the specific types of software (e.g., drawing, painting, 
+charting) into more general categories (e.g., Graphics), and indicates what 
+types of users used what combinations of these software categories. For the 
+purposes of </table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="11,132.71,76.99,347.33,283.29"><head>Table II . Number of Users (Professionaland Amateur Slidemaker)Using Each Type of Software Creating and Organizing Pmsentstions Software</head><label>II</label><figDesc coords="11,139.68,76.99,331.92,8.14;11,283.20,86.59,45.60,8.14;11,138.96,112.71,158.21,7.33;11,177.12,126.87,33.37,7.33"></figDesc><table coords="11,132.71,126.63,347.33,233.65">Type 
+Profeaaionai 
+Amateur 
+Total 
+
+Presentation 
+8of10 
+2of8 
+10 of 16 
+
+Drawing 
+3oflo 
+lof6 
+4of16 
+
+Desktop Pubs 
+7of 10 
+3of6 
+10of 16 
+
+Doc Compiler 
+Oof 10 
+2of6 
+2of16 
+
+Animation 
+4of 10 
+Oof6 
+4of 16 
+
+I Creating presentation ContentforEx@vtintoOth erProgrerns 
+
+I 
+
+Software Tvw 
+I 
+Professional 
+] 
+Amateur 
+
+I Paintina 
+
+140flo 
+! lof6 
+
+I Drawing 
+170flo 
+llof6 
+
+Charting 
+5oflo 
+0of6 
+
+Spreadsheet 
+3of 10 
+3of6 
+
+Desktop Pubs 
+2of 10 
+0of6 
+
+Image Processing 
+3of 10 
+0of6 
+
+Database 
+Ooflo 
+lof6 
+
+I Custom 
+Iloflo 
+100f6 
+
+Totai 
+
+%%--+ 
+
+-%+-i 
+
+=+ 
+
+2of16 
+
+3of 16 
+
+1 of16 
+
+1 of 16 
+I 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_3" validated="false" coords="12,142.32,70.47,323.77,61.05"><head>Table III . Usage of Combinationsof General Software Category by User Type</head><label>III</label><figDesc coords="12,160.08,70.47,306.00,8.14"></figDesc><table coords="12,142.32,98.99,312.29,32.53">Combinations of Software 
+
+Graphics 
+Gmphics 
+Preaantetton 
+Document 
+Graphics 
+Animation 
+Profaesional 
+Amateur 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="18,130.56,51.71,360.09,54.50"><head>In most task domains, one distinguished activity is coordinating</head><label></label><figDesc coords="18,480.96,73.60,9.69,9.04;18,146.15,85.36,302.66,9.04"></figDesc><table coords="18,130.56,51.71,359.38,54.50">User Preferences for Task-Specific versus Generic Software 
+
+. 
+55 
+
+-Support 
+for coordinating 
+activity 
+and organizing 
+products: 
+
+and 
+guiding 
+the execution 
+of actions, 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_6" validated="false" coords="26,130.08,63.03,360.97,371.74"><head>Table IV , Presentation-Making Software Used by Informantsand Their</head><label>IV</label><figDesc coords="26,130.08,63.03,282.98,8.14"></figDesc><table coords="26,130.08,63.03,360.96,371.74">Subordinates,with 
+Other Pertinent Data 
+
+P 1 
+
+(1 mnga) 
+
+k 
+
+2 
+
+(2 mngs) 
+
+3 
+
+&amp; 
+
+4 
+
+(4 mngs) 
+
+(4 mngs) 
+
+5 
+
+F 14 
+
+15 
+
+I 
+
+Graphic 
+Empl. or 
+work 
+Mahr SW 
+Aux. SW 
+Work in Who piCfM 
+Art SIdll 
+Fraelanoe 
+Product 
+Taama? 
+
+Sw? 
+-
+-
+-
+. 
+
+pro 
+empl 
+fancy pres pres, anim 
+unknown 
+no 
+SJ3if 
+
+cler(s) 
+empl 
+plain pres 
+pres 
+none 
+no 
+1 
+i 
+pro 
+empl 
+plain pres 
+drew, pre$ 
+pub, draw, paint, 
+yes 
+self 
+
+fancy pres draw 
+charl 
+
+pro(s) 
+ampl, free 
+graphics 
+none 
+draw, paint, charl 
+yes 
+
+2 
+
+pro 
+
+free 
+pfain pros 
+pres 
+pub, draw, paint, 
+no 
+client 
+
+fancy pres anim 
+chart, image 
+
+pro 
+empl 
+pres 
+draw 
+chart, custm 
+yes 
+self 
+
+pro 
+empl 
+fancy pres draw 
+chari, cuelm 
+yes 
+4 
+
+pro(s) 
+empl, free 
+graphics 
+none 
+draw, chart, cuatm yes 
+4 
+
+pro 
+empl 
+plain pres 
+pub, pres, draw draw, paint, image 
+yes 
+worir group 
+
+fancy pree anim 
+
+pro 
+free 
+plain pres 
+pres 
+paint, image, 
+no 
+self, client 
+
+fancy pres anim 
+spread 
+
+pro 
+frae 
+pres 
+draw, prea 
+pub, chart 
+no 
+client, self 
+
+am 
+empl 
+pres 
+pres 
+paint, spread 
+no 
+
+am 
+empl 
+plain pres 
+pub 
+draw, spread 
+no 
+Self 
+
+am 
+empl 
+plain pree 
+doccomp, pub 
+none 
+no 
+self 
+
+am 
+empl 
+plain pres 
+pres 
+none 
+no 
+self, comp ! 
+
+fancy pres pub 
+yes 
+' 
+
+am 
+empl 
+plain prea 
+pub, doccomp 
+none 
+no 
+self, comp 
+
+pro 
+free 
+pfain pree 
+pres 
+draw, pub, paint, 
+yes 
+client, aeff 
+
+fancy pres pub 
+chart 
+
+am 
+empl 
+pres 
+draw 
+spread, dbase 
+no 
+self 
+
+pro 
+empl 
+plain pres 
+pub 
+draw, chart, 
+no 
+
+self, comp 1 
+
+fancy pres draw 
+spread 
+
+pro 
+empl 
+pres 
+pub, pres 
+draw, spread 
+yas 
+comp, self 
+
+</table></figure>
+
+			<note place="foot">ACM Transactions on Computer-Human Interaction, Vol. 3, No, 1, March 19S6.</note>
+
+			<note place="foot">ACM Transactions on Computer-Human Interaction, Vol. 3, No. 1, March 1996.</note>
+
+			<note place="foot">ACM &apos;Transactions on Computer-Human Interaction, Vol. 3, No. 1, March 1996.</note>
+
+			<note place="foot">ACM Transactions on Computer-Human Interaction, Vol. 3, No. 1, March 1996</note>
+		</body>
+		<back>
+			<div type="annex">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGMENTS</head><p>The research described herein was conducted while the authors were employed at Hewlett-Packard Laboratories, Palo Alto, California. We thank Michelle Gantt, the anthropology student intern and graphic artist who served as the interviewer for the study and-by questioning our initial hypothesis about who uses task-specific versus generic software-as the primary catalyst for our conducting it. We thank Jim Miller and Craig Zarmer, our colleagues on the ACE project, for their ideas and for com- ments on earlier drafts of this article. We also thank Jonathan Grudin and several anonymous reviewers for comments and suggestions that helped us improve this article. Last but not least, we thank our informants for taking time out of their busy schedules to educate us about their work practices.</p></div>			</div>
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="27,126.48,528.91,362.39,8.14;27,134.40,538.99,162.73,8.14" xml:id="b0">
+	<analytic>
+		<title level="a" type="main">A task-analytic approach to the automated design of graphic presentations</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Casner</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Graphics</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="page" from="111" to="151" />
+			<date type="published" when="1991" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="27,126.24,548.83,43.19,8.14;27,163.68,548.83,324.68,8.14;27,134.16,558.67,338.89,8.14" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Construction kits and design environments: Steps toward human problem-domaincommunication</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Fischer</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">G</forename><surname>Andlemke</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><forename type="middle">C</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Hum. Comput. Interaction</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="179" to="222" />
+			<date type="published" when="1988" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="27,126.48,568.51,361.42,8.14;27,134.40,578.59,347.47,8.14;27,134.40,588.43,157.45,8.14" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Design environments for constructive and argumentativedesign</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Fischsr</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">G</forename><surname>Mccall</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><surname>And</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Morch</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM Conference on Computer-Human Interaction (CHI&apos;89)</title>
+		<meeting>the ACM Conference on Computer-Human Interaction (CHI&apos;89)<address><addrLine>New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1989" />
+			<biblScope unit="page" from="269" to="275" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="27,126.72,598.27,229.88,8.14" xml:id="b3">
+	<analytic>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Fox</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">NewsTrack.Commun. ACM</title>
+		<imprint>
+			<biblScope unit="volume">38</biblScope>
+			<biblScope unit="page">9</biblScope>
+			<date type="published" when="1995-05" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="27,126.72,608.59,364.36,8.14;27,134.64,618.67,225.37,8.14" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Making usable, useful, productivity-enhancing computerapplications</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Gould</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Boies</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>And</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Lewis</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Commun. ACM</title>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="page" from="75" to="85" />
+			<date type="published" when="1991-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="27,126.24,637.43,269.79,6.56" xml:id="b5">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Computer-Human Interaction</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">1</biblScope>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,315.84,195.27,174.00,8.14" xml:id="b6">
+	<monogr>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Diaper</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Gilmore</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">G</forename><surname>Cocktan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename></persName>
+		</author>
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,136.56,205.11,163.72,8.14" xml:id="b7">
+	<monogr>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Shackel</surname></persName>
+		</author>
+		<imprint>
+			<publisher>Elsevier Science</publisher>
+			<pubPlace>New York</pubPlace>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,128.64,214.95,357.78,8.14;28,136.56,226.27,314.17,6.56" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">Twinkling lights and nested loops: Distributed problem-solving and spreadsheet development</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nardi</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><forename type="middle">A</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">R</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Znt. J. Man-Machine Stud</title>
+		<imprint>
+			<biblScope unit="volume">34</biblScope>
+			<biblScope unit="page" from="161" to="184" />
+			<date type="published" when="1991" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,128.64,236.35,359.50,6.56;28,136.80,246.67,209.99,6.56" xml:id="b9">
+	<analytic>
+		<title level="a" type="main">Beyond models and metaphors: Visual formalisms in user interface design</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nardi</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><forename type="middle">A</forename><surname>And Zarmer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">L</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">J. Visual Lang. Comput</title>
+		<imprint>
+			<biblScope unit="volume">4</biblScope>
+			<biblScope unit="page" from="5" to="33" />
+			<date type="published" when="1993" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,128.88,256.75,354.91,6.56;28,136.80,266.83,350.59,6.56;28,136.56,276.67,347.50,6.56" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Integrated sofiware usage in the professional work environment: Evidence from questionnaires and interviews</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nielsen</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Mack</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">L</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Bergendorff</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">K</forename><forename type="middle">H</forename><surname>And</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Grischkowsky</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">N</forename><forename type="middle">L</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM Conference on Computer-Human Interaction (CHI&apos;86)</title>
+		<meeting>the ACM Conference on Computer-Human Interaction (CHI&apos;86)</meeting>
+		<imprint>
+			<date type="published" when="1986" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,128.64,296.35,305.78,6.56" xml:id="b11">
+	<analytic>
+		<title level="a" type="main">The trouble with Unix</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Norman</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Datamation</title>
+		<imprint>
+			<biblScope unit="volume">27</biblScope>
+			<biblScope unit="page" from="139" to="150" />
+			<date type="published" when="1981-11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,128.88,306.43,356.60,6.56;28,136.80,316.27,346.27,6.56;28,136.80,326.59,133.21,6.56" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Workspaces: An architecture for editing collections of objects</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Omen</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mcneill</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">T</forename><surname>And</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mitchell</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM Conference on Computer-Human Interaction (CHI&apos;92</title>
+		<meeting>the ACM Conference on Computer-Human Interaction (CHI&apos;92<address><addrLine>New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1992" />
+			<biblScope unit="page" from="267" to="272" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="28,129.12,336.19,356.83,6.56;28,136.80,346.27,19.69,6.56;28,128.88,356.59,359.54,6.56;28,136.32,366.67,113.70,6.56;28,128.88,376.51,352.03,6.56;28,137.04,386.83,229.45,6.56" xml:id="b13">
+	<analytic>
+		<title level="a" type="main">SPA. 1995, Home users: Fourth annual survey. Software Publishers Association, Mar. 14. Reported by Internet newswire</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Prieto-Diaz</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">R</forename><forename type="middle">;</forename><surname>Vlissides</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>And</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Linton</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Trans. Infi Syst</title>
+		<imprint>
+			<biblScope unit="volume">15</biblScope>
+			<biblScope unit="page" from="237" to="268" />
+			<date type="published" when="1990-04" />
+		</imprint>
+	</monogr>
+	<note>So@J. Eng. Notes</note>
+</biblStruct>
+
+<biblStruct coords="28,129.12,396.43,357.30,6.56;28,137.04,406.27,349.67,6.56;28,137.04,416.11,17.52,6.56;28,129.12,425.47,359.66,6.56;28,137.04,436.27,348.22,6.56;28,136.80,445.63,312.97,6.56" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">User-interface tools: Past, present, and future trends</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Zarmer</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><forename type="middle">L</forename><surname>And</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Johnson</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">A</forename><surname>Hewlett-Packard</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Palo</forename><surname>Alto</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Calif</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Zarmer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">L</forename><surname>Nardi</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>Johnson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">A</forename><surname>Andmiller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><forename type="middle">R</forename></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 25th Hawaii International Conference on System Sciences (HZCSS-25)</title>
+		<meeting>the 25th Hawaii International Conference on System Sciences (HZCSS-25)<address><addrLine>Koloa, Hawaii; New York</addrLine></address></meeting>
+		<imprint>
+			<publisher>ACM</publisher>
+			<date type="published" when="1990" />
+			<biblScope unit="volume">2</biblScope>
+			<biblScope unit="page" from="687" to="698" />
+		</imprint>
+	</monogr>
+<note type="report_type">Hewlett-Packard Laboratories Tech. Rep. HPL-90-20</note>
+	<note>ACE: Zen and the art of application building</note>
+</biblStruct>
+
+<biblStruct coords="28,220.56,635.71,269.30,6.56" xml:id="b15">
+	<analytic>
+		<title/>
+	</analytic>
+	<monogr>
+		<title level="j">ACM Transactions on Computer-Human Interaction</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="issue">1</biblScope>
+			<date type="published" when="1996-03" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

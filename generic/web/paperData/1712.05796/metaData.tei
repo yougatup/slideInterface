@@ -1,0 +1,1867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://www.tei-c.org/ns/1.0 /home/lopez/test/grobid/grobid-home/schemas/xsd/Grobid.xsd"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+	<teiHeader xml:lang="en">
+		<encodingDesc>
+			<appInfo>
+				<application version="0.5.1-SNAPSHOT" ident="GROBID" when="2018-08-16T18:25+0000">
+					<ref target="https://github.com/kermitt2/grobid">GROBID - A machine learning software for extracting information from scholarly documents</ref>
+				</application>
+			</appInfo>
+		</encodingDesc>
+		<fileDesc>
+			<titleStmt>
+				<title level="a" type="main">A Data-Driven Analysis of Workers&apos; Earnings on Amazon Mechanical Turk</title>
+			</titleStmt>
+			<publicationStmt>
+				<publisher/>
+				<availability status="unknown"><licence/></availability>
+			</publicationStmt>
+			<sourceDesc>
+				<biblStruct>
+					<analytic>
+						<author role="corresp">
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kotaro</forename><surname>Hara</surname></persName>
+							<email>kotarohara@smu.edu.sg</email>
+							<affiliation key="aff0">
+								<orgName type="institution">Carnegie Mellon University</orgName>
+							</affiliation>
+							<affiliation key="aff1">
+								<orgName type="institution">Singapore Management University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Abi</forename><surname>Adams</surname></persName>
+							<affiliation key="aff2">
+								<orgName type="institution">University of Oxford</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kristy</forename><surname>Milland</surname></persName>
+							<affiliation key="aff3">
+								<orgName type="institution">McMaster University</orgName>
+								<address>
+									<addrLine>5 TurkerNation.com, 6 West</addrLine>
+								</address>
+							</affiliation>
+							<affiliation key="aff4">
+								<orgName type="institution">Virginia University</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Saiph</forename><surname>Savage</surname></persName>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chris</forename><surname>Callison-Burch</surname></persName>
+							<affiliation key="aff5">
+								<orgName type="institution">University of Pennsylvania</orgName>
+							</affiliation>
+						</author>
+						<author>
+							<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeffrey</forename><forename type="middle">P</forename><surname>Bigham</surname></persName>
+							<affiliation key="aff0">
+								<orgName type="institution">Carnegie Mellon University</orgName>
+							</affiliation>
+						</author>
+						<title level="a" type="main">A Data-Driven Analysis of Workers&apos; Earnings on Amazon Mechanical Turk</title>
+					</analytic>
+					<monogr>
+						<imprint>
+							<date/>
+						</imprint>
+					</monogr>
+					<idno type="DOI">10.1145/3173574.3174023</idno>
+				</biblStruct>
+			</sourceDesc>
+		</fileDesc>
+		<profileDesc>
+			<textClass>
+				<keywords>
+					<term>Author Keywords Crowdsourcing</term>
+					<term>Amazon Mechanical Turk</term>
+					<term>Hourly wage ACM Classification Keywords H5m Information interfaces and presentation (eg, HCI): Miscellaneous</term>
+				</keywords>
+			</textClass>
+			<abstract>
+				<p>A growing number of people are working as part of on-line crowd work. Crowd work is often thought to be low wage work. However, we know little about the wage distribution in practice and what causes low/high earnings in this setting. We recorded 2,676 workers performing 3.8 million tasks on Amazon Mechanical Turk. Our task-level analysis revealed that workers earned a median hourly wage of only ~$2/h, and only 4% earned more than $7.25/h. While the average requester pays more than $11/h, lower-paying requesters post much more work. Our wage calculations are influenced by how unpaid work is accounted for, e.g., time spent searching for tasks, working on tasks that are rejected, and working on tasks that are ultimately not submitted. We further explore the characteristics of tasks and working patterns that yield higher hourly wages. Our analysis informs platform design and worker tools to create a more positive future for crowd work.</p>
+			</abstract>
+		</profileDesc>
+	</teiHeader>
+	<text xml:lang="en">
+		<body>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>INTRODUCTION</head><p>Crowd work is growing <ref type="bibr" coords="1,160.08,484.07,15.75,9.00" target="#b32">[31,</ref><ref type="bibr" coords="1,175.83,484.07,11.81,9.00" target="#b48">46]</ref>. A report by Harris and Krueger states that 600k workers participate in the online gig economy and the number is growing rapidly <ref type="bibr" coords="1,275.85,507.07,15.42,9.00" target="#b32">[31]</ref>. Crowdsourcing does not just enable novel technologies (e.g., human-powered word processing and assistive technologies <ref type="bibr" coords="1,108.55,541.59,11.16,9.00" target="#b4">[5,</ref><ref type="bibr" coords="1,119.72,541.59,7.44,9.00" target="#b5">6]</ref>) that we create in the HCI community, but also facilitates new ways of working. Its remote and asynchronous work style, unbounded by time and location, is considered to extend the modern office work <ref type="bibr" coords="1,250.85,576.10,16.10,9.00" target="#b45">[44,</ref><ref type="bibr" coords="1,266.95,576.10,12.08,9.00" target="#b48">46,</ref><ref type="bibr" coords="1,279.03,576.10,12.08,9.00" target="#b49">47]</ref>, enabling people with disabilities, at-home parents, and temporarily out-of-work engineers to work <ref type="bibr" coords="1,490.95,194.50,11.80,9.00" target="#b0">[1,</ref><ref type="bibr" coords="1,502.75,194.50,7.87,9.00" target="#b3">4,</ref><ref type="bibr" coords="1,510.62,194.50,11.80,9.00" target="#b40">39,</ref><ref type="bibr" coords="1,522.43,194.50,11.80,9.00" target="#b48">46,</ref><ref type="bibr" coords="1,534.23,194.50,11.80,9.00" target="#b67">65]</ref>.</p><p>Yet, despite the potential for crowdsourcing platforms to extend the scope of the labor market, many are concerned that workers on crowdsourcing markets are treated unfairly <ref type="bibr" coords="1,316.88,246.50,16.30,9.00">[19,</ref><ref type="bibr" coords="1,333.18,246.50,12.23,9.00" target="#b39">38,</ref><ref type="bibr" coords="1,345.41,246.50,12.23,9.00" target="#b40">39,</ref><ref type="bibr" coords="1,357.64,246.50,12.23,9.00" target="#b43">42,</ref><ref type="bibr" coords="1,369.87,246.50,12.23,9.00" target="#b49">47,</ref><ref type="bibr" coords="1,382.10,246.50,12.23,9.00" target="#b61">59]</ref>. Concerns about low earnings on crowd work platforms have been voiced repeatedly. Past research has found evidence that workers typically earn a fraction of the U.S. minimum wage <ref type="bibr" coords="1,436.92,281.02,17.34,9.00" target="#b35">[34,</ref><ref type="bibr" coords="1,454.26,281.02,13.00,9.00" target="#b36">35,</ref><ref type="bibr" coords="1,467.26,281.02,8.67,9.00" target="#b38">[37]</ref><ref type="bibr" coords="1,475.93,281.02,4.33,9.00" target="#b39">[38]</ref><ref type="bibr" coords="1,480.26,281.02,13.00,9.00" target="#b40">[39]</ref><ref type="bibr" coords="1,493.27,281.02,8.67,9.00" target="#b51">49</ref>] and many workers report not being paid for adequately completed tasks <ref type="bibr" coords="1,340.90,304.02,15.75,9.00" target="#b39">[38,</ref><ref type="bibr" coords="1,356.65,304.02,11.81,9.00" target="#b53">51]</ref>. This is problematic as income generation is the primary motivation of workers <ref type="bibr" coords="1,456.92,315.52,11.95,9.00" target="#b3">[4,</ref><ref type="bibr" coords="1,468.87,315.52,11.95,9.00" target="#b14">13,</ref><ref type="bibr" coords="1,480.82,315.52,11.95,9.00" target="#b48">46,</ref><ref type="bibr" coords="1,492.77,315.52,11.95,9.00" target="#b51">49]</ref>.</p><p>Detailed research into crowd work earnings has been limited by an absence of adequate quantitative data. Prior research based on self-reported income data (e.g., <ref type="bibr" coords="1,517.95,356.04,12.03,9.00" target="#b3">[4,</ref><ref type="bibr" coords="1,529.98,356.04,12.03,9.00" target="#b35">34,</ref><ref type="bibr" coords="1,542.02,356.04,12.03,9.00" target="#b51">49]</ref>) might be subject to systemic biases <ref type="bibr" coords="1,470.20,367.54,16.58,9.00" target="#b22">[22]</ref> and is often not sufficiently granular to facilitate a detailed investigation of earnings dispersion. Existing data-driven quantitative work in crowdsourcing research has taken the employers' perspective <ref type="bibr" coords="1,370.15,413.54,16.82,9.00" target="#b51">[49]</ref> (e.g., finding good pricing methods <ref type="bibr" coords="1,316.88,425.04,16.01,9.00" target="#b37">[36,</ref><ref type="bibr" coords="1,332.89,425.04,12.01,9.00" target="#b52">50,</ref><ref type="bibr" coords="1,344.89,425.04,12.01,9.00" target="#b63">61]</ref>, suggesting effective task design for requesters <ref type="bibr" coords="1,316.88,436.57,15.45,9.00" target="#b24">[24,</ref><ref type="bibr" coords="1,332.33,436.57,11.59,9.00" target="#b41">40]</ref>), or it characterizes crowdsourcing market dynamics <ref type="bibr" coords="1,357.90,448.07,15.75,9.00" target="#b21">[21,</ref><ref type="bibr" coords="1,373.65,448.07,11.81,9.00" target="#b38">37]</ref>. Data-driven research on how workers are treated on the markets is missing. This paper complements and extends the existing understanding of crowd work earnings using a data-driven approach. Our research focuses on Amazon Mechanical Turk (AMT), one of the largest micro-crowdsourcing markets, that is widely used by industry <ref type="bibr" coords="1,492.95,523.09,16.75,9.00" target="#b35">[34,</ref><ref type="bibr" coords="1,509.70,523.09,12.57,9.00" target="#b50">48]</ref> and the HCI community, as well as by other research areas such as NLP and computer vision <ref type="bibr" coords="1,435.92,546.09,15.77,9.00" target="#b16">[15,</ref><ref type="bibr" coords="1,451.69,546.09,11.82,9.00" target="#b47">45]</ref>. At the core of our research is an unprecedented amount of worker log data collected by the Crowd Workers Chrome plugin <ref type="bibr" coords="1,541.23,569.09,16.82,9.00" target="#b15">[14]</ref> between Sept 2014 to Jan 2017. Our dataset includes the records of 3.8 million HITs that were submitted or returned by 2,676 unique workers. The data includes task duration and HIT reward, which allows us to evaluate hourly wage rates-the key measure that has been missing from the prior data-driven research <ref type="bibr" coords="1,400.65,638.12,18.52,9.00" target="#b21">[21,</ref><ref type="bibr" coords="1,419.17,638.12,13.89,9.00" target="#b41">40]</ref>-at an unprecedented scale.</p><p>We provide the first task-level descriptive statistics on worker earnings. Our analysis reveals that the mean and median hourly wages of workers on AMT are $3.13/h and $1.77/h respectively. The hourly wage distribution has a long-tail; the majority of the workers earn low hourly wages, but there are 111 workers (4%) who earned more than $7.25/h, the U.S. federal minimum wage. These findings reify existing research based on worker self-reports that estimate the typical hourly wage to be $1-6/h <ref type="bibr" coords="2,258.35,98.20,12.27,9.00" target="#b3">[4,</ref><ref type="bibr" coords="2,270.62,98.20,12.27,9.00" target="#b35">34,</ref><ref type="bibr" coords="2,282.90,98.20,12.27,9.00" target="#b51">49]</ref> and strongly supports the view that crowd workers on this platform are underpaid <ref type="bibr" coords="2,156.83,121.22,15.88,9.00" target="#b35">[34,</ref><ref type="bibr" coords="2,172.71,121.22,11.91,9.00" target="#b39">38]</ref>. However, it is not that individual requesters are necessarily paying so little, as we found requesters pay $11.58/h on average. Rather, there is a group of requesters who post a large amount of low-reward HITs and, in addition, unpaid time spent doing work-related activities leads to the low wages. We quantify three sources of unpaid work that impact the hourly wage: (i) searching for tasks, (ii) working on tasks that are rejected, and (iii) working on tasks that are not submitted. If one ignores this unpaid work, our estimates of the median and mean hourly wages rise to $3.18/h and $6.19/h respectively.</p><p>Our data also enable us to go beyond existing quantitative studies to examine how effective different work and taskselection strategies are at raising hourly wages. Workers could employ the potential strategies to maximize their hourly wage while working on AMT. In the final section, we discuss the implications of our findings for initiatives and design opportunities to improve the working environment on AMT and crowdsourcing platforms in general.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>BACKGROUND</head><p>Many are concerned that workers on crowdsourcing markets are treated unfairly <ref type="bibr" coords="2,179.08,385.04,16.30,9.00">[19,</ref><ref type="bibr" coords="2,195.38,385.04,12.23,9.00" target="#b39">38,</ref><ref type="bibr" coords="2,207.61,385.04,12.23,9.00" target="#b40">39,</ref><ref type="bibr" coords="2,219.84,385.04,12.23,9.00" target="#b43">42,</ref><ref type="bibr" coords="2,232.07,385.04,12.23,9.00" target="#b49">47,</ref><ref type="bibr" coords="2,244.30,385.04,12.23,9.00" target="#b61">59]</ref>. Market design choices, it is argued, systematically favor requesters over workers in a number of dimensions. The use of asymmetric rating systems makes it difficult for workers to learn about unfair requesters <ref type="bibr" coords="2,183.83,431.04,11.71,9.00" target="#b1">[2,</ref><ref type="bibr" coords="2,195.54,431.04,11.71,9.00" target="#b39">38,</ref><ref type="bibr" coords="2,207.24,431.04,11.71,9.00" target="#b62">60]</ref>, while platforms rarely offer protection against wage theft or provide mechanisms for workers to dispute task rejections and poor ratings <ref type="bibr" coords="2,85.28,465.57,11.37,9.00" target="#b3">[4,</ref><ref type="bibr" coords="2,96.64,465.57,11.37,9.00" target="#b49">47]</ref>. Platforms' characteristics such as pay-perwork <ref type="bibr" coords="2,80.78,477.07,11.58,9.00" target="#b1">[2]</ref> and treating workers as contractors <ref type="bibr" coords="2,260.10,477.07,16.58,9.00" target="#b66">[64]</ref> (so requesters are not bound to paying minimum wage <ref type="bibr" coords="2,262.60,488.57,16.31,9.00" target="#b66">[64,</ref><ref type="bibr" coords="2,278.91,488.57,12.23,9.00" target="#b68">66]</ref>) also contribute to earnings instability and stressful working conditions <ref type="bibr" coords="2,98.05,511.57,11.36,9.00" target="#b3">[4,</ref><ref type="bibr" coords="2,109.41,511.57,11.36,9.00" target="#b10">11]</ref>.</p><p>Past research has found evidence that workers typically earn a fraction of the U.S. minimum wage <ref type="bibr" coords="2,225.85,540.59,17.33,9.00" target="#b35">[34,</ref><ref type="bibr" coords="2,243.18,540.59,13.00,9.00" target="#b36">35,</ref><ref type="bibr" coords="2,256.18,540.59,8.67,9.00" target="#b38">[37]</ref><ref type="bibr" coords="2,264.84,540.59,4.33,9.00" target="#b39">[38]</ref><ref type="bibr" coords="2,269.17,540.59,13.00,9.00" target="#b40">[39]</ref><ref type="bibr" coords="2,282.17,540.59,13.00,9.00" target="#b51">49]</ref> and many workers report not being paid for adequately completed tasks <ref type="bibr" coords="2,123.30,563.59,16.01,9.00" target="#b39">[38,</ref><ref type="bibr" coords="2,139.31,563.59,12.01,9.00" target="#b51">49,</ref><ref type="bibr" coords="2,151.32,563.59,12.01,9.00" target="#b53">51]</ref>. This is problematic as income generation is the primary motivation of workers <ref type="bibr" coords="2,54.03,586.59,11.89,9.00" target="#b3">[4,</ref><ref type="bibr" coords="2,65.92,586.59,11.89,9.00" target="#b14">13,</ref><ref type="bibr" coords="2,77.81,586.59,11.89,9.00" target="#b48">46,</ref><ref type="bibr" coords="2,89.70,586.59,11.89,9.00" target="#b51">49]</ref>. Further, low wage rates and the ethical concerns of workers should be of importance to requesters given the association between poor working conditions, low quality, and high turnover <ref type="bibr" coords="2,160.33,621.12,16.00,9.00" target="#b12">[12,</ref><ref type="bibr" coords="2,176.33,621.12,12.00,9.00" target="#b27">27,</ref><ref type="bibr" coords="2,188.33,621.12,12.00,9.00" target="#b45">44]</ref>.</p><p>To date, detailed research into crowd work earnings has been limited by an absence of adequate quantitative data. For instance, Martin et al. analyzed publicly available conversations on Turker Nation-a popular forum for workers-in an attempt to answer questions such as "how much do Turkers make?" <ref type="bibr" coords="2,164.08,696.15,15.20,9.00" target="#b51">[49]</ref>. While such analyses have provided important insights into how much the workers believe they earn, we cannot be sure if their earnings estimates are unbiased and representative.</p><p>Existing quantitative work in crowdsourcing research has taken the employers' perspective <ref type="bibr" coords="2,458.92,104.20,16.58,9.00" target="#b51">[49]</ref> (e.g., finding good pricing methods <ref type="bibr" coords="2,395.40,115.72,16.01,9.00" target="#b37">[36,</ref><ref type="bibr" coords="2,411.41,115.72,12.01,9.00" target="#b52">50,</ref><ref type="bibr" coords="2,423.41,115.72,12.01,9.00" target="#b63">61]</ref>, suggesting effective task design for requesters <ref type="bibr" coords="2,427.92,127.22,16.16,9.00" target="#b24">[24,</ref><ref type="bibr" coords="2,444.09,127.22,12.12,9.00" target="#b41">40]</ref>) or it focuses on characterizing the crowdsourcing market dynamics <ref type="bibr" coords="2,526.22,138.72,15.88,9.00" target="#b21">[21,</ref><ref type="bibr" coords="2,542.10,138.72,11.91,9.00" target="#b38">37]</ref>. Although important, data-driven research on how workers are treated on the crowdsourcing markets is missing. This paper complements and extends our existing understanding of crowd work earnings using a data-driven approach. The unprecedented amount of AMT worker log data collected by the Crowd Workers Chrome plugin <ref type="bibr" coords="2,485.20,207.75,16.58,9.00" target="#b15">[14]</ref> allows us to evaluate hourly wage rates at scale.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>TERMINOLOGY</head><p>Before presenting our formal analysis, we define a set of key terms necessary for understanding the AMT crowdsourcing platform. AMT was launched in 2008 and is one of the largest micro-task sites in operation today. The 2010 report by Ipeirotis noted that the most prevalent types on AMT are transcription, data collection, image tagging, and classification <ref type="bibr" coords="2,391.90,316.02,15.42,9.00" target="#b38">[37]</ref>. Follow-up work by Difallah et al. reaffirms these findings, although tasks like audio transcription are becoming more prevalent <ref type="bibr" coords="2,489.20,339.02,15.20,9.00" target="#b21">[21]</ref>.</p><p>Each standalone unit of work undertaken by a worker on AMT is referred to as a task or HIT. Tasks are listed on custom webpages nested within the AMT platform, although some tasks require workers to interact with web pages outside of the AMT platform.</p><p>Tasks are issued by requesters. Requesters often issue multiple HITs at once that can be completed by different workers in parallel. A group of tasks that can be performed concurrently by workers is called a HIT group.</p><p>Requesters can require workers to possess certain qualifications to perform their tasks. For example, a requester could only allow workers with "&gt; 95% HIT approval rate" to work on their tasks.</p><p>Workers who meet the required qualifications can accept HITs. Once workers complete a task, they submit their work for requesters to evaluate and either approve or reject the HITs. If a submitted task is approved, workers get a financial reward. If, however, a worker accepts a HIT but does not complete the task, the task is said to be returned.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DATASET</head><p>We describe the tool that we used to collect task-level data on worker behavior and present basic statistics of the data.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Crowd Worker Plugin</head><p>The data was collected using the Crowd Workers Chrome plugin <ref type="bibr" coords="2,346.15,660.37,15.20,9.00" target="#b15">[14]</ref>. The plugin was used by workers in an opt-in basis. The plugin was designed to disclose the effective hourly wage rates of tasks for workers, following design suggestions in <ref type="bibr" coords="2,377.90,694.90,15.20,9.00" target="#b57">[55]</ref>. It tracks what tasks and when workers accept and submit/return, as well as other metadata about the HITs. More specifically, our dataset includes:</p><p>• User attributes such as worker IDs, registration date, blacklisted requesters, "favorite" requesters, and daily work time goal.</p><p>• HIT Group information such as HIT Group IDs, titles, descriptions, keywords, reward, and requester IDs, and any qualification requirements.</p><p>• For each HIT group, we have information on HIT IDs, submission status (i.e., submitted vs. returned), timestamps for HIT accept, submit, and return.</p><p>• Web page domains that the workers visited (though the scope was limited to predefined domains including mturk.com, crowd-workers.com, and a selected few AMT-related sites (e.g., turkernation.com).</p><p>• A partial record of HIT approval and rejection status for submitted HITs. The plugin periodically polled the worker's AMT dashboard and scraped this data. As an approve/reject status is updated by the workers at their convenience rather than at a specified interval after task completion, we only have approval records for 29.6% of the HIT records.</p><p>Some important attributes are not recorded in our dataset. For instance, the plugin does not record fine-grained interactions, such as keystrokes and mouse movements. Though potentially useful in, for example, detecting active work, we did not collect them because they could contain personally identifiable information. Further, while the plugin records data about browsing on a set of predefined web sites, it does not track browsing history on all domains. The plugin does not collect the HTML contents of the HIT UIs. Thus, we do not have the "true" answers for tasks that workers performed, so we cannot compute task accuracy.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Data Description</head><p>The dataset consists of task logs collected from Sept 2014 to Jan 2017. There are 3,808,020 records of HITs from 104,939 HIT groups performed by 2,676 unique workers. The recorded HITs were posted by 20,286 unique requesters. <ref type="figure" coords="3,100.80,617.12,34.50,9.00" target="#fig_0">Figure 1</ref> shows the transition in the number of active monthly users and tracked HITs. We can see that the number of recorded HITs increased from December 2015 (N=114,129) and peaked on June 2016 (N=386,807). The data on January 2017 is small because the data was exported earlier in the month and the data for the full month was not collected. The number of unique monthly user started to increase from December 2015 (N=202), then peaked on November 2016 (N=842), indicating that the following analyses mainly reflect the activities from the end of 2015 to the end of 2016. To our knowledge, this is the largest AMT worker log data in existence that enables hourly wage analysis.</p><p>On average, workers worked on 1,302 HITs each (SD=4722.5; median=128.5), spending 54.0 hours on average (SD=172.4; median=6.14h). <ref type="figure" coords="3,473.95,238.75,36.25,9.00" target="#fig_1">Figure 2</ref> shows the distribution of the total number of HITs completed by workers. One worker completed 107,432 HITs, whereas 135 workers completed only one HIT. Workers used the Crowd Worker plugin for 69.6 days on average (SD=106.3; median=25 days).</p><p>Some HITs were submitted with abnormally short or long work duration. This could be because these HITs were completed by automated scripts, submitted prematurely or workers abandoned/forgot to perform the tasks. To mitigate the effect of these outliers on our results, we filtered out top and bottom 5-percentile of the submitted HIT records based on their task duration, leaving N=3,471,580 HITs (91.2% of the original number). The remaining data represents 99,056 unique HIT groups, N=2,666 unique workers, and 19,598 unique requesters.</p><p>We retain the N=23,268 (0.7%) HITs with $0 reward, which are typically qualification HITs (e.g., answering profile surveys). We keep these tasks in our dataset as time completing these tasks is still work even if it is not rewarded as such by the requesters. The small portion of the records does not significantly impact our results.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>THE AMT WAGE DISTRIBUTION</head><p>In this section, we analyze the level and distribution of hourly wages and earnings on AMT. We first outline a set of methods to calculate hourly wages before reporting detailed descriptive statistics including total and hourly earnings.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Measuring the Hourly Wage</head><p>Work on AMT is organized and remunerated as a piece rate system in which workers are paid for successfully completed tasks. Our work log record includes Timesubmit, Timeaccept and the Reward for each HIT. If HIT Interval=Timesubmit -Timeaccept accurately reflected time spent working on a HIT, then it would be simple to calculate the hourly wage associated with each task as Reward / HIT Interval. (Note that when the worker returns the HIT, we use Reward=$0 regardless of the HIT reward.) Similarly, we could calculate the average per-worker hourly wage with ∑ í µí± í µí±í µí±¤í µí±í µí±í µí± / ∑ í µí°»í µí°¼í µí± í µí°¼í µí±í µí±¡í µí±í µí±í µí±£í µí±í µí± -sum of the total  reward over the total HIT duration that a person earned/spent over the course of working on HITs. We refer to this as the interval-based method of computing per-HIT and per-worker hourly wage.</p><p>But the HIT Interval does not always correspond directly to work time. As depicted in <ref type="figure" coords="4,172.08,297.27,38.99,9.00" target="#fig_2">Figure 3a</ref>, HIT Intervals can overlap when a worker accepts multiple HITs at once, and then completes them one-by-one. This is a common strategy that workers use to secure the HITs that they want to work on to prevent them from being taken by other workers. This could cause the interval-based method to underestimate the hourly wage because any time lag between accepting a HIT and starting to work on it will be counted as work time.</p><p>There is also a question over how to treat the time between HITs when calculating the hourly wage. When a worker works on HITs in the same HIT group or looks for a new HIT using AMT's search interface, there can be a lag between submitting one HIT and accepting the next. This seems important to count as part of working time but is not captured by the interval-based method, which could lead the interval-based method to overestimate the hourly wage.</p><p>To take into account overlapping HITs and the time between tasks, we needed to temporally cluster the HITs into contiguous working sessions. We used a temporal clustering method following Monroe et al.</p><p>[52] that groups a series of temporally close time intervals into clusters using an interval threshold, D. For example, given a pair of HITs that are sorted by Timeaccepted, the algorithm will group these HITs into a single cluster if the duration between the first HIT's Timesubmitted timestamp and the second HIT's Timeaccepted is smaller than D-see <ref type="figure" coords="4,205.83,608.37,39.60,9.00" target="#fig_2">Figure 3b</ref>. Then, the cluster's last Timesubmitted is compared with the subsequent HIT. If the duration between the next HIT's Timeaccepted timestamp is smaller than gap D, the algorithm puts the HIT into this cluster. Otherwise, the subsequent HIT forms a new cluster. We call this the cluster-based method of measuring the hourly wage.</p><p>Different choices of D yield different estimates of working time and thus hourly wages. With D=0, only concurrently occurring HITs are clustered together. We also report results for a choice of D&gt;0. With D&gt;0, HITs that are worked on sequentially but with slight intervals between submitting one task and accepting the next are clustered. <ref type="figure" coords="4,316.88,109.70,34.27,9.00" target="#fig_3">Figure 4</ref> shows how the number of clusters in the data set varies with D. The Elbow point is 1min <ref type="bibr" coords="4,477.95,121.22,19.46,9.00" target="#b42">[41]</ref>-the change in the number of clusters formed diminishes sharply after D=1min. This seems sensible as most intervals between submitting and accepting HITs within the same work session should be small. Thus, in addition to the intervalbased method, we report wage results using the clusterbased method with D=0min and D=1min. We compute the per-cluster hourly wage for a cluster C as: where t refers to a task. The per-worker average hourly wage is then calculated as í µí±¤ = ∑ í µí»¿ í µí° ¶ í µí±¤ í µí° ¶ where í µí»¿ í µí° ¶ is the fraction of time spent on cluster C relative to all time spent working.</p><formula xml:id="formula_0" coords="4,323.38,202.26,1.72,23.37">í</formula></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Hourly Wages per HIT/Cluster</head><p>We first report statistics on effective wage rates at the task level, calculated using our three different methods. In summary, depending on the measure used, mean wage rates per work-unit vary between $4.80/h and $6.19/h. N=600,763 (23.5%) of 0min clusters generated an hourly wage of $7.25, whereas N=80,427 (12.7%) of 1min clusters generated above the federal minimum wage. <ref type="table" coords="4,502.70,478.32,30.77,9.00">Table 1</ref> gives the relevant summary statistics. <ref type="figure" coords="4,316.88,597.37,35.27,9.00" target="#fig_4">Figure 5</ref> shows the distribution of per-HIT/cluster hourly wages using the different methods for hourly wage computation, disregarding worker identity. The distributions are zero inflated, because N= 460,939 paid $0, either because they were qualification tasks and/or returned. After removing the $0 HITs, the median hourly wage using the interval-based method is $3.31/h and the mean hourly wage is $6.53/h (SD=25.8). We will revisit the impact of the returned HITs to the worker income later.   At D=0, N=2,560,066 clusters were formed. N=2,429,384 had only 1 HIT in a cluster-i.e., 70% of HITs were not overlapping. Overlapping HITs came from N=1,629 workers. This indicates that 38.9% of the workers never worked on HITs in parallel and 61.1% of the workers work on two or more HITs in parallel. Taking into account the overlapping nature of tasks raises estimates of average work-unit wage rates as shown in <ref type="figure" coords="5,190.58,144.22,48.32,9.00" target="#fig_4">Figure 5a&amp;b</ref>.</p><p>At D=1, N=635,198 clusters were formed. The median and mean per-cluster hourly wages were $1.77/h and $4.80/h (SD=43.4) <ref type="figure" coords="5,101.30,184.72,41.63,9.00" target="#fig_4">(Figure 5c</ref>). N=331,770 had only 1 HIT in a cluster. Compared to the statistics in case of D=0, the mean and median per-cluster hourly wages dropped by 1.39 and 1.41. This indicates that the unpaid time intervals between accepting and submitting HITs have a non-negligible amount of impact to the hourly wage of the workers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Hourly Wages per Worker</head><p>Average hourly wages per worker are lower than those at the task/cluster level. This is because small number of workers are contributing a large number of high hourly wage HITs. Depending on the method used, mean hourly wages per worker on AMT lie between $3.13/h and $3.48/h, while the median wage lies between $1.77/h and $2.11/h-see <ref type="table" coords="5,112.05,462.07,31.00,9.00" target="#tab_2">Table 2</ref>. Only 4.2% of workers earn more than the federal minimum wage on average. <ref type="figure" coords="5,54.03,555.59,35.25,9.00" target="#fig_5">Figure 6</ref> shows the distribution of the per-worker hourly wage and Thus, we cannot attribute the high-hourly wage to experience on the platform alone, which does not explain the high hourly wage of more than half of the workers who completed N=12 tasks or less. To further investigate why these workers are earning more, we investigate the factors affecting low/high hourly wage in the next section. We use the interval-based method to compute hourly wage unless otherwise noted, because (i) the clustering methods for calculating wages does not provide granular task-level hourly wage information that is necessary in some of the analyses below and (ii) the interval-based method does not over/underestimate the wage much.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>FACTORS AFFECTING THE HOURLY WAGE</head><p>In this section, we analyze the effect of (i) unpaid work, (ii) HIT reward, (iii) requester behaviors, (iv) qualifications, and (v) HIT type on the hourly wage to identify potential strategies for workers to increase their earnings.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Unpaid Work</head><p>It is not always obvious what counts as work on crowdsourcing platforms. Working on AMT often involves invisible work <ref type="bibr" coords="5,390.90,445.57,19.76,9.00" target="#b64">[62]</ref>-time spent on work that is directly/indirectly related to completing HITs yet unpaid. There are several types of this invisible work, including the time spent on the returned HITs, work done for the rejected HITs, and, again, time spent searching for HITs <ref type="bibr" coords="5,513.70,491.32,16.10,9.00" target="#b26">[26,</ref><ref type="bibr" coords="5,529.80,491.32,12.07,9.00" target="#b51">49,</ref><ref type="bibr" coords="5,541.87,491.32,12.07,9.00" target="#b53">51]</ref>. While these issues have been identified in prior work, their significance to hourly wage is not quantified. Below, we look into the impact of returned HITs, rejected HITs, and time between HITs on worker hourly wages.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Returned HITs</head><p>Of the 3.5m HITs, N=3,027,952 (87.2%) were submitted and N=443,628 (12.8%) were returned. For the submitted HITs, the median and mean work durations were 41s and 116.8s (SD=176.4s). For the returned HITs, the median and mean time spent were 28.4s and 371.5s (SD=2909.8). The total work duration of submitted and returned HITs was 143,981 hours. 98,202 hours were spent on the submitted HITs and 45,778 hours were spent on the returned HITs.</p><p>We cannot quantify exactly how much monetary value has been lost due to the 12.8% of the work that was never compensated. However, if we assume that the workers could have earned $1.77/h or $7.25/h-the interval-based     In our dataset we cannot observe why a worker returns a HIT. So investigating why HITs are returned should thus be a key area of future research; it could be because of poor task instructions that prohibits workers from completing a HIT, broken interface that prohibits submitting HITs, a worker not enjoying a task, and others.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Rejected HITs</head><p>In our dataset, N=1,029,162 out of 3.5m HITs (29.6%) had 'approved' or 'rejected' status. Within these records, N=1,022,856 records (99.4%) were approved and N=6,306 (0.6%) were rejected. In terms of total time spent on the approved and rejected HITs, 33,130 hours were spent on the approved HITs (99.3%) and 240 hours were spent on the rejected HITs (0.7%).</p><p>This suggests that, at least within the scope of our data, HIT rejection is a smaller issue in terms of unpaid work as nearly 100% of work was accepted. Note, however, as McInnis revealed <ref type="bibr" coords="6,130.30,374.04,15.40,9.00" target="#b53">[51]</ref>, workers are sensitive to rejection because a poor approval rate could prohibit them from doing some tasks on the market (because some HITs require a high approval rate) or get them banned permanently from the platform. Avoiding rejection (e.g., by returning) could be contributing to the high acceptance rate.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Time between HITs</head><p>Our cluster-based analysis of the worker hourly wage suggests that there is non-negligible amount of unpaid time spent between HITs. Some portion of this likely represents time taken for searching for HITs, waiting for a page to load or accepting new HITs, although we have no way to know how workers are spending their time between HITs. We now investigate the effect of the unpaid time between HITs on the worker hourly wage. We do this by computing the total cluster-based task durations with D=1min and D=0min, and subtracting the former by the latter.</p><p>In </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Takeaway</head><p>Returning HITs has the biggest impact to the hourly wage. The time lost due to the time between the HITs has the second most impact. Task rejection has the least impact in terms of unpaid work. Note, however, rejection could have potential risks of not being able to accept HITs in the future or getting banned from AMT, which is not quantified here.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>HIT Reward</head><p>The hourly wage depends both on HIT reward and how long it takes to complete a task. While it might seem obvious that higher reward HITs result in higher hourly wages, this relationship might not hold if higher paying HITs take proportionately longer to complete.</p><p>To investigate the relationship between HIT reward and hourly wages, we examine the association between the mean interval-based HIT hourly wage of HIT groups and HIT reward. Similar to the per-worker hourly wage, mean per-group hourly wage is ∑ í µí± í µí±í µí±¤í µí±í µí±í µí± / ∑ í µí°»í µí°¼í µí± í µí°¼í µí±í µí±¡í µí±í µí±í µí±£í µí±í µí± , summed over the tasks in the same HIT group. In the analysis of this section, we omit the HITs that had $0 reward to remove the effect of returned HITs.</p><p>As the HIT reward distribution is highly skewed, we apply the Box-Cox transformation 1 (λ=0.174) for our analysis. We select this transformation over alternatives as it generated better fit for the regression model that we describe in the next paragraph. We transform the per-HIT group hourly wage using the log transformation.</p><p>We fit the transformed reward and hourly wage using ordinary least squares regression. The residuals are slightly skewed and peaked compared to the normal distribution assumed by the model (skew=0.7, kurtosis=2.2), but it should be tolerable. We obtain í µí±¦ = 1.996í µí±¥ + 0.9465 (R 2 =0.18; <ref type="figure" coords="6,359.65,602.12,37.17,9.00" target="#fig_7">Figure 7)</ref>. The obtained linear model is for the transformed data. In the original dimension, this model suggests that if a worker completes a HIT with $0.01 reward, they should expect to earn $2.06/h. Similarly, working on a HIT with $1.00 reward should yield $8.84/h  and working on HITs with rewards above $0.64 should pay workers above the minimum wage ($7.25/h).</p><p>We point out that there are low-reward HITs that yield high-hourly wage, too. This means some low reward HITs are indeed priced fairly in terms of the time that a worker has to spend to complete them. It is, however, harder for workers to distinguish low-reward HITs that yield high hourly wage and low hourly wage a priori.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Takeaway</head><p>High reward HITs yield a higher hourly wage, indicating that while they take longer to perform, they do not take so much longer as to eliminate the gains of the higher piece rate. The analysis suggests an easy-to-employ strategy for worker to increase their wages (i.e., take high reward HITs).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Requesters</head><p>Workers seek to find good requesters so they can earn fairer rewards <ref type="bibr" coords="7,93.55,275.02,15.75,9.00" target="#b51">[49,</ref><ref type="bibr" coords="7,109.30,275.02,11.81,9.00" target="#b53">51]</ref>. To do so they use tools such as Turkopticon <ref type="bibr" coords="7,108.30,286.52,16.58,9.00" target="#b39">[38]</ref> and information from sites like Turker Nation <ref type="bibr" coords="7,88.28,298.02,15.22,9.00" target="#b69">[67]</ref>. In this section, we evaluate how much variation in hourly wages there is across requesters.</p><p>We use the interval-based method to compute the per HIT hourly wage-or hourly payment from the requester's perspective-and in turn per-requester hourly payment. The other methods for calculating wages do not make sense for this analysis because tasks grouped together may come from different requesters. Overall, there were N=19,598 requesters who posted at least 1 HIT in our dataset. On average, requesters posted N=173.4 HITs (SD=4283.0), with the median N=6 HITs. To investigate the characteristics of actual payments, we removed the HITs that were returned. This reduces the HITs to 3.03 million records from N=16,721 requesters (i.e., HITs in our records from 2,839 requesters were never completed). We also filter out qualification HITs that had $0 reward. Per-HIT level hourly payment follows the same trend as what we saw in the analyses of interval-based hourly wage, so we skip that analyses and only report the per-requester statistics.</p><p>Using the filtered data, we computed the hourly payment per requester. On average, requesters paid $11.58/h (SD=145.71; median=$4.57/h)-see <ref type="figure" coords="7,208.08,599.37,35.27,9.00" target="#fig_8">Figure 8</ref>. Mean and median are higher than per-worker hourly wage statistics (e.g., interval-based mean and median wages are $3.13/h and $1.77/h). This suggests that the large sum of low-paid HITs is posted by a relatively small number of requesters.</p><p>The aggregate statistics disregard the number of HITs the requester posted. For example, 3,667 requesters posted only 1 HIT, whereas 1 requester posted 405,709 HITs. Therefore, we created a scatter plot that depicts the relationship between per-requester hourly payment and how many HITs the requesters posted <ref type="figure" coords="7,450.75,230.75,35.62,9.00">(Figure 9</ref>).</p><p>In <ref type="figure" coords="7,328.88,248.25,33.52,9.00">Figure 9</ref>, each dot represents a requester. The x-axis is the number of HITs posted by each requester, while the yaxis represents per-requester hourly payment. The dashed line indicates 7.25/h. The green points above the dashed line indicate the requesters who paid more than minimum wage (N=4,473). N=962 of them posted more than 10 HITs and N=3,511 posted less than 10 HITs. While many requesters post a large amount of low-payment HITs, there are requesters who are posting above median number of HITs that yield fair wage. This validates that it is feasible to get fair hourly wage if you can find good requesters.</p><p>Do requesters who post high-reward HITs pay more fairly? To validate this, we look into the relationship between the per-requester HIT reward and hourly payment. <ref type="figure" coords="7,517.45,509.82,40.53,9.00" target="#fig_0">Figure 10</ref> shows the median HIT reward per-requester on the x-axis and the hourly payment on the y-axis. The graph indicates that working for requesters who constantly post high reward HITs is associated with earning a higher hourly wage. This corresponds to the insight from the previous analysis that working on high reward HITs can be lucrative.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Takeaway</head><p>Though the majority of the requesters pay below minimum wage, we saw that there are requesters who are fair. They post a significant number of HITs. Thus, finding these requesters and giving their work priority could improve worker hourly wage. Existing worker tools could support this by watching for the presence of HITs from these requesters and alerting workers to their presence <ref type="bibr" coords="7,513.20,675.65,15.22,9.00" target="#b70">[68]</ref>.  </p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Qualifications</head><p>Qualifications allow requesters to selectively hire workers. As this gives requesters the potential to hire only skilled and/or targeted workers, it is plausible that HITs that require qualification pay more generously. We thus compare the wage of HITs with and without qualification requirements.</p><p>Our dataset contains N=1,801 unique qualification types. N=36,068 unique HIT groups requires at least one qualification, which corresponds to N=1,711,473 HITs. N=1,760,107 HITs did not require qualifications. The median interval-based hourly wage of the HITs with and without qualification requirements were $2.63/h and $2.45/h respectively. Likewise, means were $5.65/h (SD=19.1) and $5.67/h (SD=28.2). Unlike what we expected, the wages did not differ much between groups. <ref type="table" coords="8,54.03,384.54,32.75,9.00" target="#tab_8">Table 3</ref> summarizes the ten most common qualification types. For example, N=1,309,320 HITs required the workers to have "HIT approval rate (%)" qualification, N=937,701 HITs required the workers to have "Location" qualification, and so on. Some qualifications seem to correspond to higher hourly wage. <ref type="figure" coords="8,199.58,442.07,39.77,9.00" target="#fig_0">Figure 11</ref> shows that 7 out the ten most common qualifications such as "Total approved HITs" and "Question Editor" corresponded to higher hourly wage compared to the overall average wage.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Takeaway</head><p>The HITs that require qualifications do not necessarily yield a higher hourly wage. But there are some qualifications that correspond to higher hourly wage (e.g., "Question Editor").</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Types of Work</head><p>What types or topics of HITs yield high hourly wage? Knowing that could guide workers to selectively work on types of work associated with high-wage. Unfortunately, the platform does not provide adequate information about a topic of a particular HIT. While requesters could provide HIT keywords, they are not necessarily consistent across HITs and keywords could be ambiguous. In fact, in our pilot analysis where we studied the relationship between keyword and hourly wage, keyword ambiguity prevented us from understanding what topic/keyword of HITs yield high hourly wage (e.g., audio and image 'transcription' gets mixed up). Thus keywords alone were not adequate to characterize HIT types, which led us to also take information from HITs' titles and descriptions.</p><p>Manually labeling HITs' topics based on HIT title, description, and keywords-we call this triplet a HIT document-cannot be done by any one person because of the data volume. We thus turn to a labeling process mediated by computation known as topic modeling. Topic modeling methods are often used to categorize a set of unlabeled documents into a finite number of coherent topic clusters <ref type="bibr" coords="8,350.65,321.52,11.70,9.00" target="#b6">[7,</ref><ref type="bibr" coords="8,362.35,321.52,11.70,9.00" target="#b29">28,</ref><ref type="bibr" coords="8,374.05,321.52,11.70,9.00" target="#b65">63]</ref>, in turn helping researchers to navigate a large corpus (HIT documents in our case) <ref type="bibr" coords="8,501.20,333.02,16.22,9.00" target="#b18">[17,</ref><ref type="bibr" coords="8,517.42,333.02,12.16,9.00" target="#b19">18,</ref><ref type="bibr" coords="8,529.59,333.02,12.16,9.00" target="#b24">24,</ref><ref type="bibr" coords="8,541.75,333.02,12.16,9.00" target="#b56">54]</ref>. However, unsupervised clustering of unlabeled documents is far from a solved problem <ref type="bibr" coords="8,443.42,356.04,15.89,9.00" target="#b17">[16,</ref><ref type="bibr" coords="8,459.31,356.04,11.92,9.00" target="#b19">18]</ref>. Although there are existing machine learning algorithms like K-Means <ref type="bibr" coords="8,541.47,367.54,16.58,9.00" target="#b33">[32]</ref> and Latent Dirichlet Allocation <ref type="bibr" coords="8,466.95,379.04,10.69,9.00" target="#b6">[7]</ref>, fully automated algorithm still cannot cluster documents with adequate accuracy.</p><p>The lack of a go-to method for document clustering necessitates us to iteratively explore different methods that allow us to efficiently and effectively categorize HIT documents into a set of topics. After trial-and-errors, we settled in using a three-step method, which involved: (i) transform each HIT document into vector representation using term frequency-inverse document frequency (TF-IDF) and Latent Semantic Analysis (LSA) transformations; (ii) retrieve a list of topical keywords by a semi-automated process that involves automated clustering of the transformed HIT documents and manual process of retrieving recurring topical phrases; and (iii) we use the retrieved topical keywords to query HITs in our dataset.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Vector Representation of HIT Description</head><p>The starting point of the process is preprocessing of HIT descriptions. From each HIT group, we extract requesterspecified title, description, and keywords, then concatenate them into a single document. To suppress the effect of uninformative words to the subsequent steps, we remove stop words (e.g., "the"), remove special characters (e.g., "*"), turn them into lower-case, and remove the last character of a term if it ends with "s".</p><p>We then create a table of term counts in which rows represent documents, columns represent terms in of the documents, and each cell contains the count of words used   in a HIT document. At this point, there is no distinction between the words' importance (e.g., terms "survey" and "good" have same weight even though the former is likely more informative for characterizing a HIT topic). A common step for assigning importance to words is TF-IDF transformation <ref type="bibr" coords="9,115.80,121.22,15.20,9.00" target="#b58">[56]</ref>. The method assigns a weight to a term that occurs frequently in a document, but negatively weights the term that appears across documents.</p><p>A tabulation with term counting and TF-IDF transformation yields a sparse, high-dimensional matrix. This causes the poorly generalizable representation and negatively impacts the subsequent clustering and querying steps. We thus use Latent Semantic Analysis which maps a sparse vector representation of a document into denser latent vectors <ref type="bibr" coords="9,275.85,219.25,15.42,9.00" target="#b60">[58]</ref>. Following the advice by Evangelopoulos et al <ref type="bibr" coords="9,241.85,230.75,15.20,9.00" target="#b23">[23]</ref>, we map the rows of HIT documents into kdim=300 dimensions.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Retrieving HIT Topics</head><p>Given the latent representation of the documents (i.e., HIT group descriptions), we move on to retrieving the topical keywords. This sub-process includes two steps: (i) KMeans based automated document clustering and (ii) manual retrieval of topical phrases from the clustered documents.</p><p>We use K-Means algorithm to cluster the transformed documents that are close to each other in the latent space <ref type="bibr" coords="9,54.03,368.04,15.20,9.00" target="#b55">[53]</ref>. K-Means clustering requires a user to specify a distance function and a number of clusters a priori. We use cosine distance to measure the similarity between two documents. Cosine distance returns a value between <ref type="bibr" coords="9,270.10,402.54,10.75,9.00">[0,</ref><ref type="bibr" coords="9,284.09,402.54,7.33,9.00" target="#b1">2]</ref>, where 0 indicates that two documents are close or similar.</p><p>We follow Bradford recommendation and use a clusters size kcluster=200 <ref type="bibr" coords="9,99.55,448.57,10.50,9.00" target="#b8">[9]</ref>.</p><p>From each of the formed HIT document 200 clusters, we sampled 50 HIT groups uniformly randomly. We manually go through them and retrieve recurring topical keywords (e.g., {"transcribe", "image"}). While 200x50=10k is a large number, this way of retrieving topical phrases is easier compared to randomly going through all 99k HIT groups because clustering algorithm returns some sets of HIT documents with clean, coherent topics. The retrieved topical keywords are listed on <ref type="table" coords="9,185.08,558.09,30.51,9.00" target="#tab_11">Table 4</ref>, which we further group into classes of HIT taxonomy given by Gadiraju et al. <ref type="bibr" coords="9,66.78,581.09,16.58,9.00" target="#b25">[25]</ref> (with an additional category Research).</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Querying HITs</head><p>Given the document-to-vector mapping and the list of topical keywords, we can move on to querying HITs from the dataset. Using the same transformation that is used to map a HIT document to a latent vector, we map every topical keyword (e.g., {"psychology", "survey"}, {"audio", "transcription}) into a vector of real values. This allows us to use cosine distance to measure similarity between a topical phrase, which acts as a search query and documents. While there is no universally accepted distance threshold for the cosine distance, dcosine=0.4 is considered as a good choice <ref type="bibr" coords="9,345.90,75.20,15.20,9.00" target="#b23">[23]</ref>, which we follow. Although <ref type="bibr" coords="9,483.20,75.20,74.79,9.00;9,316.88,86.70,10.25,9.00">Evangelopoulos et al.</ref> warns that this threshold is solely based on heuristics, manual inspection of query results validated that relevant documents are returned.</p><p>Query Result <ref type="figure" coords="9,316.88,137.47,44.21,9.00" target="#fig_0">Figure 12a</ref> shows the distributions of hourly wage for the seven HIT categories. Duplicate HITs that are associated with two or more topical phrases are dropped for aggregate statistic computation and plotting the distribution.  <ref type="figure" coords="9,316.88,621.62,44.02,9.00" target="#fig_0">Figure 12b</ref> shows strip plots where each circle represents a topical query. The size of circles corresponds to the number of HITs retrieved. The x-axis represents the median HIT hourly wage among the retrieved HITs. We observe two HIT groups with large quantities of tasks under CC are pulling down the hourly wage distribution. They correspond to topical keywords {"transcribe", "data"} (N=313,559; median=$1.24/h) and {"transcribe", "image"} (N=152,031;  median=1.13/h). On the other hand, topical phrase {"video", "evaluation"} under the category IA is associated with higher median hourly wage ($10.30/h) and has large quantity (N=49,720), making the group's distribution flat.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>Takeaway</head><p>There is variation in hourly wage between different topics of HITs. We showed that HITs such as data/image transcription are low-paying whereas "video evaluation" HITs are high-paying.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>DISCUSSION</head><p>We estimate that 96% of workers on AMT earn below the U.S federal minimum wage. While requesters are paying $11.58/h on average, dominant requesters who post many low-wage HITs like content creation tasks are pulling down the overall wage distribution. This is problematic as the primary goal of workers is income generation <ref type="bibr" coords="10,243.35,397.79,11.95,9.00" target="#b3">[4,</ref><ref type="bibr" coords="10,255.30,397.79,11.95,9.00" target="#b14">13,</ref><ref type="bibr" coords="10,267.25,397.79,11.95,9.00" target="#b48">46,</ref><ref type="bibr" coords="10,279.20,397.79,11.95,9.00" target="#b51">49]</ref>, rather than having fun or making pocket money <ref type="bibr" coords="10,260.85,409.29,11.43,9.00" target="#b1">[2,</ref><ref type="bibr" coords="10,272.28,409.29,7.62,9.00" target="#b3">4,</ref><ref type="bibr" coords="10,279.89,409.29,11.43,9.00" target="#b44">43]</ref>. Many people working on low paying HITs are likely from groups traditionally excluded from the formal labor market <ref type="bibr" coords="10,54.03,443.82,11.63,9.00" target="#b0">[1,</ref><ref type="bibr" coords="10,65.65,443.82,7.75,9.00" target="#b3">4,</ref><ref type="bibr" coords="10,73.40,443.82,11.63,9.00" target="#b9">10,</ref><ref type="bibr" coords="10,85.03,443.82,11.63,9.00" target="#b66">64]</ref>, such as people with disabilities who have challenges in securing jobs at contemporary office work environment <ref type="bibr" coords="10,110.05,466.82,11.46,9.00" target="#b3">[4,</ref><ref type="bibr" coords="10,121.51,466.82,11.46,9.00" target="#b67">65]</ref>. Hara and Bigham noted that some crowd work like image transcription can be done by autistic people-a population that has challenge in securing jobs compared to those without disabilities <ref type="bibr" coords="10,212.83,501.32,18.44,9.00" target="#b9">[10,</ref><ref type="bibr" coords="10,231.27,501.32,13.83,9.00" target="#b31">30,</ref><ref type="bibr" coords="10,245.10,501.32,13.83,9.00" target="#b34">33]</ref>-but this type of work is exactly what generates the lowest hourly wages as we showed in the topical analysis. We here discuss the implications of our results for the design of worker tools and platform infrastructure, and call on the HCI community to advance research in tools that can help to achieve a fairer distribution of earnings from crowd work.</p><p>Raising workers' awareness of their effective hourly wage and suggesting real-time strategies to increase their earnings may help workers to optimize their task selection and working patterns. Providing visualized, easy to interpret information about earnings provides useful feedback for workers that is not provided by AMT.</p><p>Although measuring hourly wage is not straightforward <ref type="bibr" coords="10,280.88,668.37,10.69,9.00" target="#b2">[3]</ref>, we showed that different wage computation methods do not result in largely different hourly wage estimates. Privacy concerns must be taken into consideration when designing such tools. Although the Crowd Worker plugin does not collect more information than it requires to compute hourly wages, this may not be visible to workers which could limit adoption of the technology <ref type="bibr" coords="10,426.67,98.20,15.40,9.00" target="#b59">[57]</ref>.</p><p>Unpaid work is an important factor driving low hourly wages on AMT. Workers are not paid when searching for tasks and are not paid for qualification tasks nor tasks that are returned or rejected. We suspect that experienced workers learn over time to minimize such unpaid work. However, encoding this process into a system that can be used by novice workers maximize their wage would be beneficial. Tools that automatically push tasks to workers (e.g., <ref type="bibr" coords="10,340.40,363.29,16.16,9.00" target="#b30">[29,</ref><ref type="bibr" coords="10,356.57,363.29,12.12,9.00" target="#b31">30]</ref>) and inform them of how likely the task is to be completable and accepted, combined with real-time information about tasks that exist on the market could thus be useful.</p><p>The majority of requesters pay below minimum wage. Helping workers to avoid unfair requesters is one way of dealing with this problem. But fair requesters do not post HITs all the time and a solution to the root problem-the presence of unfair requesters-is needed. We may be able to mitigate the problem by facilitating the communication between workers and/or increasing minimum reward.</p><p>Workers cite poor communication with requesters as a major flaw in crowd work platform design <ref type="bibr" coords="10,497.95,513.34,10.50,9.00" target="#b3">[4]</ref>. Improving communication channels might make it easier for requesters to identify and fix broken HITs (reducing time spent on returned tasks) and enable crowd workers to bargain collectively. While nudging workers to individually or collectively communicate and negotiate is difficult <ref type="bibr" coords="10,526.22,570.84,15.88,9.00" target="#b43">[42,</ref><ref type="bibr" coords="10,542.10,570.84,11.91,9.00" target="#b61">59]</ref>, overcoming these barriers can be beneficial for workers.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>LIMITATIONS</head><p>Our results may be biased (e.g., super turkers <ref type="bibr" coords="10,510.20,610.12,11.58,9.00" target="#b7">[8]</ref> who are already experienced may not be interested in using the plugin). That said, our sample includes 2,676 workers, each of whom completed 1.3k tasks on average. Our estimate of work intervals may not correspond to the time spent actively working on HITs, but this is same for any timebased payment scheme. Our data did not capture what scripts workers may have been using to assist them. Those who use scripts may have been automating some parts of  <ref type="table" coords="10,454.62,324.95,27.61,8.10" target="#tab_11">Table 4</ref>.</p><p>their work and earning more than those who do not. While our analyses suggested methods for increasing wage, we do not argue for causal relationship. Like many log analysis, we lack worker demographics. To better understand who are the workers in our dataset, we will conduct an online survey study. Investigation of other ethical issues like overtime work is future work.</p></div>
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>CONCLUSION</head><p>We used the log data of 2,676 workers performing 3.8 million tasks on Amazon Mechanical Turk to understand worker hourly wages. Our task-level analysis revealed a median hourly wage of ~$2/h, validating past self-report estimates. Only 4% of workers earn more than $7.25/h, justifying concerns about non-payment of the minimum wage. We characterize three sources of unpaid work that impact the hourly wage (i.e., task search, task rejection, task return). We further explore the characteristics of tasks and working patterns that yield higher hourly wages.</p></div><figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_0" coords="3,54.03,541.27,240.34,8.10;3,54.03,552.02,147.72,8.10"><head>Figure 1 . Line charts showing the transition in the number of active monthly users and HIT records.</head><label>1</label><figDesc>Figure 1. Line charts showing the transition in the number of active monthly users and HIT records.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_1" coords="3,316.88,195.68,224.22,8.10"><head>Figure 2 .</head><label>2</label><figDesc>Figure 2. Histogram of performed HIT counts by workers.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_2" coords="4,54.03,243.43,240.62,8.10;4,54.03,253.67,240.37,8.10;4,54.03,264.43,175.46,8.10"><head>Figure 3 . Timeline visualization of HIT intervals and depiction of the temporal clustering method. The HIT interval data comes from one of the workers in our dataset.</head><label>3</label><figDesc>Figure 3. Timeline visualization of HIT intervals and depiction of the temporal clustering method. The HIT interval data comes from one of the workers in our dataset.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_3" coords="4,316.88,369.97,240.38,8.10;4,316.88,380.47,197.31,8.10"><head>Figure 4 . Line chart of the number of clusters formed. The change in the number becomes small after D=1min.</head><label>4</label><figDesc>Figure 4. Line chart of the number of clusters formed. The change in the number becomes small after D=1min.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_4" coords="5,54.03,353.97,240.80,8.10;5,54.03,364.47,226.91,8.10"><head>Figure 5 . Distributions of per-HIT and per-cluster hourly wages. The blue and green lines indicate median and mean.</head><label>5</label><figDesc>Figure 5. Distributions of per-HIT and per-cluster hourly wages. The blue and green lines indicate median and mean.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_5" coords="5,316.88,310.70,240.73,8.10;5,316.88,320.95,240.50,8.10;5,316.88,331.70,146.68,8.10"><head>Figure 6 . Distributions of per-worker hourly wages based on the interval-based and cluster-based methods. The blue and green lines indicate median and mean.</head><label>6</label><figDesc>Figure 6. Distributions of per-worker hourly wages based on the interval-based and cluster-based methods. The blue and green lines indicate median and mean.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_6" coords="6,316.88,690.29,3.25,5.85;6,322.38,692.08,111.96,8.10;6,436.67,670.17,14.47,30.05;6,453.67,672.72,16.29,21.70;6,459.68,682.47,3.78,21.70;6,471.95,692.08,15.00,8.10"><head>1</head><label></label><figDesc>Box-Cox transform is given by í µí±¦ = í µí±¥ í µí¼ −1 í µí¼ [20]</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_7" coords="6,316.88,508.50,240.65,8.10;6,316.88,518.77,240.38,8.10;6,316.88,529.27,202.91,8.10"><head>Figure 7 . The scatter plot showing the relationship between the transformed reward and hourly wage. The line represents the model that we fit with ordinary linear regression.</head><label>7</label><figDesc>Figure 7. The scatter plot showing the relationship between the transformed reward and hourly wage. The line represents the model that we fit with ordinary linear regression.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_8" coords="7,54.03,558.52,203.50,8.10"><head>Figure 8 .</head><label>8</label><figDesc>Figure 8. KDE plot of per-requester hourly payment.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_9" coords="7,316.88,146.15,240.59,8.10;7,316.88,156.90,101.95,8.10"><head>Figure 9 . A scatter plot of per-requester HIT count vs. per- requester hourly payment.Figure 10 . A scatter plot of median HIT reward paid by requesters vs.</head><label>910</label><figDesc>Figure 9. A scatter plot of per-requester HIT count vs. perrequester hourly payment.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_10" coords="8,54.03,620.55,240.35,8.10;8,54.03,631.05,227.92,8.10"><head>Figure 11 . Mean and median hourly wages yielded by the HITs that require the ten most common qualification types.</head><label>11</label><figDesc>Figure 11. Mean and median hourly wages yielded by the HITs that require the ten most common qualification types.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" xml:id="fig_11" coords="10,55.53,314.45,502.82,8.10;10,55.53,324.95,430.08,8.10"><head>Figure 12 . (a) Hourly wage distributions of seven HIT categories provided by Gadiraju et al. [ 25 ] (with an additional category Research). (b) Strip plots showing median hourly wages of HITs associated with the topical keywords in</head><label>1225</label><figDesc>Figure 12. (a) Hourly wage distributions of seven HIT categories provided by Gadiraju et al. [25] (with an additional category Research). (b) Strip plots showing median hourly wages of HITs associated with the topical keywords in Table 4.</figDesc></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_2" validated="false" coords="5,54.03,63.70,503.95,644.94"><head>Table 2 gives</head><label>2</label><figDesc coords="5,95.55,567.09,54.13,9.00"></figDesc><table coords="5,54.03,567.09,241.35,141.55">the relevant summary statistics. On 
+average, the workers earned $95.96 (SD=310.56; 
+median=$11.90). Compared to the interval-based per-
+worker hourly wage, cluster based median wages are 19.2% 
+(=2.11/1.77) and 12.4% (1.99/1.77) larger for D=0min and 
+D=1min respectively. This indicates that the workers are 
+benefiting from working in parallel, to some extent. 
+
+The wage distributions are positively skewed, with a small 
+proportion earning average wages in excess of $5/h. There 
+are N=111 (4.2%) workers who are making more than 
+minimum wage according to the interval-based method. 
+The number of HITs performed by these workers ranged 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_4" validated="false" coords="5,54.03,540.52,214.02,8.10"><head>Table 2 .</head><label>2</label><figDesc coords="5,54.03,540.52,30.75,8.10"></figDesc><table coords="5,87.03,540.52,181.02,8.10">Summary of per-worker hourly wage statistics. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_8" validated="false" coords="8,54.03,407.97,197.58,8.10"><head>Table 3 .</head><label>3</label><figDesc coords="8,54.03,407.97,30.75,8.10"></figDesc><table coords="8,87.03,407.97,164.58,8.10">Top ten most prevalent qualification types. 
+
+</table></figure>
+<figure xmlns="http://www.tei-c.org/ns/1.0" type="table" xml:id="tab_11" validated="false" coords="9,316.63,569.52,240.84,18.85"><head>Table 4 .</head><label>4</label><figDesc coords="9,316.63,569.52,31.77,8.10"></figDesc><table coords="9,316.63,569.52,240.84,18.85">The full list of topical phrases collected through the 
+HIT topic retrieval process. 
+
+</table></figure>
+		</body>
+		<back>
+
+			<div type="acknowledgement">
+<div xmlns="http://www.tei-c.org/ns/1.0"><head>ACKNOWLEDGEMENTS</head><p>Adams gratefully acknowledges funding from the Economic and Social Research Council, Grant ES/N017099/1</p></div>
+			</div>
+
+			<div type="references">
+
+				<listBibl>
+
+<biblStruct coords="12,68.28,73.95,206.73,9.00;12,68.28,85.45,223.32,9.00;12,68.28,96.95,62.28,9.00" xml:id="b0">
+	<monogr>
+		<title level="m" type="main">When Home Affects Pay: An Analysis of the Gender Pay Gap among Crowdworkers</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Abigail</forename><surname>Adams</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Janine</forename><surname>Berg</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2017" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,114.47,218.38,9.00;12,68.28,125.97,220.14,9.00;12,68.28,137.47,225.96,9.00;12,68.28,148.97,223.62,9.00;12,68.28,158.39,126.30,11.08;12,68.28,171.97,166.78,9.00" xml:id="b1">
+	<analytic>
+		<title level="a" type="main">Examining Crowd Work and Gig Work Through The Historical Lens of Piecework</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ali</forename><surname>Alkhatib</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Margaret</forename><surname>Michael S Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Levi</surname></persName>
+		</author>
+		<idno type="doi">10.1145/3025453.3025974</idno>
+		<ptr target="https://doi.org/10.1145/3025453.3025974" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems (CHI &apos;17)</title>
+		<meeting>the 2017 CHI Conference on Human Factors in Computing Systems (CHI &apos;17)</meeting>
+		<imprint>
+			<date type="published" when="2017" />
+			<biblScope unit="page" from="4599" to="4616" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,189.47,210.61,9.00;12,68.28,201.00,219.28,9.00;12,68.28,210.42,208.92,11.08;12,68.28,221.92,217.82,11.08;12,68.28,235.50,166.81,9.00" xml:id="b2">
+	<analytic>
+		<title level="a" type="main">Web Workers Unite! Addressing Challenges of Online Laborers</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">B</forename><surname>Benjamin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Alexander J</forename><surname>Bederson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Quinn</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1979742.1979606</idno>
+		<ptr target="https://doi.org/10.1145/1979742.1979606" />
+	</analytic>
+	<monogr>
+		<title level="m">CHI &apos;11 Extended Abstracts on Human Factors in Computing Systems (CHI EA &apos;11)</title>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="97" to="106" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,252.99,214.05,9.00;12,68.28,264.50,219.14,9.00;12,68.28,276.02,59.45,9.00" xml:id="b3">
+	<monogr>
+		<title level="m" type="main">Income security in the on-demand economy: findings and policy lessons from a survey of crowdworkers</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Janine</forename><surname>Berg</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2016" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,293.52,201.85,9.00;12,68.28,305.02,215.11,9.00;12,68.28,316.52,223.70,9.00;12,68.28,328.02,224.05,9.00;12,68.28,339.52,212.57,9.00;12,68.28,348.94,191.83,11.08;12,68.28,362.54,166.73,9.00" xml:id="b4">
+	<analytic>
+		<title level="a" type="main">Soylent: A Word Processor with a Crowd Inside</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Greg</forename><surname>Michael S Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Little</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Robert</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Björn</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Hartmann</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">S</forename><surname>Mark</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><forename type="middle">R</forename><surname>Ackerman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Karger</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Katrina</forename><surname>Crowell</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Panovich</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1866029.1866078</idno>
+		<ptr target="https://doi.org/10.1145/1866029.1866078" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 23Nd Annual ACM Symposium on User Interface Software and Technology (UIST &apos;10)</title>
+		<meeting>the 23Nd Annual ACM Symposium on User Interface Software and Technology (UIST &apos;10)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="313" to="322" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,380.04,210.26,9.00;12,68.28,391.54,216.87,9.00;12,68.28,403.04,224.82,9.00;12,68.28,414.54,224.77,9.00;12,68.28,426.04,133.06,9.00;12,68.28,437.57,166.73,9.00" xml:id="b5">
+	<monogr>
+		<title level="m" type="main">VizWiz: Nearly Real-Time Answers to Visual Questions</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chandrika</forename><surname>Jeffrey P Bigham</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hanjie</forename><surname>Jayant</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Greg</forename><surname>Ji</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Andrew</forename><surname>Little</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Robert</forename><forename type="middle">C</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Robin</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Aubrey</forename><surname>Miller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Brandyn</forename><surname>Tatarowicz</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Samuel</forename><surname>White</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Tom</forename><surname>White</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Yeh</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1866029.1866080</idno>
+		<ptr target="https://doi.org/10.1145/1866029.1866080" />
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="333" to="342" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,455.07,208.62,9.00;12,68.28,466.57,211.20,9.00;12,68.28,478.07,148.06,9.00" xml:id="b6">
+	<analytic>
+		<title level="a" type="main">Latent dirichlet allocation</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>David</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Blei</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Y</forename><surname>Andrew</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Michael I Jordan</forename><surname>Ng</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of machine Learning research</title>
+		<imprint>
+			<biblScope unit="volume">3</biblScope>
+			<biblScope unit="page" from="993" to="1022" />
+			<date type="published" when="2003-01" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,495.57,201.12,9.00;12,68.28,507.07,191.29,9.00;12,68.28,518.59,224.34,9.00;12,68.28,530.09,17.52,9.00" xml:id="b7">
+	<analytic>
+		<title level="a" type="main">Social Science for Pennies</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">John</forename><surname>Bohannon</surname></persName>
+		</author>
+		<ptr target="http://science.sciencemag.org/content/334/6054/307.abstract" />
+	</analytic>
+	<monogr>
+		<title level="j">Science</title>
+		<imprint>
+			<biblScope unit="volume">334</biblScope>
+			<biblScope unit="page" from="307" to="307" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,547.59,192.98,9.00;12,68.28,559.09,192.04,9.00;12,68.28,570.59,219.93,9.00;12,68.28,582.09,217.82,9.00;12,68.28,591.54,145.56,11.08;12,68.28,605.12,166.73,9.00" xml:id="b8">
+	<analytic>
+		<title level="a" type="main">An Empirical Study of Required Dimensionality for Large-scale Latent Semantic Indexing Applications</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Roger B Bradford</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1458082.1458105</idno>
+		<ptr target="https://doi.org/10.1145/1458082.1458105" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 17th ACM Conference on Information and Knowledge Management (CIKM &apos;08)</title>
+		<meeting>the 17th ACM Conference on Information and Knowledge Management (CIKM &apos;08)</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="153" to="162" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,622.62,221.80,9.00;12,68.28,634.12,211.80,9.00;12,68.28,645.62,206.90,9.00" xml:id="b9">
+	<monogr>
+				<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Matthew</forename><forename type="middle">W</forename><surname>Brault</surname></persName>
+		</author>
+		<ptr target="http://www.census.gov/prod/2012pubs/p70-131.pdf" />
+		<title level="m">Americans with Disabilities: 2010, Household Economics Studies</title>
+		<imprint>
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,663.12,211.07,9.00;12,68.28,674.64,215.60,9.00;12,68.28,686.15,225.13,9.00;12,68.28,697.65,37.50,9.00" xml:id="b10">
+	<analytic>
+		<title level="a" type="main">Work experiences on MTurk: Job satisfaction, turnover, and information sharing</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Alice</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Cynthia L S</forename><surname>Brawley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Pury</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computers in Human Behavior</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<biblScope unit="page" from="531" to="546" />
+			<date type="published" when="2016" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,68.28,709.15,225.44,9.00" xml:id="b11">
+	<monogr>
+		<title/>
+		<idno type="doi">10.1016/j.chb.2015.08.031</idno>
+		<ptr target="https://doi.org/https://doi.org/10.1016/j.chb.2015.08.031" />
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,63.70,210.87,9.00;12,331.13,75.20,215.71,9.00;12,331.13,86.70,225.13,9.00;12,331.13,98.20,37.52,9.00" xml:id="b12">
+	<analytic>
+		<title level="a" type="main">Work experiences on MTurk: Job satisfaction, turnover, and information sharing</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Alice</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Cynthia L S</forename><surname>Brawley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Pury</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Computers in Human Behavior</title>
+		<imprint>
+			<biblScope unit="volume">54</biblScope>
+			<biblScope unit="page" from="531" to="546" />
+			<date type="published" when="2016" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,109.70,225.44,9.00" xml:id="b13">
+	<monogr>
+		<title/>
+		<idno type="doi">10.1016/j.chb.2015.08.031</idno>
+		<ptr target="https://doi.org/https://doi.org/10.1016/j.chb.2015.08.031" />
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,127.22,226.78,9.00;12,331.13,136.64,190.66,11.07;12,331.13,148.14,184.15,11.08;12,331.13,161.72,223.22,9.00;12,331.13,173.22,201.12,9.00;12,331.13,182.64,126.30,11.08;12,331.13,196.25,166.73,9.00" xml:id="b14">
+	<analytic>
+		<title level="a" type="main">Why Would Anybody Do This?&quot;: Understanding Older Adults&apos; Motivations and Challenges in Crowd Work</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Robin</forename><surname>Brewer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Meredith</forename><forename type="middle">Ringel</forename><surname>Morris</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anne</forename><forename type="middle">Marie</forename><surname>Piper</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2858036.2858198</idno>
+		<ptr target="https://doi.org/10.1145/2858036.2858198" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16</title>
+		<meeting>the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16</meeting>
+		<imprint>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="2246" to="2257" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,213.75,180.82,9.00;12,331.13,225.25,209.65,9.00;12,331.13,236.75,227.19,9.00;12,331.13,248.25,169.07,9.00" xml:id="b15">
+	<analytic>
+		<title level="a" type="main">Crowd-workers: Aggregating information across turkers to help them find higher paying work</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chris</forename><surname>Callison-Burch</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Second AAAI Conference on Human Computation and Crowdsourcing</title>
+		<imprint>
+			<date type="published" when="2014" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,265.75,221.92,9.00;12,331.13,275.19,221.84,11.07;12,331.13,288.77,187.17,9.00;12,331.13,300.27,224.14,9.00;12,331.13,309.69,210.59,11.07;12,331.13,323.27,60.48,9.00;12,331.13,334.77,207.67,9.00" xml:id="b16">
+	<analytic>
+		<title level="a" type="main">Creating Speech and Language Data with Amazon&apos;s Mechanical Turk</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chris</forename><surname>Callison</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">-</forename><surname>Burch</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mark</forename><surname>Dredze</surname></persName>
+		</author>
+		<ptr target="http://dl.acm.org/citation.cfm?id=1866696.1866697" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the NAACL HLT 2010 Workshop on Creating Speech and Language Data with Amazon&apos;s Mechanical Turk (CSLDAMT &apos;10)</title>
+		<meeting>the NAACL HLT 2010 Workshop on Creating Speech and Language Data with Amazon&apos;s Mechanical Turk (CSLDAMT &apos;10)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="1" to="12" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,352.27,213.36,9.00;12,331.13,363.79,200.89,9.00;12,331.13,375.29,224.82,9.00;12,331.13,386.79,226.10,9.00;12,331.13,398.29,205.92,9.00;12,331.13,409.79,73.12,9.00" xml:id="b17">
+	<analytic>
+		<title level="a" type="main">Topic Model Diagnostics: Assessing Domain Relevance via Topical Alignment</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jason</forename><surname>Chuang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Sonal</forename><surname>Gupta</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">D</forename><surname>Christopher</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeffrey</forename><surname>Manning</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Heer</surname></persName>
+		</author>
+		<ptr target="http://vis.stanford.edu/papers/topic-model-diagnostics" />
+	</analytic>
+	<monogr>
+		<title level="m">International Conference on Machine Learning (ICML)</title>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,427.29,216.03,9.00;12,331.13,438.82,194.17,9.00;12,331.13,450.32,192.95,9.00;12,331.13,461.82,222.36,9.00;12,331.13,471.24,221.59,11.08;12,331.13,484.82,186.82,9.00" xml:id="b18">
+	<analytic>
+		<title level="a" type="main">Interpretation and Trust: Designing Model-driven Visualizations for Text Analysis</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jason</forename><surname>Chuang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Daniel</forename><surname>Ramage</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Christopher</forename><surname>Manning</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeffrey</forename><surname>Heer</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2207676.2207738</idno>
+		<ptr target="https://doi.org/10.1145/2207676.2207738" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;12)</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;12)</meeting>
+		<imprint>
+			<date type="published" when="2012" />
+			<biblScope unit="page" from="443" to="452" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,502.32,225.61,9.00;12,331.13,513.84,212.59,9.00;12,331.13,525.34,221.35,9.00;12,331.13,536.84,216.10,9.00;12,331.13,548.34,37.52,9.00" xml:id="b19">
+	<analytic>
+		<title level="a" type="main">TopicCheck: Interactive Alignment for Assessing Topic Model Stability</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jason</forename><surname>Chuang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Margaret</forename><forename type="middle">E</forename><surname>Roberts</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Brandon</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Rebecca</forename><surname>Stewart</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Dustin</forename><surname>Weiss</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Justin</forename><surname>Tingley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeffrey</forename><surname>Grimmer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Heer</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">HLT-NAACL</title>
+		<imprint>
+			<date type="published" when="2015" />
+			<biblScope unit="page" from="175" to="184" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,594.87,210.36,9.00;12,331.13,606.37,175.76,9.00" xml:id="b20">
+	<monogr>
+		<title level="m" type="main">Engineering statistics handbook. NIST iTL</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Carroll</forename><surname>Croarkin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Paul</forename><surname>Tobias</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chelli</forename><surname>Zey</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,623.87,203.77,9.00;12,331.13,635.37,218.17,9.00;12,331.13,646.87,185.80,9.00;12,331.13,658.37,195.35,9.00;12,331.13,669.87,211.85,9.00;12,331.13,679.31,164.07,11.08;12,331.13,692.90,166.73,9.00" xml:id="b21">
+	<analytic>
+		<title level="a" type="main">The Dynamics of Micro-Task Crowdsourcing: The Case of Amazon MTurk</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Michele</forename><surname>Djellel Eddine Difallah</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Gianluca</forename><surname>Catasta</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Demartini</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">G</forename><surname>Panagiotis</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Philippe</forename><surname>Ipeirotis</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Cudré-Mauroux</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2736277.2741685</idno>
+		<ptr target="https://doi.org/10.1145/2736277.2741685" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 24th International Conference on World Wide Web (WWW &apos;15)</title>
+		<meeting>the 24th International Conference on World Wide Web (WWW &apos;15)</meeting>
+		<imprint>
+			<date type="published" when="2015" />
+			<biblScope unit="page" from="238" to="247" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="12,331.13,710.40,215.54,9.00;13,68.28,63.70,200.21,9.00;13,68.28,75.20,225.86,9.00;13,68.28,86.70,125.76,9.00;13,68.28,98.20,150.18,9.00" xml:id="b22">
+	<analytic>
+		<title level="a" type="main">Understanding Self-Report Bias in Organizational Behavior Research</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Elisa J Grant-Vallone</forename><surname>Stewart I Donaldson</surname></persName>
+		</author>
+		<ptr target="http://www.jstor.org/stable/25092818" />
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Business and Psychology</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="page" from="245" to="260" />
+			<date type="published" when="2002" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,115.72,219.00,9.00;13,68.28,127.22,190.04,9.00;13,68.28,138.72,224.05,9.00;13,68.28,150.22,137.56,9.00;13,68.28,161.72,143.30,9.00" xml:id="b23">
+	<analytic>
+		<title level="a" type="main">Latent Semantic Analysis: five methodological recommendations</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nicholas</forename><surname>Evangelopoulos</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Xiaoni</forename><surname>Zhang</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Victor</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Prybutok</surname></persName>
+		</author>
+		<idno type="doi">10.1057/ejis.2010.61</idno>
+		<ptr target="https://doi.org/10.1057/ejis.2010.61" />
+	</analytic>
+	<monogr>
+		<title level="j">European Journal of Information Systems</title>
+		<imprint>
+			<biblScope unit="volume">21</biblScope>
+			<biblScope unit="page" from="70" to="86" />
+			<date type="published" when="2012" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,179.22,209.34,9.00;13,68.28,188.64,216.00,11.07;13,68.28,202.25,223.06,9.00;13,68.28,211.67,223.58,11.08;13,68.28,225.25,90.48,9.00;13,68.28,236.75,207.72,9.00" xml:id="b24">
+	<analytic>
+		<title level="a" type="main">What&apos;s the Right Price? Pricing Tasks for Finishing on Time</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Siamak</forename><surname>Faridani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Björn</forename><surname>Hartmann</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Panagiotis G</forename><surname>Ipeirotis</surname></persName>
+		</author>
+		<ptr target="http://dl.acm.org/citation.cfm?id=2908698.2908703" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 11th AAAI Conference on Human Computation (AAAIWS&apos;11-11)</title>
+		<meeting>the 11th AAAI Conference on Human Computation (AAAIWS&apos;11-11)</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="26" to="31" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,254.25,210.81,9.00;13,68.28,265.75,197.39,9.00;13,68.28,277.27,221.85,9.00;13,68.28,286.69,151.05,11.08;13,68.28,300.27,166.81,9.00" xml:id="b25">
+	<analytic>
+		<title level="a" type="main">A Taxonomy of Microtasks on the Web</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ujwal</forename><surname>Gadiraju</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ricardo</forename><surname>Kawase</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Stefan</forename><surname>Dietze</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2631775.2631819</idno>
+		<ptr target="https://doi.org/10.1145/2631775.2631819" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 25th ACM Conference on Hypertext and Social Media (HT &apos;14)</title>
+		<meeting>the 25th ACM Conference on Hypertext and Social Media (HT &apos;14)</meeting>
+		<imprint>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="218" to="223" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,317.77,221.35,9.00;13,68.28,327.19,222.17,11.08;13,68.28,340.77,206.14,9.00;13,68.28,350.19,136.56,11.08;13,68.28,363.79,166.73,9.00" xml:id="b26">
+	<analytic>
+		<title level="a" type="main">Turk-Life in India</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Neha</forename><surname>Gupta</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Martin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jacki O&amp;apos;</forename><surname>Benjamin V Hanrahan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Neill</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2660398.2660403</idno>
+		<ptr target="https://doi.org/10.1145/2660398.2660403" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 18th International Conference on Supporting Group Work (GROUP &apos;14</title>
+		<meeting>the 18th International Conference on Supporting Group Work (GROUP &apos;14</meeting>
+		<imprint>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="1" to="11" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,381.29,189.47,9.00;13,68.28,392.79,222.33,9.00;13,68.28,404.29,219.83,9.00;13,68.28,415.79,47.77,9.00" xml:id="b27">
+	<analytic>
+		<title level="a" type="main">Motivation through the design of work: test of a theory</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Richard</forename><surname>Hackman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Greg</forename><forename type="middle">R</forename><surname>Oldham</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Organizational Behavior and Human Performance</title>
+		<imprint>
+			<biblScope unit="volume">16</biblScope>
+			<biblScope unit="page" from="250" to="279" />
+			<date type="published" when="1976" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,427.29,176.91,9.00;13,68.28,438.82,69.78,9.00" xml:id="b28">
+	<monogr>
+		<title/>
+		<idno type="doi">10.1016/0030-5073</idno>
+		<ptr target="https://doi.org/https://doi.org/10.1016/0030-5073" />
+		<imprint>
+			<biblScope unit="page" from="90016" to="90023" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,456.32,190.58,9.00;13,68.28,467.82,210.12,9.00;13,68.28,479.32,207.90,9.00;13,68.28,490.82,210.37,9.00;13,68.28,500.24,162.01,11.08;13,68.28,513.84,207.73,9.00" xml:id="b29">
+	<analytic>
+		<title level="a" type="main">Studying the History of Ideas Using Topic Models</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Hall</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Daniel</forename><surname>Jurafsky</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Christopher D</forename><surname>Manning</surname></persName>
+		</author>
+		<ptr target="http://dl.acm.org/citation.cfm?id=1613715.1613763" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the Conference on Empirical Methods in Natural Language Processing (EMNLP &apos;08)</title>
+		<meeting>the Conference on Empirical Methods in Natural Language Processing (EMNLP &apos;08)</meeting>
+		<imprint>
+			<date type="published" when="2008" />
+			<biblScope unit="page" from="363" to="371" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,531.34,225.09,9.00;13,68.28,542.84,217.15,9.00;13,68.28,554.34,226.46,9.00;13,68.28,565.84,210.88,9.00;13,68.28,575.26,173.08,11.08;13,68.28,588.84,166.73,9.00" xml:id="b30">
+	<analytic>
+		<title level="a" type="main">TurkBench: Rendering the Market for Turkers</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jutta</forename><forename type="middle">K</forename><surname>Benjamin V Hanrahan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Saiganesh</forename><surname>Willamowski</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David B</forename><surname>Swaminathan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Martin</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2702123.2702279</idno>
+		<ptr target="https://doi.org/10.1145/2702123.2702279" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems (CHI &apos;15</title>
+		<meeting>the 33rd Annual ACM Conference on Human Factors in Computing Systems (CHI &apos;15</meeting>
+		<imprint>
+			<date type="published" when="2015" />
+			<biblScope unit="page" from="1613" to="1616" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,606.37,220.35,9.00;13,68.28,617.87,226.21,9.00;13,68.28,629.37,211.38,9.00;13,68.28,640.87,177.08,9.00" xml:id="b31">
+	<analytic>
+		<title level="a" type="main">Introducing People with ASD to Crowd Work</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kotaro</forename><surname>Hara</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeffrey</forename><forename type="middle">P</forename><surname>Bigham</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 19th International ACM SIGACCESS Conference on Computers and Accessibility</title>
+		<meeting>the 19th International ACM SIGACCESS Conference on Computers and Accessibility</meeting>
+		<imprint>
+			<date type="published" when="2017" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,658.37,218.58,9.00;13,68.28,669.87,219.98,9.00;13,68.28,679.31,140.45,11.07" xml:id="b32">
+	<monogr>
+		<title level="m" type="main">A Proposal for Modernizing Labor Laws for Twenty-First-Century Work: The &quot;Independent Worker</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Seth</forename><forename type="middle">D</forename><surname>Harris</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Alan</forename><forename type="middle">B</forename><surname>Krueger</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,68.28,698.90,186.65,9.00;13,68.28,710.40,208.98,9.00;13,331.13,63.70,194.58,9.00;13,331.13,75.20,141.55,9.00" xml:id="b33">
+	<analytic>
+		<title level="a" type="main">Algorithm AS 136: A k-means clustering algorithm</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A</forename><surname>John</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Hartigan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Manchek</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Wong</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of the Royal Statistical Society. Series C (Applied Statistics)</title>
+		<imprint>
+			<biblScope unit="volume">28</biblScope>
+			<biblScope unit="page" from="100" to="108" />
+			<date type="published" when="1979" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,92.70,212.63,9.00;13,331.13,104.20,225.67,9.00;13,331.13,115.72,207.85,9.00;13,331.13,127.22,37.52,9.00" xml:id="b34">
+	<analytic>
+		<title level="a" type="main">Employment and adults with autism spectrum disorders: Challenges and strategies for success</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Dawn</forename><surname>Hendricks</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Vocational Rehabilitation</title>
+		<imprint>
+			<biblScope unit="volume">32</biblScope>
+			<biblScope unit="page" from="125" to="134" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,144.72,222.60,9.00;13,331.13,156.22,135.82,9.00" xml:id="b35">
+	<monogr>
+		<title level="m" type="main">Research in the crowdsourcing age, a case study</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Paul</forename><surname>Hitlin</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2016" />
+			<publisher>Pew Research Center</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,173.72,209.30,9.00;13,331.13,185.22,179.11,9.00;13,331.13,196.75,224.02,9.00;13,331.13,206.17,123.55,11.08;13,331.13,219.75,166.73,9.00" xml:id="b36">
+	<analytic>
+		<title level="a" type="main">The Labor Economics of Paid Crowdsourcing</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">John Joseph</forename><surname>Horton</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Lydia</forename><forename type="middle">B</forename><surname>Chilton</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1807342.1807376</idno>
+		<ptr target="https://doi.org/10.1145/1807342.1807376" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 11th ACM Conference on Electronic Commerce (EC &apos;10)</title>
+		<meeting>the 11th ACM Conference on Electronic Commerce (EC &apos;10)</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="209" to="218" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,237.25,211.90,9.00;13,331.13,248.75,199.67,9.00;13,331.13,260.24,214.45,9.00;13,331.13,271.75,223.62,9.00;13,331.13,281.19,126.30,11.08;13,331.13,294.77,166.73,9.00" xml:id="b37">
+	<analytic>
+		<title level="a" type="main">Pay It Backward: Per-Task Payments on Crowdsourcing Platforms Reduce Productivity</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kazushi</forename><surname>Ikeda</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Michael S Bernstein</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2858036.2858327</idno>
+		<ptr target="https://doi.org/10.1145/2858036.2858327" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16)</title>
+		<meeting>the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16)</meeting>
+		<imprint>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="4111" to="4121" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,312.27,209.62,9.00;13,331.13,323.77,205.57,9.00;13,331.13,335.27,166.73,9.00" xml:id="b38">
+	<analytic>
+		<title level="a" type="main">Analyzing the Amazon Mechanical Turk Marketplace</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">G</forename><surname>Panagiotis</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Ipeirotis</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1869086.1869094</idno>
+		<ptr target="https://doi.org/10.1145/1869086.1869094" />
+	</analytic>
+	<monogr>
+		<title level="j">XRDS</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="page" from="16" to="21" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,352.79,219.83,9.00;13,331.13,364.29,222.64,9.00;13,331.13,375.79,206.62,9.00;13,331.13,385.21,221.59,11.08;13,331.13,398.79,186.73,9.00" xml:id="b39">
+	<analytic>
+		<title level="a" type="main">Turkopticon: Interrupting Worker Invisibility in Amazon Mechanical Turk</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Lilly</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Irani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Six Silberman</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2470654.2470742</idno>
+		<ptr target="https://doi.org/10.1145/2470654.2470742" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;13)</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;13)</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+			<biblScope unit="page" from="611" to="620" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,416.29,211.99,9.00;13,331.13,427.79,210.35,9.00;13,331.13,437.24,218.83,11.08;13,331.13,448.74,211.56,11.08;13,331.13,462.32,216.75,9.00" xml:id="b40">
+	<analytic>
+		<title level="a" type="main">Stories We Tell About Labor: Turkopticon and the Trouble with &quot;Design</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Lilly</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Irani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Six Silberman</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2858036.2858592</idno>
+		<ptr target="https://doi.org/10.1145/2858036.2858592" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16)</title>
+		<meeting>the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16)</meeting>
+		<imprint>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="4573" to="4586" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,479.82,216.79,9.00;13,331.13,491.32,209.64,9.00;13,331.13,502.82,175.87,9.00;13,331.13,514.34,174.79,9.00;13,331.13,525.84,226.61,9.00;13,331.13,537.34,211.75,9.00" xml:id="b41">
+	<analytic>
+		<title level="a" type="main">Understanding Workers, Developing Effective Tasks, and Enhancing Marketplace Dynamics: A Study of a Large Crowdsourcing Marketplace</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ayush</forename><surname>Jain</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Akash</forename><forename type="middle">Das</forename><surname>Sarma</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Aditya</forename><surname>Parameswaran</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jennifer</forename><surname>Widom</surname></persName>
+		</author>
+		<idno type="doi">10.14778/3067421.3067431</idno>
+		<ptr target="https://doi.org/10.14778/3067421.3067431" />
+	</analytic>
+	<monogr>
+		<title level="m">Proc. VLDB Endow</title>
+		<meeting>VLDB Endow</meeting>
+		<imprint>
+			<date type="published" when="2017" />
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="page" from="829" to="840" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,554.84,199.40,9.00;13,331.13,566.34,215.52,9.00;13,331.13,577.84,75.52,9.00" xml:id="b42">
+	<monogr>
+		<title level="m" type="main">An introduction to statistical learning</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Gareth</forename><surname>James</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Daniela</forename><surname>Witten</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Trevor</forename><surname>Hastie</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Robert</forename><surname>Tibshirani</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2013" />
+			<publisher>Springer</publisher>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,595.37,189.89,9.00;13,331.13,606.87,142.82,9.00" xml:id="b43">
+	<monogr>
+		<title level="m" type="main">Amazon Mechanical Turk Workers Have Had Enough</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Miranda</forename><surname>Katz</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2017" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,624.37,211.60,9.00;13,331.13,635.87,217.87,9.00;13,331.13,647.37,221.83,9.00;13,331.13,658.87,54.27,9.00" xml:id="b44">
+	<analytic>
+		<title level="a" type="main">More than fun and money. worker motivation in crowdsourcing--a study on mechanical turk</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Nicolas</forename><surname>Kaufmann</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Thimo</forename><surname>Schulze</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Daniel</forename><surname>Veit</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proc. of AMCIS</title>
+		<meeting>of AMCIS</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="13,331.13,676.39,220.35,9.00;13,331.13,687.90,222.29,9.00;13,331.13,699.40,209.36,9.00;13,331.13,710.90,197.39,9.00" xml:id="b45">
+	<analytic>
+		<title level="a" type="main">The Future of Crowd Work</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Aniket</forename><surname>Kittur</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Michael</forename><surname>Jeffrey V Nickerson</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Elizabeth</forename><surname>Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Aaron</forename><surname>Gerber</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">John</forename><surname>Shaw</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Matt</forename><surname>Zimmerman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">John</forename><surname>Lease</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Horton</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2013 Conference on</title>
+		<meeting>the 2013 Conference on</meeting>
+		<imprint>
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,61.62,215.55,11.08;14,68.28,75.20,216.75,9.00" xml:id="b46">
+	<monogr>
+				<idno type="doi">10.1145/2441776.2441923</idno>
+		<ptr target="https://doi.org/10.1145/2441776.2441923" />
+		<title level="m">Computer Supported Cooperative Work (CSCW &apos;13)</title>
+		<imprint>
+			<biblScope unit="page" from="1301" to="1318" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,92.70,219.05,9.00;14,68.28,104.20,213.21,9.00;14,68.28,115.72,190.59,9.00;14,68.28,127.22,148.31,9.00;14,68.28,138.72,144.23,9.00" xml:id="b47">
+	<analytic>
+		<title level="a" type="main">Crowdsourcing in Computer Vision</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Adriana</forename><surname>Kovashka</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Olga</forename><surname>Russakovsky</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Li</forename><surname>Fei-Fei</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kristen</forename><surname>Grauman</surname></persName>
+		</author>
+		<idno type="doi">10.1561/0600000071</idno>
+		<ptr target="https://doi.org/10.1561/0600000071" />
+	</analytic>
+	<monogr>
+		<title level="j">Foundations and Trends® in Computer Graphics and Vision</title>
+		<imprint>
+			<biblScope unit="volume">10</biblScope>
+			<biblScope unit="page" from="177" to="243" />
+			<date type="published" when="2016" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,156.22,192.17,9.00;14,68.28,167.72,220.21,9.00;14,68.28,179.22,183.58,9.00;14,68.28,190.72,137.56,9.00" xml:id="b48">
+	<analytic>
+		<title level="a" type="main">Panos Ipeirotis, Patricia Pina, Manpreet Singh, and others</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Cecilia</forename><surname>Siou Chew Kuek</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Toks</forename><surname>Paradi-Guilford</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Saori</forename><surname>Fayomi</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Imaizumi</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">The global opportunity in online outsourcing</title>
+		<imprint>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,208.25,216.33,9.00;14,68.28,219.75,192.55,9.00;14,68.28,231.25,222.03,9.00;14,68.28,240.67,220.62,11.07;14,68.28,254.25,201.85,9.00;14,68.28,265.75,214.11,9.00" xml:id="b49">
+	<monogr>
+		<title/>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Philippe</forename><surname>Marcadent</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Janine</forename><surname>Berg</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mariya</forename><surname>Aleksynska</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Martine</forename><surname>Valerio De Stefano</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Christina</forename><surname>Humblet</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Susan</forename><surname>Behrendt</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Christopher</forename><surname>Hayter</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Angelika</forename><surname>Land-Kazlauskas</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Niall O&amp;apos;</forename><surname>Muller</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Friederike</forename><surname>Higgins</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Simone</forename><surname>Eberlein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Bao</forename><forename type="middle">Chau</forename><surname>Marino</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Calum</forename><surname>Le</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Carson</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2016" />
+		</imprint>
+		<respStmt>
+			<orgName>Non-Standard Employment Around The World</orgName>
+		</respStmt>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,283.27,191.60,9.00;14,68.28,294.77,189.60,9.00;14,68.28,306.27,214.50,9.00;14,68.28,317.77,102.78,9.00;14,68.28,329.27,144.23,9.00" xml:id="b50">
+	<analytic>
+		<title level="a" type="main">Crowdsourced Data Management: Industry and Academic Perspectives</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Adam</forename><surname>Marcus</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Aditya</forename><surname>Parameswaran</surname></persName>
+		</author>
+		<idno type="doi">10.1561/1900000044</idno>
+		<ptr target="https://doi.org/10.1561/1900000044" />
+	</analytic>
+	<monogr>
+		<title level="j">Foundations and Trends® in Databases</title>
+		<imprint>
+			<biblScope unit="volume">6</biblScope>
+			<biblScope unit="page" from="1" to="2" />
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,344.69,209.88,11.07;14,68.28,358.29,221.17,9.00;14,68.28,369.79,213.81,9.00;14,68.28,379.21,221.55,11.08;14,68.28,392.79,206.73,9.00" xml:id="b51">
+	<analytic>
+		<title level="a" type="main">Being a Turker</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Martin</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jacki O&amp;apos;</forename><surname>Benjamin V Hanrahan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Neha</forename><surname>Neill</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Gupta</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2531602.2531663</idno>
+		<ptr target="https://doi.org/10.1145/2531602.2531663" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 17th ACM Conference on Computer Supported Cooperative Work and Social Computing (CSCW &apos;14)</title>
+		<meeting>the 17th ACM Conference on Computer Supported Cooperative Work and Social Computing (CSCW &apos;14)</meeting>
+		<imprint>
+			<date type="published" when="2014" />
+			<biblScope unit="page" from="224" to="235" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,410.29,207.15,9.00;14,68.28,419.71,192.60,11.07;14,68.28,433.32,225.34,9.00;14,68.28,442.74,145.06,11.08;14,68.28,456.32,166.73,9.00" xml:id="b52">
+	<analytic>
+		<title level="a" type="main">Financial Incentives and the &quot;Performance of Crowds</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Winter</forename><surname>Mason</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Duncan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Watts</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1600150.1600175</idno>
+		<ptr target="https://doi.org/10.1145/1600150.1600175" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the ACM SIGKDD Workshop on Human Computation (HCOMP &apos;09</title>
+		<meeting>the ACM SIGKDD Workshop on Human Computation (HCOMP &apos;09</meeting>
+		<imprint>
+			<date type="published" when="2009" />
+			<biblScope unit="page" from="77" to="85" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,473.82,219.83,9.00;14,68.28,485.32,192.39,9.00;14,68.28,494.74,221.07,11.07;14,68.28,508.32,218.49,9.00;14,68.28,519.84,201.12,9.00;14,68.28,529.26,126.30,11.08;14,68.28,542.84,166.73,9.00" xml:id="b53">
+	<analytic>
+		<title level="a" type="main">Taking a HIT: Designing Around Rejection, Mistrust, Risk, and Workers&apos; Experiences in Amazon Mechanical Turk</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Brian</forename><surname>Mcinnis</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Dan</forename><surname>Cosley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Chaebong</forename><surname>Nam</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Gilly</forename><surname>Leshed</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2858036.2858539</idno>
+		<ptr target="https://doi.org/10.1145/2858036.2858539" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16</title>
+		<meeting>the 2016 CHI Conference on Human Factors in Computing Systems (CHI &apos;16</meeting>
+		<imprint>
+			<date type="published" when="2016" />
+			<biblScope unit="page" from="2271" to="2282" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,560.34,186.13,9.00;14,68.28,571.85,193.64,9.00;14,68.28,583.34,191.92,9.00;14,68.28,594.87,219.76,9.00;14,68.28,606.37,77.78,9.00;14,68.28,617.87,161.45,9.00" xml:id="b54">
+	<analytic>
+		<title level="a" type="main">Temporal Event Sequence Simplification</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Megan</forename><surname>Monroe</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Rongjian</forename><surname>Lan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Hanseung</forename><surname>Lee</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Catherine</forename><surname>Plaisant</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ben</forename><surname>Shneiderman</surname></persName>
+		</author>
+		<idno type="doi">10.1109/TVCG.2013.200</idno>
+		<ptr target="https://doi.org/10.1109/TVCG.2013.200" />
+	</analytic>
+	<monogr>
+		<title level="j">IEEE Transactions on Visualization and Computer Graphics</title>
+		<imprint>
+			<biblScope unit="volume">19</biblScope>
+			<biblScope unit="page" from="2227" to="2236" />
+			<date type="published" when="2013" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,635.37,214.75,9.00;14,68.28,646.87,220.59,9.00;14,68.28,658.37,220.32,9.00;14,68.28,669.87,204.66,9.00;14,68.28,681.39,223.96,9.00;14,68.28,692.90,142.05,9.00" xml:id="b55">
+	<analytic>
+		<title level="a" type="main">Scikitlearn: Machine Learning in Python</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">F</forename><surname>Pedregosa</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Varoquaux</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Gramfort</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Michel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Thirion</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Grisel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Blondel</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Prettenhofer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Weiss</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Dubourg</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Vanderplas</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Passos</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Cournapeau</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Brucher</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">E</forename><surname>Perrot</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Duchesnay</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Journal of Machine Learning Research</title>
+		<imprint>
+			<biblScope unit="volume">12</biblScope>
+			<biblScope unit="page" from="2825" to="2830" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,68.28,710.40,211.55,9.00;14,331.13,63.70,199.33,9.00;14,331.13,75.20,210.61,9.00;14,331.13,86.70,213.34,9.00" xml:id="b56">
+	<analytic>
+		<title level="a" type="main">ALTO: Active Learning with Topic Overviews for Speeding Label Induction and Document Labeling</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Forough</forename><surname>Poursabzi-Sangdeh</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jordan</forename><forename type="middle">L</forename><surname>Boyd-Graber</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Leah</forename><surname>Findlater</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kevin</forename><forename type="middle">D</forename><surname>Seppi</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">In ACL</title>
+		<imprint>
+			<biblScope unit="issue">1</biblScope>
+			<date type="published" when="2016" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,104.20,210.37,9.00;14,331.13,115.72,207.56,9.00;14,331.13,127.22,184.79,9.00;14,331.13,138.72,215.50,9.00;14,331.13,148.14,92.02,11.07;14,331.13,161.72,166.73,9.00" xml:id="b57">
+	<analytic>
+		<title level="a" type="main">Human Computation: A Survey and Taxonomy of a Growing Field</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">J</forename><surname>Alexander</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Quinn</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Benjamin B Bederson</surname></persName>
+		</author>
+		<idno type="doi">10.1145/1978942.1979148</idno>
+		<ptr target="https://doi.org/10.1145/1978942.1979148" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;11</title>
+		<meeting>the SIGCHI Conference on Human Factors in Computing Systems (CHI &apos;11</meeting>
+		<imprint>
+			<date type="published" when="2011" />
+			<biblScope unit="page" from="1403" to="1412" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,179.22,222.21,9.00;14,331.13,190.72,221.05,9.00;14,331.13,202.25,218.84,9.00;14,331.13,213.75,37.52,9.00" xml:id="b58">
+	<analytic>
+		<title level="a" type="main">Using tf-idf to determine word relevance in document queries</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Juan</forename><surname>Ramos</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the first instructional conference on machine learning</title>
+		<meeting>the first instructional conference on machine learning</meeting>
+		<imprint>
+			<date type="published" when="2003" />
+			<biblScope unit="page" from="133" to="142" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,231.25,209.94,9.00;14,331.13,242.75,107.20,9.00;14,331.13,254.25,222.35,9.00;14,331.13,265.75,164.11,9.00" xml:id="b59">
+	<monogr>
+		<title level="m" type="main">/r/mturk: Crowd-Workers browser extension discussion</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Reddit</surname></persName>
+		</author>
+		<ptr target="https://www.reddit.com/r/mturk/comments/35uujl/crowdworkers_browser_extension_discussion" />
+		<imprint/>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,283.27,189.83,9.00;14,331.13,294.77,224.65,9.00;14,331.13,306.27,200.29,9.00;14,331.13,317.77,165.57,9.00" xml:id="b60">
+	<analytic>
+		<title level="a" type="main">Software Framework for Topic Modelling with Large Corpora</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Radim</forename><surname>Rehurek</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Petr</forename><surname>Sojka</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frameworks</title>
+		<meeting>the LREC 2010 Workshop on New Challenges for NLP Frameworks</meeting>
+		<imprint>
+			<date type="published" when="2010" />
+			<biblScope unit="page" from="45" to="50" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,335.27,220.40,9.00;14,331.13,346.77,219.61,9.00;14,331.13,358.29,198.92,9.00;14,331.13,369.79,209.11,9.00;14,331.13,381.29,212.60,9.00;14,331.13,390.71,226.59,11.08;14,331.13,404.29,191.73,9.00" xml:id="b61">
+	<analytic>
+		<title level="a" type="main">We Are Dynamo: Overcoming Stalling and Friction in Collective Action for Crowd Workers</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Niloufar</forename><surname>Salehi</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">C</forename><surname>Lilly</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Michael</forename><forename type="middle">S</forename><surname>Irani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Ali</forename><surname>Bernstein</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Eva</forename><surname>Alkhatib</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kristy</forename><surname>Ogbe</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Clickhappier</forename><surname>Milland</surname></persName>
+		</author>
+		<idno type="doi">10.1145/2702123.2702508</idno>
+		<ptr target="https://doi.org/10.1145/2702123.2702508" />
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems (CHI &apos;15</title>
+		<meeting>the 33rd Annual ACM Conference on Human Factors in Computing Systems (CHI &apos;15</meeting>
+		<imprint>
+			<date type="published" when="2015" />
+			<biblScope unit="page" from="1621" to="1630" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,421.79,201.47,9.00;14,331.13,433.32,215.56,9.00;14,331.13,444.82,222.00,9.00" xml:id="b62">
+	<analytic>
+		<title level="a" type="main">Ethics and Tactics of Professional Crowdwork</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Six Silberman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Lilly</forename><surname>Irani</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Joel</forename><forename type="middle">Ross</forename></persName>
+		</author>
+		<idno type="doi">10.1145/1869086.1869100</idno>
+		<ptr target="https://doi.org/10.1145/1869086.1869100" />
+	</analytic>
+	<monogr>
+		<title level="j">XRDS</title>
+		<imprint>
+			<biblScope unit="volume">17</biblScope>
+			<biblScope unit="page" from="39" to="43" />
+			<date type="published" when="2010" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,462.32,221.36,9.00;14,331.13,473.82,191.32,9.00" xml:id="b63">
+	<analytic>
+		<title level="a" type="main">Pricing Tasks in Online Labor Markets</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Yaron</forename><surname>Singer</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Manas</forename><surname>Mittal</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Human Computation</title>
+		<imprint>
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,491.32,218.23,9.00;14,331.13,502.82,215.31,9.00;14,331.13,514.34,224.85,9.00;14,331.13,525.84,78.27,9.00;14,331.13,537.34,169.23,9.00" xml:id="b64">
+	<analytic>
+		<title level="a" type="main">Layers of Silence, Arenas of Voice: The Ecology of Visible and Invisible Work</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Leigh</forename><surname>Susan</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Anselm</forename><surname>Star</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Strauss</surname></persName>
+		</author>
+		<idno type="doi">10.1023/A:1008651105359</idno>
+		<ptr target="https://doi.org/10.1023/A:1008651105359" />
+	</analytic>
+	<monogr>
+		<title level="j">Computer Supported Cooperative Work (CSCW)</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="page" from="9" to="30" />
+			<date type="published" when="1999" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,554.84,204.87,9.00;14,331.13,566.34,198.55,9.00;14,331.13,577.84,219.10,9.00;14,331.13,589.35,212.79,9.00;14,331.13,600.87,218.85,9.00;14,331.13,612.37,47.77,9.00" xml:id="b65">
+	<analytic>
+		<title level="a" type="main">Database of NIH grants using machine-learned categories and graphical clustering</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Edmund</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Talley</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Newman</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Bruce</forename><forename type="middle">W</forename><surname>Mimno</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">I</forename><forename type="middle">I</forename><surname>Herr</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">M</forename><surname>Hanna</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Wallach</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A P C</forename><surname>Gully</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">A G Miriam</forename><surname>Burns</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Andrew</forename><surname>Leenders</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><surname>Mccallum</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="j">Nature Methods</title>
+		<imprint>
+			<biblScope unit="volume">8</biblScope>
+			<biblScope unit="page" from="443" to="444" />
+			<date type="published" when="2011" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,629.87,212.70,9.00;14,331.13,639.29,206.33,11.07;14,331.13,652.87,214.48,9.00;14,331.13,664.37,103.05,9.00" xml:id="b66">
+	<monogr>
+		<title level="m" type="main">The Application of the Fair Labor Standards Act&apos;s &quot;Suffer or Permit&quot; Standard in the Identification of Employees Who Are Misclassified as Independent Contractors</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">David</forename><surname>Weil</surname></persName>
+		</author>
+		<imprint>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="14,331.13,681.90,220.13,9.00;14,331.13,693.40,196.88,9.00;14,331.13,704.90,210.42,9.00;15,68.28,63.70,209.29,9.00;15,68.28,75.20,200.78,9.00;15,68.28,86.70,220.78,9.00;15,68.28,98.20,84.52,9.00" xml:id="b67">
+	<analytic>
+		<title level="a" type="main">Accessible Crowdwork? Understanding the Value in and Challenge of Microtask Employment for People with Disabilities</title>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Kathryn</forename><surname>Zyskowski</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Meredith</forename><forename type="middle">Ringel</forename><surname>Morris</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Jeffrey</forename><forename type="middle">P</forename><surname>Bigham</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Mary</forename><forename type="middle">L</forename><surname>Gray</surname></persName>
+		</author>
+		<author>
+			<persName xmlns="http://www.tei-c.org/ns/1.0"><forename type="first">Shaun K</forename><surname>Kane</surname></persName>
+		</author>
+	</analytic>
+	<monogr>
+		<title level="m">Proceedings of the 18th ACM Conference on Computer Supported Cooperative Work &amp; Social Computing</title>
+		<meeting>the 18th ACM Conference on Computer Supported Cooperative Work &amp; Social Computing</meeting>
+		<imprint>
+			<date type="published" when="2015" />
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,68.28,115.72,205.12,9.00;15,68.28,127.22,143.96,9.00;15,68.28,138.72,188.09,9.00" xml:id="b68">
+	<analytic>
+		<title/>
+		<ptr target="https://www.mturk.com/mturk/conditionsofuse" />
+	</analytic>
+	<monogr>
+		<title level="j">Amazon Mechanical Turk Participation Agreement</title>
+		<imprint>
+			<date type="published" when="2014-07" />
+		</imprint>
+	</monogr>
+	<note>Retrieved</note>
+</biblStruct>
+
+<biblStruct coords="15,68.28,156.22,200.15,9.00;15,68.28,167.72,119.22,9.00" xml:id="b69">
+	<analytic>
+		<title/>
+		<ptr target="http://www.turkernation.com/" />
+	</analytic>
+	<monogr>
+		<title level="j">Turker Nation</title>
+		<imprint>
+		</imprint>
+	</monogr>
+</biblStruct>
+
+<biblStruct coords="15,68.28,185.22,221.55,9.00;15,68.28,196.75,184.91,9.00;15,68.28,208.25,157.63,9.00" xml:id="b70">
+	<monogr>
+		<title level="m" type="main">The Evolving Ecosystem of Crowd Workers</title>
+		<ptr target="http://www.ifis.cs.tu-bs.de/project/crowdsourcing/ecosystem" />
+		<imprint>
+		</imprint>
+	</monogr>
+	<note>Retrieved</note>
+</biblStruct>
+
+				</listBibl>
+			</div>
+		</back>
+	</text>
+</TEI>

@@ -1,0 +1,101 @@
+[{
+  "renderDpi": 150,
+  "name": "1",
+  "page": 0,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 332.64,
+    "y1": 192.0,
+    "x2": 553.4399999999999,
+    "y2": 316.32
+  },
+  "caption": "Figure 1: An example of in-video prompting supported by a video learning interface. Once the playhead reaches the red bar, the prompt appears. This example asks a question about the learner’s comprehension on a specific part of the video. While common, it’s not the only possible prompting type. This paper explores the design space of in-video prompting, and presents how learners perceive the general idea of in-video prompting and different prompting designs.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure1-1.png",
+  "captionBoundary": {
+    "x1": 320.6260070800781,
+    "y1": 326.9380798339844,
+    "x2": 565.9129638671875,
+    "y2": 410.1319885253906
+  }
+}, {
+  "renderDpi": 150,
+  "name": "1",
+  "page": 1,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 52.8,
+    "y1": 132.0,
+    "x2": 565.4399999999999,
+    "y2": 345.59999999999997
+  },
+  "caption": "Table 1: The design space of in-video prompting questions, segmented by comprehension-experience orientation and the level of specificity. Comprehension-centered/Experience-centered questions ask about learners’ comprehension and learning experience. General/Specific questions determine whether the questions refer to lecture content or not. Table 1a shows example questions for each prompting strategy, and Table 1b shows sample responses for each prompting condition.",
+  "imageText": ["(b)", "Sample", "responses", "to", "each", "question", "presented", "in", "Table", "1a,", "submitted", "by", "crowd", "workers", "in", "our", "study.", "Speciﬁc", "The", "standard", "deviation", "is", "calculated", "by", "taking", "the", "square", "root", "of", "the", "variance.", "Explanation", "of", "change", "from", "squared", "units", "to", "units", "was", "slightly", "too", "fast.", "The", "instructor’s", "handwriting", "is", "a", "little", "bad.", "General", "Population", "standard", "deviation", "and", "how", "it", "is", "calculated", "and", "what", "it", "means", "if", "it", "is", "a", "larger", "number.", "Comprehension-centered", "Experience-centered", "(a)", "Sample", "questions", "for", "each", "prompting", "condition.", "Speciﬁc", "Describe", "how", "to", "calculate", "the", "standard", "deviation.", "You", "may", "assume", "you", "want", "to", "calculate", "the", "standard", "deviation", "of", "ﬁve", "numbers.", "Describe", "something", "unsatisfying", "about", "calculating", "the", "standard", "deviation.", "You", "can", "consider", "how", "clear", "the", "explanation", "was,", "how", "fast", "the", "explanation", "was,", "and", "what", "information", "was", "missing.", "General", "Describe", "what", "you", "have", "learned", "so", "far.", "Describe", "something", "unsatisfying", "about", "the", "lecture", "so", "far.", "Comprehension-centered", "Experience-centered"],
+  "renderURL": "imageOutputpaper-Table1-1.png",
+  "captionBoundary": {
+    "x1": 53.599998474121094,
+    "y1": 63.55208969116211,
+    "x2": 565.9279174804688,
+    "y2": 102.90997314453125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 6,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 109.92,
+    "y1": 478.56,
+    "x2": 241.44,
+    "y2": 564.0
+  },
+  "caption": "Table 3: The number of participants in each group and subgroup. Co-Sp: comprehension-centered and specific, CoGe: comprehension-centered and general, Ex-Sp: Experiencecentered and specific, and Ex-Ge: experience-centered and general. High: participants with high pretest scores; Low: participants with low pretest scores.",
+  "imageText": ["Ex-Ge", "50", "31", "19", "Ex-Sp", "50", "23", "27", "Co-Ge", "50", "21", "29", "Co-Sp", "50", "22", "28", "Total", "High", "Low"],
+  "renderURL": "imageOutputpaper-Table3-1.png",
+  "captionBoundary": {
+    "x1": 53.60000228881836,
+    "y1": 404.3430480957031,
+    "x2": 298.6670837402344,
+    "y2": 465.6189880371094
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 64.8,
+    "y1": 61.919999999999995,
+    "x2": 553.4399999999999,
+    "y2": 324.0
+  },
+  "caption": "Figure 2: Participants’ self-reported learning experiences captured by responses to 6 survey questions (Q1-Q6). Bar graphs show the responses to each question for each of the four prompting strategies. Questions on the left column (Q1-Q4) address positive experiences while questions on the right column (Q5-Q6) address negative experiences. Error bar: +/- 1 standard error of the mean.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure2-1.png",
+  "captionBoundary": {
+    "x1": 53.92900085449219,
+    "y1": 334.903076171875,
+    "x2": 564.5376586914062,
+    "y2": 374.260986328125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 4,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 52.8,
+    "y1": 82.56,
+    "x2": 565.4399999999999,
+    "y2": 174.23999999999998
+  },
+  "caption": "Table 2: Main pros and cons of in-video prompting from learners’ perspective (number of mentions in parenthesis)",
+  "imageText": ["Emotional", "responses", "-", "Provide", "interactivity.", "(5)", "-", "Cause", "anxiety.", "(17)", "-", "Provide", "no", "feedback", "on", "responses.", "(9)", "Learning", "process", "-", "Encourage", "reﬂection.", "(57)", "-", "Split", "the", "lecture", "into", "small", "pieces.", "(16)", "-", "Help", "grasp", "key", "concepts.", "(10)", "Concentration", "-", "Enhance", "learners’", "concentration.", "(42)", "-", "Distract", "from", "the", "learning", "process.", "(59)", "Pros", "Cons"],
+  "renderURL": "imageOutputpaper-Table2-1.png",
+  "captionBoundary": {
+    "x1": 79.03199768066406,
+    "y1": 63.55208969116211,
+    "x2": 538.7537841796875,
+    "y2": 70.03302001953125
+  }
+}]

@@ -1,0 +1,221 @@
+[{
+  "renderDpi": 150,
+  "name": "5",
+  "page": 5,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 74.88,
+    "x2": 557.28,
+    "y2": 220.32
+  },
+  "caption": "Figure 5. A tree with two traces, a trunk trace and one branch trace. The trunk trace contains a guard to which a branch trace was attached. The branch trace contain a guard that may fail and trigger a side exit. Both the trunk and the branch trace loop back to the tree anchor, which is the beginning of the trace tree.",
+  "imageText": ["Side", "Exit", "Guard", "Branch", "Trace", "Trace", "Anchor", "Tree", "Anchor", "Trunk", "Trace", "T"],
+  "renderURL": "imageOutputpaper-Figure5-1.png",
+  "captionBoundary": {
+    "x1": 317.01373291015625,
+    "y1": 223.81768798828125,
+    "x2": 556.1220703125,
+    "y2": 269.50079345703125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "6",
+  "page": 5,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 465.59999999999997,
+    "x2": 557.28,
+    "y2": 488.15999999999997
+  },
+  "caption": "Figure 6. We handle type-unstable loops by allowing traces to compile that cannot loop back to themselves due to a type mismatch. As such traces accumulate, we attempt to connect their loop edges to form groups of trace trees that can execute without having to side-exit to the interpreter to cover odd type cases. This is particularly important for nested trace trees where an outer tree tries to call an inner tree (or in this case a forest of inner trees), since inner loops frequently have initially undefined values which change type to a concrete value after the first iteration.",
+  "imageText": ["(c)"],
+  "renderURL": "imageOutputpaper-Figure6-1.png",
+  "captionBoundary": {
+    "x1": 317.01373291015625,
+    "y1": 492.4271545410156,
+    "x2": 556.120849609375,
+    "y2": 577.9608764648438
+  }
+}, {
+  "renderDpi": 150,
+  "name": "10",
+  "page": 10,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 72.0,
+    "x2": 557.28,
+    "y2": 351.36
+  },
+  "caption": "Figure 10. Speedup vs. a baseline JavaScript interpreter (SpiderMonkey) for our trace-based JIT compiler, Apple’s SquirrelFish Extreme inline threading interpreter and Google’s V8 JS compiler. Our system generates particularly efficient code for programs that benefit most from type specialization, which includes SunSpider Benchmark programs that perform bit manipulation. We type-specialize the code in question to use integer arithmetic, which substantially improves performance. For one of the benchmark programs we execute 25 times faster than the SpiderMonkey interpreter, and almost 5 times faster than V8 and SFX. For a large number of benchmarks all three VMs produce similar results. We perform worst on benchmark programs that we do not trace and instead fall back onto the interpreter. This includes the recursive benchmarks access-binary-trees and control-flow-recursive, for which we currently don’t generate any native code.",
+  "imageText": ["01\"", "-./\"", "&'()*+,\"", "%#\"", "%!\"", "$#\"", "$!\"", "#\"", "!\""],
+  "renderURL": "imageOutputpaper-Figure10-1.png",
+  "captionBoundary": {
+    "x1": 53.999996185302734,
+    "y1": 354.8494567871094,
+    "x2": 556.1188354492188,
+    "y2": 420.4579772949219
+  }
+}, {
+  "renderDpi": 150,
+  "name": "8",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 74.88,
+    "x2": 557.28,
+    "y2": 203.04
+  },
+  "caption": "Figure 8. Control flow graph of a loop with two nested loops (left) and its nested trace tree configuration (right). The outer tree calls the two inner nested trace trees and places guards at their side exit locations.",
+  "imageText": ["Nested", "Tree", "Exit", "Guard", "t4", "t1", "t2", "i5", "i4", "i6", "i1", "i3", "i2"],
+  "renderURL": "imageOutputpaper-Figure8-1.png",
+  "captionBoundary": {
+    "x1": 317.013671875,
+    "y1": 207.4249267578125,
+    "x2": 556.1207275390625,
+    "y2": 243.14544677734375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "7",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 75.84,
+    "x2": 294.24,
+    "y2": 222.23999999999998
+  },
+  "caption": "Figure 7. Control flow graph of a nested loop with an if statement inside the inner most loop (a). An inner tree captures the inner loop, and is nested inside an outer tree which “calls” the inner tree. The inner tree returns to the outer tree once it exits along its loop condition guard (b).",
+  "imageText": ["(a)", "(b)", "Exit", "Guard", "Nested", "Tree", "Outer", "Tree", "Tree", "Call", "t2", "t1", "i7", "i6", "i1", "i5", "i3", "i4", "i2"],
+  "renderURL": "imageOutputpaper-Figure7-1.png",
+  "captionBoundary": {
+    "x1": 54.0,
+    "y1": 226.22003173828125,
+    "x2": 293.1073913574219,
+    "y2": 271.90325927734375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "11",
+  "page": 9,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 72.96,
+    "x2": 562.0799999999999,
+    "y2": 297.12
+  },
+  "caption": "Figure 11. Fraction of dynamic bytecodes executed by interpreter and on native traces. The speedup vs. interpreter is shown in parentheses next to each test. The fraction of bytecodes executed while recording is too small to see in this figure, except for crypto-md5, where fully 3% of bytecodes are executed while recording. In most of the tests, almost all the bytecodes are executed by compiled traces. Three of the benchmarks are not traced at all and run in the interpreter.",
+  "imageText": ["KA>29:92>#", "L<ID2#", "?>9@AJ.D<F@-<>2.@A:0>#3$4,56#", "?>9@AJ.0A:</C./8-2#3$4%56#", "?>9@AJ.><J/F80-#3$4$56#", "?>9@AJ.B<?><#3$4(56#", "?>9@AJ.1<?2)'#3%4(56#", "92J25:.-A<#3'4%56#", "7<>;.?:2/>9<F.A897#3*4$56#", "7<>;.:<9I<F.?07?#3(4,56#", "7<>;./89-@/#3'4,56#", "-<>2.B897<>.5:<91#3$4!56#", "-<>2.B897<>.>8H2#3$4$56#", "/9=:>8.?;<$#3(4,56#", "/9=:>8.7-(#3%4&56#", "/9=:>8.<2?#3$4)56#", "/8A>98FG8E.92/09?@D2#3$4!56#", "1@>8:?.A?@2D2.1@>?#3%4*56#", "1@>8:?.1@>E@?2.<A-#3%(4%56#", "1@>8:?.1@>?.@A.1=>2#3+4*56#", "1@>8:?.&1@>.1@>?.@A.1=>2#3%(4(56#", "<//2??.A?@2D2#3&4!56#", "<//2??.A18-=#3'4%56#", "<//2??.B<AAC0/;#3%4%56#", "<//2??.1@A<9=.>922?#3!4,56#", "&-.9<=>9</2#3$4%56#", "&-.789:;#3%4,56#", "&-./012#3%4%56#", "!\"#", "$!\"#", "%!\"#", "&!\"#", "'!\"#", "(!\"#", ")!\"#", "*!\"#", "+!\"#", ",!\"#", "$!!\"#"],
+  "renderURL": "imageOutputpaper-Figure11-1.png",
+  "captionBoundary": {
+    "x1": 317.0137023925781,
+    "y1": 301.4363708496094,
+    "x2": 556.1207885742188,
+    "y2": 377.0074768066406
+  }
+}, {
+  "renderDpi": 150,
+  "name": "4",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 270.71999999999997,
+    "x2": 557.28,
+    "y2": 500.15999999999997
+  },
+  "caption": "Figure 4. x86 snippet for sample program. This is the x86 code compiled from the LIR snippet in Figure 3. Most LIR instructions compile to a single x86 instruction. Instructions marked with (*) would be omitted by an idealized compiler that knew that none of the side exits would ever be taken. The 17 instructions generated by the compiler compare favorably with the 100+ instructions that the interpreter would execute for the same code snippet, including 4 indirect jumps.",
+  "imageText": ["mov", "edx,", "ebx(748)", "//", "load", "primes", "from", "the", "trace", "activation", "record", "mov", "edi(0),", "edx", "//", "(*)", "store", "primes", "to", "interpreter", "stack", "mov", "esi,", "ebx(764)", "//", "load", "k", "from", "the", "trace", "activation", "record", "mov", "edi(8),", "esi", "//", "(*)", "store", "k", "to", "interpreter", "stack", "mov", "edi(16),", "0", "//", "(*)", "store", "false", "to", "interpreter", "stack", "mov", "eax,", "edx(4)", "//", "(*)", "load", "object", "class", "word", "for", "primes", "and", "eax,", "-4", "//", "(*)", "mask", "out", "object", "class", "tag", "for", "primes", "cmp", "eax,", "Array", "//", "(*)", "test", "whether", "primes", "is", "an", "array", "jne", "side_exit_1", "//", "(*)", "side", "exit", "if", "primes", "is", "not", "an", "array", "sub", "esp,", "8", "//", "bump", "stack", "for", "call", "alignment", "convention", "push", "false", "//", "push", "last", "argument", "for", "call", "push", "esi", "//", "push", "first", "argument", "for", "call", "call", "js_Array_set", "//", "call", "function", "to", "set", "array", "element", "add", "esp,", "8", "//", "clean", "up", "extra", "stack", "space", "mov", "ecx,", "ebx", "//", "(*)", "created", "by", "register", "allocator", "test", "eax,", "eax", "//", "(*)", "test", "return", "value", "of", "js_Array_set", "je", "side_exit_2", "//", "(*)", "side", "exit", "if", "call", "failed", "...", "side_exit_1:", "mov", "ecx,", "ebp(-4)", "//", "restore", "ecx", "mov", "esp,", "ebp", "//", "restore", "esp", "jmp", "epilog", "//", "jump", "to", "ret", "statement"],
+  "renderURL": "imageOutputpaper-Figure4-1.png",
+  "captionBoundary": {
+    "x1": 54.0,
+    "y1": 504.0870666503906,
+    "x2": 556.1182861328125,
+    "y2": 539.8077392578125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 193.44,
+    "x2": 557.28,
+    "y2": 211.2
+  },
+  "caption": "Figure 3. LIR snippet for sample program. This is the LIR recorded for line 5 of the sample program in Figure 1. The LIR encodes the semantics in SSA form using temporary variables. The LIR also encodes all the stores that the interpreter would do to its data stack. Sometimes these stores can be optimized away as the stack locations are live only on exits to the interpreter. Finally, the LIR records guards and side exits to verify the assumptions made in this recording: that primes is an array and that the call to set its element succeeds.",
+  "imageText": ["xt", "v7", "//", "side", "exit", "if", "js_Array_set", "returns", "false."],
+  "renderURL": "imageOutputpaper-Figure3-1.png",
+  "captionBoundary": {
+    "x1": 54.0,
+    "y1": 215.38873291015625,
+    "x2": 556.120849609375,
+    "y2": 251.1092529296875
+  }
+}, {
+  "renderDpi": 150,
+  "name": "12",
+  "page": 12,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 52.8,
+    "y1": 72.96,
+    "x2": 299.03999999999996,
+    "y2": 298.08
+  },
+  "caption": "Figure 12. Fraction of time spent on major VM activities. The speedup vs. interpreter is shown in parentheses next to each test. Most programs where the VM spends the majority of its time running native code have a good speedup. Recording and compilation costs can be substantial; speeding up those parts of the implementation would improve SunSpider performance.",
+  "imageText": ["K?</676/<#", "L5?><56#", "M/,56*#", "N547>F/#", "N:FF#O6:,/#", "M-?#O6:,/#", "=<6>?J+B:F>*:</+>?7-<#0(1923#", "=<6>?J+-?7:,A+,5*/#0(1$23#", "=<6>?J+<:J,F5-*#0(1(23#", "=<6>?J+@:=<:#0(1C23#", "=<6>?J+.:=/&%#0$1C23#", "6/J/27+*?:#0%1$23#", "4:<8+=7/,<6:F+?564#0D1(23#", "4:<8+7:6I:F+=-4=#0C1923#", "4:<8+,56*>,#0%1923#", "*:</+@564:<+27:6.#0(1!23#", "*:</+@564:<+<5H/#0(1(23#", ",6;7<5+=8:(#0C1923#", ",6;7<5+4*C#0$1)23#", ",6;7<5+:/=#0(1&23#", ",5?<65FG5E+6/,-6=>B/#0(1!23#", ".><57=+?=>/B/+.><=#0$1D23#", ".><57=+.><E>=/+:?*#0$C1$23#", ".><57=+.><=+>?+.;</#0'1D23#", ".><57=+).><+.><=+>?+.;</#0$C1C23#", ":,,/==+?=>/B/#0)1!23#", ":,,/==+?.5*;#0%1$23#", ":,,/==+@:??A-,8#0$1$23#", ":,,/==+.>?:6;+<6//=#0!1923#", ")*+6:;<6:,/#0(1$23#", ")*+45678#0$1923#", ")*+,-./#0$1$23#", "!\"#", "$!\"#", "%!\"#", "&!\"#", "'!\"#", "(!!\"#"],
+  "renderURL": "imageOutputpaper-Figure12-1.png",
+  "captionBoundary": {
+    "x1": 54.0,
+    "y1": 301.8585205078125,
+    "x2": 293.1069641113281,
+    "y2": 357.50445556640625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "9",
+  "page": 7,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 72.0,
+    "x2": 557.28,
+    "y2": 157.44
+  },
+  "caption": "Figure 9. Tagged values in the SpiderMonkey JS interpreter.",
+  "imageText": ["null,", "or", "undeﬁned", "Tag", "JS", "Type", "Description", "xx1", "number", "31-bit", "integer", "representation", "000", "object", "pointer", "to", "JSObject", "handle", "010", "number", "pointer", "to", "double", "handle", "100", "string", "pointer", "to", "JSString", "handle", "110", "boolean", "enumeration", "for", "null,", "undeﬁned,", "true,", "false"],
+  "renderURL": "imageOutputpaper-Figure9-1.png",
+  "captionBoundary": {
+    "x1": 317.013671875,
+    "y1": 160.74365234375,
+    "x2": 556.12060546875,
+    "y2": 166.5762939453125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "13",
+  "page": 11,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 72.48,
+    "x2": 557.28,
+    "y2": 353.28
+  },
+  "caption": "Figure 13. Detailed trace recording statistics for the SunSpider benchmark set.",
+  "imageText": ["Loops", "Trees", "Traces", "Aborts", "Flushes", "Trees/Loop", "Traces/Tree", "Traces/Loop", "Speedup", "3d-cube", "25", "27", "29", "3", "0", "1.1", "1.1", "1.2", "2.20x", "3d-morph", "5", "8", "8", "2", "0", "1.6", "1.0", "1.6", "2.86x", "3d-raytrace", "10", "25", "100", "10", "1", "2.5", "4.0", "10.0", "1.18x", "access-binary-trees", "0", "0", "0", "5", "0", "-", "-", "-", "0.93x", "access-fannkuch", "10", "34", "57", "24", "0", "3.4", "1.7", "5.7", "2.20x", "access-nbody", "8", "16", "18", "5", "0", "2.0", "1.1", "2.3", "4.19x", "access-nsieve", "3", "6", "8", "3", "0", "2.0", "1.3", "2.7", "3.05x", "bitops-3bit-bits-in-byte", "2", "2", "2", "0", "0", "1.0", "1.0", "1.0", "25.47x", "bitops-bits-in-byte", "3", "3", "4", "1", "0", "1.0", "1.3", "1.3", "8.67x", "bitops-bitwise-and", "1", "1", "1", "0", "0", "1.0", "1.0", "1.0", "25.20x", "bitops-nsieve-bits", "3", "3", "5", "0", "0", "1.0", "1.7", "1.7", "2.75x", "controlﬂow-recursive", "0", "0", "0", "1", "0", "-", "-", "-", "0.98x", "crypto-aes", "50", "72", "78", "19", "0", "1.4", "1.1", "1.6", "1.64x", "crypto-md5", "4", "4", "5", "0", "0", "1.0", "1.3", "1.3", "2.30x", "crypto-sha1", "5", "5", "10", "0", "0", "1.0", "2.0", "2.0", "5.95x", "date-format-tofte", "3", "3", "4", "7", "0", "1.0", "1.3", "1.3", "1.07x", "date-format-xparb", "3", "3", "11", "3", "0", "1.0", "3.7", "3.7", "0.98x", "math-cordic", "2", "4", "5", "1", "0", "2.0", "1.3", "2.5", "4.92x", "math-partial-sums", "2", "4", "4", "1", "0", "2.0", "1.0", "2.0", "5.90x", "math-spectral-norm", "15", "20", "20", "0", "0", "1.3", "1.0", "1.3", "7.12x", "regexp-dna", "2", "2", "2", "0", "0", "1.0", "1.0", "1.0", "4.21x", "string-base64", "3", "5", "7", "0", "0", "1.7", "1.4", "2.3", "2.53x", "string-fasta", "5", "11", "15", "6", "0", "2.2", "1.4", "3.0", "1.49x", "string-tagcloud", "3", "6", "6", "5", "0", "2.0", "1.0", "2.0", "1.09x", "string-unpack-code", "4", "4", "37", "0", "0", "1.0", "9.3", "9.3", "1.20x", "string-validate-input", "6", "10", "13", "1", "0", "1.7", "1.3", "2.2", "1.86x"],
+  "renderURL": "imageOutputpaper-Figure13-1.png",
+  "captionBoundary": {
+    "x1": 161.45469665527344,
+    "y1": 357.0076599121094,
+    "x2": 446.4243469238281,
+    "y2": 362.8403015136719
+  }
+}]

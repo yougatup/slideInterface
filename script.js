@@ -1857,7 +1857,7 @@ dataType: "json"
 
 $(document).ready(function() {
     myDB = new PouchDB('doc2slide_db')
-    // clearDatabase();
+  //  clearDatabase();
     prepare();
 });
 

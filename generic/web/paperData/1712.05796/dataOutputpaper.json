@@ -1,0 +1,281 @@
+[{
+  "renderDpi": 150,
+  "name": "7",
+  "page": 5,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 315.84,
+    "y1": 392.64,
+    "x2": 557.28,
+    "y2": 504.0
+  },
+  "caption": "Figure 7. The scatter plot showing the relationship between the transformed reward and hourly wage. The line represents the model that we fit with ordinary linear regression.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure7-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 510.63153076171875,
+    "x2": 557.5330810546875,
+    "y2": 535.4200439453125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "8",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 518.88,
+    "x2": 294.24,
+    "y2": 553.4399999999999
+  },
+  "caption": "Figure 8. KDE plot of per-requester hourly payment.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure8-1.png",
+  "captionBoundary": {
+    "x1": 54.025001525878906,
+    "y1": 560.6514892578125,
+    "x2": 257.52496337890625,
+    "y2": 564.6699829101562
+  }
+}, {
+  "renderDpi": 150,
+  "name": "10",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 315.84,
+    "y1": 371.52,
+    "x2": 558.24,
+    "y2": 453.12
+  },
+  "caption": "Figure 10. A scatter plot of median HIT reward paid by requesters vs. per-requester hourly payment.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure10-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 459.8815002441406,
+    "x2": 557.5611572265625,
+    "y2": 474.3999938964844
+  }
+}, {
+  "renderDpi": 150,
+  "name": "9",
+  "page": 6,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 315.84,
+    "y1": 60.96,
+    "x2": 557.28,
+    "y2": 142.07999999999998
+  },
+  "caption": "Figure 9. A scatter plot of per-requester HIT count vs. perrequester hourly payment.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure9-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 148.281494140625,
+    "x2": 557.4669799804688,
+    "y2": 163.04998779296875
+  }
+}, {
+  "renderDpi": 150,
+  "name": "12",
+  "page": 9,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 180.0,
+    "x2": 556.3199999999999,
+    "y2": 313.44
+  },
+  "caption": "Figure 12. (a) Hourly wage distributions of seven HIT categories provided by Gadiraju et al. [25] (with an additional category Research). (b) Strip plots showing median hourly wages of HITs associated with the topical keywords in Table 4.",
+  "imageText": ["DISCUSSION"],
+  "renderURL": "imageOutputpaper-Figure12-1.png",
+  "captionBoundary": {
+    "x1": 55.525001525878906,
+    "y1": 316.5815124511719,
+    "x2": 558.3489379882812,
+    "y2": 331.1000061035156
+  }
+}, {
+  "renderDpi": 150,
+  "name": "1",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 464.15999999999997,
+    "x2": 293.28,
+    "y2": 540.0
+  },
+  "caption": "Figure 1. Line charts showing the transition in the number of active monthly users and HIT records.",
+  "imageText": ["Data", "Description"],
+  "renderURL": "imageOutputpaper-Figure1-1.png",
+  "captionBoundary": {
+    "x1": 54.025001525878906,
+    "y1": 543.4014892578125,
+    "x2": 294.3619384765625,
+    "y2": 558.1699829101562
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 315.84,
+    "y1": 112.8,
+    "x2": 557.28,
+    "y2": 194.4
+  },
+  "caption": "Figure 2. Histogram of performed HIT counts by workers.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure2-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 197.8115234375,
+    "x2": 541.0950317382812,
+    "y2": 201.83001708984375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "11",
+  "page": 7,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 490.56,
+    "x2": 295.2,
+    "y2": 616.3199999999999
+  },
+  "caption": "Figure 11. Mean and median hourly wages yielded by the HITs that require the ten most common qualification types.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure11-1.png",
+  "captionBoundary": {
+    "x1": 54.025001525878906,
+    "y1": 622.6815185546875,
+    "x2": 294.3729553222656,
+    "y2": 637.2000122070312
+  }
+}, {
+  "renderDpi": 150,
+  "name": "1",
+  "page": 3,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 314.88,
+    "y1": 504.0,
+    "x2": 555.36,
+    "y2": 584.16
+  },
+  "caption": "Table 1. Summary of per-HIT/cluster hourly wage statistics.",
+  "imageText": ["1.77", "4.80", "43.4", "Cluster", "(D=1;", "N=635,198)", "3.18", "6.19", "26.4", "Cluster", "(D=0;", "N=2,560,066)", "2.54", "5.66", "24.1", "Interval", "(N=3,471,580)", "Median", "Mean", "SD", "Per-HIT/Cluster", "($/h)"],
+  "renderURL": "imageOutputpaper-Table1-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 591.1514892578125,
+    "x2": 547.9259033203125,
+    "y2": 595.1699829101562
+  }
+}, {
+  "renderDpi": 150,
+  "name": "4",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 315.84,
+    "y1": 283.68,
+    "x2": 558.24,
+    "y2": 365.28
+  },
+  "caption": "Figure 4. Line chart of the number of clusters formed. The change in the number becomes small after D=1min.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure4-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 372.10150146484375,
+    "x2": 557.2560424804688,
+    "y2": 386.6199951171875
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 112.8,
+    "x2": 295.2,
+    "y2": 242.39999999999998
+  },
+  "caption": "Figure 3. Timeline visualization of HIT intervals and depiction of the temporal clustering method. The HIT interval data comes from one of the workers in our dataset.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure3-1.png",
+  "captionBoundary": {
+    "x1": 54.025001525878906,
+    "y1": 245.5615234375,
+    "x2": 294.64501953125,
+    "y2": 270.58001708984375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 4,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 51.839999999999996,
+    "y1": 487.68,
+    "x2": 293.28,
+    "y2": 539.04
+  },
+  "caption": "Table 2. Summary of per-worker hourly wage statistics.",
+  "imageText": ["Interval", "1.77", "3.13", "25.5", "Cluster", "(D=0)", "2.11", "3.48", "25.1", "Cluster", "(D=1)", "1.99", "3.32", "25.0", "Per-Worker", "($/h)", "Median", "Mean", "SD"],
+  "renderURL": "imageOutputpaper-Table2-1.png",
+  "captionBoundary": {
+    "x1": 54.025001525878906,
+    "y1": 542.6514892578125,
+    "x2": 268.0450134277344,
+    "y2": 546.6699829101562
+  }
+}, {
+  "renderDpi": 150,
+  "name": "5",
+  "page": 4,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 256.8,
+    "x2": 295.2,
+    "y2": 349.44
+  },
+  "caption": "Figure 5. Distributions of per-HIT and per-cluster hourly wages. The blue and green lines indicate median and mean.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure5-1.png",
+  "captionBoundary": {
+    "x1": 54.025001525878906,
+    "y1": 356.10150146484375,
+    "x2": 294.8269958496094,
+    "y2": 370.6199951171875
+  }
+}, {
+  "renderDpi": 150,
+  "name": "6",
+  "page": 4,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 315.84,
+    "y1": 216.0,
+    "x2": 558.24,
+    "y2": 309.12
+  },
+  "caption": "Figure 6. Distributions of per-worker hourly wages based on the interval-based and cluster-based methods. The blue and green lines indicate median and mean.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure6-1.png",
+  "captionBoundary": {
+    "x1": 316.8800048828125,
+    "y1": 312.8315124511719,
+    "x2": 557.60791015625,
+    "y2": 337.8500061035156
+  }
+}]

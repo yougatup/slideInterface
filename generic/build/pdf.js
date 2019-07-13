@@ -30,6 +30,8 @@ var appearedNumberBoxes = {};
 var slideInfo;
 var gslideLoaded = false;
 var sectionStructure = [], sectionStructureSegments = [], sectionStructureSegmentProcessed = [];
+var sectionMappingCount = {};
+var inverseSectionStructure = {};
 
 
 var ignoreString = [
@@ -18923,8 +18925,14 @@ function enableDoc2Slide() {
 
      });
 
-    $(document).on('mouseleave', '.textElement', function() {
+    $(document).on('mouseleave', '.textElement', function(e) {
         issueEvent(document, "clearPlaneCanvas", null);
+
+	if(!e.shiftKey && !popoverShown) {
+	    $(".textHighlighted").each(function() {
+		$(this).removeClass("textHighlighted " + getAllHighlightColors());
+	    });
+	}
     });
 
     $(document).on('click', function(e){
@@ -18993,7 +19001,7 @@ function enableDoc2Slide() {
 
     // console.log("hmM?");
     // clearDatabase();
-    loadData();
+   loadData();
 }
 
 function clearDatabase() {
@@ -19520,14 +19528,7 @@ function printMessage(mutationList) {
 
             for(var j=0;j<jsonPdfStructure.sections.length;j++) {
                 var data = jsonPdfStructure.sections[j];
-
-                for(var k=0;k<data.paragraphs.length;k++) {
-                    var paragraph = data.paragraphs[k];
-
-                    if((paragraph.page + 1) == pageNumber) {
-                        sections.push(paragraph);
-                    }
-                }
+		var thisSectionID = '';
 
                 if(data.title != null) {
                     if((data.title.page + 1) == pageNumber) {
@@ -19537,14 +19538,28 @@ function printMessage(mutationList) {
 			for(var k=0;k<sectionStructure.length;k++) {
 			    if(sectionStructure[k].text == data.title.text) {
 				sectionStructureSegments[k] = "section_" + pageNumber + "_" + (sections.length-1);
+				thisSectionID = sectionStructureSegments[k];
+				inverseSectionStructure[thisSectionID] = thisSectionID;
+				sectionMappingCount[thisSectionID] = 1;
+				break;
 			    }
 			}
                     }
                 }
 
+                for(var k=0;k<data.paragraphs.length;k++) {
+                    var paragraph = data.paragraphs[k];
+
+                    if((paragraph.page + 1) == pageNumber) {
+                        sections.push(paragraph);
+			inverseSectionStructure["section_" + pageNumber + "_" + (sections.length-1)] = thisSectionID;
+			sectionMappingCount["section_" + pageNumber + "_" + (sections.length-1)] = 0;
+                    }
+                }
             }
 	    
 	    console.log(sectionStructureSegments);
+	    console.log(inverseSectionStructure);
 
             if(jsonPdfStructure.abstractText != null && (jsonPdfStructure.abstractText.page+1) == pageNumber) {
                 sections.push(jsonPdfStructure.abstractText);

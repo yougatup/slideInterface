@@ -1,0 +1,201 @@
+[{
+  "renderDpi": 150,
+  "name": "3",
+  "page": 10,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 54.72,
+    "y1": 55.68,
+    "x2": 295.2,
+    "y2": 106.08
+  },
+  "caption": "Table 3: An overview of the MTurk svLabel and svVerify HITs. While Tohme’s svControl system would, in practice, split work between the svLabel and svDetect+svVerify pipelines, we fed every GSV scene to both to perform our analyses. Acronyms above include CRs=Curb Ramps; MCRs=Missing Curb Ramps; RLs=Removed Labels; KLs=Kept Labels. svVerify was 2.2x faster than svLabel.",
+  "imageText": ["SVLABEL", "242", "1,046", "1,270", "6,350", "6.1", "(0.6)", "20,789", "labels", "(17,327CRs,", "3,462MCRs)", "94.1s", "(144.4s)", "SVVERIFY", "161", "1,046", "582", "5,820", "5.6", "(0.6)", "42,226", "verified", "labels", "(28,801RLs,", "13,425KLs)", "43.2", "(48.7s)", "Scenes", "HITs", "Tasks", "Avg.", "Turkers", "/", "Intersection", "Label", "Stats", "Avg.", "Task", "Time", "Turkers", "GSV"],
+  "renderURL": "imageOutputpaper-Table3-1.png",
+  "captionBoundary": {
+    "x1": 54.959999084472656,
+    "y1": 111.51011657714844,
+    "x2": 293.9322509765625,
+    "y2": 161.05999755859375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "13",
+  "page": 9,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 317.76,
+    "y1": 60.0,
+    "x2": 556.3199999999999,
+    "y2": 180.0
+  },
+  "caption": "Figure 13: We use top-down stylized Google Maps (bottom row) to infer intersection complexity by counting black pixels (streets) in each scene. A higher count correlates to higher complexity.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure13-1.png",
+  "captionBoundary": {
+    "x1": 317.45001220703125,
+    "y1": 189.27012634277344,
+    "x2": 558.4295654296875,
+    "y2": 211.58001708984375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "1",
+  "page": 2,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 266.88,
+    "x2": 559.1999999999999,
+    "y2": 333.12
+  },
+  "caption": "Table 1: A breakdown of our eight audit areas. Age calculated from summer 2013. *These counts are based on ground truth data.",
+  "imageText": ["Avg.", "GSV", "Data", "Age", "(SD)", "1.9", "yrs", "(0.77)", "1.6", "yrs", "(0.63)", "2.1", "yrs", "(0.75)", "0.4", "yrs", "(0.65)", "2.0", "yrs", "(0.31)", "0.9", "yrs", "(0.24)", "4.0", "yrs", "(0.0)", "4.0", "yrs", "(0.0)", "2.2", "(1.3)", "#", "of", "Missing", "Curb", "Ramps*", "8", "35", "32", "69", "43", "214", "24", "222", "647", "Total", "Area", "(km2)", "1.52", "1.13", "0.73", "2.24", "1.91", "1.89", "0.74", "1.13", "11.28", "#", "of", "Intersections", "140", "124", "132", "139", "132", "132", "141", "146", "1,086", "#", "of", "Curb", "Ramps*", "818", "352", "476", "229", "358", "186", "321", "137", "2877", "WASHINGTON", "DC", "BALTIMORE", "LOS", "ANGELES", "SASKATOON", "OVERALL", "Region", "Type", "Downtown", "Residential", "Downtown", "Residential", "Downtown", "Residential", "Downtown", "Residential"],
+  "renderURL": "imageOutputpaper-Table1-1.png",
+  "captionBoundary": {
+    "x1": 54.599998474121094,
+    "y1": 336.5401306152344,
+    "x2": 496.85076904296875,
+    "y2": 340.1300048828125
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 2,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 53.76,
+    "y1": 60.0,
+    "x2": 558.24,
+    "y2": 243.35999999999999
+  },
+  "caption": "Figure 2: The eight urban (blue) and residential (red) audit areas used in our studies from Washington DC, Baltimore, LA, and Saskatoon. This includes 1,086 intersections across a total area of 11.3km2. Among these areas, we physically surveyed 273 intersections (see annotations in a-d).",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure2-1.png",
+  "captionBoundary": {
+    "x1": 54.599998474121094,
+    "y1": 248.0701141357422,
+    "x2": 557.7655639648438,
+    "y2": 260.80999755859375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "18",
+  "page": 12,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 526.56,
+    "x2": 558.24,
+    "y2": 667.1999999999999
+  },
+  "caption": "Figure 18: In the quickVerify interface, workers could randomly verify CV curb ramp detection patches. After providing an answer for a given detection, the patch would “explode” (bottom left) and a new one would load in its place. Though fast, verification accuracies went down in an experiment of 160 GSV scenes and 59 turkers.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure18-1.png",
+  "captionBoundary": {
+    "x1": 317.92999267578125,
+    "y1": 672.1101684570312,
+    "x2": 557.3200073242188,
+    "y2": 712.7760009765625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "10",
+  "page": 7,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 317.76,
+    "y1": 60.0,
+    "x2": 558.24,
+    "y2": 151.2
+  },
+  "caption": "Figure 10: Using code from [39], we download GSV’s 3D-point cloud data and use this to create a ground plane mask to post-process DPM output. The 3D depth data is coarse: 512 x 256px.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure10-1.png",
+  "captionBoundary": {
+    "x1": 318.5299987792969,
+    "y1": 156.51011657714844,
+    "x2": 558.2138671875,
+    "y2": 178.82000732421875
+  }
+}, {
+  "renderDpi": 150,
+  "name": "9",
+  "page": 7,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 54.72,
+    "y1": 58.559999999999995,
+    "x2": 293.28,
+    "y2": 169.44
+  },
+  "caption": "Figure 9: The trained curb ramp DPM model. Each row represents an automatically learned viewpoint variation. The root and parts filter visualize learned weights for the gradient features. The displacement costs for parts are shown in (c).",
+  "imageText": ["(a)", "Root", "filter", "(b)", "Parts", "filter", "(c)", "Displacement", "costs"],
+  "renderURL": "imageOutputpaper-Figure9-1.png",
+  "captionBoundary": {
+    "x1": 55.20000076293945,
+    "y1": 177.63011169433594,
+    "x2": 294.165283203125,
+    "y2": 209.05999755859375
+  }
+}, {
+  "renderDpi": 150,
+  "name": "2",
+  "page": 3,
+  "figType": "Table",
+  "regionBoundary": {
+    "x1": 314.88,
+    "y1": 624.0,
+    "x2": 562.0799999999999,
+    "y2": 671.04
+  },
+  "caption": "Table 2: Krippendorff’s alpha inter-rater agreement scores between two researchers on both the physical audit and GSV audit image datasets. Following Hruschka et al.’s iterative coding methodology, a 3rd audit pass was conducted with an updated codebook to achieve high-agreement scores—in our case, α > 0.996.",
+  "imageText": ["Overall", "0.897", "0.931", "0.996", "0.883", "0.917", "0.996", "Curb", "Ramp", "0.959", "0.960", "0.989", "0.927", "0.928", "0.989", "Missing", "C.", "Ramp", "0.647", "0.802", "0.999", "0.631", "0.788", "0.999", "PHYSICAL", "AUDIT", "IMAGE", "DATASET", "GSV", "AUDIT", "IMAGE", "DATASET", "1st", "Pass", "(α)", "2nd", "Pass", "(α)", "3rd", "Pass", "(α)", "1st", "Pass", "(α)", "2nd", "Pass", "(α)", "3rd", "Pass", "(α)"],
+  "renderURL": "imageOutputpaper-Table2-1.png",
+  "captionBoundary": {
+    "x1": 315.2900085449219,
+    "y1": 676.43017578125,
+    "x2": 560.1566772460938,
+    "y2": 716.7360229492188
+  }
+}, {
+  "renderDpi": 150,
+  "name": "3",
+  "page": 3,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 55.68,
+    "y1": 60.0,
+    "x2": 293.28,
+    "y2": 211.67999999999998
+  },
+  "caption": "Figure 3: Example curb ramps (top two rows) and missing curb ramps (bottom row) from our GSV dataset.",
+  "imageText": ["m", "ps", "b", "Ra", "C", "ur", "si", "ng", "M", "is", "Downtown", "DC", "Residential", "Baltimore", "Residential", "LA", "Residential", "Saskatoon", "n", "D", "C", "D", "ow", "nt", "ow", "n", "LA", "nt", "ow", "D", "ow"],
+  "renderURL": "imageOutputpaper-Figure3-1.png",
+  "captionBoundary": {
+    "x1": 54.47999954223633,
+    "y1": 211.5901336669922,
+    "x2": 271.7369079589844,
+    "y2": 224.41998291015625
+  }
+}, {
+  "renderDpi": 150,
+  "name": "4",
+  "page": 4,
+  "figType": "Figure",
+  "regionBoundary": {
+    "x1": 316.8,
+    "y1": 58.559999999999995,
+    "x2": 559.1999999999999,
+    "y2": 185.28
+  },
+  "caption": "Figure 4: A workflow diagram depicting Tohme’s four main subsystems. In summary, svDetect processes every GSV scene producing curb ramp detections with confidence scores. svControl predicts whether the scene/detections contain a false negative. If so, the detections are discarded and the scene is fed to svLabel for manual labeling. If not, the scene/detections are forwarded to svVerify for verification. The workflow attempts to optimize accuracy and speed.",
+  "imageText": [],
+  "renderURL": "imageOutputpaper-Figure4-1.png",
+  "captionBoundary": {
+    "x1": 317.45001220703125,
+    "y1": 193.9501190185547,
+    "x2": 558.4151000976562,
+    "y2": 252.97998046875
+  }
+}]

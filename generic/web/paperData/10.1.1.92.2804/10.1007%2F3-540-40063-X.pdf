@@ -1,0 +1,1915 @@
+<!DOCTYPE HTML>
+<html lang="en-gb" class="no-js">
+    <head>
+        <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.5,user-scalable=yes">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" content="Multimodal Interfaces represents an emerging interdisciplinary research direction and has become one of the frontiers in Computer Science. Multimodal interfaces aim at efficient, convenient and natura"/>
+
+        <title>Advances in Multimodal Interfaces — ICMI 2000 | SpringerLink</title>
+        <link rel="canonical" href="https://link.springer.com/book/10.1007/3-540-40063-X"/>
+        <link rel="shortcut icon" href="/springerlink-static/2040091917/images/favicon/favicon.ico" />
+<link rel="icon" sizes="16x16 32x32 48x48" href="/springerlink-static/2040091917/images/favicon/favicon.ico">
+<link rel="icon" sizes="16x16" type="image/png" href="/springerlink-static/2040091917/images/favicon/favicon-16x16.png">
+<link rel="icon" sizes="32x32" type="image/png" href="/springerlink-static/2040091917/images/favicon/favicon-32x32.png">
+<link rel="icon" sizes="48x48" type="image/png" href="/springerlink-static/2040091917/images/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" href="/springerlink-static/2040091917/images/favicon/app-icon-iphone@3x.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/springerlink-static/2040091917/images/favicon/ic_launcher_hdpi.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="/springerlink-static/2040091917/images/favicon/app-icon-ipad.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/springerlink-static/2040091917/images/favicon/app-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="/springerlink-static/2040091917/images/favicon/app-icon-iphone@2x.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="/springerlink-static/2040091917/images/favicon/ic_launcher_xxhdpi.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/springerlink-static/2040091917/images/favicon/app-icon-ipad@2x.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/springerlink-static/2040091917/images/favicon/app-icon-iphone@3x.png" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="/springerlink-static/2040091917/images/favicon/ic_launcher_xxhdpi.png">
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//google-analytics.com" />
+<link rel="dns-prefetch" href="//www.google-analytics.com" />
+<link rel="dns-prefetch" href="//www.googletagservices.com" />
+<link rel="dns-prefetch" href="//www.googletagmanager.com" />
+<link rel="dns-prefetch" href="//static-content.springer.com" />
+        <link rel="stylesheet" href="/springerlink-static/2040091917/css/basic.css" media="screen">
+<link rel="stylesheet" href="/springerlink-static/2040091917/css/styles.css" class="js-ctm" media="only screen and (-webkit-min-device-pixel-ratio:0) and (min-color-index:0), (-ms-high-contrast: none), only all and (min--moz-device-pixel-ratio:0) and (min-resolution: 3e1dpcm)">
+<link rel="stylesheet" href="/springerlink-static/2040091917/css/print.css" media="print">
+
+
+            <script type="text/javascript">
+        window.Krux||((Krux=function(){Krux.q.push(arguments);}).q=[]);
+        var dataLayer = [{
+                'GA Key':"UA-26408784-1",
+                'Features':["leaderboardadverts","abtesting"],
+                'Event Category':"Conference Proceedings",
+                'Open Access':"N",
+                'Labs':"Y",
+                'DOI':"10.1007/3-540-40063-X",
+                'VG Wort Identifier':"pw-vgzm.415900-10.1007-3-540-40063-X",
+                'HasAccess':"N",
+                'Full HTML':"N",
+                'Has Body':"N",
+                'Static Hash':"2040091917",
+                'Has Preview':"N",
+                'user':{"license":{"businessPartnerID":[],"businessPartnerIDString":""}},
+                'content':{"serial":{"eissn":"","pissn":"0302-9743"},"book":{"seriesTitle":"Lecture Notes in Computer Science","eisbn":"978-3-540-40063-9","pisbn":"978-3-540-41180-2","bookProductType":"Proceedings","seriesId":"558","title":"Advances in Multimodal Interfaces — ICMI 2000","doi":"10.1007/3-540-40063-X"},"type":"ConferenceProceedings","category":{"pmc":{"primarySubject":"Computer Science","primarySubjectCode":"I","secondarySubjects":{"4":"User Interfaces and Human Computer Interaction","5":"Pattern Recognition","6":"Computer Graphics","1":"Image Processing and Computer Vision","2":"Computer Communication Networks","3":"Signal, Image and Speech Processing"},"secondarySubjectCodes":{"4":"I18067","5":"I2203X","6":"I22013","1":"I22021","2":"I13022","3":"T24051"}},"sucode":"SUCO11645"}},
+                'Access Type':"noaccess",
+                'Page':"book",
+                'Bpids':"",
+                'Bpnames':"",
+                'SubjectCodes':"SCI, SCI22021, SCI13022, SCT24051, SCI18067, SCI2203X, SCI22013",
+                'session':{"authentication":{"loginStatus":"N"},"attributes":{"edition":"academic"}},
+                'eventTrackerBaseUrl':"https://event-tracker.springernature.com",
+                'Keywords':"Augmented Reality, HCI, Human-computer interaction, Human-computer interaction (HCI), Navigation, Processing, face recognition, graphical user interfaces, handwriting recognition, intelligent user interfaces, interface design, multimodal user interfaces, natural language processing, object, speech processing",
+                'Country':"US",
+                'ConferenceSeriesId':"icmi",
+
+                    'doi': "10.1007-3-540-40063-X",
+                    'kwrd': ["Augmented_Reality","HCI","Human-computer_interaction","Human-computer_interaction_(HCI)","Navigation","Processing","face_recognition","graphical_user_interfaces","handwriting_recognition","intelligent_user_interfaces","interface_design","multimodal_user_interfaces","natural_language_processing","object","speech_processing"],
+                    'pmc': ["I","I22021","I13022","T24051","I18067","I2203X","I22013"],
+                    'BPID': ["1"],
+                    'ksg': Krux.segments,
+                    'kuid': Krux.uid,
+
+                'CurrentPage':1,
+                'MaxPage':2
+        }];
+    </script>
+
+<script type="text/javascript" src="/springerlink-static/2040091917/js/jquery-3.3.1.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.cookielaw.org/consent/6b2ec9cd-5ace-4387-96d2-963e596401c6.js" charset="UTF-8"></script>
+
+<script type="text/javascript">
+    function OptanonWrapper() {
+        dataLayer.push({
+            'event' : 'onetrustActive'
+        });
+    }
+</script>
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WCF9Z9');</script>
+
+    </head>
+    <body>
+            <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-WCF9Z9"
+                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+        <div class="skip-to">
+    <a class="skip-to__link pseudo-focus" href="#main-content">Skip to main content</a>
+        <a href="#toc" class="skip-to__link skip-to__link--contents pseudo-focus">Skip to table of contents</a>
+</div>
+        <div class="page-wrapper page-wrapper--book">
+            <noscript>
+    <div class="nojs-banner u-interface">
+        <p>This service is more advanced with JavaScript available, learn more at <a
+                href="http://activatejavascript.org" target="_blank" rel="noopener">http://activatejavascript.org</a>
+        </p>
+    </div>
+</noscript>
+                    <div id="leaderboard" class="leaderboard u-hide" data-component="SpringerLink.GoogleAds" data-namespace="leaderboard">
+            <div class="leaderboard__wrapper">
+                <p class="leaderboard__label">Advertisement</p>
+                <button class="leaderboard__hide" title="Hide this advertisement">Hide</button>
+                <div id="doubleclick-leaderboard-ad" class="leaderboard__ad"></div>
+            </div>
+        </div>
+
+                <header id="header" class="header u-interface">
+        <div class="header__content">
+            <div class="header__menu-container">
+                    <a id="logo" class="site-logo" href="/" title="Go to homepage">
+                <div class="u-screenreader-only">SpringerLink</div>
+    <svg class="site-logo__springer" width="148" height="30" role="img" focusable="false" aria-hidden="true">
+        <image width="148" height="30" alt="" src="/springerlink-static/2040091917/images/png/springerlink.png" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/springerlink-static/2040091917/images/svg/springerlink.svg"></image>
+    </svg>
+
+    </a>
+
+
+                    <nav id="search-container" class="u-inline-block">
+                        <div class="search">
+                            <div class="search__content">
+                                <form class="u-form-single-input" action="/search" method="get" role="search">
+    <label for="search-springerlink">Search SpringerLink</label>
+    <div class="u-relative">
+        <input id="search-springerlink" name="query" type="text" autocomplete="off" value="">
+        <input class="u-hide-text" type="submit" value="Submit" title="Submit">
+        <svg class="u-vertical-align-absolute" width="13" height="13" viewBox="222 151 13 13" version="1.1" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" role="presentation">
+            <path d="M227 159C228.7 159 230 157.7 230 156 230 154.3 228.7 153 227 153 225.3 153 224 154.3 224 156 224 157.7 225.3 159 227 159L227 159 227 159 227 159ZM230 160.1L231.1 159 233.9 161.7C234.2 162.1 234.2 162.6 233.9 162.9 233.6 163.2 233.1 163.2 232.7 162.9L230 160.1 230 160.1 230 160.1 230 160.1ZM227 161L227 161C224.2 161 222 158.8 222 156 222 153.2 224.2 151 227 151 229.8 151 232 153.2 232 156 232 158.8 229.8 161 227 161L227 161 227 161 227 161 227 161Z" stroke="none" fill-rule="evenodd"/>
+        </svg>
+    </div>
+</form>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <nav class="nav-container u-interface">
+    <div class="global-nav__wrapper">
+        <div class="search-button">
+            <a class="search-button__label" href="#search-container">
+                <span class="search-button__title">Search</span><svg width="12" height="12" viewBox="222 151 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" role="presentation">
+                    <path d="M227 159C228.7 159 230 157.7 230 156 230 154.3 228.7 153 227 153 225.3 153 224 154.3 224 156 224 157.7 225.3 159 227 159L227 159 227 159 227 159ZM230 160.1L231.1 159 233.9 161.7C234.2 162.1 234.2 162.6 233.9 162.9 233.6 163.2 233.1 163.2 232.7 162.9L230 160.1 230 160.1 230 160.1 230 160.1ZM227 161L227 161C224.2 161 222 158.8 222 156 222 153.2 224.2 151 227 151 229.8 151 232 153.2 232 156 232 158.8 229.8 161 227 161L227 161 227 161 227 161 227 161Z" stroke="none" fill-rule="evenodd"></path>
+                </svg>
+            </a>
+        </div>
+
+        <ul class="global-nav" data-component="SpringerLink.Menu" data-title="Navigation menu" data-text="Menu">
+            <li>
+                <a href="/">
+                    <span class="u-overflow-ellipsis">Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="/contactus">
+                    <span class="u-overflow-ellipsis">Contact us</span>
+                </a>
+            </li>
+
+                <li class="global-nav__logged-out">
+                    <a class="test-login-link" href="//link.springer.com/signup-login?previousUrl=https%3A%2F%2Flink.springer.com%2Fbook%2F10.1007%252F3-540-40063-X">
+                        <span class="u-overflow-ellipsis">Log in</span>
+                    </a>
+                </li>
+
+        </ul>
+    </div> 
+</nav> 
+            </div>
+
+        </div>
+    </header>
+
+
+            <main id="main-content" tabindex="-1">
+                <article class="main-wrapper main-wrapper--no-gradient main-wrapper--dual-main">
+                    <div class="main-container">
+                        <aside class="main-sidebar-left u-three-col-pl-0">
+                            <div class="main-sidebar-left__content">
+                                <div class="cover-image">
+                                    <div class="cover-image--book test-cover" itemscope>
+                                        
+    <img class="test-cover-image" src="https://media.springernature.com/w306/springer-static/cover-hires/book/978-3-540-40063-9" itemprop="image" alt=""/>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <div class="main-body u-mb-36 u-pb-0 main-body--no-background" data-role="NavigationContainer">
+                            <div class="main-body__content">
+
+                                <div class="main-context main-context--buybox">
+                                    <div class="evaluation-section">
+                                        <div class="evaluation-section__text-col">
+                                            <div id="enumeration" class="enumeration">    <div>
+        <a class="gtm-confseries-link" data-test="ConfSeriesLink" href="/conference/icmi" >
+                <span data-test="ConferenceAcronym">ICMI:</span>
+            <span data-test="ConfSeriesName"> International Conference on Multimodal Interfaces</span>
+        </a>
+    </div>
+</div>
+
+                                            <div data-test="book-title" class="page-title">
+                                                <h1>Advances in Multimodal Interfaces — ICMI 2000</h1>
+                                                    <h2 class="page-title__subtitle">Third International Conference Beijing, China, October 14–16, 2000 Proceedings</h2>
+                                            </div>
+
+                                            
+                                                <div id="editors" class="persons u-clearfix" data-component="SpringerLink.Persons">
+        <ul class="u-inline-list persons__title">
+            <li>
+                <span class="u-strong">Editors</span>
+            </li>
+            <li>
+                <a class="gtm-book-editorsandaffiliations"
+                   href="#editorsandaffiliations">(view affiliations)</a>
+            </li>
+        </ul>
+        <div class="persons__list" data-role="PersonsList">
+            <ul xmlns="http://www.w3.org/1999/xhtml" class="test-contributor-names"><li itemscope="" itemtype="http://schema.org/Person" class="u-mb-2 u-pt-4 u-pb-4"><span itemprop="name" class="authors__name">Tieniu Tan</span></li><li itemscope="" itemtype="http://schema.org/Person" class="u-mb-2 u-pt-4 u-pb-4"><span itemprop="name" class="authors__name">Yuanchun Shi</span></li><li itemscope="" itemtype="http://schema.org/Person" class="u-mb-2 u-pt-4 u-pb-4"><span itemprop="name" class="authors__name">Wen Gao</span></li></ul>
+        </div>
+    </div>
+
+                                        </div>
+
+                                        <div class="evaluation-section__image-col">
+                                            <div class="cover-image">
+                                                <div class="cover-image--book test-cover" itemscope>
+                                                    
+    <img class="test-cover-image" src="https://media.springernature.com/w306/springer-static/cover-hires/book/978-3-540-40063-9" itemprop="image" alt=""/>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="evaluation-section__text-col">
+                                        <div class="main-context__container main-context__container--duel main-context__container--with-metrics" data-component="SpringerLink.ArticleMetrics">
+                                            <div class="main-context__column">
+                                                <span>
+                                                    
+                                                        <span class="test-content-type" id="content-type">Conference proceedings</span>
+                                                </span>
+
+                                                    <strong class="conference-acronym" data-test="ConferenceAcronymAndYear">ICMI 2000</strong>
+                                            </div>
+
+                                                <div class="main-context__column main-context__column--books-metrics">
+                                                        <ul id="book-metrics" class="article-metrics u-sansSerif">
+            <li class="article-metrics__item">
+                    <a class="article-metrics__link gtm-bookcitations-count" href="http://www.bookmetrix.com/detail/book/396ee55f-423c-49d2-aaca-1562d3ccbf8a#citations" target="_blank" rel="noopener"
+                       title="Visit Bookmetrix for full citation details" id="bookcitations-link">
+                            <span id="bookcitations-count-number" class="test-metric-count c-button-circle gtm-bookcitations-count">60</span>
+                       <span class="test-metric-name article-metrics__label gtm-bookcitations-count">Citations</span>
+                    </a>
+            </li>
+            <li class="article-metrics__item">
+                    <a class="article-metrics__link gtm-bookreaders-count" href="http://www.bookmetrix.com/detail/book/396ee55f-423c-49d2-aaca-1562d3ccbf8a#readers" target="_blank" rel="noopener"
+                       title="Visit Bookmetrix for full Mendeley reader details" id="bookreaders-link">
+                            <span id="bookreaders-count-number" class="test-metric-count c-button-circle gtm-bookreaders-count">120</span>
+                       <span class="test-metric-name article-metrics__label gtm-bookreaders-count">Readers</span>
+                    </a>
+            </li>
+            <li class="article-metrics__item">
+                    <a class="article-metrics__link gtm-bookdownloads-count" href="http://www.bookmetrix.com/detail/book/396ee55f-423c-49d2-aaca-1562d3ccbf8a#downloads" target="_blank" rel="noopener"
+                       title="Visit Bookmetrix for full download details" id="bookdownloads-link">
+                            <span id="bookdownloads-count-number" class="test-metric-count c-button-circle gtm-bookdownloads-count">51k</span>
+                       <span class="test-metric-name article-metrics__label gtm-bookdownloads-count">Downloads</span>
+                    </a>
+            </li>
+    </ul>
+
+                                                </div>
+                                        </div>
+                                     </div>
+                                            <div class="vol-info u-interface">
+        <p data-test="test-series">
+            Part of the
+            <a class="gtm-book-series-link" href="/bookseries/558">Lecture Notes in Computer Science</a>
+            book series
+              <span class="test-AbbreviationVolumeNumber">(LNCS, volume 1948)</span>
+
+        </p>
+
+    </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <aside class="main-sidebar-right u-pb-36 u-two-col-pb-0  u-interface">
+                            <div class="main-sidebar-right__content u-composite-layer">
+                                <div id="article-actions" class="article-actions">
+                                        <div id="buy">
+                                            
+<style type="text/css">
+    .buybox {
+        margin: 16px 0 0;
+        position: relative;
+    }
+    .buybox {
+        font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        font-size: 1.4rem;
+    }
+    .buybox {
+        zoom: 1;
+    }
+    .buybox:after,
+    .buybox:before {
+        content: '';
+        display: table;
+    }
+    .buybox:after {
+        clear: both;
+    }
+    /*---------------------------------*/
+    .buybox .buybox__header {
+        border: 1px solid #b3b3b3;
+        border-bottom: 0;
+        padding: 8px;
+        position: relative;
+        background-color: #f2f2f2;
+    }
+    .buybox__header .buybox__login {
+        font-family: Source Sans Pro, Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        font-size: 1.4rem;
+        letter-spacing: .017em;
+        display: inline-block;
+        line-height: 1.2;
+        padding: 0;
+    }
+    .buybox__header .buybox__login:before {
+        position: absolute;
+        top: 50%;
+        -webkit-transform: perspective(1px) translateY(-50%);
+        transform: perspective(1px) translateY(-50%);
+        content: '\A';
+        width: 34px;
+        height: 34px;
+        left: 10px;
+    }
+    /*---------------------------------*/
+    .buybox .buybox__body {
+        padding: 0;
+        padding-bottom: 16px;
+        position: relative;
+        text-align: center;
+        background-color: #fcfcfc;
+        border: 1px solid #b3b3b3;
+    }
+    /******/
+    .buybox__body .buybox__section {
+        padding: 16px 12px 0 12px;
+        text-align: left;
+    }
+    .buybox__section .buybox__buttons {
+        text-align: center;
+        width: 100%;
+    }
+    /********** mycopy buybox specific **********/
+    .buybox.mycopy__buybox .buybox__body {
+        background-color: transparent;
+    }
+    .buybox.mycopy__buybox .buybox__section .buybox__buttons {
+        border-top: 0;
+        padding-top: 0;
+    }
+    /******/
+    .buybox__section:nth-child(2) .buybox__buttons {
+        border-top: 1px solid #b3b3b3;
+        padding-top: 20px;
+    }
+    .buybox__buttons .buybox__buy-button {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 5px;
+        padding: 6px 12px;
+        max-width: 180px
+    }
+    .buybox__buttons .buybox__price {
+        white-space: nowrap;
+        text-align: center;
+        font-size: larger;
+        padding-top: 6px;
+    }
+    .buybox__section .buybox__meta {
+        letter-spacing: 0;
+        padding-top: 12px;
+    }
+    .buybox__section .buybox__meta:only-of-type {
+        padding-top: 0;
+        position: relative;
+        bottom: 6px;
+    }
+    /********** mycopy buybox specific **********/
+    .buybox.mycopy__buybox .buybox__section .buybox__meta {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    /******/
+    .buybox__meta .buybox__product-title {
+        display: inline;
+        font-weight: bold;
+    }
+    .buybox__meta .buybox__list {
+        line-height: 1.3;
+    }
+    .buybox__meta .buybox__list li {
+        position: relative;
+        padding-left: 1em;
+        list-style: none;
+        margin-bottom: 5px;
+    }
+    .buybox__meta .buybox__list li:before {
+        font-size: 1em;
+        content: '\2022';
+        float: left;
+        position: relative;
+        top: .1em;
+        font-family: serif;
+        font-weight: 600;
+        text-align: center;
+        line-height: inherit;
+        color: #666;
+        width: auto;
+        margin-left: -1em;
+    }
+    .buybox__meta .buybox__list li:last-child {
+        margin-bottom: 0;
+    }
+    /********** chapter buybox specific **********/
+    .buybox.chapter__buybox .buybox__section .buybox__meta {
+        border-top: 1px solid #d3d3d3;
+        padding-top: 12px;
+    }
+    .buybox.chapter__buybox .buybox__section .buybox__buy-ebook {
+        margin-bottom: 12px;
+    }
+    /******/
+    /*---------------------------------*/
+    .buybox .buybox__footer {
+        border: 1px solid #b3b3b3;
+        border-top: 0;
+        padding: 8px;
+        position: relative;
+        border-style: dashed;
+        line-height: 1.3;
+    }
+    .buybox .deepdyve {
+        display: none;
+        text-align: left;
+        margin: 8px 12px 0 12px;
+        padding-top: 5px;
+        border-top: 1px solid #d3d3d3;
+    }
+    /*-----------------------------------------------------------------*/
+    @media screen and (min-width: 460px) and (max-width: 1074px) {
+        .buybox__body .buybox__section {
+            display: inline-block;
+            vertical-align: top;
+            padding: 12px 12px;
+            padding-bottom: 0;
+            text-align: left;
+            width: 48%;
+        }
+        .buybox__body .buybox__section {
+            padding-top: 16px;
+            padding-left: 0;
+        }
+        .buybox__section:nth-of-type(2) .buybox__meta {
+            border-left: 1px solid #d3d3d3;
+            padding-left: 28px;
+        }
+        .buybox__section:nth-of-type(2) .buybox__buttons {
+            border-top: 0;
+            padding-top: 0;
+            padding-left: 16px ;
+        }
+        .buybox__buttons .buybox__buy-button {
+        }
+        /********** article buybox specific **********/
+        .buybox.article__buybox .buybox__section:nth-of-type(2) {
+            margin-top: 16px;
+            padding-top: 0;
+        }
+        .buybox.article__buybox .buybox__section:nth-of-type(2) .buybox__meta {
+            margin-top: 40px;
+            padding-top: 0;
+            padding-bottom: 45px;
+        }
+        .buybox.article__buybox .buybox__section:nth-of-type(2) .buybox__meta:only-of-type {
+            margin-top: 8px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+        }
+        /********** mycopy buybox specific **********/
+        .buybox.mycopy__buybox .buybox__section:first-child {
+            width: 69%;
+            padding-left: 12px ;
+        }
+        .buybox.mycopy__buybox .buybox__section:last-child {
+            width: 29%;
+        }
+        /********** chapter buybox specific **********/
+        .buybox.chapter__buybox .buybox__body {
+            display: flex;
+            align-items: stretch;
+            padding-left: 12px;
+            padding-top: 12px;
+        }
+        .buybox.chapter__buybox .buybox__section .buybox__meta {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            border-top: 0;
+            padding-top: 0;
+        }
+        /******/
+    }
+    /*-----------------------------------------------------------------*/
+    @media screen and (max-width: 459px) {
+        /********** mycopy buybox specific **********/
+        .buybox.mycopy__buybox .buybox__body {
+            padding-bottom: 5px;
+        }
+        .buybox.mycopy__buybox .buybox__section:last-child {
+            text-align: center;
+            width: 100%;
+        }
+        .buybox.mycopy__buybox .buybox__buttons {
+            display: inline-block;
+            width: 150px ;
+        }
+        /******/
+    }
+    /*-----------------------------------------------------------------*/
+</style>
+
+<div class="buybox book__buybox" data-webtrekkTrackId="196033507532344" data-webtrekkContentId="SL-book">
+    <div class="buybox__header">
+        <span class="buybox__login">Log in to check access</span>
+    </div>
+    <div class="buybox__body">
+        <div class="buybox__section">
+            <div class="buybox__buttons">
+                <a
+                    data-product-id="978-3-540-40063-9_Advances in Multimodal Interfaces "
+                    data-tracking-category="ebook"
+                    data-eCommerceParam_11="book-page"
+                    href="https://checkout.springer.com/checkout/add?wt_mc=ThirdParty.SpringerLink.3.EPR653.AbstractPage_EBook-new&isbn=978-3-540-40063-9"
+                    class="buybox__buy-button c-button c-button--blue"
+                    data-gtm="buybox__buy-button-ebook">
+                    <span class="buybox__buy" data-gtm="buybox__buy-button">Buy eBook</span>
+                </a>
+                <div class="buybox__price" data-gtm="buybox__buy-button">
+                    USD&nbsp;129.00
+                </div>
+            </div>
+        </div>
+        <div class="buybox__section">
+            <div class="buybox__meta">
+                <ul class="buybox__list">
+                    <li>Instant download</li>
+                    <li>Readable on all devices</li>
+                    <li>Own it forever</li>
+                    <li>Local sales tax included if applicable</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="buybox__footer">
+        <a class="js-buybox__inst-sub-link" data-gtm="buybox__inst-sub-link" href="http://www.springer.com/gp/shop/subscriptions?wt_mc=ThirdParty.SpringerLink.3.EPR653.BookPage_Institutional-customers">
+            Learn about institutional subscriptions</a>
+    </div>
+
+    
+
+</div>
+
+<script>
+(function () {
+    var forEach = function (array, callback, scope) {
+        for (var i = 0; i < array.length; i++) {
+            callback.call(scope, i, array[i]);
+        }
+    };
+
+    var trackDomain = 'springergmbh01.webtrekk.net';
+    var domain = 'link.springer.com';
+    var loadEventSent = false;
+
+    var buyboxRoot = document.getElementsByClassName('buybox')[0];
+    var webtrekkTrackId = buyboxRoot.getAttribute('data-webtrekkTrackId');
+    var webtrekkContentId = buyboxRoot.getAttribute('data-webtrekkContentId');
+
+    function LinkTrack(webtrekkTrackId) {
+        if (!webtrekkTrackId) return;
+
+        var data = {
+            trackDomain: trackDomain,
+            trackId: webtrekkTrackId,
+            domain: domain,
+            contentId: 'springer_com.buybox',
+            customSessionParameter: {
+                2: getBusinessPartnerIds()
+            }
+        };
+
+        if (!window.webtrekkV3 && console) {
+            console.log('No webtrekk found.', data);
+            return;
+        }
+
+        return new webtrekkV3(data);
+    }
+
+    function Track(product, webtrekkTrackId, eCommerceParam_11, action) {
+        if (!product) return;
+
+        var data = {
+            trackDomain: trackDomain,
+            trackId: webtrekkTrackId,
+            domain: domain,
+            contentId: webtrekkContentId,
+            product: product.id,
+            productStatus: action,
+            productCategory: {
+                1: product.trackingCategory
+            },
+            customEcommerceParameter: {
+                9: domain,
+                11: eCommerceParam_11
+            },
+            customSessionParameter: {
+                2: getBusinessPartnerIds()
+            }
+        };
+
+        if (!window.webtrekkV3 && console) {
+            console.log('No webtrekk found.', data);
+            return;
+        }
+
+        return new webtrekkV3(data);
+    }
+
+    function track(trackingConfig) {
+        return function(payload) {
+            if (!trackingConfig) return
+            if (payload) {
+                trackingConfig.sendinfo(payload)
+            } else {
+                trackingConfig.sendinfo()
+            }
+            return true
+        }
+    }
+
+    function trackAddToCart(trackingConfig) {
+        return track(trackingConfig)()
+    }
+
+    function trackOnLoad(trackingConfig) {
+        if (loadEventSent) return;
+        loadEventSent = true;
+        return track(trackingConfig)()
+    }
+
+    function trackSubscription(trackingConfig) {
+        return track(trackingConfig)({linkId: 'inst. subscription info'})
+    }
+
+    function trackDeepDyve(trackingConfig) {
+        return track(trackingConfig)({linkId: 'Rent Article'})
+    }
+
+    function getBusinessPartnerIds() {
+        var businessPartnerIDs = [];
+        try {
+            var ids = window.dataLayer[0]["user"]["license"]["businessPartnerID"];
+            if(ids && ids.length) businessPartnerIDs = ids;
+        } catch(e) {}
+        return businessPartnerIDs.join(";");
+    }
+
+    var bindClickLinkHandle = function (link) {
+        if (!link) return;
+
+        link.addEventListener('click', function (event) {
+            trackSubscription(LinkTrack(webtrekkTrackId));
+        });
+    };
+
+    var bindLoadButtonHandle = function (button) {
+        if (!button) return;
+
+        var productId = button.getAttribute('data-product-id');
+        var trackingCategory = button.getAttribute('data-tracking-category');
+        var eCommerceParam_11 = button.getAttribute('data-eCommerceParam_11');
+
+        window.addEventListener('load', function (event) {
+            trackOnLoad(Track({
+                id: productId,
+                trackingCategory: trackingCategory
+            }, webtrekkTrackId, eCommerceParam_11, 'view'));
+        });
+    };
+
+    var bindClickButtonHandle = function (button) {
+        if (!button) return;
+
+        var productId = button.getAttribute('data-product-id');
+        var trackingCategory = button.getAttribute('data-tracking-category');
+        var eCommerceParam_11 = button.getAttribute('data-eCommerceParam_11');
+
+        button.addEventListener('click', function (event) {
+            trackAddToCart(Track({
+                id: productId,
+                trackingCategory: trackingCategory
+            }, webtrekkTrackId, eCommerceParam_11, 'add'));
+        });
+    };
+
+    var buyButtons = document.getElementsByClassName('buybox__buy-button');
+    forEach(buyButtons, function (index, button) {
+        bindLoadButtonHandle(button);
+        bindClickButtonHandle(button);
+    });
+
+    var sublinks = document.getElementsByClassName('js-buybox__inst-sub-link');
+    forEach(sublinks, function (index, link) {
+        bindClickLinkHandle(link);
+    });
+
+    var bindDeepDyveClickHandle = function (link) {
+        if (!link) return
+
+        link.addEventListener('click', function (event) {
+            trackDeepDyve(LinkTrack(webtrekkTrackId))
+        })
+    }
+
+    var deepDyveLink = document.getElementById('deepdyve-link')
+    bindDeepDyveClickHandle(deepDyveLink)
+})();
+</script>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </article>
+
+                <article class="main-wrapper main-wrapper--no-gradient">
+                    <div class="main-container">
+                        <aside class="main-sidebar-left" aria-hidden="true">
+                            <div class="main-sidebar-left__content">
+                            </div>
+                        </aside>
+
+                        <div class="main-body main-body u-pb-70 u-pt-0" data-role="NavigationContainer">
+                            <div class="main-body__content">
+                                <div id="tabs" class="c-tabs c-tabs--off" data-component="SV.Tabs">
+                                    <ul class="c-tabs__list">
+                                        <li class="c-tabs__list-item">
+                                            <a href="#toc" class="c-tabs__list-link gtm-tabs-toc" data-test="toc-link"
+                                               title="Table of contents (86 papers)">
+                                                <span class="u-hide-small" aria-hidden="true">Papers</span>
+                                                <span class="u-hide u-show-small">Table of contents <span class="c-tabs__deemphasize" data-test="no-of-chapters">(86 papers)</span></span>
+                                            </a>
+                                        </li>
+
+                                        <li class="c-tabs__list-item">
+                                            <a href="#about" class="c-tabs__list-link gtm-tabs-about" title="About these proceedings">
+                                                <span class="u-hide-small" aria-hidden="true">About</span>
+                                                <span class="u-hide u-show-small">About these proceedings</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="c-tabs__content">
+                                        <div id="toc" class="c-tabs__content-item c-tabs__content-item section section--non-collapsible">
+                                            <h2 class="section__heading">Table of contents </h2>
+                                            <div class="c-tabs__block c-tabs__block--content-type-list">
+                                                        <div class="interface-bar">
+        <nav class="c-pagination u-inline-block" role="navigation" aria-label="Pagination" data-component="SV.Pagination">
+
+            <div class="c-pagination__info">
+                Page&nbsp;&nbsp;
+                <span class="test-pagenum u-js-hide" aria-current="true">1</span>
+
+                <form action="/book/10.1007%2F3-540-40063-X#toc" method="GET" class="test-pageuri c-pagination__jump">
+                    <label for="page-number" class="u-screenreader-only">Navigate to page number</label>
+                    <input type="number" id="page-number" name="page" min="1" max="2" class="c-pagination__input" value="1"/>
+                    <input class="c-pagination__submit u-screenreader-only" type="submit" value="Submit">
+                </form>
+
+                &nbsp;&nbsp;of&nbsp;&nbsp;
+                <span class="test-maxpagenum">2</span>
+            </div>
+
+                <a href="/book/10.1007%2F3-540-40063-X?page&#x3D;2#toc" class="test-pagination-next c-pagination__next" title="Next" rel="next">
+                    <span class="c-pagination__next-icon">Next</span>
+                </a>
+
+                <form action="/book/10.1007%2F3-540-40063-X#toc" method="GET" class="test-pageuri u-hide">
+                    <label for="page-number-hidden" class="u-screenreader-only">Navigate to page number</label>
+                    <input type="number" id="page-number-hidden" name="page" min="1" max="2" class="c-pagination__input" value="1"/>
+                    <input class="c-pagination__submit u-screenreader-only" type="submit" value="Submit">
+                </form>
+        </nav>
+
+            <div class="search-event">
+    <form class="u-form-single-input" action="/search" method="get" role="search">
+        <input type="hidden" name="facet-conf-event-id" value="icmi2000"/>
+        <input type="hidden" name="facet-content-type" value="Chapter"/>
+        <label for="springerlink-event-search" class="u-pr-8">Search within event</label>
+        <div class="u-relative">
+            <input id="springerlink-event-search" name="query" type="text" autocomplete="off" value="">
+            <input class="u-hide-text sgtm-search-within" type="submit" value="Submit"
+                   title="Submit">
+            <svg class="u-vertical-align-absolute" width="13" height="13" viewBox="222 151 13 13" version="1.1"
+                 xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" role="presentation">
+                <path d="M227 159C228.7 159 230 157.7 230 156 230 154.3 228.7 153 227 153 225.3 153 224 154.3 224 156 224 157.7 225.3 159 227 159L227 159 227 159 227 159ZM230 160.1L231.1 159 233.9 161.7C234.2 162.1 234.2 162.6 233.9 162.9 233.6 163.2 233.1 163.2 232.7 162.9L230 160.1 230 160.1 230 160.1 230 160.1ZM227 161L227 161C224.2 161 222 158.8 222 156 222 153.2 224.2 151 227 151 229.8 151 232 153.2 232 156 232 158.8 229.8 161 227 161L227 161 227 161 227 161 227 161Z"
+                      stroke="none" fill-rule="evenodd"/>
+            </svg>
+       </div>
+    </form>
+</div>
+
+    </div>
+
+
+
+
+                                                <div class="book-toc-container" id="booktoc">
+                                                    <ol class="content-type-list">
+            <li class="front-matter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <span class="content-type-list__title">Front Matter</span>
+
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages I-XV</span>
+                    </div>
+                </div>
+
+                    <div class="content-type-list__action">
+                        <a class="content-type-list__action-label test-book-toc-download-link gtm-front-matter-pdf-link" href="/content/pdf/bfm%3A978-3-540-40063-9%2F1.pdf"  target="_blank" rel="noopener">
+                            <span>PDF</span><svg width="12" height="14" viewBox="0 0 12 14" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true" role="presentation"><path d="M7 7.269v-6.271c0-.551-.448-.998-1-.998-.556 0-1 .447-1 .998v6.271l-1.5-1.547c-.375-.387-1.01-.397-1.401-.006l.016-.016c-.397.397-.391 1.025-.001 1.416l3.178 3.178c.392.392 1.024.391 1.415 0l3.178-3.178c.392-.392.391-1.025-.001-1.416l.016.016c-.397-.397-1.018-.388-1.401.006l-1.5 1.547zm-7 5.731c0-.552.456-1 1.002-1h9.995c.554 0 1.002.444 1.002 1 0 .552-.456 1-1.002 1h-9.995c-.554 0-1.002-.444-1.002-1z" fill="#0176C3"></path></svg>
+                        </a>
+                    </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Affective and Perceptual Computing</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_1">Gaze and Speech in Attentive User Interfaces</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Paul P. Maglio, Teenie Matlock, Christopher S. Campbell, Shumin Zhai, Barton A. Smith</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 1-7</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_2">Resolving References to Graphical Objects in Multimodal Queries by Constraint Satisfaction</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Daqing He, Graeme Ritchie, John Lee</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 8-15</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_3">Human-Robot Interface Based on Speech Understanding Assisted by Vision</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Shengshien Chong, Yoshinori Kuno, Nobutaka Shimada, Yoshiaki Shirai</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 16-23</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_4">Designing Multi-sensory Models for Finding Patterns in Stock Market Data</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Keith Nesbitt</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 24-31</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_5">Audio-visual Segmentation and “The Cocktail Party Effect”</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Trevor Darrell, John W. Fisher III, Paul Viola</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 32-40</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_6">Visual Recognition of Emotional States</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Karl Schwerdt, Daniela Hall, James L. Crowley</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 41-48</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_7">An Experimental Study of Input Modes for Multimodal Human-Computer Interaction</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Xiangshi Ren, Gao Zhang, Guozhong Dai</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 49-56</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_8">Emotion Expression Function in Multimodal Presentation</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Yuan Zong, Hiroshi Dohi, Helmut Prendinger, Mitsuru Ishizuka</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 57-64</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_9">A Sound MagicBoard</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Christophe Le Gal, Ali Erdem Ozcan, Karl Schwerdt, James L. Crowley</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 65-71</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Gesture Recognition</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_10">A Head Gesture Recognition Algorithm</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Jinshan Tang, Ryohei Nakatsu</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 72-80</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_11">Gesture Recognition for a Walking Person by Using a Sequence of Spatially Reduced Range Image</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">T. Nishimura, S. Nozaki, K. Makimura, S. Endo, H. Yabe, R. Oka</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 81-87</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_12">Virtual Mouse—Inputting Device by Hand Gesture Tracking and Recognition</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Hu Changbo, Liang Lichen, Ma Songde, Lu Hanqing</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 88-95</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_13">A Self-reliance Smoothness of the Vision-Based Recognition of Hand Gestures</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Xiao-juan Wang, Zhen Zhang, Li-fang Peng</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 96-102</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_14">Hand Shape Extraction and Understanding by Virtue of Multiple Cues Fusion Technology</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Lin Xueyin, Zhang Xiaoping, Ren Haibing</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 103-110</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_15">Head Pose Estimation for Video-Conferencing with Multiple Cameras and Microphones</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Ce Wang, Michael Brandstein</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 111-118</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Face and Facial Expression Detection, Recognition and Synthesis</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_16">A General Framework for Face Detection</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Ai Haizhou, Liang Luhong, Xu Guangyou</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 119-126</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_17">Glasses Detection for Face Recognition Using Bayes Rules</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Zhong Jing, Robert Mariani, Jiankang Wang</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 127-134</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_18">Real-Time Face Tracking under Partial Occlusion and Illumination Change</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Zhihong Zeng, Songde Ma</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 135-142</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_19">Eye-State Action Unit Detection by Gabor Wavelets</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Ying-li Tian, Takeo Kanade, Jeffrey F. Cohn</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 143-150</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_20"> Web-PICASSO: Internet Implementation of Facial Caricature System PICASSO</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Takayuki Fujiwara, Masafumi Tominaga, Kazuhito Murakami, Hiroyasu Koshimizu</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 151-159</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_21">Recognition of Human Faces Based on Fast Computation of Circular Harmonic Components</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Osei Adjei, Alfred Vella</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 160-167</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_22">Multiple Faces Tracking and Zooming System</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Mitsunori Ohya, Hitoshi Hongo, Kunihito Kato, Caihua Wang, Kazuhiko Yamamoto</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 168-175</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_23">Face Warping Using a Single Image</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Yan Bai, Denis Cardon, Robert Mariani</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 176-183</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_24">Hierarchical Framework for Facial Expression Recognition</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Ae-Kyung Yang, Hyung-Il Choi</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 184-190</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_25">Detecting Facial Features on Images with Multiple Faces</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Zhenyun Peng, Linmi Tao, Guangyou Xu, Hongjiang Zhang</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 191-198</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_26">The Synthesis of Realistic Human Face</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Sining Wang, Baocai Yin, Tao Cai</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 199-206</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_27">Gravity-Center Template Based Human Face Feature Detection</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Jun Miao, Wen Gao, Yiqiang Chen, Jie Lu</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 207-214</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_28">A Improved Facial Expression Recognition Method</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Sun Jun, Zhuo Qing, Wang wenyuan</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 215-221</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_29">Face Direction Estimation using Multiple Cameras for Human Computer Interaction</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Mamoru Yasumoto, Hitoshi Hongo, Hiroki Watanabe, Kazuhiko Yamamoto</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 222-229</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_30">Face Recognition Based on Local Fisher Features</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Dao-Qing Dai, Guo-Can Feng, Jian-Huang Lai, P. C. Yuen</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 230-236</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_31">Combining Skin Color Model and Neural Network for Rotation Invariant Face Detection</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Hongming Zhang, Debin Zhao, Wen Gao, Xilin Chen</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 237-244</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Multilingual Interfaces and Natural Language Understanding</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_32">Multimodal Integration Using Complex Feature Set</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Xiao Bin, Pu Jiantao, Dong Shihai</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 245-252</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_33">Bilingual Dictionary Based Sentence Alignment for Chinese English Bitext</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Zhao Tiejun, Yang Muyun, Qian Liping, Fang Gaolin</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 253-259</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_34">A Task Oriented Natural Language Understanding Model</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Zeng Yuming, Wang Yongcheng, Wu Fangfang</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 260-266</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_35">Variable Length Language Model for Chinese Character Recognition</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Sheng Zhang, Xianli Wang</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 267-271</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_36">Automatic Lexical Errors Detecting of Chinese Texts Based on the Orderly-Neighborship<sup xmlns="http://www.w3.org/1999/xhtml">1</sup></a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Yangsen Zhang</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 272-278</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_37">Statistical Analysis of Chinese Language and Language Modeling Based on Huge Text Corpora<sup xmlns="http://www.w3.org/1999/xhtml">1</sup></a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Hong Zhang, Bo Xu, Taiyi Huang</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 279-286</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_38">On Building a Simulating Translation Environment for Multilingual Conversation</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Jianshe Zhai, Georges Fafiotte</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 287-292</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_39">Approach to Recognition and Understanding of the Time Constituents in the Spoken Chinese Language Translation</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Chengqing Zong, Taiyi Huang, Bo Xu</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 293-299</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Speech Processing and Speaker Detection</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_40">KD2000 Chinese Text-To-Speech System</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Ren-Hua Wang, Qinfeng Liu, Yu Hu, Bo Yin, Xiaoru Wu</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 300-307</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_41">Multimodal Speaker Detection Using Input/Output Dynamic Bayesian Networks</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Vladimir Pavlović, Ashutosh Garg, James M. Rehg</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 308-316</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_42">Research on Speech Recognition Based on Phase Space Reconstruction Theory</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Chen Liang, Chen Yanxin, Zhang Xiongwei</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 317-324</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Object Motion, Tracking and Recognition</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_43">Estimating the Pose of Phicons for Human Computer Interaction</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Daniela Hall, James L. Crowley</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 325-331</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_44">An Approach to Robust and Fast Locating Lip Motion</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Rui Wang, Wen Gao, Jiyong Ma</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 332-339</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_45">Multi-level Human Tracking</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Hongzan Sun, Hao Yang, Tieniu Tan</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 340-348</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_46">Region-Based Tracking in Video Sequences Using Planar Perspective Models</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Yuwen He, Li Zhao, Shiqiang Yang, Yuzhuo Zhong</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 349-355</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_47">A Novel Motion Estimation Algorithm Based on Dynamic Search Window and Spiral Search</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Yaming Tu, Bo Li, Jianwei Niu</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 356-362</span>
+                    </div>
+                </div>
+
+            </li>
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_48">Determining Motion Components Using the Point Distribution Model</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">Ezra Tassone, Geoff West, Svetha Venkatesh</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 363-370</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+            <li class="part-item">
+                <h3 class="content-type-list__subheading">Handwriting Recognition</h3>
+                <div class="content-type-list__subcontainer">
+                    <ol class="content-type-list">
+            <li class="chapter-item content-type-list__item">
+                <div class="content-type-list__meta">
+                        <div class="content-type-list__title">
+                            <a class="content-type-list__link u-interface-link gtm-chapter-link" href="/chapter/10.1007/3-540-40063-X_49">Automatic Recognition of Unconstrained Off-Line Bangla Handwritten Numerals</a>
+                        </div>
+
+                        <div class="content-type-list__text" data-test="author-text">U. Pal, B. B. Chaudhuri</div>
+
+                    <div class="content-type-list__text">
+                            <span class="content-type-list__text" data-test="page-range">Pages 371-378</span>
+                    </div>
+                </div>
+
+            </li>
+</ol>
+                </div>
+            </li>
+</ol>
+                                                </div>
+                                                    <div class="interface-bar">
+        <nav class="c-pagination u-inline-block" role="navigation" aria-label="Pagination" data-component="SV.Pagination">
+
+            <div class="c-pagination__info">
+                Page&nbsp;&nbsp;
+                <span class="test-pagenum u-js-hide" aria-current="true">1</span>
+
+                <form action="/book/10.1007%2F3-540-40063-X#toc" method="GET" class="test-pageuri c-pagination__jump">
+                    <label for="page-number-bottom" class="u-screenreader-only">Navigate to page number</label>
+                    <input type="number" id="page-number-bottom" name="page" min="1" max="2" class="c-pagination__input" value="1"/>
+                    <input class="c-pagination__submit u-screenreader-only" type="submit" value="Submit">
+                </form>
+
+                &nbsp;&nbsp;of&nbsp;&nbsp;
+                <span class="test-maxpagenum">2</span>
+            </div>
+
+                <a href="/book/10.1007%2F3-540-40063-X?page&#x3D;2#toc" class="test-pagination-next c-pagination__next" title="Next" rel="next">
+                    <span class="c-pagination__next-icon">Next</span>
+                </a>
+
+        </nav>
+
+    </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div id="about" class="c-tabs__content-item c-tabs__content-item section section--non-collapsible">
+                                            <h2 class="section__heading">About these proceedings</h2>
+                                            <div class="c-tabs__block">
+                                                        <h3>Introduction</h3>
+        <div id="book-description" class="u-content u-overflow-wrap">Multimodal Interfaces represents an emerging interdisciplinary research direction and has become one of the frontiers in Computer Science. Multimodal interfaces aim at efficient, convenient and natural interaction and communication between computers (in their broadest sense) and human users. They will ultimately enable users to interact with computers using their everyday skills. These proceedings include the papers accepted for presentation at the Third International Conference on Multimodal Interfaces (ICMI 2000) held in Beijing, China on 1416 O ctober 2000. The papers were selected from 172 contributions submitted worldwide. Each paper was allocated for review to three members of the Program Committee, which consisted of more than 40 leading researchers in the field. Final decisions of 38 oral papers and 48 poster papers were made based on the reviewers’ comments and the desire for a balance of topics. The decision to have a single track conference led to a competitive selection process and it is very likely that some good submissions are not included in this volume. The papers collected here cover a wide range of topics such as affective and perceptual computing, interfaces for wearable and mobile computing, gestures and sign languages, face and facial expression analysis, multilingual interfaces, virtual and augmented reality, speech and handwriting, multimodal integration and application systems. They represent some of the latest progress in multimodal interfaces research.</div>
+        <h3>Keywords</h3>
+        <div class="u-content u-mb-24">
+          <span data-test="book-keyword" class="Keyword">Augmented Reality </span><span data-test="book-keyword" class="Keyword">HCI </span><span data-test="book-keyword" class="Keyword">Human-computer interaction </span><span data-test="book-keyword" class="Keyword">Human-computer interaction (HCI) </span><span data-test="book-keyword" class="Keyword">Navigation </span><span data-test="book-keyword" class="Keyword">Processing </span><span data-test="book-keyword" class="Keyword">face recognition </span><span data-test="book-keyword" class="Keyword">graphical user interfaces </span><span data-test="book-keyword" class="Keyword">handwriting recognition </span><span data-test="book-keyword" class="Keyword">intelligent user interfaces </span><span data-test="book-keyword" class="Keyword">interface design </span><span data-test="book-keyword" class="Keyword">multimodal user interfaces </span><span data-test="book-keyword" class="Keyword">natural language processing </span><span data-test="book-keyword" class="Keyword">object </span><span data-test="book-keyword" class="Keyword">speech processing </span>
+        </div>
+
+                                                
+                                                    <div id="editorsandaffiliations" class="editors-and-affiliations u-mb-24 u-two-col-mb-0" tabindex="-1">
+        <div class="page-title">
+            <h3>Editors and affiliations</h3>
+        </div>
+        <div class="authors-affiliations u-interface"><ul xmlns="http://www.w3.org/1999/xhtml" class="test-contributor-names"><li itemscope="" itemtype="http://schema.org/Person" class="u-mb-2 u-pt-4 u-pb-4"><span itemprop="name" class="authors-affiliations__name">Tieniu Tan</span><ul class="authors-affiliations__indexes u-inline-list" data-role="AuthorsIndexes"><li data-affiliation="affiliation-1">1</li></ul></li><li itemscope="" itemtype="http://schema.org/Person" class="u-mb-2 u-pt-4 u-pb-4"><span itemprop="name" class="authors-affiliations__name">Yuanchun Shi</span><ul class="authors-affiliations__indexes u-inline-list" data-role="AuthorsIndexes"><li data-affiliation="affiliation-2">2</li></ul></li><li itemscope="" itemtype="http://schema.org/Person" class="u-mb-2 u-pt-4 u-pb-4"><span itemprop="name" class="authors-affiliations__name">Wen Gao</span><ul class="authors-affiliations__indexes u-inline-list" data-role="AuthorsIndexes"><li data-affiliation="affiliation-3">3</li></ul></li></ul><ol xmlns="http://www.w3.org/1999/xhtml" class="test-affiliations"><li class="affiliation" data-test="affiliation-1" data-affiliation-highlight="affiliation-1" itemscope="" itemtype="http://schema.org/Organization"><span class="affiliation__count">1.</span><span class="affiliation__item"><span itemprop="department" class="affiliation__department">Institute of Automation</span><span itemprop="name" class="affiliation__name">Chinese Academy of Sciences</span><span itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress"><span itemprop="addressRegion" class="affiliation__city">Beijing</span><span itemprop="addressCountry" class="affiliation__country">China</span></span></span></li><li class="affiliation" data-test="affiliation-2" data-affiliation-highlight="affiliation-2" itemscope="" itemtype="http://schema.org/Organization"><span class="affiliation__count">2.</span><span class="affiliation__item"><span itemprop="department" class="affiliation__department">Computer Department, Media Laboratory</span><span itemprop="name" class="affiliation__name">Tsinghua University</span><span itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress"><span itemprop="addressRegion" class="affiliation__city">Beijing</span><span itemprop="addressCountry" class="affiliation__country">China</span></span></span></li><li class="affiliation" data-test="affiliation-3" data-affiliation-highlight="affiliation-3" itemscope="" itemtype="http://schema.org/Organization"><span class="affiliation__count">3.</span><span class="affiliation__item"><span itemprop="department" class="affiliation__department">Institute of Computing Technology</span><span itemprop="name" class="affiliation__name">Chinese Academy of Sciences</span><span itemprop="address" itemscope="" itemtype="http://schema.org/PostalAddress"><span itemprop="addressRegion" class="affiliation__city">Beijing</span><span itemprop="addressCountry" class="affiliation__country">China</span></span></span></li></ol></div>
+    </div>
+
+                                                    <div id="bibliographic-info">
+        <h3>Bibliographic information</h3>
+
+        <div class="bibliographic-information">
+            <ul class="bibliographic-information__list--inline">
+                <li class="bibliographic-information__item">
+                    <span class="bibliographic-information__title">DOI</span>
+                    <span class="bibliographic-information__value u-overflow-wrap" id="doi-url">https://doi.org/10.1007/3-540-40063-X</span>
+                </li>
+                <li class="bibliographic-information__item">
+                    <span class="bibliographic-information__title">Copyright Information</span>
+                    <span class="bibliographic-information__value" id="copyright-info">Springer-Verlag Berlin Heidelberg 2000</span>
+                </li>
+                <li class="bibliographic-information__item">
+                    <span class="bibliographic-information__title">Publisher Name</span>
+                    <span class="bibliographic-information__value" id="publisher-name">Springer, Berlin, Heidelberg</span>
+                </li>
+
+                    <li class="bibliographic-information__item">
+        <span class="bibliographic-information__title">eBook Packages</span>
+        <span class="bibliographic-information__value">
+            <a id="ebook-package" href="http://www.springer.com/gb/librarians/marc">Springer Book Archive</a>
+        </span>
+    </li>
+
+
+                    <li class="bibliographic-information__item">
+                        <span class="bibliographic-information__title">Print ISBN</span>
+                        <span class="bibliographic-information__value" id="print-isbn">978-3-540-41180-2</span>
+                    </li>
+                    <li class="bibliographic-information__item">
+                        <span class="bibliographic-information__title">Online ISBN</span>
+                        <span class="bibliographic-information__value" id="electronic-isbn">978-3-540-40063-9</span>
+                    </li>
+                    <li class="bibliographic-information__item">
+                        <span class="bibliographic-information__title">Series Print ISSN</span>
+                        <span class="bibliographic-information__value" id="print-issn">0302-9743</span>
+                    </li>
+                        <li class="bibliographic-information__item">
+                            <a id="about-book" href="//www.springer.com/978-3-540-40063-9?wt_mc&#x3D;ThirdParty.SpringerLink.3.EPR653.About_eBook" class="gtm-about-this" >Buy this book on publisher's site</a>
+                        </li>
+            </ul>
+
+            
+
+
+        </div>
+    </div>
+
+                                                
+                                            </div>
+                                        </div>
+                                        
+
+
+
+    <div class="sticky-banner sticky-banner--buybox u-interface u-js-screenreader-only" aria-hidden="true" data-component="SpringerLink.StickyBanner" data-namespace="hasLink">
+        <div class="sticky-banner__container">
+                <div class="sticky-banner__buybox-link sticky-banner__buybox-link--sticky">
+        <a href="#buy" class="gtm-buybox-anchor">
+            Buy options
+        </a>
+    </div>
+
+        </div>
+    </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside class="main-sidebar-right main-sidebar-right--buybox u-interface">
+                                <div class="skyscraper-ad u-hide" data-component="SpringerLink.GoogleAds" data-namespace="skyscraper">
+        <div class="skyscraper-ad__wrapper">
+            <p class="skyscraper-ad__label">Advertisement</p>
+            <button class="skyscraper-ad__hide" title="Hide this advertisement">Hide</button>
+            <div id="doubleclick-ad" class="skyscraper-ad__ad"></div>
+        </div>
+    </div>
+
+                        </aside>
+                    </div>
+                </article>
+            </main>
+
+                <footer class="footer u-interface">
+        <div class="footer__aside-wrapper">
+            <div class="footer__content">
+                <div class="footer__aside">
+                    <p class="footer__strapline">Over 10 million scientific documents at your fingertips</p>
+                                <div class="footer__edition" data-component="SpringerLink.EditionSwitcher">
+                                    <h3 class="u-hide" data-role="button-dropdown__title" data-btn-text="Switch between Academic &#38; Corporate Edition">Switch Edition</h3>
+                                    <ul data-role="button-dropdown__content">
+                                        <li  class="selected"><a href="/siteEdition/link?previousUrl=/book/10.1007%2F3-540-40063-X&id=siteedition-academic-link" id="siteedition-academic-link">Academic Edition</a></li>
+                                        <li ><a href="/siteEdition/rd?previousUrl=/book/10.1007%2F3-540-40063-X&id=siteedition-corporate-link" id="siteedition-corporate-link">Corporate Edition</a></li>
+                                    </ul>
+                                </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer__content">
+            <ul class="footer__nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/impressum">Impressum</a>
+                </li>
+                <li>
+                    <a href="/termsandconditions">Legal information</a>
+                </li>
+                <li>
+                    <a href="/privacystatement">Privacy statement</a>
+                </li>
+                <li>
+                    <a href="/cookiepolicy">How we use cookies</a>
+                </li>
+                <li>
+                    <a href="/accessibility" class="gtm-footer-accessibility">Accessibility</a>
+                </li>
+                <li>
+                    <a id="contactus-footer-link" href="/contactus">Contact us</a>
+                </li>
+            </ul>
+            <a class="parent-logo"
+               target="_blank" rel="noopener"
+               href="//www.springernature.com"
+               title="Go to Springer Nature">
+                <span class="u-screenreader-only">Springer Nature</span>
+                <svg width="125" height="12" focusable="false" aria-hidden="true">
+                    <image width="125" height="12"
+                           src="/springerlink-static/2040091917/images/png/springernature.png"
+                           xmlns:xlink="http://www.w3.org/1999/xlink"
+                           xlink:href="/springerlink-static/2040091917/images/svg/springernature.svg">
+                    </image>
+                </svg>
+            </a>
+
+            <p class="footer__copyright">&copy; 2017 Springer Nature Switzerland AG. Part of <a target="_blank" rel="noopener" href="//www.springernature.com">Springer Nature</a>.</p>
+                <p class="footer__user-access-info">
+                    <span>Not logged in</span>
+                    <span>Not affiliated</span>
+                    <span>204.9.220.42</span>
+                </p>
+        </div>
+    </footer>
+
+        </div>
+
+        
+<script type="text/javascript">
+    (function() {
+        var linkEl = document.querySelector('.js-ctm');
+        var scriptsList = [];
+        var polyfillFeatures = '';
+
+        window.SpringerLink = window.SpringerLink || {};
+        window.SpringerLink.staticLocation = '/springerlink-static/2040091917';
+        window.eventTrackerInstance = null;
+
+        if (window.matchMedia && window.matchMedia(linkEl.media).matches) {
+            (function(h){h.className = h.className.replace('no-js', 'js')})(document.documentElement);
+
+            polyfillFeatures = 'default,fetch,Promise,Object.setPrototypeOf,Object.entries,Number.isInteger,MutationObserver,startsWith,Array.prototype.includes,Array.from,IntersectionObserver';
+
+            scriptsList = [
+                'https://cdn.polyfill.io/v2/polyfill.js?features=' + polyfillFeatures,
+                window.SpringerLink.staticLocation + '/js/main.js'
+            ];
+
+            scriptsList.forEach(function(script) {
+                var tag = document.createElement('script');
+                tag.async = false;
+                tag.src = script;
+
+                document.body.appendChild(tag);
+            });
+        }
+    })();
+</script>
+
+<script type="text/plain" class="optanon-category-2">
+
+   function viewport() {
+        if (document.documentElement.clientWidth < 620) {
+            size = 'small';
+        }
+        else if(document.documentElement.clientWidth < 1075 ) {
+            size = 'medium';
+        }
+        else {
+            size = 'wide';
+        }
+        return size;
+    };
+
+    function reportForMouseEvents(linkCssSelectors, nolardUrl, experiment, abgroup) {
+        var counter = 0;
+        linkCssSelectors.forEach(function(cssSelector) {
+            $('body').delegate(cssSelector, 'click', function() {
+                if(counter == 0) {
+                    reportConversion(nolardUrl, experiment, abgroup);
+                    counter++;
+                }
+            });
+        });
+    };
+
+    function reportConversion(nolardUrl, experiment, abgroup) {
+        $.ajax({ url: nolardUrl + '/convert/' + experiment + '/' + abgroup });
+    };
+
+    function reportForMouseEvent(linkCssSelector, nolardUrl, experiment, abgroup) {
+        var counter = 0;
+        var elem = document.querySelector(linkCssSelector)
+
+        if (elem.addEventListener) {
+            elem.addEventListener("click", function(e) {
+                if(counter == 0) {
+                    reportConversion(nolardUrl, experiment, abgroup);
+                    counter++;
+                }
+            });
+        } else  {
+            elem.attachEvent("click", function(e) {
+                if(counter == 0) {
+                    reportConversion(nolardUrl, experiment, abgroup);
+                    counter++;
+                }
+            });
+        }
+    };
+
+    function reportParticipation(nolardUrl, experiment, abgroup, participations) {
+        if (participations)
+            participations.push(experiment + '/' + abgroup)
+
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', nolardUrl + '/participate/' + experiment + '/' + abgroup);
+        xhr.send();
+    };
+
+</script>
+    <script type="text/javascript" id="googletag-push">
+        
+            var adSlot = '270604982/springerlink/book';
+        
+
+        var definedSlots = [
+                {slot: [728, 90], containerName: 'doubleclick-leaderboard-ad'},
+                {slot: [160, 600], containerName: 'doubleclick-ad'},
+            {slot: [2, 2], containerName: 'doubleclick-native-ad'}
+        ];
+    </script>
+
+
+        
+        <span id="chat-widget" class="u-hide"></span>
+        
+    </body>
+</html>
