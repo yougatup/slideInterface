@@ -1,4 +1,9 @@
 // ### variables ###
+//
+var pageCanvasDebugging = false;
+var bodyRegisterAsWell = false;
+
+var paperURL = 'paperData/paper/paper.pdf'
 var userID, documentID;
 var startElementInx, endElementInx, curPageNumber;
 var highlightedParts = [];
@@ -30,6 +35,7 @@ var appearedNumberBoxes = {};
 var slideInfo;
 var gslideLoaded = false;
 var sectionStructure = [], sectionStructureSegments = [], sectionStructureSegmentProcessed = [];
+var sectionParagraph = [], sectionHierarchy = {}, sectionParents = {};
 var sectionMappingCount = {};
 var inverseSectionStructure = {};
 
@@ -17737,6 +17743,14 @@ exports.NetworkManager = NetworkManager;
 });
 //# sourceMappingURL=pdf.js.map
 
+
+
+
+
+
+
+
+
 function getRandomID() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -18070,13 +18084,90 @@ function removeParenthesis(myString) {
 }
 
 function highlightString(pageNumber, start, end, color, slideObjId) {
+    // console.log(pageNumber);
+    // console.log($("#pageCanvas" + pageNumber));
+
+    if($("#pageCanvas" + pageNumber).length <= 0) return;
+
+    var pageCanvasLeft = $("#pageCanvas" + pageNumber).offset().left;
+    var pageCanvasTop = $("#pageCanvas" + pageNumber).offset().top;
+
+    var minX = 987987987, minY = 987987987;
+
+    var mappedSlideNumberBoxWidth = 10, mappedSlideNumberBoxHeight = 20;
+    var mappedSlideNumberBoxID = "mappedSlideNumbering-" + pageNumber + "-" + start + "-" + end;
+
     for(var i=Math.min(start, end);i<=Math.max(start, end);i++) {
         var elem = $('#textSegment_' + pageNumber + '_' + i);
+
+	// console.log('#textSegment_' + pageNumber + '_' + i);
+	// console.log(elem);
+	// console.log($(elem));
 
 	$(elem).removeClass("textSelected textSelectedyellow textSelectedblue textSelectedred textSelectedgreen");
 
         $(elem).addClass("textSelected textSelected"+color);
         $(elem).attr("slideObjId", slideObjId);
+        $(elem).attr("highlightSegmentStart", start);
+        $(elem).attr("highlightSegmentEnd", end);
+
+	$(elem).hover(function() {
+	    var pageNumber = $(this).attr("id").split("_")[1];
+	    var highlightStartNumber = $(this).attr("highlightsegmentstart");
+	    var highlightEndNumber = $(this).attr("highlightsegmentend");
+
+	    var mappedBoxID = "mappedSlideNumbering-" + pageNumber + "-" + highlightStartNumber + "-" + highlightEndNumber;
+
+	    var mappedBoxObj = $("#" + mappedBoxID);
+
+	    $(mappedBoxObj).show();
+	}, function() {
+	    var pageNumber = $(this).attr("id").split("_")[1];
+	    var highlightStartNumber = $(this).attr("highlightsegmentstart");
+	    var highlightEndNumber = $(this).attr("highlightsegmentend");
+
+	    var mappedBoxID = "mappedSlideNumbering-" + pageNumber + "-" + highlightStartNumber + "-" + highlightEndNumber;
+
+	    var mappedBoxObj = $("#" + mappedBoxID);
+
+	    $(mappedBoxObj).hide();
+	});
+
+	if(i == Math.min(start, end)) {
+	    var leftMargin = $(elem).offset().left - pageCanvasLeft;
+	    var topMargin = $(elem).offset().top - pageCanvasTop;
+
+	    minX = Math.min(minX, leftMargin);
+	    minY = Math.min(minY, topMargin);
+	}
+    }
+
+    if($("#" + mappedSlideNumberBoxID).length <= 0) {
+	$("#pageCanvas" + pageNumber).append(
+		"<div id=" + mappedSlideNumberBoxID + " class='mappedSlideNumberBox' slideobjid='" + slideObjId + "'></div>"
+		);
+
+	$("#" + mappedSlideNumberBoxID).css({
+	    "left": minX - mappedSlideNumberBoxWidth - 10,
+	    "top": minY
+	});
+
+	$("#" + mappedSlideNumberBoxID).width(mappedSlideNumberBoxWidth);
+	$("#" + mappedSlideNumberBoxID).height(mappedSlideNumberBoxHeight);
+	$("#" + mappedSlideNumberBoxID).hide();
+
+	console.log(pageNumber, start, end, slideObjId, mappedSlideNumberBoxID);
+
+	issueEvent(document, "updateSlideNumbersOnBoxes", {
+	    pageNumber: pageNumber,
+	    start: start,
+	    end: end,
+	    objID: slideObjId,
+	    boxID: mappedSlideNumberBoxID
+	});
+    }
+    else {
+	$("#" + mappedSlideNumberBoxID).hide();
     }
 }
 
@@ -18191,6 +18282,7 @@ function removeHighlight() {
    $(".textHighlighted").each(function() {
         $(this).removeClass("textHighlighted " + getAllHighlightColors());
    });
+
 }
 
 function getRefInfo(id) {
@@ -18229,7 +18321,9 @@ function selectHighlightColor(color) {
             $("#topBarYellowIcon").addClass("topBarHighlightButtonSelected");
             break;
         case 2: 
-            $("#topBarRedIcon").addClass("topBarHighlightButtonSelected");
+	    clearDatabase();
+	    issueEvent(document, "pdfjs_clearDatabase", null);
+            // $("#topBarRedIcon").addClass("topBarHighlightButtonSelected");
             break;
         case 3:
             $("#topBarBlueIcon").addClass("topBarHighlightButtonSelected");
@@ -18246,15 +18340,15 @@ function selectHighlightColor(color) {
 
 function prepareUI() {
     $("#toolbarViewerRight").prepend(
-            "<button id='topBarCursorIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(0)> &nbsp; </button>"  +
+    //        "<button id='topBarCursorIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(0)> &nbsp; </button>"  +
             "<button id='topBarYellowIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(1)> &nbsp; </button>" 
-    /*
-            "<button id='topBarRedIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(2)> &nbsp; </button>"  +
+     //       "<button id='topBarRedIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(2)> &nbsp; </button>" 
+	    /*
             "<button id='topBarBlueIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(3)> &nbsp; </button>"  +
             "<button id='topBarGreenIcon' class='topBarIcons topBarButton topBarHighlightButtons' onclick=selectHighlightColor(4)> &nbsp; </button>" */
             );
 
-    selectHighlightColor(0);
+    selectHighlightColor(1);
 
 }
 
@@ -18337,11 +18431,21 @@ function enableDoc2Slide() {
         console.log($(elementMouseIsOver));
 
         if($(elementMouseIsOver).hasClass("textElement")) {
+	    curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
+// 	    startElementInx = parseInt($(elementMouseIsOver).attr("id").split("_")[2]);
+
+	    console.log("curPageNumber and startElementInx");
+	    console.log(curPageNumber + ' ' + startElementInx);
+
+	    /*
 	    if(e.shiftKey) {
 		removePopovers();
 
 		curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
 		startElementInx = parseInt($(elementMouseIsOver).attr("id").split("_")[2]);
+
+		console.log("curPageNumber and startElementInx");
+		console.log(curPageNumber + ' ' + startElementInx);
 
 		var textHighlightedCnt = $(".textHighlighted").length;
 		var eachCount = 0;
@@ -18363,6 +18467,7 @@ function enableDoc2Slide() {
 		    });
 		}
 	    }
+	    */
         }
         else if($(elementMouseIsOver).hasClass("shorteningBoxSpan")) {
             shorteningBoxSpanStartInx = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
@@ -18395,118 +18500,72 @@ function enableDoc2Slide() {
 
 	if(currentHighlightColor == 0) return;
 
-	if(e.shiftKey) {
+	if(true) {
+	    console.log("true true true");
+
 	    if($(elementMouseIsOver).hasClass("textElement")) {
 		var textHighlightedCnt = $(".textHighlighted").length;
-		var endElement = elementMouseIsOver;
+		// var endElement = elementMouseIsOver;
 		var eachCount = 0;
 
 		if(currentHighlightColor != 0) {
-		    $(".textHighlighted").each(function() {
-			var classes = $(this).attr('class').split(/\s+/);
-			var referredList = getReferredList(classes);
+		    if($(".textHighlighted").length > 0) {
+			$(".textHighlighted").each(function() {
+			    console.log("I cannot understand");
 
-			$(this).removeClass("textHighlighted " + getAllHighlightColors());
+			    var classes = $(this).attr('class').split(/\s+/);
+			    var referredList = getReferredList(classes);
 
-			eachCount++;
+			    $(this).removeClass("textHighlighted " + getAllHighlightColors());
 
-			if(eachCount >= textHighlightedCnt) {
-			    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+			    eachCount++;
 
-			    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-				$("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+			    if(eachCount >= textHighlightedCnt) {
+				// endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+
+				for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+				    $("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+				}
+
+				var contents = getSelectedString();
+
+				console.log(contents);
+
+				// highlightedText = removeParenthesis(contents)
+				highlightedText = contents;
+
+				console.log(highlightedText);
+
+				removePopovers();
+
+				console.log(startElementInx + ' ' + endElementInx);
+				console.log(curPageNumber);
+
+				var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
+				appearPopover(firstDiv);
 			    }
+			});
+		    }
+		    else {
+			console.log("here!");
+			console.log(curPageNumber);
+			console.log(startElementInx + ' ' + endElementInx);
 
-			    var contents = getSelectedString();
+			var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
+			var sectionIndex = $(firstDiv).attr("sectionindex");
+			var sectionSentenceIndex = $(firstDiv).attr("sectionsentenceindex");
 
-			    console.log(contents);
+        		highlightedText = sectionDictionary[sectionIndex][sectionSentenceIndex];
 
-			    // highlightedText = removeParenthesis(contents)
-			    highlightedText = contents;
+			console.log(highlightedText);
 
-			    console.log(highlightedText);
-
-			    removePopovers();
-
-			    var firstDiv = $("#textSegment_" + curPageNumber + "_" + startElementInx);
-			    var content = '';
-
-			    popupDiv = firstDiv;
-
-			    if(firstDiv != null) {
-				highlightParts();
-
-				if(startElementInx >= endElementInx) {
-				    $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
-					var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
-				    var referredList = getReferredList(classes);
-
-				    for(var i=0;i<referredList.length;i++) {
-					refInfo = getRefInfo(referredList[i]);
-
-					if(refInfo != null && refInfo.authors != null) {
-					    content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
-					    console.log(refInfo);
-					}
-				    }
-				}
-
-				var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>";
-
-				if(content == ''){
-				    content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
-					content = content + "<hr />"
-					content = content + btnList;
-				}
-				else {
-				    content = content + "<br><hr />" + btnList;
-				}
-
-				$(firstDiv).attr("data-toggle", "popover");
-				$(firstDiv).attr("title", "Conversion options");
-				$(firstDiv).attr("data-content", content);
-
-				$(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
-				popoverShown = true;
-
-				var tempHighlightedText = highlightedText + ' ';
-				var temp = '';
-
-				shorteningBoxSpanCnt = 0;
-
-				for(var i=0;i<tempHighlightedText.length;i++) {
-				    if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
-					if(temp != ''){
-					    $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
-					    shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
-					}
-
-				    if(i < tempHighlightedText.length-1)  {
-					$("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
-
-					shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
-				    }
-
-				    temp = '';
-				}
-				    else {
-					temp = temp + tempHighlightedText[i];
-				    }
-				}
-				/*
-				   for(var i=0;i<textArray.length;i++) {
-				   $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
-				   if(i < textArray.length - 1)
-				   $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
-				   }
-				   */
-			    }
-			}
-		    });
+			appearPopover(firstDiv);
+		    }
 		}
 	    }
 	}
 	else {
+	    /*
 	    if($(elementMouseIsOver).hasClass("textElement")) {
 		var sectionKey = $(elementMouseIsOver).attr("sectionindex");
 		var sectionSentenceKey = $(elementMouseIsOver).attr("sectionsentenceindex");
@@ -18529,18 +18588,15 @@ function enableDoc2Slide() {
 		    console.log(highlightedText);
 		}
 
-
 		sendTextHighlighted();
 
-		/* 
-                "text": highlightedText,
-                "pageNumber": curPageNumber,
-                "startIndex": startElementInx,
-                "endIndex": endElementInx,
-                "color": highlightColors[currentHighlightColor]
-		*/
-
+                // "text": highlightedText,
+                // "pageNumber": curPageNumber,
+                // "startIndex": startElementInx,
+                // "endIndex": endElementInx,
+                // "color": highlightColors[currentHighlightColor]
 	    }
+	    */
 	}
     });
 
@@ -18551,7 +18607,7 @@ function enableDoc2Slide() {
              $(this).removeClass("textHighlighted " + getAllHighlightColors());
         });
 
-        console.log("HIGHLIGHT TEXT");
+        // console.log("HIGHLIGHT TEXT");
         highlightString(p.data.pageNumber, p.data.startIndex, p.data.endIndex, p.data.color, p.data.slideObjId);
     });
 
@@ -18704,7 +18760,12 @@ function enableDoc2Slide() {
 
         // console.log(calculateCostList);
 
-        for(var i=0;i<calculateCostList.length;i++) {
+	var len;
+
+	if(calculateCostList.length < 10) len = calculateCostList.length;
+	else len = 10;
+
+        for(var i=0;i<len;i++) {
             var sentence = highlightSentenceBasedOnScore(calculateCostList[i][0], calculateCostList[i][1], maxScore, i+1);
 
             sentences.push({
@@ -18716,7 +18777,7 @@ function enableDoc2Slide() {
 
         issueEvent(document, "autoCompleteAppeared", null);
 
-        // issueEvent(document, "appearAutoComplete", sentences);
+        issueEvent(document, "appearAutoComplete", sentences);
         /*issueEvent(document, "sendAutoCompleteInstance", {
             text: originalSentence,
             objId: key,
@@ -18809,6 +18870,24 @@ function enableDoc2Slide() {
 
 	console.log(p);
 
+	var pageNumber = p[0][0];
+	var start = p[0][1];
+
+	var textElementObj = $("#textSegment_" + pageNumber + "_" + start);
+	var boundingClientRect = $(textElementObj).offset();
+
+	var page = $("[data-page-number=" + pageNumber + "][class='page']");
+	var pageRect = $(page)[0].getBoundingClientRect();
+	var pageHeight = pageRect.height;
+
+	console.log($(textElementObj));
+
+	var relativeTop = boundingClientRect.top - pageRect.top - 400;
+
+	console.log(pageHeight * (pageNumber-1));
+	console.log(relativeTop);
+	$("#viewerContainer").scrollTop(pageHeight * (pageNumber-1) + relativeTop);
+/*
 	var page = $("[data-page-number='" + p[0] + "'][class='page']");
 
 	console.log($(page));
@@ -18817,6 +18896,36 @@ function enableDoc2Slide() {
 	var boundingClientRect = $(page)[0].getBoundingClientRect();
 
 	$("#viewerContainer").scrollTop(boundingClientRect.height * (p[0]-1));
+	*/
+    });
+
+    $(document).on("extension_putSlideNumberOnBoxes", function(e) {
+	var boxID = e.detail.boxID;
+	var slideNumber = e.detail.slideNumber;
+
+	// console.log(e.detail);
+
+	$("#" + boxID).html(slideNumber);
+    });
+
+    $(document).on("extension_requestSlideNumberUpdate", function(e) {
+	$(".mappedSlideNumberBox").each(function(){
+	    // console.log($(this));
+	    var myId = $(this).attr("id");
+
+	    var pageNumber = myId.split('-')[1];
+	    var start = myId.split('-')[2];
+	    var end = myId.split('-')[3];
+	    var slideobjid = $(this).attr("slideobjid");
+
+	    issueEvent(document, "updateSlideNumbersOnBoxes", {
+		pageNumber: pageNumber,
+		start: start,
+		end: end,
+		objID: slideobjid,
+		boxID: myId
+	    });
+	});
     });
 
     $(document).on("PDFJS_REMOVE_HIGHLIGHT", function(e) {
@@ -18830,6 +18939,9 @@ function enableDoc2Slide() {
 
              $(this).removeAttr("slideObjId");
         });
+	$(".mappedSlideNumberBox").each(function() {
+	    $(this).hide();
+	});
     });
 
     $(document).on("sendSlideInfoToPDF", function(e) {
@@ -18842,7 +18954,7 @@ function enableDoc2Slide() {
 	var slideObjIds = [];
 
 	for(var i=1;i<slideInfo.length;i++) {
-	    slideObjIds.push(slideInfo[i].slideObjs[0].slideObjId);
+	    slideObjIds.push([ slideInfo[i].slideObjs[0].slideObjId, slideInfo[i].slideObjs[1].slideObjId]);
 	}
 
 	console.log(slideObjIds);
@@ -18854,74 +18966,130 @@ function enableDoc2Slide() {
 	    sectionObjs: slideObjIds
 	});
 
-      	PDFViewerApplication.open('paperData/paper/paper.pdf');
+      	//PDFViewerApplication.open('paperData/paper/paper.pdf');
+      	PDFViewerApplication.open(paperURL);
     });
 
     $(document).on('mouseenter', '.textElement', function(e) {
 	if(currentHighlightColor == 0) return;
 
-	if(e.shiftKey) {
-	    if(mouseDown) {
-		if(currentHighlightColor != 0) {
-		    var textHighlightedCnt = $(".textHighlighted").length;
-		    var endElement = this;
-		    var eachCount = 0;
+	if(popoverShown) return;
 
-		    $(".textHighlighted").each(function() {
-			$(this).removeClass("textHighlighted " + getAllHighlightColors());
+	var textHighlightedCnt = $(".textHighlighted").length;
+	var endElement = this;
+	var eachCount = 0;
 
-			eachCount++;
+	$(".textHighlighted").each(function() {
+	    $(this).removeClass("textHighlighted " + getAllHighlightColors());
+	});
 
-			if(eachCount >= textHighlightedCnt) {
-			    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+	var pageNumber = $(this).attr("sectionindex").split("_")[1];
+	var sectionKey = $(this).attr("sectionindex");
 
-			    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
-				$("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
-			    }
-			}
-		    });
-		}
+	if(mouseDown) {
+	    endElementInx = $(this).attr("id").split("_")[2];
+	}
+	else {
+	    startElementInx = $(this).attr("id").split("_")[2];
+	    endElementInx = $(this).attr("id").split("_")[2];
+	}
+
+	/*
+	var sectionSentenceKey = $(this).attr("sectionsentenceindex");
+
+	if(mouseDown) {
+	    if(sentenceDatabase[sectionKey] != null && sentenceDatabase[sectionKey][sectionSentenceKey] != null) {
+		endElementInx =  sentenceDatabase[sectionKey][sectionSentenceKey][2];
 	    }
-	    else if($(this).hasClass("textSelected")) {
-		/*
-		var objId = $(this).attr("slideObjId");
+	}
+	else {
+	    if(sentenceDatabase[sectionKey] != null && sentenceDatabase[sectionKey][sectionSentenceKey] != null) {
+		startElementInx = sentenceDatabase[sectionKey][sectionSentenceKey][1]; 
+		endElementInx =  sentenceDatabase[sectionKey][sectionSentenceKey][2];
+	    }
+	}
 
-		// highlightSlideObject(objId);
+	console.log('mouse enter info');
+	console.log(sectionKey + ' ' + sectionSentenceKey + ' ' + startElementInx + ' ' + endElementInx);
+	*/
+
+	if($(this).hasClass("textSelected")) {
+	    if($(this).hasClass("textSelectedblue")) {
+		var objId = $(this).attr("slideObjId");
 
 		issueEvent(document, "getSlideObjectForHighlight", {
 		    "slideObjId": objId
-		});*/
-	    }
-	    else if(!popoverShown){
-		$(".textHighlighted").each(function() {
-		    $(this).removeClass("textHighlighted " + getAllHighlightColors());
 		});
 	    }
-	}
-	else if(!popoverShown) {
-	    console.log("here");
-
-	    $(".textHighlighted").each(function() {
-		$(this).removeClass("textHighlighted " + getAllHighlightColors());
-	    });
-
-	    var sectionKey = $(this).attr("sectionindex");
-	    var sectionSentenceKey = $(this).attr("sectionsentenceindex");
-
-	    if(sentenceDatabase[sectionKey] != null && sentenceDatabase[sectionKey][sectionSentenceKey] != null) {
-		console.log(sentenceDatabase[sectionKey][sectionSentenceKey]);
-
-		var pageNumber = sentenceDatabase[sectionKey][sectionSentenceKey][0];
-		var startIndex = sentenceDatabase[sectionKey][sectionSentenceKey][1];
-		var endIndex = sentenceDatabase[sectionKey][sectionSentenceKey][2];
-
-		for(var i=startIndex;i<=endIndex;i++) {
-		    var textSegmentID = "textSegment_" + pageNumber + "_" + i;
-
-		    $("#" + textSegmentID).addClass("textHighlighted textHighlightedYellow");
-		}
+	    else if($(this).hasClass("textSelectedyellow")) {
 	    }
 	}
+	else {
+	    for(var i=startElementInx;i<=endElementInx;i++) {
+		$("#textSegment_" + pageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+	    }
+	}
+
+// 	if(e.shiftKey) {
+// 	    if(mouseDown) {
+// 		if(currentHighlightColor != 0) {
+// 		    var textHighlightedCnt = $(".textHighlighted").length;
+// 		    var endElement = this;
+// 		    var eachCount = 0;
+// 
+// 		    $(".textHighlighted").each(function() {
+// 			$(this).removeClass("textHighlighted " + getAllHighlightColors());
+// 
+// 			eachCount++;
+// 
+// 			if(eachCount >= textHighlightedCnt) {
+// 			    endElementInx = parseInt($(endElement).attr("id").split('_')[2]);
+// 
+// 			    for(var i=Math.min(startElementInx, endElementInx);i<=Math.max(startElementInx, endElementInx);i++) {
+// 				$("#textSegment_" + curPageNumber + "_" + i).addClass("textHighlighted " + getHighlightColorClass(currentHighlightColor));
+// 			    }
+// 			}
+// 		    });
+// 		}
+// 	    }
+// 	    else if($(this).hasClass("textSelected")) {
+// 		/*
+// 		var objId = $(this).attr("slideObjId");
+// 
+// 		// highlightSlideObject(objId);
+// 
+// 		issueEvent(document, "getSlideObjectForHighlight", {
+// 		    "slideObjId": objId
+// 		});*/
+// 	    }
+// 	    else if(!popoverShown){
+// 		$(".textHighlighted").each(function() {
+// 		    $(this).removeClass("textHighlighted " + getAllHighlightColors());
+// 		});
+// 	    }
+// 	}
+// 	else if(!popoverShown) {
+// 	    $(".textHighlighted").each(function() {
+// 		$(this).removeClass("textHighlighted " + getAllHighlightColors());
+// 	    });
+// 
+// 	    var sectionKey = $(this).attr("sectionindex");
+// 	    var sectionSentenceKey = $(this).attr("sectionsentenceindex");
+// 
+// 	    if(sentenceDatabase[sectionKey] != null && sentenceDatabase[sectionKey][sectionSentenceKey] != null) {
+// 		console.log(sentenceDatabase[sectionKey][sectionSentenceKey]);
+// 
+// 		var pageNumber = sentenceDatabase[sectionKey][sectionSentenceKey][0];
+// 		var startIndex = sentenceDatabase[sectionKey][sectionSentenceKey][1];
+// 		var endIndex = sentenceDatabase[sectionKey][sectionSentenceKey][2];
+// 
+// 		for(var i=startIndex;i<=endIndex;i++) {
+// 		    var textSegmentID = "textSegment_" + pageNumber + "_" + i;
+// 
+// 		    $("#" + textSegmentID).addClass("textHighlighted textHighlightedYellow");
+// 		}
+// 	    }
+// 	}
 
      });
 
@@ -18999,12 +19167,13 @@ function enableDoc2Slide() {
 	console.log("done!!!!");
     });*/
 
-    // console.log("hmM?");
-    // clearDatabase();
-   loadData();
+   console.log("hmM?");
+  // clearDatabase();
+  loadData();
 }
 
 function clearDatabase() {
+    console.log("clear db");
     console.log("??");
 
     myDBDB.destroy().then(function() {
@@ -19054,56 +19223,73 @@ function storeData(textSegmentId, referred, section, sentenceIndex, sentenceWord
 }
 
 function loadData() {
-    // console.log("doesnt make sense");
+    console.log(paperTitle);
+    console.log(paperAuthors);
+    console.log(sectionStructure);
+    console.log(sectionParagraph);
 
-	myDBDB.allDocs({
-	  include_docs: true,
-	  attachments: true
-	}).then(function (result) {
-      var flag = false;
-	  console.log(result);
-
-      for(var i=0;i<result.rows.length;i++) {
-	  isFirstSlides = false;
-         var elem = result.rows[i].doc;
-
-         if(elem.type == "segment" && elem.userId == userID && elem.documentId == documentID) {
-            if(segmentDatabase[elem.pageNumber] == null) {
-                segmentDatabase[elem.pageNumber] = {}
-	    }
-
-            segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section, elem.sectionsentenceindex, elem.sectionsentencewordindex];
-         }
-      }
-
-      // console.log(segmentDatabase);
-
-      if(isFirstSlides) {
-	  console.log(paperTitle);
-	  console.log(paperAuthors);
-	  console.log(sectionStructure);
-
-	  issueEvent(document, "initialSlideGeneration", {
-	      title: paperTitle,
-	      authors: paperAuthors,
-	      sections: sectionStructure
-	  });
-      }
-      else {
-      	PDFViewerApplication.open('paperData/paper/paper.pdf');
-      }
+    issueEvent(document, "initialSlideGeneration", {
+	title: paperTitle,
+	authors: paperAuthors,
+	sections: sectionStructure,
+	paragraph: sectionParagraph
+    });
 
 
-      // PDFViewerApplication.open('paperData/paper/paper.pdf');
-
-	}).catch(function (err) {
-	  console.log(err);
-	});
+//     // console.log("doesnt make sense");
+// 
+// 	myDBDB.allDocs({
+// 	  include_docs: true,
+// 	  attachments: true
+// 	}).then(function (result) {
+//       var flag = false;
+// 	  console.log(result);
+// /*
+//       for(var i=0;i<result.rows.length;i++) {
+// 	  isFirstSlides = false;
+//          var elem = result.rows[i].doc;
+// 
+//          if(elem.type == "segment" && elem.userId == userID && elem.documentId == documentID) {
+//             if(segmentDatabase[elem.pageNumber] == null) {
+//                 segmentDatabase[elem.pageNumber] = {}
+// 	    }
+// 
+//             segmentDatabase[elem.pageNumber][elem.textSegmentId] = [elem.referred, elem.section, elem.sectionsentenceindex, elem.sectionsentencewordindex];
+//          }
+//       }
+// */
+//       // console.log(segmentDatabase);
+// 
+//       if(isFirstSlides) {
+// 	  console.log(paperTitle);
+// 	  console.log(paperAuthors);
+// 	  console.log(sectionStructure);
+// 	  console.log(sectionParagraph);
+// 
+// 	  issueEvent(document, "initialSlideGeneration", {
+// 	      title: paperTitle,
+// 	      authors: paperAuthors,
+// 	      sections: sectionStructure,
+// 	      paragraph: sectionParagraph
+// 	  });
+//       }
+//       else {
+//       	PDFViewerApplication.open(paperURL);
+//       }
+// 
+// 
+//       // PDFViewerApplication.open('paperData/paper/paper.pdf');
+// 
+// 	}).catch(function (err) {
+// 	  console.log(err);
+// 	});
 }
 
 $(document).ready( function() {
-    prepareUI();
-    enableDoc2Slide();
+    $(document).on("pdfjs_start", function(e) {
+	prepareUI();
+	enableDoc2Slide();
+    });
 });
 
 function clearShorteningBoxSpanBackground() {
@@ -19319,6 +19505,7 @@ function readTextFile(file, filetype, type)
                     for(var i=0;i<jsonPdfStructure.sections.length;i++) {
                         if(jsonPdfStructure.sections[i].title != null) {
                             sectionStructure.push(jsonPdfStructure.sections[i].title);
+			    sectionParagraph.push(jsonPdfStructure.sections[i].paragraphs);
 			    sectionStructureSegments.push('');
 			    sectionStructureSegmentProcessed.push(false);
                         }
@@ -19464,6 +19651,152 @@ function findWordsOnSegments(words, startCnt, endCnt) {
     return null;
 }
 
+function mapItemClicked() {
+    console.log(curPageNumber);
+    console.log($(popupDiv));
+    console.log($(popupDiv).attr("slideobjid"));
+
+    var mapID = createObjId();
+
+    issueEvent(document, "pdfjs_storeMappingWithCurrentParagraph", {
+	boxID: mapID,
+    });
+}
+
+function removeItemClicked() {
+    console.log(curPageNumber);
+    console.log($(popupDiv));
+    console.log($(popupDiv).attr("slideobjid"));
+
+    var mapIdentifier = $(popupDiv).attr("slideobjid").split('-')[3];
+    var boxID = $(popupDiv).attr("slideobjid").split('-')[1];
+
+    var startIndex = $(popupDiv).attr("highlightsegmentstart");
+    var endIndex = $(popupDiv).attr("highlightsegmentend");
+    var pageNumber = $(popupDiv).attr("id").split('_')[1];
+
+    issueEvent(document, "pdfjs_removeHighlight", {
+	pageID: null,
+	mappingIdentifiers: [mapIdentifier],
+	boxID: boxID,
+	lastElemIndex: -1,
+	startIndex: startIndex,
+	endIndex: endIndex,
+	pageNumber: pageNumber,
+	updateFlag: true
+    });
+
+    $(popupDiv).popover('dispose');
+    popoverShown = false;
+}
+
+function appearPopover(myDiv) {
+    var firstDiv = myDiv;
+    var content = '';
+
+    console.log($(firstDiv));
+    popupDiv = firstDiv;
+
+    if(firstDiv != null) {
+	// highlightParts();
+
+	if(startElementInx >= endElementInx) {
+	    $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
+		var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
+	    var referredList = getReferredList(classes);
+
+	    for(var i=0;i<referredList.length;i++) {
+		refInfo = getRefInfo(referredList[i]);
+
+		if(refInfo != null && refInfo.authors != null) {
+		    content = content + refInfo.authors.join(", ") + ", " + "<b>" + refInfo.paperTitle + "</b>" + ", " + refInfo.venue + ", " + refInfo.date + '\n';
+		    console.log(refInfo);
+		}
+	    }
+	}
+
+	var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + 
+	    "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>" + 
+	    "<button id='removeBtn' class='btnItem' onclick='removeItemClicked()'> Rem </button>" ;
+	    // "<button id='mapBtn' class='btnItem' onclick='mapItemClicked()'> Map </button>";
+
+	if(content == ''){
+	    content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
+		content = content + "<hr />"
+		content = content + btnList;
+	}
+	else {
+	    content = content + "<br><hr />" + btnList;
+	}
+
+	$(firstDiv).attr("data-toggle", "popover");
+	$(firstDiv).attr("title", "Conversion options");
+	$(firstDiv).attr("data-content", content);
+
+	$(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
+	popoverShown = true;
+
+	console.log("popover shown");
+	/*
+	   var tempHighlightedText = highlightedText + ' ';
+	   var temp = '';
+
+	   shorteningBoxSpanCnt = 0;
+
+	   for(var i=0;i<tempHighlightedText.length;i++) {
+	   if(tempHighlightedText[i].match(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/)) {
+	   if(temp != ''){
+	   $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + temp + "</span>");
+	   shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+	   }
+
+	   if(i < tempHighlightedText.length-1)  {
+	   $("#textShorteningBox").append("<span id='shorteningBoxSpan_" + shorteningBoxSpanCnt + "' class='shorteningBoxSpan'>" + tempHighlightedText[i] + "</span>");
+
+	   shorteningBoxSpanCnt = shorteningBoxSpanCnt + 1;
+	   }
+
+	   temp = '';
+	   }
+	   else {
+	   temp = temp + tempHighlightedText[i];
+	   }
+	   }
+	   */
+
+
+	/*
+	   for(var i=0;i<textArray.length;i++) {
+	   $("#textShorteningBox").append("<span class='shorteningBoxSpan'>" + textArray[i] + '</span>');
+	   if(i < textArray.length - 1)
+	   $("#textShorteningBox").append("<span class='shorteningBoxSpan'> </span>");
+	   }
+	   */
+    }
+}
+
+
+function getSectionName(str) {
+    var dictKey = Object.keys(sectionDictionary);
+
+    for(var i=0;i<dictKey.length;i++) {
+	for(var j=0;j<sectionDictionary[dictKey[i]].length;j++) {
+	    var flag = false;
+
+	    for(var k=0;k<sectionDictionary[dictKey[i]][j].length;k++) {
+		if(!(str.includes(sectionDictionary[dictKey[i]][j][k]))) {
+		    flag = true;
+		    break;
+		}
+	    }
+
+	    if(!flag) return dictKey[i];
+	}
+    }
+
+    return null;
+}
+
 function printMessage(mutationList) {
     // console.log(mutationList);
 
@@ -19522,9 +19855,9 @@ function printMessage(mutationList) {
                 }
             }
 
-            // console.log(jsonPdfStructure);
-
+            console.log(jsonPdfStructure);
 	    console.log(sectionStructure);
+	    console.log(sections);
 
             for(var j=0;j<jsonPdfStructure.sections.length;j++) {
                 var data = jsonPdfStructure.sections[j];
@@ -19565,8 +19898,23 @@ function printMessage(mutationList) {
                 sections.push(jsonPdfStructure.abstractText);
             }
 
+
             for(var j=0;j<sections.length;j++) {
-                sectionDictionary["section_" + pageNumber + "_" + j] = sections[j].sentences;
+	    	// console.log(sections[j]);
+
+		if(!("sentences" in sections[j])) {
+		    var mySplit = sections[j].text.split('.');
+		    var temp = [];
+
+		    for(var k=0;k<mySplit.length;k++) {
+			temp.push(mySplit[k]);
+		    }
+
+		    sectionDictionary["section_" + pageNumber + "_" + j] = temp;
+		}
+		else {
+		    sectionDictionary["section_" + pageNumber + "_" + j] = sections[j].sentences;
+		}
             }
 
             var pageRect = $(mutationList[i].target)[0].getBoundingClientRect();
@@ -19603,7 +19951,49 @@ function printMessage(mutationList) {
 
 	    /* Title and author detection
 	     */
-	   
+
+	    var sectionKeys = Object.keys(sectionDictionary);
+
+	    console.log(sectionKeys);
+	    console.log(sectionParagraph);
+	    console.log(sectionDictionary);
+
+	    sectionHierarchy = {};
+	    sectionParents = {}
+
+	    for(var i=0;i<sectionKeys.length;i++) {
+		for(var j=0;j<sectionParagraph.length;j++) {
+		    for(var k=0;k<sectionParagraph[j].length;k++) {
+		    	var flag = false;
+
+			for(var p=0;p<sectionDictionary[sectionKeys[i]].length;p++) {
+			    var str1 = sectionDictionary[sectionKeys[i]][p];
+
+			    if(!(sectionParagraph[j][k].text.includes(str1))) {
+				flag = true;
+				break;
+			    }
+			}
+
+		    	if(!flag){
+			    var sectionName = getSectionName(sectionStructure[j].text);
+
+			    console.log(sectionKeys[i], sectionStructure[j], sectionName);
+
+			    if(sectionName in sectionHierarchy)
+				sectionHierarchy[sectionName].push(sectionKeys[i]);
+			    else
+				sectionHierarchy[sectionName] = [sectionKeys[i]];
+
+			    sectionParents[sectionKeys[i]] = sectionName;
+			}
+		    }
+
+		}
+	    }
+
+	    console.log(sectionHierarchy);
+
 	    if(pageNumber == 1) {
 		paperTitleSegments = findWordsOnSegments(paperTitle, startCnt, endCnt);
 		console.log(paperTitleSegments);
@@ -19693,7 +20083,7 @@ function printMessage(mutationList) {
                             }
                         }
                         else {
-                            $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
+                            //  $("#textSegment_" + pageNumber + "_" + j).css("background-color", "purple");
                         }
 
 			if(segmentDatabase[pageNumber][key][2] != null) {
@@ -19801,42 +20191,6 @@ function printMessage(mutationList) {
                 }
             }
 
-
-	    /* section header mapping if it's the first time */
-
-	    if(isFirstSlides) {
-		console.log("This is the first slide");
-
-		for(var i=0;i<sectionStructureSegments.length;i++) {
-		    if(sectionStructureSegments[i] != '' && sectionStructureSegmentProcessed[i] == false) {
-			sectionStructureSegmentProcessed[i] = true;
-
-			var minIndex = 987987987, maxIndex = -1;
-			var pageNumber = -1;
-
-			$("[sectionIndex='" + sectionStructureSegments[i] + "']").each(function(e) {
-			    minIndex = Math.min(minIndex, parseInt($(this).attr("id").split("_")[2]));
-			    maxIndex = Math.max(maxIndex, parseInt($(this).attr("id").split("_")[2]));
-
-			    pageNumber = parseInt($(this).attr("id").split("_")[1]);
-			});
-
-			console.log(sectionStructureSegments[i]);
-			console.log(minIndex + " " +  maxIndex + " " + slideInfo[i+1].slideObjs[0].slideObjId + " " + pageNumber);
-
-			issueEvent(document, "addSectionHighlight", {
-			    minIndex: minIndex,
-			    maxIndex: maxIndex,
-			    pageNumber: pageNumber,
-			    paragraphNumber: 0,
-			    pageId: slideInfo[i+1].slideID,
-			    objId: slideInfo[i+1].slideObjs[0].slideObjId,
-			});
-		    }
-		}
-	    }
-
-
             /* REFERENCES ANNOTATING */
             for(var j=0;j<refs.length;j++) {
                 var ref = refs[j];
@@ -19849,22 +20203,24 @@ function printMessage(mutationList) {
                 var pageCanvasReferenceElementID = "pageCanvasReference_" + pageNumber + "_" + j;
 
                 if($("#" + pageCanvasReferenceElementID).length == 0) {
-                    $("#pageCanvas" + pageNumber).append(
-                            "<div id=" + pageCanvasReferenceElementID + "></div>"
-                            );
+		    if(pageCanvasDebugging) {
+			$("#pageCanvas" + pageNumber).append(
+				"<div id=" + pageCanvasReferenceElementID + "></div>"
+				);
 
-                    if(ref.id != null) 
-                        $("#" + pageCanvasReferenceElementID).addClass("pageCanvasReferenceWithID")
-                    else 
-                        $("#" + pageCanvasReferenceElementID).addClass("pageCanvasReferenceWithoutID")
+			if(ref.id != null) 
+			    $("#" + pageCanvasReferenceElementID).addClass("pageCanvasReferenceWithID")
+			else 
+			    $("#" + pageCanvasReferenceElementID).addClass("pageCanvasReferenceWithoutID")
 
-                    $("#" + pageCanvasReferenceElementID).css({
-                            "left": refX,
-                            "top": refY
-                    });
+				$("#" + pageCanvasReferenceElementID).css({
+				    "left": refX,
+				    "top": refY
+				});
 
-                    $("#" + pageCanvasReferenceElementID).width(refWidth);
-                    $("#" + pageCanvasReferenceElementID).height(refHeight);
+			$("#" + pageCanvasReferenceElementID).width(refWidth);
+			$("#" + pageCanvasReferenceElementID).height(refHeight);
+		    }
 
                     /*
                     console.log(pageCanvasReferenceElementID);
@@ -19949,20 +20305,22 @@ function printMessage(mutationList) {
                 figHeight += 10;
                 figWidth += 10;
 
-                $("#pageCanvas" + pageNumber).append(
-                        "<div id=" + pageCanvasFigsID + "></div>"
-                );
+		if(pageCanvasDebugging) {
+		    $("#pageCanvas" + pageNumber).append(
+			    "<div id=" + pageCanvasFigsID + "></div>"
+			    );
 
-                $("#" + pageCanvasFigsID).addClass("pageCanvasFigures");
-                $("#" + pageCanvasFigsID).attr("imageURL", figs[j].renderURL);
-                $("#" + pageCanvasFigsID).css({
-                        "left": figX,
-                        "top": figY 
-                        });
+		    $("#" + pageCanvasFigsID).addClass("pageCanvasFigures");
+		    $("#" + pageCanvasFigsID).attr("imageURL", figs[j].renderURL);
+		    $("#" + pageCanvasFigsID).css({
+			"left": figX,
+			"top": figY 
+		    });
 
-                $("#" + pageCanvasFigsID).width(figWidth);
-                $("#" + pageCanvasFigsID).height(figHeight);
+		    $("#" + pageCanvasFigsID).width(figWidth);
+		    $("#" + pageCanvasFigsID).height(figHeight);
 
+		}
             }
 
             /* SECTION ANNOTATION */
@@ -19980,28 +20338,32 @@ function printMessage(mutationList) {
                 figHeight += 10;
                 figWidth += 10;
 
-                $("#pageCanvas" + pageNumber).append(
-                        "<div id=" + pageCanvasSectionID + "></div>"
-                );
+		if(pageCanvasDebugging) {
+		    $("#pageCanvas" + pageNumber).append(
+			    "<div id=" + pageCanvasSectionID + "></div>"
+			    );
 
-                $("#" + pageCanvasSectionID).addClass("borderForDebugging");
-                $("#" + pageCanvasSectionID).attr("imageURL", sections[j].renderURL);
-                $("#" + pageCanvasSectionID).css({
-                        "left": figX,
-                        "top": figY 
-                        });
+		    $("#" + pageCanvasSectionID).addClass("borderForDebugging");
+		    $("#" + pageCanvasSectionID).attr("imageURL", sections[j].renderURL);
+		    $("#" + pageCanvasSectionID).css({
+			"left": figX,
+			"top": figY 
+		    });
 
-                $("#" + pageCanvasSectionID).width(figWidth);
-                $("#" + pageCanvasSectionID).height(figHeight);
+		    $("#" + pageCanvasSectionID).width(figWidth);
+		    $("#" + pageCanvasSectionID).height(figHeight);
+		}
 
             }
+
+	    // isInitialCase = true;
 
 	    if(isInitialCase) {
 	 	sentenceDatabaseLoaded[pageNumber] = true;
 		var keys = Object.keys(sectionDictionary);
 
-		// console.log(sectionTextSegment);
-		// console.log(sectionDictionary);
+		console.log(sectionTextSegment);
+		console.log(sectionDictionary);
 
 		for(var i=0;i<keys.length;i++) {
 		    var thisPage = parseInt(keys[i].split('_')[1]);
@@ -20200,6 +20562,84 @@ function printMessage(mutationList) {
 		   	    var db = sentenceDatabase[sectionKey[j]][sentenceIndex];
 
 			    addNumberingBox(db[0], sectionKey[j], sentenceIndex, db[1], db[2]);
+			}
+		    }
+		}
+	    }
+
+
+	    /* section header mapping if it's the first time */
+
+	    if(isFirstSlides) {
+		console.log("This is the first slide");
+
+		var keys = Object.keys(sectionDictionary);
+
+		// Play with all the sections?
+
+		for(var i=0;i<sectionStructureSegments.length;i++) {
+		    if(sectionStructureSegments[i] != '' && sectionStructureSegmentProcessed[i] == false) {
+			sectionStructureSegmentProcessed[i] = true;
+
+			var minIndex = 987987987, maxIndex = -1;
+			var pageNumber = -1;
+
+			console.log($("[sectionIndex='" + sectionStructureSegments[i] + "']"));
+
+			$("[sectionIndex='" + sectionStructureSegments[i] + "']").each(function(e) {
+			    minIndex = Math.min(minIndex, parseInt($(this).attr("id").split("_")[2]));
+			    maxIndex = Math.max(maxIndex, parseInt($(this).attr("id").split("_")[2]));
+
+			    pageNumber = parseInt($(this).attr("id").split("_")[1]);
+			});
+
+			console.log(sectionStructureSegments[i]);
+			console.log(minIndex + " " +  maxIndex + " " + slideInfo[i+1].slideObjs[0].slideObjId + " " + pageNumber);
+
+			console.log(sentenceMinIndex+ " " + sentenceMaxIndex + " " + slideInfo[i+1].slideObjs[1].slideObjId + " " + sentencePageNumber);
+
+			issueEvent(document, "addSectionHighlight", {
+			    minIndex: minIndex,
+			    maxIndex: maxIndex,
+			    pageNumber: pageNumber,
+			    paragraphNumber: 0,
+			    pageId: slideInfo[i+1].slideID,
+			    objId: slideInfo[i+1].slideObjs[0].slideObjId,
+			});
+
+			if(bodyRegisterAsWell) {
+			    if(sectionStructureSegments[i] in sectionHierarchy) {
+				for(var j=0;j<sectionHierarchy[sectionStructureSegments[i]].length;j++) {
+				    var sentenceMinIndex = 987987987, sentenceMaxIndex = -1;
+				    var sentencePageNumber = -1;
+
+				    var childSection = sectionHierarchy[sectionStructureSegments[i]][j];
+
+				    $("[sectionindex='" + childSection + "']").each(function(e) {
+					if(parseInt($(this).attr("sectionsentenceindex")) == 0) {
+					    sentenceMinIndex = Math.min(sentenceMinIndex, parseInt($(this).attr("id").split("_")[2]));
+					    sentenceMaxIndex = Math.max(sentenceMaxIndex, parseInt($(this).attr("id").split("_")[2]));
+					    sentencePageNumber = parseInt($(this).attr("id").split("_")[1]);
+					}
+				    });
+
+				    console.log(childSection);
+				    console.log(sentenceMinIndex, sentenceMaxIndex, sentencePageNumber, slideInfo[i+1].slideObjs[1].slideObjId);
+
+				    if(sentenceMinIndex != 987987987) {
+					issueEvent(document, "addSectionHighlight", {
+					    minIndex: sentenceMinIndex,
+					    maxIndex: sentenceMaxIndex,
+					    pageNumber: sentencePageNumber,
+					    paragraphNumber: j,
+					    pageId: slideInfo[i+1].slideID,
+					    objId: slideInfo[i+1].slideObjs[1].slideObjId,
+					});
+				    }
+
+				}
+
+			    }
 			}
 		    }
 		}

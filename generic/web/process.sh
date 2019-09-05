@@ -1,4 +1,7 @@
-for filename in 10.1.1.92.2804
+for filename in global
 do
     sh getMetadata.sh $filename
+
+    rm -rf ./paperData/paper
+    ln -s  ./paperData/$filename ./paperData/paper
 done

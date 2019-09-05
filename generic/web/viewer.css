@@ -2666,6 +2666,14 @@ border: 3px solid black;
 display: none;
 }
 
+.mappedSlideNumberBox{
+    position: absolute;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 5px;
+    font-weight: bold;
+}
+
 .activeAutoCompleteNumbers {
     background-color: yellow;
 }

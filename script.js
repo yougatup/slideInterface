@@ -1,3 +1,6 @@
+var pageCanvasDebugging = false;
+var bodyRegisterAsWell = false;
+
 var PRESENTATION_ID = '1-ZGwchPm3T31PghHF5N0sSUU_Jd9BTwntcFf1ypb8ZY'
 var documentString;
 var highlightDictionary = {};
@@ -20,11 +23,15 @@ var segmentDatabase = {};
 var paragraphTable = {};
 
 var sectionStructure, paperTitle, paperAuthors;
+var sectionParagraph;
 var autoCompleteStatus = false;
 var autoCompleteObjID = null;
 var autoCompleteParagraphNumber = null;
 var autoCompleteParagraphIdentifier = null;
 var autoCompletePageID = null;
+
+var replaceFlag = false;
+var replaceParagraphNumber = -1;
 
 Array.prototype.insert = function ( index, item ) {
         this.splice( index, 0, item );
@@ -100,6 +107,8 @@ function listSlides(callback) {
 	console.log("hmm?");
 	$("#outlinePlaneContent").text('');
 
+	console.log(response.result);
+	
 	var presentation = response.result;
 	var length = presentation.slides.length;
 	slideInfo = [];
@@ -295,16 +304,38 @@ function initializeGAPI() {
           console.log("signed in!");
           listSlides(null);
 
+	  console.log("here1");
+
+	  console.log(initialSlideGenerationFlag);
+/*
 	  if(initialSlideGenerationFlag) {
 	      initialSlideCreationStart();
-	  }
+	  }*/
 
+	  console.log("done!");
           // callAppsScript(gapi.auth2.getAuthInstance());
-        } else {
-          authorizeButton.style.display = 'block';
-          // signoutButton.style.display = 'none';
-          console.log("yay?");
-        }
+
+	  console.log("HELLO!");
+	  console.log(slideInfo);
+
+	  console.log(gapi.client.slides);
+
+	  if(gapi.client.slides == null) {
+	      initialSlideGenerationFlag = true;
+	      initialSlideCreationStart();
+	  }
+	  else {
+	      // already loaded. Let's remove
+
+	      console.log("Already loaded. Let's remove");
+
+	      initialSlideCreationStart();
+	  }
+	} else {
+	    authorizeButton.style.display = 'block';
+	    // signoutButton.style.display = 'none';
+	    console.log("yay?");
+	}
       }
 
       /**
@@ -435,15 +466,48 @@ function fillSectionTitles() {
 
      for(var i=1;i<slides.length;i++) {
 	 var slideTitleID = slides[i].pageElements[0].objectId;
+	 var slideBodyID = slides[i].pageElements[1].objectId;
 
 	 // 	 putStringToObj(slideTitleID, sectionStructure[i-1].text);
 	 
-	 var requests = [{
-	     insertText:   {
-		 "objectId": slideTitleID,
-		 "text": sectionStructure[i-1].text,
+	 console.log(sectionStructure);
+	 console.log(sectionParagraph);
+	 console.log(slideBodyID);
+
+	 if(bodyRegisterAsWell) {
+	     var bodyString = '';
+
+	     for(var j=0;j<sectionParagraph[i-1].length;j++){
+		 if(j != 0) bodyString = bodyString + '\n';
+
+		 bodyString = bodyString + '* ' + sectionParagraph[i-1][j].text.split(".")[0];
 	     }
-	 }];
+	 }
+
+	 var requests;
+
+	 if(bodyRegisterAsWell) {
+	     requests = [{
+		 insertText: {
+		     "objectId": slideTitleID,
+		     "text": sectionStructure[i-1].text,
+		 }
+	     },
+		 {
+		     insertText: {
+			 "objectId": slideBodyID,
+			 "text": bodyString,
+		     }
+		 }];
+	 }
+	 else {
+	     requests = [{
+		 insertText: {
+		     "objectId": slideTitleID,
+		     "text": sectionStructure[i-1].text,
+		 }
+	     }];
+	 }
 
 	 gapi.client.slides.presentations.batchUpdate({
 	     presentationId: PRESENTATION_ID,
@@ -473,6 +537,7 @@ function googleSlideReady() {
 }
 
 function initialSlideCreationStart() {
+    console.log("here am I");
    gapi.client.slides.presentations.get({
      presentationId: PRESENTATION_ID
    }).then(function(response) {
@@ -705,6 +770,7 @@ function getParagraphIdentifier(objId, paragraphNumber) {
 }
 
 function registerMapping(objId, paragraphNumber, paragraphId, flag) {
+    //console.log("REGISTER MAPPING");
     console.log(objId, paragraphNumber, paragraphId, flag);
 
     if(paragraphTable[objId] == null) {
@@ -750,7 +816,7 @@ function loadData() {
 	}).then(function (result) {
       var flag = false;
 	  console.log(result);
-
+/*
       var paragraphIDDictionary = {};
 
       for(var i=0;i<result.rows.length;i++) {
@@ -778,7 +844,7 @@ function loadData() {
       console.log("data loaded");
       console.log(highlightDictionary);
       console.log(paragraphTable);
-
+*/
       dataLoaded = true;
 
       if(flag) {
@@ -802,10 +868,43 @@ function createObjId() {
     return text;
 }
 
-function removeHighlight(pageID, boxID, mappingIdentifiers, lastElemIndex) {
+function removeHighlight(pageID, boxID, mappingIdentifiers, lastElemIndex, pageNumber, startIndex, endIndex) {
     // to be filled
 
-    if(highlightDictionary[pageID] == null) return;
+    if(pageID == null) {
+    	var keys = Object.keys(highlightDictionary);
+	console.log(highlightDictionary);
+
+	for(var k=0;k<mappingIdentifiers.length;k++) {
+       	    var myKey = boxID + '-paragraph-' + mappingIdentifiers[k];
+	    console.log("myKey");
+	    console.log(myKey);
+	    console.log(keys);
+
+	    for(var i=0;i<keys.length;i++) {
+		var keys2 = Object.keys(highlightDictionary[keys[i]]);
+		console.log(keys2);
+
+		for(var j=0;j<keys2.length;j++) {
+		    console.log(keys2[j]);
+		    if(keys2[j] == myKey) {
+			pageID = keys[i];
+			break;
+		    }
+		}
+		if(pageID != null) {
+		    break;
+		}
+	    }
+
+	    if(pageID != null) {
+		break;
+	    }
+	}
+    }
+    else if(highlightDictionary[pageID] == null) return;
+
+    console.log(pageID);
 
     for(var i=0;i<mappingIdentifiers.length;i++) {
         var key = boxID + '-paragraph-' + mappingIdentifiers[i];
@@ -815,11 +914,37 @@ function removeHighlight(pageID, boxID, mappingIdentifiers, lastElemIndex) {
             console.log("cannot find key " + key);
         }
         else {
-            delete highlightDictionary[pageID][key];
+	    if(pageNumber == null) {
+            	delete highlightDictionary[pageID][key];
+	    }
+	    else {
+		console.log("cool!");
+		console.log(highlightDictionary);
+		console.log(pageID, key, pageNumber, startIndex, endIndex);
+
+		if(highlightDictionary[pageID][key].length == 1 && 
+		   highlightDictionary[pageID][key][0][0] == pageNumber && 
+		   highlightDictionary[pageID][key][0][1] == startIndex && 
+		   highlightDictionary[pageID][key][0][2] == endIndex) {
+		    delete highlightDictionary[pageID][key];
+		}
+		else {
+		    for(var j=0;j<highlightDictionary[pageID][key].length;j++) {
+			if(highlightDictionary[pageID][key][j][0] == pageNumber && 
+			    highlightDictionary[pageID][key][j][1] == startIndex && 
+			    highlightDictionary[pageID][key][j][2] == endIndex) {
+			    highlightDictionary[pageID][key].splice(j, 1);
+			    break;
+			    }
+		    }
+		}
+	    }
+
         }
     }
 
     issueEvent(document, "PDFJS_REMOVE_HIGHLIGHT", null);
+    issueEvent(document, "root_displayParagraphsCall", null);
 
     if(lastElemIndex > -1) {
         for(var i=lastElemIndex;i<30;i++) {
@@ -864,15 +989,14 @@ function addHighlight(pageId, objIdList, pageNumber, paragraphIdentifier, startI
 }
 
 function updateHighlight(pageId, objIdList, paragraphIdentifier) {
-    /*
     console.log(pageId);
-    console.log(objIdList);*/
+    console.log(objIdList);
+    console.log(paragraphIdentifier);
+    console.log(highlightDictionary);
 
     // console.log(objIdList);
     // console.log(paragraphNumber);
     // console.log(highlightDictionary);
-
-    if(!(pageId in highlightDictionary)) return;
 
     var clickedObjKey = null;
 
@@ -1045,6 +1169,7 @@ function removeOutlineLine(index) {
 }
 
 function prepare() {
+    console.log("NOW PREPARE");
        initializeGAPI();
 
       $("#createSlideButton").on("click", function() {
@@ -1065,6 +1190,7 @@ function prepare() {
 
       $(document).on("registerMappings", function(e) {
 	  var p = e.detail;
+	  console.log(p);
 
 	  registerMapping(p.titleObj, 0, createObjId(), true);
 
@@ -1073,9 +1199,39 @@ function prepare() {
 	  }
 
 	  for(var i=0;i<p.sectionObjs.length;i++) {
-	  	registerMapping(p.sectionObjs[i], 0, createObjId(), true);
+	      registerMapping(p.sectionObjs[i][0], 0, createObjId(), true);
+
+	      if(bodyRegisterAsWell) {
+		  for(var j=0;j<30;j++) {
+		      registerMapping(p.sectionObjs[i][1], j, createObjId(), true);
+		  }
+	      }
 	  }
 
+      });
+
+      $(document).on("extension_confirmPutParagraph", function(e) {
+	  console.log(e.detail);
+	  console.log(replaceFlag);
+
+	  if(replaceFlag) {
+	      replaceFlag = false;
+
+	      console.log(e.detail.data.objID);
+	      console.log(replaceParagraphNumber);
+	      console.log(e.detail.data.oldParagraphIdentifiers[replaceParagraphNumber]);
+
+	      paragraphTable[e.detail.data.objID][replaceParagraphNumber] = e.detail.data.oldParagraphIdentifiers[replaceParagraphNumber];
+  	      registerMapping(e.detail.data.objID, replaceParagraphNumber, e.detail.data.oldParagraphIdentifiers[replaceParagraphNumber], true);
+
+	      console.log(paragraphTable);
+
+	      issueEvent(document, "root_changeParagraphIdentifier", {
+		  paragraphNumber: replaceParagraphNumber,
+		  paragraphId: e.detail.data.oldParagraphIdentifiers[replaceParagraphNumber],
+		  objId: e.detail.data.objID
+	      });
+	  }
       });
 
       $(document).on("loadGslide", function(e) {
@@ -1086,6 +1242,7 @@ function prepare() {
 	  var p = e.detail;
 
 	  console.log(p);
+	  console.log(paragraphTable);
 
           addHighlight(p.pageId, [p.objId], p.pageNumber, getParagraphIdentifier(p.objId, p.paragraphNumber), p.minIndex, p.maxIndex, 'yellow', true);
 	  // registerMapping(p.objId, 0, p.paragraphIdentifier);
@@ -1112,7 +1269,42 @@ function prepare() {
           var p = e.detail;
           var id = "paragraph__" + p.objId + '-' + p.paragraphNumber;
 
-	  registerMapping(p.objId, p.paragraphNumber, p.paragraphId, true);
+	  console.log(p);
+	  console.log("SEND PARAGRAPH MAPPING DATA");
+
+	  if(p.isOverride){
+	  	registerMapping(p.objId, p.paragraphNumber, p.paragraphId, true);
+	  }
+	  else {
+	      if(!(p.objId in paragraphTable)) {
+		  console.log(p.paragraphNumber);
+
+		  registerMapping(p.objId, p.paragraphNumber, p.paragraphId, true);
+		  issueEvent(document, "root_sendParagraphIdentifier", {
+		      objId: p.objId,
+		      paragraphNumber: p.paragraphNumber,
+		      paragraphId: p.paragraphId
+		  });
+	      }
+	      else if(paragraphTable[p.objId].length <= p.paragraphNumber) {
+		  console.log(paragraphTable[p.objId].length, p.paragraphNumber);
+
+		  registerMapping(p.objId, p.paragraphNumber, p.paragraphId, true);
+		  issueEvent(document, "root_sendParagraphIdentifier", {
+		      objId: p.objId,
+		      paragraphNumber: p.paragraphNumber,
+		      paragraphId: p.paragraphId
+		  });
+	      }
+	      else {
+		  issueEvent(document, "root_sendParagraphIdentifier", {
+		      objId: p.objId,
+		      paragraphNumber: p.paragraphNumber,
+		      paragraphId: paragraphTable[p.objId][parseInt(p.paragraphNumber)]
+		  });
+	      }
+	  }
+
       });
 
       $(document).on("addText", function(e) {
@@ -1122,6 +1314,24 @@ function prepare() {
           addText(e.detail.objId, e.detail.pageId, e.detail.text, e.detail.pageNumber, e.detail.paragraphIdentifier, e.detail.startIndex, e.detail.endIndex, e.detail.color);
 
           console.log("FIRE!");
+      });
+
+      $(document).on("extension_appendTextIntoParagraph", function(e) {
+	  console.log(e.detail);
+
+	  var data = e.detail.data;
+
+	  var pageID = data.pageID;
+	  var objID = data.objID;
+	  var paragraphNumber = data.paragraphNumber;
+	  var paragraphIdentifier = data.paragraphIdentifier;
+	  var pageNumber = data.pageNumber;
+	  var segmentStartIndex = data.segmentStartIndex;
+	  var segmentEndIndex = data.segmentEndIndex;
+	  var text = data.text;
+
+    	  appendTextIntoParagraph(pageID, objID, paragraphNumber, paragraphIdentifier, pageNumber, segmentStartIndex, segmentEndIndex, text);
+
       });
 
       $(document).on("getSlideInfo", function() {
@@ -1176,6 +1386,11 @@ function prepare() {
 
       function appendText(objId, myText, pageNumber, paragraphIdentifier, startIndex, endIndex, color) {
          console.log("yay");
+
+	 issueEvent(document, "root_appendParagraphIdentifier", {
+	     objId: objId,
+	     paragraphId: paragraphIdentifier
+	 });
 
          var requests = [ 
          {
@@ -1236,6 +1451,7 @@ function prepare() {
                      console.log(paragraphIdentifier);
 
                      console.log(color);
+
                      addHighlight(curPageId, [objId], pageNumber, paragraphIdentifier, startIndex, endIndex, color, true);
 
                      issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
@@ -1243,8 +1459,8 @@ function prepare() {
 			        "pageNumber": pageNumber,
                                 "startIndex": startIndex,
                                 "endIndex": endIndex,
-                                "slideObjId": paragraphIdentifier,
-                                "color": color,
+                                "slideObjId": "editor-" + objId + "-paragraph-" + paragraphIdentifier,
+                                "color": 'blue',
                              });
                      });
 
@@ -1352,34 +1568,23 @@ function prepare() {
       $(document).on("removeHighlight", function(e) {
               var p = e.detail;
 
-              removeHighlight(p.pageID, p.boxID, p.mappingIdentifiers, p.lastElemIndex);
+	      if(!replaceFlag) {
+		  removeHighlight(p.pageID, p.boxID, p.mappingIdentifiers, p.lastElemIndex, p.pageNumber, p.startIndex, p.endIndex);
+		  if(p.updateFlag) {
+		      updateHighlight(curPageId, [], null);
+		  }
+	      }
+
               });
+
     $(document).on("highlighted", function(details){
             console.log(details);
 
             console.log("I got this");
     });
 
-    $(document).on("initialSlideGeneration", function(e) {
-        var p = e.detail;
-
-	console.log(p);
-        console.log(slideInfo);
-
-	sectionStructure = p.sections;
-	paperTitle = p.title;
-	paperAuthors = p.authors;
-
-	if(gapi.client.slides == null) {
-	    initialSlideGenerationFlag = true;
-	}
-	else {
-	    // already loaded. Let's remove
-
-	    console.log("Already loaded. Let's remove");
-
-	    initialSlideCreationStart();
-	}
+    $(document).on("pdfjs_clearDatabase", function(e) {
+	clearDatabase();
     });
 
     $(document).on("ADDTEXT_COMPLETED", function(e) {
@@ -1402,6 +1607,37 @@ function prepare() {
                     'opacity: 0.2" class="slidePlaneCanvasHighlight">' + 
                     '</div>'
                     );
+    });
+
+    $(document).on("get_slide_object_for_highlight", function(e) {
+	console.log(e.detail);
+	var myString = e.detail.data.slideObjId.split('-');
+
+	console.log(myString);
+
+	if(myString[2] == "paragraph") {
+	    if(myString[1] in paragraphTable) {
+	    	var paragraphs = paragraphTable[myString[1]];
+	    	console.log(myString[3]);
+	    	console.log(paragraphTable);
+
+		for(var i=0;i<paragraphs.length;i++) {
+		    if(paragraphs[i] == myString[3]) {
+			console.log("get the paragraph number");
+			console.log(i);
+
+			issueEvent(document, "highlight_slide_object_mouse_enter", {
+			    "slideObjId": "editor-" + myString[1] + '-paragraph-' + i
+			});
+		    }
+		}
+	    }
+	    else {
+		console.log("paragraph does not exist");
+		console.log(myString);
+		console.log(paragraphTable);
+	    }
+    	}
     });
 
     $(document).on("ROOT_UPDATE_HIGHLIGHT_REQUEST", function(e) {
@@ -1470,14 +1706,19 @@ function prepare() {
         for(var i=0;i<p.length;i++) {
             $("#autoCompleteTable tbody").append(
                     '<tr>' + 
-                    '<td class="autoCompleteTableFirst">' + p[i].score + '</td>' + 
-                    '<td class="autoCompleteTableSecond">' + p[i].text + '</td>' + 
+                    '<td class="autoCompleteTableFirst">' + (i+1) + '</td>' + 
+                    '<td class="autoCompleteTableSecond order=' + (i+1) + ' onclick="autoCompleteItemClicked()" ">' + p[i].text + '</td>' + 
                     '</tr>'
                     );
         }
 
         $("#slidePlaneCanvasPopup").show();
     });
+
+    function autoCompleteItemClicked() {
+	console.log("here!");
+	console.log(this);
+    }
 /*
     $(document).on("sendAutoCompleteInstance", function(e) {
         var p = e.detail;
@@ -1541,8 +1782,72 @@ function prepare() {
           requests: requests
         }).then((result) => {
             addHighlight(autoCompletePageID, [objID], pageNumber, paragraphIdentifier, segmentStartIndex, segmentEndIndex, 'yellow', true);
+
+	    issueEvent(document, "PDFJS_HIGHLIGHT_TEXT", 
+		    {
+			"pageNumber": pageNumber,
+			"startIndex": segmentStartIndex,
+			"endIndex": segmentEndIndex,
+			"slideObjId": "editor-" + objID + "-paragraph-" + paragraphIdentifier,
+			"color": 'blue',
+		    });
+	    replaceFlag = true;
         });
       }
+
+    function appendTextIntoParagraph(pageID, objID, paragraphNumber, paragraphIdentifier, pageNumber, segmentStartIndex, segmentEndIndex, text) {
+        console.log(text);
+
+	 issueEvent(document, "root_replaceParagraphIdentifier", {
+	     objId: objId,
+	     paragraphNumber: paragraphNumber,
+	     paragraphId: paragraphIdentifier
+	 });
+
+        gapi.client.slides.presentations.pages.get({
+          presentationId: PRESENTATION_ID,
+          pageObjectId: pageID 
+        }).then(function(response) {
+            var slideObjs = response.result;
+
+            for(var i=0;i<slideObjs.pageElements.length;i++) {
+                if(slideObjs.pageElements[i].objectId == objID) {
+                    var textElements = slideObjs.pageElements[i].shape.text.textElements;
+                    var paragraphCnt = -1;
+
+                    for(var j=0;j<textElements.length;j++) {
+                        var textElem = textElements[j];
+
+                        if(textElem.paragraphMarker != null) paragraphCnt++;
+                        else {
+                            if(textElem.textRun != null) {
+                                if(paragraphNumber == paragraphCnt) {
+                                    var myStr = textElem.textRun.content;
+				    var myStrWithoutNewline = myStr.substr(0, myStr.length-1) + ' ';
+
+				    replaceParagraphNumber = paragraphNumber;
+
+				    console.log("WTF IS THIS?");
+				    console.log(paragraphNumber);
+				    console.log(paragraphCnt);
+
+                                    replaceTextInTheObj(pageID, objID, paragraphIdentifier, myStr, myStrWithoutNewline + text, pageNumber, segmentStartIndex, segmentEndIndex)
+
+                                    return;
+                                }
+                            }
+                            else {
+                                console.log("################### ERROR ###################");
+                            }
+                        }
+                    }
+                }
+            }
+
+        }, function(response) {
+	    console.log(response.result.error.message);
+        });
+    }
     function putTextIntoParagraph(autoCompletePageID, objID, paragraphNumber, paragraphIdentifier, pageNumber, segmentStartIndex, segmentEndIndex, text) {
         console.log(text);
 
@@ -1645,7 +1950,7 @@ function prepare() {
 
         if(highlightDictionary[pageID] != null && highlightDictionary[pageID][key] != null) {
             issueEvent(document, "__removeAutoComplete", null);
-	    issueEvent(document, "PdfjsMoveScrollBar", highlightDictionary[pageID][key][0]);
+	    // issueEvent(document, "PdfjsMoveScrollBar", highlightDictionary[pageID][key][0]);
         }
         else {
             issueEvent(document, "requestShowingAutoComplete", {
@@ -1695,7 +2000,119 @@ function prepare() {
 
     $(document).on("visualizeParagraph", function(e) {
         var p = e.detail;
+	var border = '';
 
+	if(pageCanvasDebugging) {
+	    if(p.flag) border = "3px solid red";
+	    else border = "2px dotted black";
+	}
+
+	var pidObj = $("#" + p.pid + "-boundary");
+
+	var objID = p.pid.split("-")[1];
+	var paragraphNumber = p.pid.split("-")[3];
+	var paragraphID;
+
+	if(objID in paragraphTable && paragraphNumber in paragraphTable[objID]) {
+	    paragraphID = paragraphTable[objID][paragraphNumber];
+	}
+	else paragraphID = null;
+
+	console.log(p);
+	console.log(p.pageID);
+	console.log($(pidObj));
+	console.log(highlightDictionary);
+	console.log(paragraphTable);
+	console.log(paragraphID);
+
+	if(p.pageID in highlightDictionary && paragraphID != null && 
+  	  (objID + "-paragraph-" + paragraphID) in highlightDictionary[p.pageID] && 
+	  highlightDictionary[p.pageID][objID + "-paragraph-" + paragraphID].length > 0) {
+	    $("#slidePlaneCanvas").append(
+		    '<div ' + 
+		    'id="' + p.pid + '-mappingIdentifier" ' + 
+		    'style="' + 
+		    'position: absolute; ' + 
+		    'width: 15; ' + 
+		    'height: 15; ' + 
+		    'left: ' + (e.detail.left-20) + '; ' + 
+		    'top: ' + e.detail.top + '; ' +
+		    '" class="slideVisualizeParagraph slideVisualizeParagraphIdentifier" ' + 
+		    'pageID="' + p.pageID + '" ' + 
+		    'objID="' + objID + '" ' + 
+		    'paragraphID="' + paragraphID + '" ' + 
+		    '>' + 
+		    '</div>'
+		    );
+	    
+	    
+	    $("#" + p.pid + '-mappingIdentifier').hover(function() {
+		var objID = $(this).attr("id").substr(0, $(this).attr("id").length-18);
+		var boundaryObj = $("#" + objID + '-boundary');
+
+		$(boundaryObj).css("border", "2px dotted black");
+	    }, function() {
+		var objID = $(this).attr("id").substr(0, $(this).attr("id").length-18);
+		var boundaryObj = $("#" + objID + '-boundary');
+
+		$(boundaryObj).css("border", "");
+	    });
+	}
+
+	if($(pidObj).length > 0) {
+	    $(pidObj).css("border", border);
+	}
+	else {
+	    $("#slidePlaneCanvas").append(
+		    '<div ' + 
+		    'id="' + p.pid + '-boundary" ' + 
+		    'style="' + 
+		    'position: absolute; ' + 
+		    'width: ' + e.detail.width + '; ' + 
+		    'height: ' + e.detail.height + '; ' + 
+		    'left: ' + e.detail.left+ '; ' + 
+		    'top: ' + e.detail.top + '; ' +
+		    'border: ' + border + 
+		    '" class="slideVisualizeParagraph" ' + 
+		    ' paragraphID="' + paragraphID + '" ' + 
+		    '>' + 
+		    '</div>'
+		    );
+
+	    // FOR DEBUGGING
+	    //
+	   /*
+	    $("#slidePlaneCanvas").append(
+		    '<div ' + 
+		    'id="' + p.pid + '-boundary-prime" ' + 
+		    'style="' + 
+		    'position: absolute; ' + 
+		    'width: ' + e.detail.width + '; ' + 
+		    'height: ' + e.detail.height + '; ' + 
+		    'left: ' + e.detail.left+ '; ' + 
+		    'top: ' + (e.detail.top-300) + '; ' +
+		    'border: ' + border + 
+		    '" class="slideVisualizeParagraph" ' + 
+		    ' paragraphID="' + paragraphID + '" ' + 
+		    '>' + 
+		    '</div>'
+		    );
+	    $("#slidePlaneCanvas").append(
+		    '<div ' + 
+		    'id="' + p.pid + '-paragraphID" ' + 
+		    'style="' + 
+		    'position: absolute; ' + 
+		    'width: ' + e.detail.width + '; ' + 
+		    'height: ' + e.detail.height + '; ' + 
+		    'left: ' + e.detail.left+ '; ' + 
+		    'top: ' + (e.detail.top-300) + '; ' +
+		    'border: ' + border + 
+		    '" class="slideVisualizeParagraph" ' + 
+		    '>' + paragraphID  + 
+		    '</div>'
+		    );*/
+	}
+	/*
         if($(".slideVisualizeParagraph").length > 0) {
             $(".slideVisualizeParagraph").css("left", e.detail.left);
             $(".slideVisualizeParagraph").css("top", e.detail.top);
@@ -1717,12 +2134,25 @@ function prepare() {
                     '</div>'
                     );
         }
+	*/
     });
 /*
 	readTextFile("./generic/web/metadata.tei", 'xml');
 	readTextFile("./generic/web/metadata.json", 'json');
 */
 	
+    $(document).on("click", ".slideVisualizeParagraphIdentifier", function(e) {
+	console.log("HELLO?!");
+	console.log($(this));
+
+	var pageID = $(this).attr("pageID");
+	var paragraphID = $(this).attr("paragraphID");
+	var objID = $(this).attr("objID");
+
+	var highlight = highlightDictionary[pageID][objID + "-paragraph-" + paragraphID];
+	issueEvent(document, "PdfjsMoveScrollBar", highlight);
+    });
+
     $(document).on("click", "#outlinePlaneContent", function(e){
         var x = e.clientX, y = e.clientY;
         var elementMouseIsOver = document.elementFromPoint(x, y);
@@ -1841,7 +2271,7 @@ function prepare() {
 
         $("#outlineLineEditor1").css("padding-left", $("#outlineLineBullet1").width);
     });
-
+/*
     function refSuccess(e) {
         console.log(e);
     }
@@ -1850,14 +2280,24 @@ function prepare() {
 url: "https://api.crossref.org/works?rows=5&query.title=Trace-based+Just-in-Time+Type+Specialization+for+Dynamic+Languages",
 success: refSuccess,
 dataType: "json"
-            });
+            });*/
 
     loadData();
 }
 
 $(document).ready(function() {
-    myDB = new PouchDB('doc2slide_db')
-  //  clearDatabase();
-    prepare();
+    console.log("clear db");
+    myDB = new PouchDB('doc2slide_db');
+    // clearDatabase();
+    //
+    $(document).on("initialSlideGeneration", function(e) {
+	  var p = e.detail;
+
+	  sectionParagraph = p.paragraph;
+	  sectionStructure = p.sections;
+	  paperTitle = p.title;
+	  paperAuthors = p.authors;
+	prepare();
+    });
 });
 
