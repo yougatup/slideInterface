@@ -3,6 +3,8 @@
 var pageCanvasDebugging = false;
 var bodyRegisterAsWell = false;
 
+var curImageQueryString = '';
+
 var paperURL = 'paperData/paper/paper.pdf'
 var userID, documentID;
 var startElementInx, endElementInx, curPageNumber;
@@ -17926,8 +17928,11 @@ function getSelectionHtml() {
 }
 
 function prevPopover() {
+    removePopovers();
+    /*
      $(popupDiv).popover('dispose');
      popoverShown = false;
+     */
 
      $(popupDiv).attr("data-toggle", "popover");
      $(popupDiv).attr("title", "Conversion options");
@@ -17951,8 +17956,11 @@ function sendTextAsPlane() {
 function sendTextHighlighted() {
      console.log(highlightedText);
 
+    removePopovers();
+    /*
      $(popupDiv).popover('dispose');
      popoverShown = false;
+     */
 
 /*
      $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Text conversion options");
@@ -17986,10 +17994,14 @@ function appendImageQueryResult(response) {
         var item = response.items[i];
 
         $("#imageQueryResult").append("<img id='imageQueryResultItem" + i + "' class='imageQueryResultItem' src='" + item.link + "' />");
+	$("#imageQueryResultItem" + i).attr("queryString", curImageQueryString);
     }
 }
+
 function getImageQueryResult(queryString) {
     queryString = queryString.replace(' ', '+');
+
+    curImageQueryString = queryString;
 
     $.get({
             url:"https://www.googleapis.com/customsearch/v1?key=AIzaSyA160fCjV5GS8HhQtYj2R29huH9lnXURKw&cx=000180283903413636684:oxqpr8tki8w&q="+queryString+"&searchType=image",
@@ -17998,8 +18010,11 @@ function getImageQueryResult(queryString) {
 }
 
 function figureItemClicked() {
+    removePopovers();
+    /*
     $(popupDiv).popover('dispose');
     popoverShown = false;
+    */
 
     $(popupDiv).attr("title", "<button id='prevBtn' class='smallBtnItem' onclick='prevPopover()'> \< </button> Figure search");
     $(popupDiv).attr("data-content", "<div id='popOverFigureContents'></div>");
@@ -18058,6 +18073,9 @@ function removePopovers() {
      });
 
      popoverShown = false;
+
+    issueEvent(document, "pdfjs_enableSlideplane", null);
+    issueEvent(document, "pdfjs_clearParagraphs", null);
 }
 
 function removeParenthesis(myString) {
@@ -18430,7 +18448,19 @@ function enableDoc2Slide() {
 
         console.log($(elementMouseIsOver));
 
-        if($(elementMouseIsOver).hasClass("textElement")) {
+	if($(elementMouseIsOver).hasClass("textSelected")) {
+	    curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
+	    var slideobjid = $(elementMouseIsOver).attr("slideobjid");
+
+	    var objID = slideobjid.split('-')[1];
+	    var paragraphID = slideobjid.split('-')[3];
+
+	    issueEvent(document, "pdfjs_locateObject", {
+		objID: objID,
+		paragraphID: paragraphID
+	    });
+	}
+	else if($(elementMouseIsOver).hasClass("textElement")) {
 	    curPageNumber = parseInt($(elementMouseIsOver).attr("id").split("_")[1]);
 // 	    startElementInx = parseInt($(elementMouseIsOver).attr("id").split("_")[2]);
 
@@ -18944,6 +18974,61 @@ function enableDoc2Slide() {
 	});
     });
 
+    $(document).on("root_getSectionHierarchyStructure", function(e) {
+	var p = e.detail;
+	var highlightDictionary = p.highlightDictionary;
+	var retValue = {};
+	var includedSectionList = [];
+
+	console.log(p);
+
+	var pageIDs = Object.keys(highlightDictionary);
+
+	for(var i=0;i<pageIDs.length;i++) {
+	    pageID = pageIDs[i];
+	    console.log(pageID);
+
+	    var objIDs = Object.keys(highlightDictionary[pageID]);
+	    var thisPage = {};
+
+	    for(var j=0;j<objIDs.length;j++) {
+		var objID = objIDs[j];
+		var thisObj = [];
+
+		for(var k=0;k<highlightDictionary[pageID][objID].length;k++) {
+		    var pageNumber = highlightDictionary[pageID][objID][k][0];
+		    var startIndex = highlightDictionary[pageID][objID][k][1];
+		    var endIndex = highlightDictionary[pageID][objID][k][2];
+
+		    var textSegmentID = "textSegment_" + pageNumber + "_" + startIndex;
+		    var textSegmentObj = $("#" + textSegmentID);
+		    var sectionIndex = $(textSegmentObj).attr("sectionindex");
+
+		    var parentSectionIndex = sectionParents[sectionIndex];
+/*
+		    console.log(textSegmentID);
+		    console.log(textSegmentObj);
+		    console.log(sectionIndex);
+		    console.log(parentSectionIndex);
+		    console.log(sectionParents);*/
+
+		    if(parentSectionIndex in sectionDictionary) {
+			console.log(sectionDictionary[parentSectionIndex]);
+			console.log(sectionDictionary[parentSectionIndex].join(' '));
+			thisObj.push(sectionDictionary[parentSectionIndex].join(' '));
+			includedSectionList.push(sectionDictionary[parentSectionIndex].join(' '));
+		    }
+		}
+
+		thisPage[objID] = thisObj;
+	    }
+	    
+	    retValue[pageID] = thisPage;
+	}
+
+	issueEvent(document, "pdfjs_printInlineSectionHeaders", retValue);
+    });
+
     $(document).on("sendSlideInfoToPDF", function(e) {
 	var p = e.detail;
 
@@ -18962,8 +19047,11 @@ function enableDoc2Slide() {
 	issueEvent(document, "registerMappings", {
 	    titleObj: slideInfo[0].slideObjs[0].slideObjId,
 	    titleObj2: slideInfo[0].slideObjs[1].slideObjId,
+	    titleText: paperTitle,
+	    authorText: paperAuthors,
 	    paragraphNumber: paperAuthors.length,
-	    sectionObjs: slideObjIds
+	    sectionObjs: slideObjIds,
+	    sectionTitleText: sectionStructure
 	});
 
       	//PDFViewerApplication.open('paperData/paper/paper.pdf');
@@ -19115,12 +19203,23 @@ function enableDoc2Slide() {
             console.log("hovered!" + this);
             });
 
-    $(document).on("click", ".pageCanvasFigures", function(){
-            console.log('image clicked!');
-            console.log($(this));
-            console.log("URL: " + $(this).attr("imageURL"));
+    $(document).on("click", ".conversionBoxElement", function(){
+	var myText = $(this).text();
 
-          issueEvent(document, "sendImage", 
+	$(".conversionBoxActive").removeClass("conversionBoxActive");
+	$(this).addClass("conversionBoxActive");
+
+	genBoxBody(myText);
+    });
+
+    $(document).on("click", ".pageCanvasFigures", function(){
+	console.log('image clicked!');
+	console.log($(this));
+	console.log("URL: " + $(this).attr("imageURL"));
+
+	console.log(startElementInx, endElementInx, curPageNumber);
+
+	issueEvent(document, "sendImage", 
               {
                 "imageURL": "https://hyungyu.com/doc2slide/metaData/paper/" + ($(this).attr("imageURL")),
               });
@@ -19132,9 +19231,16 @@ function enableDoc2Slide() {
             console.log($(this));
             console.log($(this).attr("src"));
 
+	    console.log(startElementInx, endElementInx, curPageNumber);
+
             issueEvent(document, "sendImage", 
               {
                  "imageURL": $(this).attr("src"),
+		 "startElementInx": startElementInx,
+		 "endElementInx": endElementInx,
+		 "curPageNumber": curPageNumber,
+		 "queryString": $(this).attr("queryString")
+
               });
 
            });
@@ -19686,8 +19792,54 @@ function removeItemClicked() {
 	updateFlag: true
     });
 
+    removePopovers();
+/*
     $(popupDiv).popover('dispose');
     popoverShown = false;
+    */
+
+    issueEvent(document, "pdfjs_enableSlideplane", null);
+    issueEvent(document, "pdfjs_clearParagraphs", null);
+}
+
+function genBoxBody(myText) {
+    if(myText == "Text") {
+	bodyText = '<table id="conversionBoxBodyTable"> </table>';
+
+	$("#conversionBoxBodyPlane").html(bodyText);
+
+	$('#conversionBoxBodyTable').append(
+		$('<tr>').append(
+		    $('<td>').append('<div class="conversionBoxBodyIndex">1</div>'),
+		    $('<td>').append('<textarea id="conversionBoxBodyTextarea-1" class="conversionBoxBodyTextarea"> </textarea>'),
+		    $('<td>').append('<button id="conversionBoxBodyTextareaButton-1" class="conversionBoxBodyTextareaButton"> Go </button>'),
+		    )
+		);
+
+	$("#conversionBoxBodyTextarea-1").val(highlightedText);
+    }
+    else if(myText == "Figure") {
+	$("#conversionBoxBodyPlane").html("<div id='conversionBoxBodyFigureNLParea'> </div> <hr />" + 
+		"SearchQuery : <input type='text' id='imageQueryBox' /> <button id='imageSearchBtn' onclick='searchImage()'> Go </button> <br>" + 
+		"<input type='checkbox' class='imageSearchBox' name='icons' value='icons' onchange='searchImage()'> Icons </input>" + 
+		"<hr /> <div id='imageQueryResult'> </div>");
+
+	$("#conversionBoxBodyFigureNLParea").html(highlightedText);
+
+	$("#imageQueryBox").val(highlightedText);
+	getImageQueryResult(highlightedText);
+    }
+}
+
+function makeConversionBox() {
+    var retValue = '<ul class="conversionBoxUl">' + 
+	'<li class="conversionBoxLi"><div id="conversionBoxText" class="conversionBoxElement conversionBoxActive">Text</div></li>' + 
+	'<li class="conversionBoxLi"><div id="conversionBoxFigure" class="conversionBoxElement">Figure</div></li>' + 
+	'</ul>' + 
+	'<div id="conversionBoxBodyPlane"> </div>'
+	;
+
+    return retValue;
 }
 
 function appearPopover(myDiv) {
@@ -19697,12 +19849,29 @@ function appearPopover(myDiv) {
     console.log($(firstDiv));
     popupDiv = firstDiv;
 
+    $.ajax({
+	type: 'POST',
+	url: 'https://language.googleapis.com/v1beta2/documents:analyzeEntities',
+	data: {
+	    "document": {
+		    "type": "PLAIN_TEXT",
+		    "language": 'en',
+
+		    "content": 'As HCI researchers have explored the possibilities of human computation, they have paid less attention to ethics and values of crowdwork. This paper offers an analysis of Amazon Mechanical Turk, a popular human computation system, as a site of technically mediated worker-employer relations. We argue that human computation currently relies on worker invisibility. We then present Turkopticon, an activist system that allows workers to publicize and evaluate their relationships with employers. As a common infrastructure, Turkopticon also enables workers to engage one another in mutual aid. We conclude by discussing the potentials and challenges of sustaining activist technologies that intervene in large, existing socio-technical systems.',
+	    }
+		    
+	},
+	success:function(data){
+	    console.log(data);
+	}
+    });
+
     if(firstDiv != null) {
 	// highlightParts();
 
 	if(startElementInx >= endElementInx) {
 	    $("#textSegment_" + curPageNumber + "_" + startElementInx).hasClass("referred")
-		var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
+	    var classes = $("#textSegment_" + curPageNumber + "_" + startElementInx).attr('class').split(/\s+/);
 	    var referredList = getReferredList(classes);
 
 	    for(var i=0;i<referredList.length;i++) {
@@ -19714,16 +19883,18 @@ function appearPopover(myDiv) {
 		}
 	    }
 	}
-
+/*
 	var btnList = "<button id='textBtn' class='btnItem' onclick='sendTextHighlighted()'> Text </button>" + 
 	    "<button id='figureBtn' class='btnItem' onclick='figureItemClicked()'> Figure </button>" + 
 	    "<button id='removeBtn' class='btnItem' onclick='removeItemClicked()'> Rem </button>" ;
 	    // "<button id='mapBtn' class='btnItem' onclick='mapItemClicked()'> Map </button>";
-
+*/
+	var btnList = '';
 	if(content == ''){
-	    content = content + "<div id='textShorteningWrapper'>" + "<div id='textShorteningBox'> </div>" + "</div>"
+	    content = content + makeConversionBox() + "</div>"
 		content = content + "<hr />"
 		content = content + btnList;
+
 	}
 	else {
 	    content = content + "<br><hr />" + btnList;
@@ -19736,7 +19907,13 @@ function appearPopover(myDiv) {
 	$(firstDiv).popover({"placement": "top", "html": true, "max-width": "800px", "container": "body"}).popover('show');
 	popoverShown = true;
 
+	genBoxBody("Text");
+
 	console.log("popover shown");
+
+	issueEvent(document, "pdfjs_disableSlideplane", null);
+	issueEvent(document, "pdfjs_displayParagraphs", null);
+
 	/*
 	   var tempHighlightedText = highlightedText + ' ';
 	   var temp = '';
@@ -19773,6 +19950,29 @@ function appearPopover(myDiv) {
 	   }
 	   */
     }
+
+// wget --post-data 'The quick brown fox jumped over the lazy dog.' 'localhost:9000/?properties={"annotators":"tokenize,ssplit,pos","outputFormat":"json"}' -O -
+
+    /*
+    console.log(highlightedText);
+
+    var properties = {annotators: "parse"};
+    var property_string = JSON.stringify(properties);
+    var properties_for_url = encodeURIComponent(property_string);
+
+    $.ajax({ type: "POST", url: 'http://localhost:9000/?properties=' + properties_for_url,
+	data: highlightedText,
+	success: function (data){
+	    parse = data; console.log(parse);
+
+	    $("#textShorteningBox").html("<pre>" + parse.sentences[0].parse + "</pre>" + "<br>" + highlightedText);
+	},
+	error: function (responseData, textStatus, errorThrown)
+	{ alert('POST failed.'); }
+    });
+    */
+
+
 }
 
 
@@ -19960,6 +20160,8 @@ function printMessage(mutationList) {
 
 	    sectionHierarchy = {};
 	    sectionParents = {}
+
+	    for(var i=0;i<sectionKeys.length;i++) sectionParents[sectionKeys[i]] = sectionKeys[i];
 
 	    for(var i=0;i<sectionKeys.length;i++) {
 		for(var j=0;j<sectionParagraph.length;j++) {
@@ -20160,10 +20362,8 @@ function printMessage(mutationList) {
                         var textWidth = $(textSegmentID).width();
                         var textHeight = $(textSegmentID).height();
 
-                        if(sectionY <= textTop && textTop + textHeight <= sectionY + sectionHeight &&
+                        if(textWidth > 0 && textHeight > 0 && sectionY <= textTop && textTop + textHeight <= sectionY + sectionHeight &&
                                 sectionX <= textLeft && textLeft + textWidth <= sectionX + sectionWidth) {
-                            // console.log($("#textSegment_" + pageNumber + "_" + j));
-
                             $(textSegmentID).attr("sectionIndex", sectionKey);
 
                             if(sectionTextSegment[sectionKey] == null) {
@@ -20587,6 +20787,9 @@ function printMessage(mutationList) {
 			console.log($("[sectionIndex='" + sectionStructureSegments[i] + "']"));
 
 			$("[sectionIndex='" + sectionStructureSegments[i] + "']").each(function(e) {
+			    console.log($(this).attr("id"));
+			    console.log($(this).attr("sectionindex"));
+
 			    minIndex = Math.min(minIndex, parseInt($(this).attr("id").split("_")[2]));
 			    maxIndex = Math.max(maxIndex, parseInt($(this).attr("id").split("_")[2]));
 

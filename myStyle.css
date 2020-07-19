@@ -59,6 +59,54 @@ top: 0px;
 pointer-events: none;
 }
 
+.elementButton {
+    font-size: 15px;
+}
+
+#elementMenuButton {
+    position: relative;
+    pointer-events: auto;
+
+    display: none;
+
+    overflow: auto;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+#contentVisualizer{
+    position: relative;
+    pointer-events: none;
+
+    display: none;
+    overflow: auto;
+    font-size: 20px;
+    margin-top: 10px;
+
+    border: 1px solid black;
+}
+
+.contentVisualizerBtnSelected {
+    background-color: yellow;
+    border: 3px solid red;
+}
+
+.contentVisualizerButton{
+    pointer-events: auto !important;
+    font-size: 20px;
+    padding: 3px;
+}
+
+#slideNavigator {
+    position: relative;
+    pointer-events: auto;
+
+    display: none;
+    overflow: auto;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
 #slidePlaneCanvasPopup {
     position: relative;
     pointer-events: auto;
@@ -124,15 +172,17 @@ box-sizing: border-box;
 }
 
 #autoCompleteNumberInput {
-width: 50px;
-font-size: 20px;
-height: 30px;
+width: 0.1px;
+font-size: 0.1px;
+height: 0.1px;
+opacity:0;
+filter:alpha(opacity=0);
 }
 
 #autoCompleteSubmitBtn {
-width: 80px;
-height: 30px;
-font-size: 20px;
+width: 0.1px;
+height: 0.1px;
+font-size: 0.1px;
 }
 
 #autoCompleteCancelBtn {
@@ -141,8 +191,19 @@ height: 30px;
 font-size: 20px;
 }
 
+.slideNavigatorButton {
+    font-size: 20px;
+    padding: 3px;
+}
+
+.typeBtn{
+    font-size: 20px;
+    padding: 3px;
+}
+
 .slideVisualizeParagraphIdentifier {
-    background-color: red;
+    background-color: blue;
+    opacity: 0.5;
     cursor: pointer;
     pointer-events: auto !important;
     border-radius: 100%;
@@ -154,4 +215,51 @@ font-size: 20px;
 
 td:focus {
     background-color: yellow;
+}
+
+.selectedRow {
+    background-color: yellow;
+}
+
+#searchResultTab {
+    position: absolute;
+    height: 20%;
+    width: 50%;
+    border: 1px solid black;
+    background: white;
+    display: none;
+}
+
+.imageQueryResultItem {
+    max-width: 200px;
+    margin: 10px;
+    float: left;
+}
+
+.imageQueryResultItem:hover {
+    background-color: orange;
+    border: 2px solid red;
+    cursor: pointer;
+}
+
+.searchResultCloseBtn {
+    float: right;
+    margin: 5px;
+}
+
+#searchResultTab {
+    overflow: scroll;
+}
+
+#searchBar {
+    margin: 5px;
+}
+
+.selectedVisualizeParagraph {
+    border: 2px solid red !important;
+}
+
+.slideVisualizeParagraph:hover {
+    background-color: yellow;
+	opacity:0.3;
 }

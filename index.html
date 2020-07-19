@@ -11,6 +11,10 @@
         <script src="./splitjs/split.js"></script>
 
         <script src="https://code.jquery.com/ui/jquery-ui-git.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
         <script src="https://apis.google.com/js/api.js"></script>
         <script src="https://apis.google.com/js/platform.js" async defer></script>
         <script src="scripts/pouchdb-7.0.0.min.js"></script>
@@ -53,15 +57,45 @@
             <div id='slidePlane' class='mainPlane split split-horizontal'>
                 <div id='slidePlaneContent' class='content'>
                     <div id='slidePlaneCanvas'> 
+			<div id='contentVisualizer'> 
+			    <button id='textTypeBtn' class='contentVisualizerButton contentVisualizerBtnSelected'> Text</button> 
+			    <button id='figureTypeBtn' class='contentVisualizerButton'> Figure </button> 
+			    <button id='subtitleTypeBtn' class='stylingBtn contentVisualizerButton'> Subtitle </button> 
+
+			    <div id='objectIDField'> object id:  </div>
+			    <div id='originalTextField'> original text:  </div>
+			    <div id='originalFigureField'> original figure: </div>
+			</div>
+			<div id='slideNavigator'> 
+			    <button id='prevMappedElementButton' class='slideNavigatorButton'> < </button> 
+			    <button id='currentMappedElementButton' class='slideNavigatorButton'> Current </button> 
+			    <button id='nextMappedElementButton' class='slideNavigatorButton'> > </button> 
+			</div>
+
                         <div id='slidePlaneCanvasPopup'> 
-			    Put the sentence number: <input id='autoCompleteNumberInput'> </input> <button id='autoCompleteSubmitBtn'> Submit </button> <button id='autoCompleteCancelBtn'> Cancel </button>
+			    <input id='autoCompleteNumberInput'> </input> 
                         </div>
+
+			<div id='elementMenuButton'> 
+			    <button id='elementTextButton' class='elementButton'> Text </button>
+			    <button id='elementFigureButton' class='elementButton'> Figure </button>
+			</div>
+
                     </div>
 
                     <iframe id='slideIframe'>
                     </iframe>
                 </div>
             </div>
+
+	    <div id='searchResultTab' class="ui-widget-content"> 
+		<div id='searchBar'> 
+		    <input type='text' id='searchQueryInputBox' />
+		    <button id='searchResultSubmitBtn'> Go </button>
+		    <button id='searchResultCloseBtn'> Close </button>
+		</div>
+		<div id='searchResultImages'> </div>
+	    </div>
 
         </div>
     </body>
